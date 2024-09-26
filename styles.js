@@ -1,0 +1,128 @@
+import {StyleSheet} from 'react-native';
+
+export const COLORS = {
+  primary: '#836FFF',
+  secondary: '#15F5BA',
+  text: '#F0F3FF',
+  background: '#211951',
+};
+
+export const DIMENSIONS = {
+  height: 40,
+  padding: 12,
+  margin: 5,
+};
+
+export const styles = StyleSheet.create({
+  container: {
+    padding: DIMENSIONS.padding,
+    paddingTop: DIMENSIONS.padding,
+    backgroundColor: COLORS.background,
+    flex: 1,
+  },
+  header: {
+    paddingTop: 0,
+    borderTopWidth: DIMENSIONS.margin,
+    borderTopColor: COLORS.primary,
+    height: DIMENSIONS.height,
+    backgroundColor: COLORS.background,
+  },
+  scrollView: {
+    marginBottom: DIMENSIONS.margin,
+    flex: 1,
+  },
+  toast: {
+    height: DIMENSIONS.height * 3 + DIMENSIONS.margin,
+    width: `calc(100% - ${DIMENSIONS.padding * 2}px)`,
+    padding: DIMENSIONS.padding,
+    borderColor: COLORS.secondary,
+    borderWidth: 1,
+    backgroundColor: COLORS.background,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: DIMENSIONS.margin,
+  },
+  note: {
+    height: DIMENSIONS.height * 1.5,
+    width: '100%',
+    padding: DIMENSIONS.padding,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+  },
+  when: {
+    color: COLORS.primary,
+  },
+  what: {
+    color: COLORS.text,
+    textAlign: 'right',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+
+  input: {
+    height: '100%',
+    color: COLORS.text,
+    textAlign: 'center',
+  },
+  center: {
+    color: COLORS.secondary,
+    paddingTop: 3,
+  },
+  centerIcon: {
+    fontSize: DIMENSIONS.height / 2,
+    color: COLORS.secondary,
+  },
+  calendar: {
+    width: '100%',
+    height: DIMENSIONS.height * 9,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+  },
+  calendarTheme: {
+    backgroundColor: COLORS.background,
+    calendarBackground: COLORS.background,
+    textSectionTitleColor: COLORS.primary,
+    selectedDayTextColor: COLORS.text,
+    todayTextColor: COLORS.primary,
+    dayTextColor: COLORS.primary,
+    textDisabledColor: COLORS.background,
+    monthTextColor: COLORS.text,
+  },
+  info: {
+    height: DIMENSIONS.height * 3 + DIMENSIONS.margin,
+    width: '100%',
+    padding: DIMENSIONS.padding,
+    borderColor: COLORS.secondary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  controllers: {
+    flexDirection: 'row',
+    gap: DIMENSIONS.margin,
+  },
+  control: {
+    height: DIMENSIONS.height * 3,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  icon: {
+    fontSize: DIMENSIONS.height,
+    color: COLORS.background,
+  },
+  footer: {
+    paddingTop: 0,
+    borderTopWidth: DIMENSIONS.margin,
+    borderTopColor: COLORS.primary,
+    height: DIMENSIONS.height,
+    backgroundColor: COLORS.background,
+  },
+});

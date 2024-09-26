@@ -1,0 +1,106 @@
+import React, {useEffect, useState} from 'react';
+import {styles, COLORS} from './styles';
+import {useSelector, Provider} from 'react-redux';
+import store from './redux/store';
+import Habits from './views/habits';
+import Weights from './views/weights';
+import Costs from './views/costs';
+import Plans from './views/plans';
+import Tasks from './views/tasks';
+import Dialog from './components/Dialog';
+import toastConfig from './components/Toast';
+import Toast from 'react-native-toast-message';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faClock,
+  faWeightHanging,
+  faCoins,
+  faCalendar,
+  faList,
+} from '@fortawesome/free-solid-svg-icons';
+
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import {getEveryHabit} from './storage/services';
+
+// import Toast from 'react-native-toast-message';
+
+// import Dialog from './src/components/dialog';
+// import {toastConfig} from './src/components/toast';
+
+const Tab = createBottomTabNavigator();
+
+function assignScreenIcon(routeName: any, focused: any) {
+  const iconColor = focused ? COLORS.text : COLORS.primary;
+
+  switch (routeName) {
+    case 'Habits':
+      return <FontAwesomeIcon icon={faClock} color={iconColor} />;
+    case 'Weights':
+      return <FontAwesomeIcon icon={faWeightHanging} color={iconColor} />;
+    case 'Costs':
+      return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
+    case 'Plans':
+      return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
+    case 'Tasks':
+      return <FontAwesomeIcon icon={faList} color={iconColor} />;
+  }
+}
+
+function AppContent() {
+  const modalName = useSelector(
+    (state: {modalName: string}) => state.modalName,
+  );
+
+  return (
+    <>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          headerShown: false,
+          tabBarStyle: {
+            ...styles.footer,
+          },
+          tabBarIcon: ({focused}) => assignScreenIcon(route.name, focused),
+          tabBarLabelStyle: {
+            display: 'none',
+          },
+        })}>
+        <Tab.Screen name="Habits" component={Habits} />
+        <Tab.Screen name="Weights" component={Weights} />
+        <Tab.Screen name="Costs" component={Costs} />
+        <Tab.Screen name="Plans" component={Plans} />
+        <Tab.Screen name="Tasks" component={Tasks} />
+      </Tab.Navigator>
+      {modalName && (
+        // @ts-ignore
+        <Dialog name={modalName} />
+      )}
+
+      <React.Fragment>
+        {/* @ts-ignore */}
+        <Toast config={toastConfig} swipeable />
+      </React.Fragment>
+    </>
+  );
+}
+
+function App(): React.JSX.Element {
+  useEffect(() => {
+    const fetchData = () => {
+      const habits = getEveryHabit();
+      //   console.log(habits);
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppContent />
+      </NavigationContainer>
+    </Provider>
+  );
+}
+
+export default App;
