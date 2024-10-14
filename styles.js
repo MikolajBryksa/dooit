@@ -53,7 +53,6 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-
   input: {
     height: '100%',
     color: COLORS.text,
@@ -66,6 +65,20 @@ export const styles = StyleSheet.create({
   centerIcon: {
     fontSize: DIMENSIONS.height / 2,
     color: COLORS.secondary,
+  },
+  goal: {
+    flexDirection: 'row',
+    height: DIMENSIONS.height * 1.5,
+    width: '100%',
+    padding: DIMENSIONS.padding,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  goalWhat: {
+    color: COLORS.text,
   },
   calendar: {
     width: '100%',

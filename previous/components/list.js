@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { ScrollView } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView} from 'react-native';
 
 import Note from './note';
-import { updateItem } from '../services';
-import { styles } from '../styles';
+import {updateItem} from '../services';
+import {styles} from '../styles';
 
-export default function List({ initialItems, name }) {
+export default function List({initialItems, name}) {
   const [items, setItems] = useState(initialItems);
 
   async function fetchData(items) {
@@ -16,7 +15,7 @@ export default function List({ initialItems, name }) {
     }
   }
 
-  const onDragEnd = (result) => {
+  const onDragEnd = result => {
     if (!result.destination) return;
     const reorderedItems = Array.from(items);
     const [removed] = reorderedItems.splice(result.source.index, 1);
@@ -41,13 +40,16 @@ export default function List({ initialItems, name }) {
 
   return (
     <ScrollView style={styles.scrollView}>
-      <DragDropContext onDragEnd={(result) => onDragEnd(result, items, setItems)}>
-        <Droppable droppableId='droppable'>
-          {(provided) => (
+      <DragDropContext onDragEnd={result => onDragEnd(result, items, setItems)}>
+        <Droppable droppableId="droppable">
+          {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
-                  {(provided) => (
+                <Draggable
+                  key={item.id}
+                  draggableId={item.id.toString()}
+                  index={index}>
+                  {provided => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}

@@ -1,4 +1,11 @@
-import {COLORS} from './styles';
+import {COLORS, styles} from './styles';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faChevronDown,
+} from '@fortawesome/free-solid-svg-icons';
 
 export function formatToFloat(text) {
   const formattedText = text.replace(',', '.');
@@ -11,7 +18,6 @@ export function formatToFloat(text) {
 }
 
 export function formatDateWithDay(when) {
-  console.log(when);
   if (when.length < 3) return when;
   const date = new Date(when);
 
@@ -49,4 +55,29 @@ export function getMarkedDates(items, when) {
     };
   }
   return marked;
+}
+
+export function renderArrow(direction) {
+  let icon;
+  switch (direction) {
+    case 'left':
+      icon = faChevronLeft;
+      break;
+    case 'right':
+      icon = faChevronRight;
+      break;
+    case 'up':
+      icon = faChevronUp;
+      break;
+    case 'down':
+      icon = faChevronDown;
+      break;
+  }
+
+  return (
+    <FontAwesomeIcon
+      icon={icon}
+      style={[styles.icon, {color: COLORS.primary}]}
+    />
+  );
 }

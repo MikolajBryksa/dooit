@@ -1,14 +1,73 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, DrawerLayoutAndroidBase} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
+import Control from '../components/Control';
+import Table from '../components/Table';
+import {setCosts, setModalName} from '../redux/actions';
+import {getEveryItem} from '../storage/services';
 import {styles} from '../styles';
 
 const Costs = () => {
+  const costs = useSelector(state => state.costs);
+  const modalName = useSelector(state => state.modalName);
+  const dispatch = useDispatch();
+  const [averageCost, setAverageCost] = useState(0);
+
+  async function fetchData() {
+    const data = getEveryItem('cost', true);
+    const formattedData = data.map(item => ({
+      ...item,
+      what: item.what.toFixed(2),
+      when: convertToISO(new Date(item.when).toLocaleDateString()),
+    }));
+    dispatch(setCosts(formattedData));
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [modalName]);
+
+  function handleAdd() {
+    dispatch(setModalName('cost'));
+  }
+
+  function convertToISO(dateStr) {
+    const [month, day, year] = dateStr.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  function calcAverageCost(costs) {
+    if (!Array.isArray(costs) || costs.length === 0) {
+      return 0;
+    }
+    const totalCost = costs.reduce(
+      (sum, cost) => sum + parseFloat(cost.what),
+      0,
+    );
+    const days = new Set(costs.map(cost => cost.when)).size;
+    const averageCost = totalCost / days;
+    return averageCost.toFixed(2);
+  }
+
+  useEffect(() => {
+    const averageCost = calcAverageCost(costs);
+    setAverageCost(averageCost);
+  }, [costs]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.note}>
-        <Text style={styles.center}>Costs</Text>
-      </View>
+      {costs && (
+        <>
+          <View style={styles.info}>
+            <Text style={styles.center}>{averageCost} zł / day</Text>
+          </View>
+          <Table items={costs} name="cost" />
+          <View style={styles.controllers}>
+            <Control type="add" press={handleAdd} />
+          </View>
+        </>
+      )}
     </View>
   );
 };

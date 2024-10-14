@@ -33,7 +33,7 @@ const Control = ({type, press}) => {
     case 'add':
       icon = <FontAwesomeIcon icon={faPlus} color={iconColor} />;
       break;
-    case 'run':
+    case 'play':
       icon = <FontAwesomeIcon icon={faPlay} color={iconColor} />;
       break;
     case 'stop':

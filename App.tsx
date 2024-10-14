@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {styles, COLORS} from './styles';
 import {useSelector, Provider} from 'react-redux';
 import store from './redux/store';
@@ -21,12 +21,6 @@ import {
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {getEveryHabit} from './storage/services';
-
-// import Toast from 'react-native-toast-message';
-
-// import Dialog from './src/components/dialog';
-// import {toastConfig} from './src/components/toast';
 
 const Tab = createBottomTabNavigator();
 
@@ -85,15 +79,6 @@ function AppContent() {
 }
 
 function App(): React.JSX.Element {
-  useEffect(() => {
-    const fetchData = () => {
-      const habits = getEveryHabit();
-      //   console.log(habits);
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <Provider store={store}>
       <NavigationContainer>

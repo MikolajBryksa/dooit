@@ -2,20 +2,31 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 
 import Note from './Note';
+import Goal from './Goal';
 import {styles} from '../styles';
 
 const Table = ({items, name}) => {
   return (
     <ScrollView style={styles.scrollView}>
-      {items.map((item, index) => (
-        <Note
-          key={index}
-          id={item.id}
-          when={item.when}
-          what={item.what}
-          name={name}
-        />
-      ))}
+      {name === 'habit' || name === 'task'
+        ? items.map((item, index) => (
+            <Goal
+              key={index}
+              id={item.id}
+              when={item.when}
+              what={item.what}
+              name={name}
+            />
+          ))
+        : items.map((item, index) => (
+            <Note
+              key={index}
+              id={item.id}
+              when={item.when}
+              what={item.what}
+              name={name}
+            />
+          ))}
     </ScrollView>
   );
 };

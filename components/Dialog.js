@@ -3,14 +3,12 @@ import {TextInput, Modal, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 
 import Control from './Control';
 import {setCurrentItem, setModalName} from '../redux/actions';
 import {addItem, updateItem, deleteItem} from '../storage/services';
 import {COLORS, DIMENSIONS, styles} from '../styles';
-import {formatToFloat, getMarkedDates} from '../utils';
+import {formatToFloat, getMarkedDates, renderArrow} from '../utils';
 
 export default function Dialog() {
   const modalName = useSelector(state => state.modalName);
@@ -31,7 +29,11 @@ export default function Dialog() {
   useEffect(() => {
     if (currentItem) {
       setWhen(currentItem.when?.toString());
-      setWhat(currentItem.what?.toString());
+      setWhat(
+        typeof currentItem.what === 'number'
+          ? currentItem.what.toFixed(2)
+          : currentItem.what,
+      );
     } else {
       const today = new Date().toISOString().split('T')[0];
       setWhen(today);
@@ -43,23 +45,20 @@ export default function Dialog() {
     dispatch(setModalName(null));
   }
 
-  async function handleDelete() {
-    if (currentItem) {
-      try {
-        const data = await deleteItem(modalName, currentItem.id);
-        Toast.show({
-          type: 'delete',
-          text1: `${data.what}`,
-          topOffset: DIMENSIONS.padding,
-        });
-      } catch (error) {
-        console.error('Error deleting item:', error);
-        Toast.show({
-          type: 'error',
-          text1: `${error}`,
-          topOffset: DIMENSIONS.padding,
-        });
-      }
+  function handleAdd() {
+    try {
+      const data = addItem(modalName, when, what);
+      Toast.show({
+        type: 'add',
+        text1: `${what}`,
+        topOffset: DIMENSIONS.padding,
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: `${error}`,
+        topOffset: DIMENSIONS.padding,
+      });
     }
     dispatch(setCurrentItem(null));
     dispatch(setModalName(null));
@@ -73,14 +72,14 @@ export default function Dialog() {
           Toast.show({
             type: 'update',
             text1: `${currentItem.what}`,
-            text2: `${data.what}`,
+            text2: `${what}`,
             topOffset: DIMENSIONS.padding,
           });
         } else {
           Toast.show({
             type: 'update',
             text1: `${currentItem.when}`,
-            text2: `${data.when}`,
+            text2: `${when}`,
             topOffset: DIMENSIONS.padding,
           });
         }
@@ -97,33 +96,28 @@ export default function Dialog() {
     dispatch(setModalName(null));
   }
 
-  function handleAdd() {
-    try {
-      const data = addItem(modalName, when, what);
-      Toast.show({
-        type: 'add',
-        text1: `${data.what}`,
-        topOffset: DIMENSIONS.padding,
-      });
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: `${error}`,
-        topOffset: DIMENSIONS.padding,
-      });
+  async function handleDelete() {
+    if (currentItem) {
+      try {
+        const data = await deleteItem(modalName, currentItem.id);
+        const formattedWhat =
+          typeof data.what === 'number' ? data.what.toFixed(2) : data.what;
+        Toast.show({
+          type: 'delete',
+          text1: `${formattedWhat}`,
+          topOffset: DIMENSIONS.padding,
+        });
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        Toast.show({
+          type: 'error',
+          text1: `${error}`,
+          topOffset: DIMENSIONS.padding,
+        });
+      }
     }
     dispatch(setCurrentItem(null));
     dispatch(setModalName(null));
-  }
-
-  function renderArrow(direction) {
-    const icon = direction === 'left' ? faChevronLeft : faChevronRight;
-    return (
-      <FontAwesomeIcon
-        icon={icon}
-        style={[styles.icon, {color: COLORS.primary}]}
-      />
-    );
   }
 
   const renderCalendarAndInput = (data, inputModeType = 'numeric') => (
