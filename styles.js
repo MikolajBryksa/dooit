@@ -9,23 +9,15 @@ export const COLORS = {
 
 export const DIMENSIONS = {
   height: 40,
-  padding: 12,
+  padding: 10,
   margin: 5,
 };
 
 export const styles = StyleSheet.create({
   container: {
     padding: DIMENSIONS.padding,
-    paddingTop: DIMENSIONS.padding,
     backgroundColor: COLORS.background,
     flex: 1,
-  },
-  header: {
-    paddingTop: 0,
-    borderTopWidth: DIMENSIONS.margin,
-    borderTopColor: COLORS.primary,
-    height: DIMENSIONS.height,
-    backgroundColor: COLORS.background,
   },
   scrollView: {
     marginBottom: DIMENSIONS.margin,
@@ -33,8 +25,7 @@ export const styles = StyleSheet.create({
   },
   toast: {
     height: DIMENSIONS.height * 3 + DIMENSIONS.margin,
-    width: `calc(100% - ${DIMENSIONS.padding * 2}px)`,
-    padding: DIMENSIONS.padding,
+    width: '95%',
     borderColor: COLORS.secondary,
     borderWidth: 1,
     backgroundColor: COLORS.background,

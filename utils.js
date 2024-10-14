@@ -4,9 +4,10 @@ export function formatToFloat(text) {
   const formattedText = text.replace(',', '.');
   const floatRegex = /^(\d+)?([.]\d*)?$/;
   if (floatRegex.test(formattedText)) {
-    return formattedText;
+    const floatValue = parseFloat(formattedText);
+    return parseFloat(floatValue.toFixed(2));
   }
-  return undefined;
+  return NaN;
 }
 
 export function formatDateWithDay(when) {

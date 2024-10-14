@@ -8,7 +8,7 @@ import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 
 import Control from './Control';
 import {setCurrentItem, setModalName} from '../redux/actions';
-import {addItem, updateItem, deleteItem} from '../services';
+import {addItem, updateItem, deleteItem} from '../storage/services';
 import {COLORS, DIMENSIONS, styles} from '../styles';
 import {formatToFloat, getMarkedDates} from '../utils';
 
@@ -97,9 +97,9 @@ export default function Dialog() {
     dispatch(setModalName(null));
   }
 
-  async function handleAdd() {
+  function handleAdd() {
     try {
-      const data = await addItem(modalName, when, what);
+      const data = addItem(modalName, when, what);
       Toast.show({
         type: 'add',
         text1: `${data.what}`,

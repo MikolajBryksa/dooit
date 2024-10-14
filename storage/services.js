@@ -11,46 +11,64 @@ const getModel = name => {
   return models[name];
 };
 
+const getNextId = model => {
+  const lastItem = realm.objects(model).sorted('id', true)[0];
+  return lastItem ? lastItem.id + 1 : 1;
+};
+
 export const addItem = (name, when, what) => {
   const model = getModel(name);
-  if (when instanceof Date) {
-    realm.write(() => {
-      realm.create(model, {id: Date.now(), when, what});
-    });
-  } else {
-    const lastItem = realm.objects(model).sorted('when', true)[0];
-    const newWhen = lastItem ? lastItem.when + 1 : 1;
-    realm.write(() => {
-      realm.create(model, {id: Date.now(), when: newWhen, what});
-    });
+  const id = getNextId(model);
+  if (model === 'Weight' || model === 'Cost' || model === 'Plan') {
+    when = new Date(when);
   }
+  let newItem;
+  realm.write(() => {
+    newItem = realm.create(model, {id, when, what});
+  });
+  return newItem;
 };
 
 export const getEveryItem = (name, sort) => {
   const model = getModel(name);
-  return realm.objects(model).sorted('when', sort);
+  return realm.objects(model).sorted([
+    ['when', sort],
+    ['id', true],
+  ]);
 };
 
 export const getItem = (name, id) => {
   const model = getModel(name);
-  return realm.objectForPrimaryKey(model, id);
+  const item = realm.objectForPrimaryKey(model, id);
+  if (item && item.when instanceof Date) {
+    return {
+      ...item,
+      when: item.when.toISOString(),
+    };
+  }
+  return item;
 };
 
 export const updateItem = (name, id, when, what) => {
   const model = getModel(name);
+  let updatedItem;
   realm.write(() => {
-    const item = realm.objectForPrimaryKey(model, id);
-    item.when = when;
-    item.what = what;
+    updatedItem = realm.create(model, {id, when, what}, 'modified');
   });
+  return updatedItem;
 };
 
 export const deleteItem = (name, id) => {
   const model = getModel(name);
+  let deletedItem;
   realm.write(() => {
-    const item = realm.objectForPrimaryKey(model, id);
-    realm.delete(item);
+    const itemToDelete = realm.objectForPrimaryKey(model, id);
+    if (itemToDelete) {
+      deletedItem = {...itemToDelete};
+      realm.delete(itemToDelete);
+    }
   });
+  return deletedItem;
 };
 
 export const getTodaysPlans = () => {
