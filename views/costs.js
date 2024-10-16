@@ -7,6 +7,7 @@ import Table from '../components/Table';
 import {setCosts, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
 import {styles} from '../styles';
+import {convertToISO} from '../utils';
 
 const Costs = () => {
   const costs = useSelector(state => state.costs);
@@ -30,11 +31,6 @@ const Costs = () => {
 
   function handleAdd() {
     dispatch(setModalName('cost'));
-  }
-
-  function convertToISO(dateStr) {
-    const [month, day, year] = dateStr.split('/');
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
   function calcAverageCost(costs) {

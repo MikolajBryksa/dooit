@@ -8,6 +8,7 @@ export const COLORS = {
 };
 
 export const DIMENSIONS = {
+  row: 60,
   height: 40,
   padding: 10,
   margin: 5,
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
     gap: DIMENSIONS.margin,
   },
   note: {
-    height: DIMENSIONS.height * 1.5,
+    height: DIMENSIONS.row,
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.primary,
@@ -68,7 +69,7 @@ export const styles = StyleSheet.create({
   },
   goal: {
     flexDirection: 'row',
-    height: DIMENSIONS.height * 1.5,
+    height: DIMENSIONS.row,
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.primary,
@@ -79,6 +80,9 @@ export const styles = StyleSheet.create({
   },
   goalWhat: {
     color: COLORS.text,
+  },
+  goalActive: {
+    borderColor: COLORS.secondary,
   },
   calendar: {
     width: '100%',

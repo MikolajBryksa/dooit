@@ -8,6 +8,7 @@ import {setPlans, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
+import {convertToISO} from '../utils';
 
 const Plans = () => {
   const plans = useSelector(state => state.plans);
@@ -31,11 +32,6 @@ const Plans = () => {
 
   function handleAdd() {
     dispatch(setModalName('plan'));
-  }
-
-  function convertToISO(dateStr) {
-    const [month, day, year] = dateStr.split('/');
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
   function findFreeDay(plans) {

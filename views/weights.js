@@ -7,6 +7,7 @@ import Table from '../components/Table';
 import {setWeights, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
 import {styles} from '../styles';
+import {convertToISO} from '../utils';
 
 const Weights = () => {
   const weights = useSelector(state => state.weights);
@@ -31,11 +32,6 @@ const Weights = () => {
 
   function handleAdd() {
     dispatch(setModalName('weight'));
-  }
-
-  function convertToISO(dateStr) {
-    const [month, day, year] = dateStr.split('/');
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
   function calcWeightChange(weights) {

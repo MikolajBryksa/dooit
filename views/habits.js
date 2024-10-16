@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import Control from '../components/Control';
 import Table from '../components/Table';
-import {setHabits, setModalName} from '../redux/actions';
+import List from '../components/List';
+import {setHabits, setPlans, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
 import {styles} from '../styles';
+import {convertToISO} from '../utils';
 
 const Habits = () => {
   const habits = useSelector(state => state.habits);
@@ -19,13 +20,21 @@ const Habits = () => {
   const [todayPlans, setTodayPlans] = useState([]);
 
   async function fetchData() {
-    const data = getEveryItem('habit', false);
-    const formattedData = data.map(item => ({
+    const habits = getEveryItem('habit', false);
+    const formattedHabits = habits.map(item => ({
       ...item,
       what: item.what,
       when: item.when,
     }));
-    dispatch(setHabits(formattedData));
+    dispatch(setHabits(formattedHabits));
+
+    const plans = getEveryItem('plan', true);
+    const formattedPlans = plans.map(item => ({
+      ...item,
+      what: item.what,
+      when: convertToISO(new Date(item.when).toLocaleDateString()),
+    }));
+    dispatch(setPlans(formattedPlans));
   }
 
   useEffect(() => {
@@ -54,6 +63,7 @@ const Habits = () => {
 
   function handlePlay() {
     setCurrentHabit(habits[0]);
+    setCurrentIndex(0);
     setPlay(true);
   }
 
@@ -63,15 +73,19 @@ const Habits = () => {
 
   function handleDone() {
     const newIndex = (currentIndex + 1) % habits.length;
-    setCurrentHabit(habits[newIndex]);
-    setCurrentIndex(newIndex);
+    if (newIndex === 0) {
+      setPlay(false);
+    } else {
+      setCurrentHabit(habits[newIndex]);
+      setCurrentIndex(newIndex);
+    }
   }
 
   return (
     <View style={styles.container}>
       {habits && !play && (
         <>
-          <Table items={habits} name="habit" />
+          <List items={habits} name="habit" />
           <View style={styles.controllers}>
             <Control type="play" press={handlePlay} />
             <Control type="add" press={handleAdd} />

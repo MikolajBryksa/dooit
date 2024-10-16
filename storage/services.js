@@ -33,10 +33,11 @@ export const addItem = (name, when, what) => {
 
 export const getEveryItem = (name, sort) => {
   const model = getModel(name);
-  return realm.objects(model).sorted([
+  const results = realm.objects(model).sorted([
     ['when', sort],
     ['id', true],
   ]);
+  return results.slice(0, 90);
 };
 
 export const getItem = (name, id) => {

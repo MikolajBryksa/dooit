@@ -47,7 +47,7 @@ export default function Dialog() {
 
   function handleAdd() {
     try {
-      const data = addItem(modalName, when, what);
+      addItem(modalName, when, what);
       Toast.show({
         type: 'add',
         text1: `${what}`,
@@ -64,10 +64,10 @@ export default function Dialog() {
     dispatch(setModalName(null));
   }
 
-  async function handleUpdate() {
+  function handleUpdate() {
     if (currentItem) {
       try {
-        const data = await updateItem(modalName, currentItem.id, when, what);
+        updateItem(modalName, currentItem.id, when, what);
         if (currentItem.what !== what) {
           Toast.show({
             type: 'update',

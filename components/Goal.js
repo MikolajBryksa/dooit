@@ -6,7 +6,7 @@ import {setCurrentItem, setModalName} from '../redux/actions';
 import {getItem} from '../storage/services';
 import {styles} from '../styles';
 
-const Goal = ({id, when, what, name}) => {
+const Goal = ({id, what, name, drag, isActive}) => {
   const dispatch = useDispatch();
 
   async function fetchData() {
@@ -22,8 +22,13 @@ const Goal = ({id, when, what, name}) => {
   return (
     <>
       <Pressable
-        style={({pressed}) => [styles.goal, {opacity: pressed ? 0.8 : 1}]}
-        onPress={() => handlePress()}>
+        style={({pressed}) => [
+          styles.goal,
+          {opacity: pressed ? 0.8 : 1},
+          isActive && styles.goalActive,
+        ]}
+        onPress={() => handlePress()}
+        onLongPress={drag}>
         <Text style={styles.goalWhat}>{what}</Text>
       </Pressable>
     </>
