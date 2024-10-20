@@ -12,7 +12,7 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
-const Control = ({type, press}) => {
+const ControlButton = ({type, press}) => {
   function handlePress() {
     press && press();
   }
@@ -43,11 +43,14 @@ const Control = ({type, press}) => {
 
   return (
     <Pressable
-      style={({pressed}) => [styles.control, {opacity: pressed ? 0.8 : 1}]}
+      style={({pressed}) => [
+        styles.controlButton,
+        {opacity: pressed ? 0.8 : 1},
+      ]}
       onPress={handlePress}>
       {icon}
     </Pressable>
   );
 };
 
-export default Control;
+export default ControlButton;

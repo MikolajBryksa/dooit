@@ -7,7 +7,7 @@ import Weights from './views/weights';
 import Costs from './views/costs';
 import Plans from './views/plans';
 import Tasks from './views/tasks';
-import Dialog from './components/Dialog';
+import ModalDialog from './components/ModalDialog';
 import toastConfig from './components/Toast';
 import Toast from 'react-native-toast-message';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -68,7 +68,7 @@ function AppContent() {
       </Tab.Navigator>
       {modalName && (
         // @ts-ignore
-        <Dialog name={modalName} />
+        <ModalDialog name={modalName} />
       )}
 
       <React.Fragment>

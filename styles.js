@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: DIMENSIONS.margin,
   },
-  note: {
+  tableItem: {
     height: DIMENSIONS.row,
     width: '100%',
     padding: DIMENSIONS.padding,
@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     fontSize: DIMENSIONS.height / 2,
     color: COLORS.secondary,
   },
-  goal: {
+  listItem: {
     flexDirection: 'row',
     height: DIMENSIONS.row,
     width: '100%',
@@ -78,10 +78,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  goalWhat: {
+  lisItemWhat: {
     color: COLORS.text,
   },
-  goalActive: {
+  listItemActive: {
     borderColor: COLORS.secondary,
   },
   calendar: {
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: DIMENSIONS.margin,
   },
-  control: {
+  controlButton: {
     height: DIMENSIONS.height * 3,
     backgroundColor: COLORS.primary,
     justifyContent: 'center',

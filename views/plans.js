@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, DrawerLayoutAndroidBase} from 'react-native';
+import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Control from '../components/Control';
+import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import {setPlans, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
@@ -42,7 +42,6 @@ const Plans = () => {
     }
 
     const occupiedDates = new Set(plans.map(plan => plan.when.split('T')[0]));
-
     let currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 1);
 
@@ -56,8 +55,7 @@ const Plans = () => {
   }
 
   useEffect(() => {
-    const freeDay = findFreeDay(plans);
-    setFreeDay(freeDay);
+    setFreeDay(findFreeDay(plans));
   }, [plans]);
 
   return (
@@ -69,7 +67,7 @@ const Plans = () => {
           </View>
           <Table items={plans} name="plan" />
           <View style={styles.controllers}>
-            <Control type="add" press={handleAdd} />
+            <ControlButton type="add" press={handleAdd} />
           </View>
         </>
       )}

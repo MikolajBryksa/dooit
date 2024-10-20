@@ -7,7 +7,7 @@ import {getItem} from '../storage/services';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const Note = ({id, when, what, name}) => {
+const TableItem = ({id, when, what, name}) => {
   const dispatch = useDispatch();
 
   async function fetchData() {
@@ -20,7 +20,7 @@ const Note = ({id, when, what, name}) => {
     name && fetchData();
   }
 
-  function assignUnit(name) {
+  function assignUnit() {
     switch (name) {
       case 'weight':
         return 'kg';
@@ -32,7 +32,7 @@ const Note = ({id, when, what, name}) => {
   return (
     <>
       <Pressable
-        style={({pressed}) => [styles.note, {opacity: pressed ? 0.8 : 1}]}
+        style={({pressed}) => [styles.tableItem, {opacity: pressed ? 0.8 : 1}]}
         onPress={() => handlePress()}>
         <Text style={styles.when}>{formatDateWithDay(when)}</Text>
         <Text style={styles.what}>
@@ -43,4 +43,4 @@ const Note = ({id, when, what, name}) => {
   );
 };
 
-export default Note;
+export default TableItem;

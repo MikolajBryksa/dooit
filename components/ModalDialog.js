@@ -4,13 +4,13 @@ import {Calendar} from 'react-native-calendars';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Control from './Control';
+import ControlButton from './ControlButton';
 import {setCurrentItem, setModalName} from '../redux/actions';
 import {addItem, updateItem, deleteItem} from '../storage/services';
 import {COLORS, DIMENSIONS, styles} from '../styles';
 import {formatToFloat, getMarkedDates, renderArrow} from '../utils';
 
-export default function Dialog() {
+const ModalDialog = () => {
   const modalName = useSelector(state => state.modalName);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
@@ -71,15 +71,13 @@ export default function Dialog() {
         if (currentItem.what !== what) {
           Toast.show({
             type: 'update',
-            text1: `${currentItem.what}`,
-            text2: `${what}`,
+            text1: `${what}`,
             topOffset: DIMENSIONS.padding,
           });
         } else {
           Toast.show({
             type: 'update',
-            text1: `${currentItem.when}`,
-            text2: `${when}`,
+            text1: `${when}`,
             topOffset: DIMENSIONS.padding,
           });
         }
@@ -99,7 +97,7 @@ export default function Dialog() {
   async function handleDelete() {
     if (currentItem) {
       try {
-        const data = await deleteItem(modalName, currentItem.id);
+        const data = deleteItem(modalName, currentItem.id);
         const formattedWhat =
           typeof data.what === 'number' ? data.what.toFixed(2) : data.what;
         Toast.show({
@@ -134,7 +132,7 @@ export default function Dialog() {
           theme={styles.calendarTheme}
         />
       </View>
-      <View style={styles.note}>
+      <View style={styles.tableItem}>
         <TextInput
           ref={inputRef}
           style={styles.input}
@@ -161,7 +159,7 @@ export default function Dialog() {
       case 'habit':
       case 'task':
         return (
-          <View style={styles.note}>
+          <View style={styles.tableItem}>
             <TextInput
               ref={inputRef}
               style={styles.input}
@@ -187,17 +185,19 @@ export default function Dialog() {
       <View style={styles.container}>
         {renderInputs()}
         <View style={styles.controllers}>
-          <Control type="cancel" press={handleClose} />
+          <ControlButton type="cancel" press={handleClose} />
           {currentItem !== null ? (
             <>
-              <Control type="delete" press={handleDelete} />
-              <Control type="accept" press={handleUpdate} />
+              <ControlButton type="delete" press={handleDelete} />
+              <ControlButton type="accept" press={handleUpdate} />
             </>
           ) : (
-            <Control type="accept" press={handleAdd} />
+            <ControlButton type="accept" press={handleAdd} />
           )}
         </View>
       </View>
     </Modal>
   );
-}
+};
+
+export default ModalDialog;

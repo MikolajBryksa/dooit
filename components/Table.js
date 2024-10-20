@@ -1,13 +1,13 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
-import Note from './Note';
+import TableItem from './TableItem';
 import {styles} from '../styles';
 
 const Table = ({items, name}) => {
   return (
     <ScrollView style={styles.scrollView}>
       {items.map((item, index) => (
-        <Note
+        <TableItem
           key={index}
           id={item.id}
           when={item.when}

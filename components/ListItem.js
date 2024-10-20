@@ -6,7 +6,7 @@ import {setCurrentItem, setModalName} from '../redux/actions';
 import {getItem} from '../storage/services';
 import {styles} from '../styles';
 
-const Goal = ({id, what, name, drag, isActive}) => {
+const ListItem = ({id, what, name, drag, isActive}) => {
   const dispatch = useDispatch();
 
   async function fetchData() {
@@ -23,16 +23,16 @@ const Goal = ({id, what, name, drag, isActive}) => {
     <>
       <Pressable
         style={({pressed}) => [
-          styles.goal,
+          styles.listItem,
           {opacity: pressed ? 0.8 : 1},
-          isActive && styles.goalActive,
+          isActive && styles.listItemActive,
         ]}
         onPress={() => handlePress()}
         onLongPress={drag}>
-        <Text style={styles.goalWhat}>{what}</Text>
+        <Text style={styles.lisItemWhat}>{what}</Text>
       </Pressable>
     </>
   );
 };
 
-export default Goal;
+export default ListItem;

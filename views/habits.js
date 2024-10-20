@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import Control from '../components/Control';
+import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import List from '../components/List';
 import {setHabits, setPlans, setModalName} from '../redux/actions';
@@ -87,8 +87,8 @@ const Habits = () => {
         <>
           <List items={habits} name="habit" />
           <View style={styles.controllers}>
-            <Control type="play" press={handlePlay} />
-            <Control type="add" press={handleAdd} />
+            <ControlButton type="play" press={handlePlay} />
+            <ControlButton type="add" press={handleAdd} />
           </View>
         </>
       )}
@@ -99,8 +99,8 @@ const Habits = () => {
           </View>
           <Table items={todayPlans} name="plan" />
           <View style={styles.controllers}>
-            <Control type="stop" press={handleStop} />
-            <Control type="accept" press={handleDone} />
+            <ControlButton type="stop" press={handleStop} />
+            <ControlButton type="accept" press={handleDone} />
           </View>
         </>
       )}

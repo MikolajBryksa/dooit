@@ -1,3 +1,4 @@
+import React from 'react';
 import {COLORS, styles} from './styles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -18,7 +19,9 @@ export function formatToFloat(text) {
 }
 
 export function formatDateWithDay(when) {
-  if (when.length < 3) return when;
+  if (when.length < 3) {
+    return when;
+  }
   const date = new Date(when);
 
   const dayOfWeek = date.toLocaleDateString('en-US', {weekday: 'long'});

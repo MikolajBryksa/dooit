@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, DrawerLayoutAndroidBase} from 'react-native';
+import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Control from '../components/Control';
+import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import {setCosts, setModalName} from '../redux/actions';
 import {getEveryItem} from '../storage/services';
@@ -60,7 +60,7 @@ const Costs = () => {
           </View>
           <Table items={costs} name="cost" />
           <View style={styles.controllers}>
-            <Control type="add" press={handleAdd} />
+            <ControlButton type="add" press={handleAdd} />
           </View>
         </>
       )}

@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faMinus,
-  faRefresh,
+  faSave,
   faPlus,
   faWarning,
 } from '@fortawesome/free-solid-svg-icons';
@@ -16,13 +16,10 @@ const toastConfig = {
       <Text style={styles.center}>{text1}</Text>
     </View>
   ),
-  update: ({text1, text2}) => (
+  update: ({text1}) => (
     <View style={styles.toast}>
-      <FontAwesomeIcon icon={faRefresh} style={styles.centerIcon} />
-      <Text style={[styles.center, {textDecorationLine: 'line-through'}]}>
-        {text1}
-      </Text>
-      <Text style={styles.center}>{text2}</Text>
+      <FontAwesomeIcon icon={faSave} style={styles.centerIcon} />
+      <Text style={styles.center}>{text1}</Text>
     </View>
   ),
   add: ({text1}) => (

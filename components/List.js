@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {setHabits} from '../redux/actions';
-import Goal from './Goal';
+import {setHabits, setTasks} from '../redux/actions';
+import ListItem from './ListItem';
 import {styles} from '../styles';
 import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -19,7 +19,7 @@ const List = ({items, name}) => {
   const renderItem = useCallback(
     ({item, index, drag, isActive}) => {
       return (
-        <Goal
+        <ListItem
           key={index}
           id={item.id}
           when={item.when}
@@ -38,15 +38,28 @@ const List = ({items, name}) => {
       return {...item, when: index + 1};
     });
     setData(newData);
-    realm.write(() => {
-      newData.forEach(item => {
-        let habit = realm.objectForPrimaryKey('Habit', item.id);
-        if (habit) {
-          habit.when = item.when;
-        }
+    if (name === 'habit') {
+      realm.write(() => {
+        newData.forEach(item => {
+          let habit = realm.objectForPrimaryKey('Habit', item.id);
+          if (habit) {
+            habit.when = item.when;
+          }
+        });
       });
-    });
-    dispatch(setHabits(newData));
+      dispatch(setHabits(newData));
+    }
+    if (name === 'task') {
+      realm.write(() => {
+        newData.forEach(item => {
+          let task = realm.objectForPrimaryKey('Task', item.id);
+          if (task) {
+            task.when = item.when;
+          }
+        });
+      });
+      dispatch(setTasks(newData));
+    }
   };
 
   return (
