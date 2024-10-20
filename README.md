@@ -1,115 +1,91 @@
 # Dooit
 
-This **management tool** will help you create a system of good habits.
+Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily tasks and ensure you stay on top of your goals.
 
-### Tech Stack
+## Tech Stack
 
-- React Native
-- Realm
-- Java
+- **React Native** for building the mobile application.
+- **Realm** for local database management.
+- **Java** for Android-specific development.
 
-### Setup
+## Features
 
-- Check libraries:
+- Create and manage tasks and plans.
+- Track your progress and maintain good habits.
+- Offline support with Realm database.
+- Easy-to-use interface built with React Native.
+
+## Setup
+
+### Requirements
+
+Before you begin, ensure you have met the following requirements:
+
+- **Node.js**: 18.20.4
 
   ```
       node -v
+  ```
+
+- **npm**: 10.7.0
+
+  ```
       npm -v
+  ```
+
+- **Java Development Kit (JDK)**: 17.0.6
+
+  ```
       java --version
   ```
 
-- Run android app:
+- **Android Studio** with the Android SDK.
 
-  ```
-      npm run android
-  ```
+### Installation
 
-### Develop
+- **Clone the repository**:
 
-- Run tests:
-
-  ```
-      npm run test
-  ```
-
-### Default
-
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
-
-# Getting Started
-
-> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
-
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+    git clone https://github.com/MikolajBryksa/dooit.git
 ```
 
-## Step 2: Start your Application
+- **Install dependencies:**:
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+    cd dooit
+    npm install
 ```
 
-### For iOS
+### Launch
 
-```bash
-# using npm
-npm run ios
+- **Run the app in Android Studio**:
 
-# OR using Yarn
-yarn ios
+```
+    npm run android
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+- **Build the APK file**:
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```
+    npm run build
+```
 
-## Step 3: Modifying your App
+- **Find the APK file**:
 
-Now that you have successfully run the app, let's modify it.
+```
+    android/app/build/outputs/apk/release/app-release.apk
+```
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+### Development
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- **Run tests**:
 
-## Congratulations! :tada:
+```
+    npm run test
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+- **Change the app icon**:
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+```
+    https://icon.kitchen/
+```

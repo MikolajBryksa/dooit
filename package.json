@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "start": "react-native start",
+    "build": "cd android && ./gradlew assembleRelease",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
