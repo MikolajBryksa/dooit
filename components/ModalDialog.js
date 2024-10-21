@@ -8,7 +8,12 @@ import ControlButton from './ControlButton';
 import {setCurrentItem, setModalName} from '../redux/actions';
 import {addItem, updateItem, deleteItem} from '../storage/services';
 import {COLORS, DIMENSIONS, styles} from '../styles';
-import {formatToFloat, getMarkedDates, renderArrow} from '../utils';
+import {
+  formatToFloat,
+  formatDateWithDay,
+  getMarkedDates,
+  renderArrow,
+} from '../utils';
 
 const ModalDialog = () => {
   const modalName = useSelector(state => state.modalName);
@@ -28,15 +33,27 @@ const ModalDialog = () => {
 
   useEffect(() => {
     if (currentItem) {
-      setWhen(currentItem.when?.toString());
+      if (modalName === 'habit' || modalName === 'task') {
+        setWhen(currentItem.when?.toString());
+      } else {
+        const formattedDate = currentItem.when
+          ? new Date(currentItem.when).toISOString().split('T')[0]
+          : '';
+        setWhen(formattedDate);
+      }
+
       setWhat(
         typeof currentItem.what === 'number'
           ? currentItem.what.toFixed(2)
           : currentItem.what,
       );
     } else {
-      const today = new Date().toISOString().split('T')[0];
-      setWhen(today);
+      if (modalName === 'habit' || modalName === 'task') {
+        setWhen('');
+      } else {
+        const today = new Date().toISOString().split('T')[0];
+        setWhen(today);
+      }
     }
   }, [currentItem]);
 
@@ -47,11 +64,13 @@ const ModalDialog = () => {
 
   function handleAdd() {
     try {
-      addItem(modalName, when, what);
+      addItem(modalName, when, formatToFloat(what, modalName));
       Toast.show({
         type: 'add',
-        text1: `${what}`,
+        text1: `${formatDateWithDay(when)}`,
+        text2: `${what}`,
         topOffset: DIMENSIONS.padding,
+        visibilityTime: 2500,
       });
     } catch (error) {
       Toast.show({
@@ -67,22 +86,20 @@ const ModalDialog = () => {
   function handleUpdate() {
     if (currentItem) {
       try {
-        updateItem(modalName, currentItem.id, when, what);
-        if (currentItem.what !== what) {
-          Toast.show({
-            type: 'update',
-            text1: `${what}`,
-            topOffset: DIMENSIONS.padding,
-          });
-        } else {
-          Toast.show({
-            type: 'update',
-            text1: `${when}`,
-            topOffset: DIMENSIONS.padding,
-          });
-        }
+        updateItem(
+          modalName,
+          currentItem.id,
+          when,
+          formatToFloat(what, modalName),
+        );
+        Toast.show({
+          type: 'update',
+          text1: `${formatDateWithDay(when)}`,
+          text2: `${what}`,
+          topOffset: DIMENSIONS.padding,
+          visibilityTime: 2500,
+        });
       } catch (error) {
-        console.error('Error updating item:', error);
         Toast.show({
           type: 'error',
           text1: `${error}`,
@@ -97,16 +114,15 @@ const ModalDialog = () => {
   async function handleDelete() {
     if (currentItem) {
       try {
-        const data = deleteItem(modalName, currentItem.id);
-        const formattedWhat =
-          typeof data.what === 'number' ? data.what.toFixed(2) : data.what;
+        deleteItem(modalName, currentItem.id);
         Toast.show({
           type: 'delete',
-          text1: `${formattedWhat}`,
+          text1: `${formatDateWithDay(when)}`,
+          text2: `${what}`,
           topOffset: DIMENSIONS.padding,
+          visibilityTime: 2500,
         });
       } catch (error) {
-        console.error('Error deleting item:', error);
         Toast.show({
           type: 'error',
           text1: `${error}`,
@@ -137,9 +153,7 @@ const ModalDialog = () => {
           ref={inputRef}
           style={styles.input}
           value={what}
-          onChangeText={text =>
-            setWhat(inputModeType === 'numeric' ? formatToFloat(text) : text)
-          }
+          onChangeText={text => setWhat(text)}
           inputMode={inputModeType}
           placeholder={`Enter ${modalName}`}
           placeholderTextColor={COLORS.primary}

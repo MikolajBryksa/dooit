@@ -55,7 +55,7 @@ export const getItem = (name, id) => {
 
 export const updateItem = (name, id, when, what) => {
   const model = getModel(name);
-  if (model === 'Habit') {
+  if (model === 'Habit' || model === 'Task') {
     when = parseInt(when, 10);
   }
   let updatedItem;

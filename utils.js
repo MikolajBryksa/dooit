@@ -8,19 +8,22 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
-export function formatToFloat(text) {
-  const formattedText = text.replace(',', '.');
-  const floatRegex = /^(\d+)?([.]\d*)?$/;
-  if (floatRegex.test(formattedText)) {
-    const floatValue = parseFloat(formattedText);
-    return parseFloat(floatValue.toFixed(2));
+export function formatToFloat(text, modalName) {
+  if (modalName === 'cost' || modalName === 'weight') {
+    const formattedText = text.replace(',', '.');
+    const floatRegex = /^(\d+)?([.]\d*)?$/;
+    if (floatRegex.test(formattedText)) {
+      const floatValue = parseFloat(formattedText);
+      return isNaN(floatValue) ? text : parseFloat(floatValue.toFixed(2));
+    }
+  } else {
+    return text;
   }
-  return NaN;
 }
 
 export function formatDateWithDay(when) {
   if (when.length < 3) {
-    return when;
+    return '';
   }
   const date = new Date(when);
 
@@ -49,6 +52,14 @@ export function getMarkedDates(items, when) {
       };
     }
   });
+
+  if (when) {
+    marked[when] = {
+      selected: true,
+      selectedColor: COLORS.background,
+      selectedTextColor: COLORS.text,
+    };
+  }
 
   if (!marked[when]) {
     marked[when] = {
