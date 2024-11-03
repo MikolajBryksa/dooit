@@ -54,6 +54,13 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  inputContainer: {
+    height: DIMENSIONS.row,
+    width: '100%',
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+  },
   input: {
     height: '100%',
     color: COLORS.text,

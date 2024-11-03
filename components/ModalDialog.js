@@ -146,9 +146,10 @@ const ModalDialog = () => {
           markedDates={getMarkedDates(data, when)}
           renderArrow={renderArrow}
           theme={styles.calendarTheme}
+          hideExtraDays={true}
         />
       </View>
-      <View style={styles.tableItem}>
+      <View style={styles.inputContainer}>
         <TextInput
           ref={inputRef}
           style={styles.input}
@@ -173,7 +174,7 @@ const ModalDialog = () => {
       case 'habit':
       case 'task':
         return (
-          <View style={styles.tableItem}>
+          <View style={styles.inputContainer}>
             <TextInput
               ref={inputRef}
               style={styles.input}

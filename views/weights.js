@@ -44,6 +44,10 @@ const Weights = () => {
     let weightChange = firstWeight - lastWeight;
     weightChange = parseFloat(weightChange.toFixed(2));
 
+    if (weightChange > 0) {
+      weightChange = `+${weightChange}`;
+    }
+
     const firstDate = new Date(weights[0].when);
     const lastDate = new Date(weights[weights.length - 1].when);
     const timeDifference = Math.abs(lastDate - firstDate);
@@ -62,11 +66,14 @@ const Weights = () => {
     <View style={styles.container}>
       {weights && (
         <>
-          <View style={styles.info}>
-            <Text style={styles.center}>
-              {weightChange} kg / {dayDifference} days
-            </Text>
-          </View>
+          {weights.length > 1 && (
+            <View style={styles.info}>
+              <Text style={styles.center}>
+                {weightChange} kg / {dayDifference} days
+              </Text>
+            </View>
+          )}
+
           <Table items={weights} name="weight" />
           <View style={styles.controllers}>
             <ControlButton type="add" press={handleAdd} />

@@ -12,8 +12,8 @@ import toastConfig from './components/Toast';
 import Toast from 'react-native-toast-message';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
-  faClock,
-  faWeightHanging,
+  faCircleCheck,
+  faGaugeHigh,
   faCoins,
   faCalendar,
   faList,
@@ -30,9 +30,9 @@ function assignScreenIcon(routeName: any, focused: any) {
 
   switch (routeName) {
     case 'Habits':
-      return <FontAwesomeIcon icon={faClock} color={iconColor} />;
+      return <FontAwesomeIcon icon={faCircleCheck} color={iconColor} />;
     case 'Weights':
-      return <FontAwesomeIcon icon={faWeightHanging} color={iconColor} />;
+      return <FontAwesomeIcon icon={faGaugeHigh} color={iconColor} />;
     case 'Costs':
       return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
     case 'Plans':

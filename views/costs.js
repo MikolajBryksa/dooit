@@ -41,8 +41,13 @@ const Costs = () => {
       (sum, cost) => sum + parseFloat(cost.what),
       0,
     );
-    const days = new Set(costs.map(cost => cost.when)).size;
-    const averageCost = totalCost / days;
+
+    const firstDate = new Date(costs[0].when);
+    const lastDate = new Date(costs[costs.length - 1].when);
+    const timeDifference = Math.abs(lastDate - firstDate);
+    const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+    const averageCost = totalCost / (days + 1);
     return averageCost.toFixed(2);
   }
 
