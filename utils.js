@@ -34,6 +34,12 @@ export function formatDateWithDay(when) {
   return `${day}.${month} ${dayOfWeek}`;
 }
 
+export function convertTimeToObject(time) {
+  if (!time) return {hours: 0, minutes: 0};
+  const [hours, minutes] = time.split(':').map(Number);
+  return {hours, minutes};
+}
+
 export function getMarkedDates(items, when) {
   const marked = {};
 

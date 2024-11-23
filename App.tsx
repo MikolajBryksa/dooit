@@ -5,23 +5,28 @@ import store from './redux/store';
 import Habits from './views/habits';
 import Weights from './views/weights';
 import Costs from './views/costs';
+import Work from './views/work';
 import Plans from './views/plans';
 import Tasks from './views/tasks';
+import Settings from './views/settings';
 import ModalDialog from './components/ModalDialog';
 import toastConfig from './components/Toast';
 import Toast from 'react-native-toast-message';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCircleCheck,
-  faGaugeHigh,
   faCoins,
   faCalendar,
   faList,
+  faWeight,
+  faCog,
+  faBriefcase,
 } from '@fortawesome/free-solid-svg-icons';
 import 'react-native-gesture-handler';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
+import {faUpwork} from '@fortawesome/free-brands-svg-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,13 +37,17 @@ function assignScreenIcon(routeName: any, focused: any) {
     case 'Habits':
       return <FontAwesomeIcon icon={faCircleCheck} color={iconColor} />;
     case 'Weights':
-      return <FontAwesomeIcon icon={faGaugeHigh} color={iconColor} />;
+      return <FontAwesomeIcon icon={faWeight} color={iconColor} />;
     case 'Costs':
       return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
+    case 'Work':
+      return <FontAwesomeIcon icon={faBriefcase} color={iconColor} />;
     case 'Plans':
       return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
     case 'Tasks':
       return <FontAwesomeIcon icon={faList} color={iconColor} />;
+    case 'Settings':
+      return <FontAwesomeIcon icon={faCog} color={iconColor} />;
   }
 }
 
@@ -63,8 +72,10 @@ function AppContent() {
         <Tab.Screen name="Habits" component={Habits} />
         <Tab.Screen name="Weights" component={Weights} />
         <Tab.Screen name="Costs" component={Costs} />
+        <Tab.Screen name="Work" component={Work} />
         <Tab.Screen name="Plans" component={Plans} />
         <Tab.Screen name="Tasks" component={Tasks} />
+        <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
       {modalName && (
         // @ts-ignore

@@ -8,8 +8,7 @@ export const COLORS = {
 };
 
 export const DIMENSIONS = {
-  row: 60,
-  height: 40,
+  height: 60,
   padding: 10,
   margin: 5,
 };
@@ -25,7 +24,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   toast: {
-    height: DIMENSIONS.height * 3 + DIMENSIONS.margin,
+    height: DIMENSIONS.height,
     width: '95%',
     borderColor: COLORS.secondary,
     borderWidth: 1,
@@ -37,7 +36,7 @@ export const styles = StyleSheet.create({
     gap: DIMENSIONS.margin,
   },
   tableItem: {
-    height: DIMENSIONS.row,
+    height: DIMENSIONS.height,
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.primary,
@@ -55,7 +54,7 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
   },
   inputContainer: {
-    height: DIMENSIONS.row,
+    height: DIMENSIONS.height,
     width: '100%',
     borderColor: COLORS.primary,
     borderWidth: 1,
@@ -65,6 +64,45 @@ export const styles = StyleSheet.create({
     height: '100%',
     color: COLORS.text,
     textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  setter: {
+    height: '100%',
+    color: COLORS.primary,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  timer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: DIMENSIONS.margin,
+  },
+  clockContainer: {
+    flex: 1,
+    height: DIMENSIONS.height,
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+  },
+  clock: {
+    height: '100%',
+    textAlign: 'center',
+    backgroundColor: COLORS.background,
+    text: {
+      color: COLORS.text,
+    },
+
+    pickerItemContainer: {
+      width: '95%',
+    },
+    pickerLabelContainer: {
+      right: -20,
+      top: 0,
+      bottom: 6,
+      width: 40,
+      alignItems: 'center',
+    },
   },
   center: {
     color: COLORS.secondary,
@@ -76,7 +114,7 @@ export const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    height: DIMENSIONS.row,
+    height: DIMENSIONS.height,
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.primary,
@@ -93,7 +131,7 @@ export const styles = StyleSheet.create({
   },
   calendar: {
     width: '100%',
-    height: DIMENSIONS.height * 9,
+    height: 365,
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
@@ -109,7 +147,7 @@ export const styles = StyleSheet.create({
     monthTextColor: COLORS.text,
   },
   info: {
-    height: DIMENSIONS.height * 3 + DIMENSIONS.margin,
+    height: DIMENSIONS.height,
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.secondary,
@@ -123,7 +161,7 @@ export const styles = StyleSheet.create({
     gap: DIMENSIONS.margin,
   },
   controlButton: {
-    height: DIMENSIONS.height * 3,
+    height: DIMENSIONS.height,
     backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',

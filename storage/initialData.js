@@ -51,7 +51,10 @@ export const costs = [
   {when: '2024-09-18', what: 50.2},
 ];
 
-export const plans = [{when: '2024-09-28', what: 'Wedding'}];
+export const plans = [
+  {when: '2024-09-28', what: 'Wedding'},
+  {when: '2024-12-12', what: 'Birthday'},
+];
 
 export const tasks = [
   {category: 'Shop', when: 1, what: 'Rice'},

@@ -42,8 +42,9 @@ const Costs = () => {
       0,
     );
 
-    const firstDate = new Date(costs[0].when);
+    const firstDate = new Date();
     const lastDate = new Date(costs[costs.length - 1].when);
+    console.log(firstDate, lastDate);
     const timeDifference = Math.abs(lastDate - firstDate);
     const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 

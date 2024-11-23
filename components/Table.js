@@ -13,6 +13,8 @@ const Table = ({items, name}) => {
           when={item.when}
           what={item.what}
           name={name}
+          timeStart={item.timeStart}
+          timeEnd={item.timeEnd}
         />
       ))}
     </ScrollView>

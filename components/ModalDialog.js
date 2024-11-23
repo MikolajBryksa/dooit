@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {TextInput, Modal, View} from 'react-native';
+import {TextInput, Modal, View, Text, TouchableOpacity} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -11,9 +11,11 @@ import {COLORS, DIMENSIONS, styles} from '../styles';
 import {
   formatToFloat,
   formatDateWithDay,
+  convertTimeToObject,
   getMarkedDates,
   renderArrow,
 } from '../utils';
+import {TimerPicker} from 'react-native-timer-picker';
 
 const ModalDialog = () => {
   const modalName = useSelector(state => state.modalName);
@@ -31,6 +33,12 @@ const ModalDialog = () => {
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
 
+  const [timeStart, setTimeStart] = useState('');
+  const [showStartPicker, setShowStartPicker] = useState(false);
+
+  const [timeEnd, setTimeEnd] = useState('');
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
   useEffect(() => {
     if (currentItem) {
       if (modalName === 'habit' || modalName === 'task') {
@@ -42,11 +50,24 @@ const ModalDialog = () => {
         setWhen(formattedDate);
       }
 
-      setWhat(
-        typeof currentItem.what === 'number'
-          ? currentItem.what.toFixed(2)
-          : currentItem.what,
-      );
+      if (modalName !== 'work') {
+        setWhat(
+          typeof currentItem.what === 'number'
+            ? currentItem.what.toFixed(2)
+            : currentItem.what,
+        );
+      }
+
+      if (modalName === 'work' || modalName === 'plan') {
+        setTimeStart(currentItem.timeStart);
+        if (currentItem.timeStart) {
+          setShowStartPicker(true);
+        }
+        setTimeEnd(currentItem.timeEnd);
+        if (currentItem.timeEnd) {
+          setShowEndPicker(true);
+        }
+      }
     } else {
       if (modalName === 'habit' || modalName === 'task') {
         setWhen('');
@@ -54,6 +75,8 @@ const ModalDialog = () => {
         const today = new Date().toISOString().split('T')[0];
         setWhen(today);
       }
+      setTimeStart('');
+      setTimeEnd('');
     }
   }, [currentItem]);
 
@@ -64,7 +87,13 @@ const ModalDialog = () => {
 
   function handleAdd() {
     try {
-      addItem(modalName, when, formatToFloat(what, modalName));
+      addItem(
+        modalName,
+        when,
+        formatToFloat(what, modalName),
+        timeStart,
+        timeEnd,
+      );
       Toast.show({
         type: 'add',
         text1: `${formatDateWithDay(when)}`,
@@ -91,6 +120,8 @@ const ModalDialog = () => {
           currentItem.id,
           when,
           formatToFloat(what, modalName),
+          timeStart,
+          timeEnd,
         );
         Toast.show({
           type: 'update',
@@ -134,58 +165,117 @@ const ModalDialog = () => {
     dispatch(setModalName(null));
   }
 
-  const renderCalendarAndInput = (data, inputModeType = 'numeric') => (
-    <>
-      <View style={styles.calendar}>
-        <Calendar
-          onDayPress={day => {
-            setWhen(day.dateString);
-          }}
-          initialDate={when}
-          firstDay={1}
-          markedDates={getMarkedDates(data, when)}
-          renderArrow={renderArrow}
-          theme={styles.calendarTheme}
-          hideExtraDays={true}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          ref={inputRef}
-          style={styles.input}
-          value={what}
-          onChangeText={text => setWhat(text)}
-          inputMode={inputModeType}
-          placeholder={`Enter ${modalName}`}
-          placeholderTextColor={COLORS.primary}
-        />
-      </View>
-    </>
+  const renderCalendar = data => (
+    <View style={styles.calendar}>
+      <Calendar
+        onDayPress={day => {
+          setWhen(day.dateString);
+        }}
+        initialDate={when}
+        firstDay={1}
+        markedDates={getMarkedDates(data, when)}
+        renderArrow={renderArrow}
+        theme={styles.calendarTheme}
+        hideExtraDays={true}
+      />
+    </View>
   );
 
-  const renderInputs = () => {
+  const renderInput = (inputModeType = 'numeric') => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        ref={inputRef}
+        style={styles.input}
+        value={what}
+        onChangeText={text => setWhat(text)}
+        inputMode={inputModeType}
+        placeholder={`Enter ${modalName}`}
+        placeholderTextColor={COLORS.primary}
+      />
+    </View>
+  );
+
+  const renderClock = () => (
+    <View style={styles.timer}>
+      {showStartPicker ? (
+        <View style={styles.clockContainer}>
+          <TimerPicker
+            padWithNItems={0}
+            hideSeconds={true}
+            hourLabel=":"
+            minuteLabel={false}
+            styles={styles.clock}
+            padHoursWithZero={true}
+            initialValue={convertTimeToObject(timeStart)}
+            onDurationChange={duration => {
+              const hours = duration.hours.toString().padStart(2, '0');
+              const minutes = duration.minutes.toString().padStart(2, '0');
+              setTimeStart(`${hours}:${minutes}`);
+            }}
+          />
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.clockContainer}
+          onPress={() => setShowStartPicker(true)}>
+          <Text style={styles.setter}>Set start time</Text>
+        </TouchableOpacity>
+      )}
+
+      {showEndPicker ? (
+        <View style={styles.clockContainer}>
+          <TimerPicker
+            padWithNItems={0}
+            hideSeconds={true}
+            hourLabel=":"
+            minuteLabel={false}
+            styles={styles.clock}
+            padHoursWithZero={true}
+            initialValue={convertTimeToObject(timeEnd)}
+            onDurationChange={duration => {
+              const hours = duration.hours.toString().padStart(2, '0');
+              const minutes = duration.minutes.toString().padStart(2, '0');
+              setTimeEnd(`${hours}:${minutes}`);
+            }}
+          />
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.clockContainer}
+          onPress={() => setShowEndPicker(true)}>
+          <Text style={styles.setter}>Set end time</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
+  const renderDialog = () => {
     switch (modalName) {
       case 'weight':
-        return renderCalendarAndInput(weights, 'numeric');
+        return (
+          <>
+            {renderCalendar(weights)}
+            {renderInput('numeric')}
+          </>
+        );
       case 'cost':
-        return renderCalendarAndInput(costs, 'numeric');
+        return (
+          <>
+            {renderCalendar(costs)}
+            {renderInput('numeric')}
+          </>
+        );
       case 'plan':
-        return renderCalendarAndInput(plans, 'text');
+        return (
+          <>
+            {renderCalendar(plans)}
+            {renderInput('text')}
+            {renderClock('numeric')}
+          </>
+        );
       case 'habit':
       case 'task':
-        return (
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={inputRef}
-              style={styles.input}
-              value={what}
-              onChangeText={text => setWhat(text)}
-              inputMode="text"
-              placeholder={`Enter ${modalName}`}
-              placeholderTextColor={COLORS.primary}
-            />
-          </View>
-        );
+        return <>{renderInput('text')}</>;
       default:
         return null;
     }
@@ -198,7 +288,7 @@ const ModalDialog = () => {
       visible={modalName !== null}
       onRequestClose={handleClose}>
       <View style={styles.container}>
-        {renderInputs()}
+        {renderDialog()}
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />
           {currentItem !== null ? (

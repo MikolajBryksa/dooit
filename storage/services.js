@@ -5,6 +5,7 @@ const getModel = name => {
     habit: 'Habit',
     weight: 'Weight',
     cost: 'Cost',
+    work: 'Work',
     plan: 'Plan',
     task: 'Task',
   };
@@ -16,27 +17,32 @@ const getNextId = model => {
   return lastItem ? lastItem.id + 1 : 1;
 };
 
-export const addItem = (name, when, what) => {
+export const addItem = (name, when, what, timeStart, timeEnd) => {
   const model = getModel(name);
   const id = getNextId(model);
-  if (model === 'Weight' || model === 'Cost' || model === 'Plan') {
-    when = new Date(when);
-  } else {
+  if (model === 'Habit' || model === 'Task') {
     when = id;
+  } else {
+    when = new Date(when);
   }
   let newItem;
   realm.write(() => {
-    newItem = realm.create(model, {id, when, what});
+    newItem = realm.create(model, {id, when, what, timeStart, timeEnd});
   });
   return newItem;
 };
 
 export const getEveryItem = (name, sort) => {
   const model = getModel(name);
-  const results = realm.objects(model).sorted([
-    ['when', sort],
-    ['id', true],
-  ]);
+  const sortFields = [['when', sort]];
+
+  if (name === 'plan' || name === 'work') {
+    sortFields.push(['timeStart', sort]);
+  }
+
+  sortFields.push(['id', true]);
+
+  const results = realm.objects(model).sorted(sortFields);
   return results.slice(0, 90);
 };
 
@@ -53,14 +59,18 @@ export const getItem = (name, id) => {
   return item;
 };
 
-export const updateItem = (name, id, when, what) => {
+export const updateItem = (name, id, when, what, timeStart, timeEnd) => {
   const model = getModel(name);
   if (model === 'Habit' || model === 'Task') {
     when = parseInt(when, 10);
   }
   let updatedItem;
   realm.write(() => {
-    updatedItem = realm.create(model, {id, when, what}, 'modified');
+    updatedItem = realm.create(
+      model,
+      {id, when, what, timeStart, timeEnd},
+      'modified',
+    );
   });
   return updatedItem;
 };

@@ -7,7 +7,7 @@ import {getItem} from '../storage/services';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const TableItem = ({id, when, what, name}) => {
+const TableItem = ({id, when, what, name, timeStart, timeEnd}) => {
   const dispatch = useDispatch();
 
   async function fetchData() {
@@ -29,12 +29,23 @@ const TableItem = ({id, when, what, name}) => {
     }
   }
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isPastDate = new Date(when) < today;
+  const dynamicStyle = ({pressed}) => [
+    styles.tableItem,
+    {opacity: pressed ? 0.8 : 1},
+    name === 'plan' && isPastDate && {opacity: pressed ? 0.3 : 0.5},
+  ];
+
   return (
     <>
-      <Pressable
-        style={({pressed}) => [styles.tableItem, {opacity: pressed ? 0.8 : 1}]}
-        onPress={() => handlePress()}>
-        <Text style={styles.when}>{formatDateWithDay(when)}</Text>
+      <Pressable style={dynamicStyle} onPress={() => handlePress()}>
+        <Text style={styles.when}>
+          {formatDateWithDay(when)}
+          {timeStart && ` | ${timeStart}`}
+          {timeEnd && ` - ${timeEnd}`}
+        </Text>
         <Text style={styles.what}>
           {what} {assignUnit(name)}
         </Text>
