@@ -5,7 +5,7 @@ import store from './redux/store';
 import Habits from './views/habits';
 import Weights from './views/weights';
 import Costs from './views/costs';
-import Work from './views/work';
+import Hours from './views/hours';
 import Plans from './views/plans';
 import Tasks from './views/tasks';
 import Settings from './views/settings';
@@ -26,7 +26,6 @@ import 'react-native-gesture-handler';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {faUpwork} from '@fortawesome/free-brands-svg-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +39,7 @@ function assignScreenIcon(routeName: any, focused: any) {
       return <FontAwesomeIcon icon={faWeight} color={iconColor} />;
     case 'Costs':
       return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
-    case 'Work':
+    case 'Hours':
       return <FontAwesomeIcon icon={faBriefcase} color={iconColor} />;
     case 'Plans':
       return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
@@ -72,7 +71,7 @@ function AppContent() {
         <Tab.Screen name="Habits" component={Habits} />
         <Tab.Screen name="Weights" component={Weights} />
         <Tab.Screen name="Costs" component={Costs} />
-        <Tab.Screen name="Work" component={Work} />
+        <Tab.Screen name="Hours" component={Hours} />
         <Tab.Screen name="Plans" component={Plans} />
         <Tab.Screen name="Tasks" component={Tasks} />
         <Tab.Screen name="Settings" component={Settings} />

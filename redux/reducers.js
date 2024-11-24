@@ -3,6 +3,7 @@ import {
   SET_HABITS,
   SET_WEIGHTS,
   SET_COSTS,
+  SET_HOURS,
   SET_PLANS,
   SET_TASKS,
   SET_MODAL_NAME,
@@ -10,11 +11,12 @@ import {
 
 const initialState = {
   currentItem: null,
-  habits: null,
-  costs: null,
-  weights: null,
-  plans: null,
-  tasks: null,
+  habits: [],
+  weights: [],
+  costs: [],
+  hours: [],
+  plans: [],
+  tasks: [],
   modalName: null,
 };
 
@@ -39,6 +41,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         costs: action.payload,
+      };
+    case SET_HOURS:
+      return {
+        ...state,
+        hours: action.payload,
       };
     case SET_PLANS:
       return {

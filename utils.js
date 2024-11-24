@@ -40,6 +40,34 @@ export function convertTimeToObject(time) {
   return {hours, minutes};
 }
 
+export function timeToMinutes(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+export function calculateDuration(timeStart, timeEnd) {
+  if (timeStart === '' || timeEnd === '') {
+    return null;
+  } else {
+    const startTotalMinutes = timeToMinutes(timeStart);
+    const endTotalMinutes = timeToMinutes(timeEnd);
+
+    let durationMinutes = endTotalMinutes - startTotalMinutes;
+    if (durationMinutes < 0) {
+      durationMinutes += 24 * 60;
+    }
+
+    const durationHours = Math.floor(durationMinutes / 60);
+    const durationRemainingMinutes = durationMinutes % 60;
+
+    return `${durationHours
+      .toString()
+      .padStart(2, '0')}:${durationRemainingMinutes
+      .toString()
+      .padStart(2, '0')}`;
+  }
+}
+
 export function getMarkedDates(items, when) {
   const marked = {};
 

@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: DIMENSIONS.margin,
   },
   tableItem: {

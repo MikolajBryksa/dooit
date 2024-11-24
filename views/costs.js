@@ -44,11 +44,11 @@ const Costs = () => {
 
     const firstDate = new Date();
     const lastDate = new Date(costs[costs.length - 1].when);
-    console.log(firstDate, lastDate);
     const timeDifference = Math.abs(lastDate - firstDate);
     const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-    const averageCost = totalCost / (days + 1);
+    const averageCost = totalCost / days;
+
     return averageCost.toFixed(2);
   }
 

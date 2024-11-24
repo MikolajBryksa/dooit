@@ -33,13 +33,14 @@ Cost.schema = {
   },
 };
 
-class Work extends Realm.Object {}
-Work.schema = {
-  name: 'Work',
+class Hour extends Realm.Object {}
+Hour.schema = {
+  name: 'Hour',
   primaryKey: 'id',
   properties: {
     id: 'int',
     when: 'date',
+    what: 'string?',
     timeStart: 'string?',
     timeEnd: 'string?',
   },
@@ -70,8 +71,8 @@ Task.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Weight, Cost, Plan, Task],
-  schemaVersion: 1,
+  schema: [Habit, Weight, Cost, Hour, Plan, Task],
+  schemaVersion: 3,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 1) {
       const oldObjects = oldRealm.objects('Plan');
@@ -80,6 +81,15 @@ const realmConfig = {
       for (let i = 0; i < oldObjects.length; i++) {
         newObjects[i].timeStart = '';
         newObjects[i].timeEnd = '';
+      }
+    }
+
+    if (oldRealm.schemaVersion < 3) {
+      const oldHourObjects = oldRealm.objects('Hour');
+      const newHourObjects = newRealm.objects('Hour');
+
+      for (let i = 0; i < oldHourObjects.length; i++) {
+        newHourObjects[i].what = oldHourObjects[i].what || '';
       }
     }
   },

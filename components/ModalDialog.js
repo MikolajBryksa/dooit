@@ -23,6 +23,7 @@ const ModalDialog = () => {
   const dispatch = useDispatch();
   const weights = useSelector(state => state.weights);
   const costs = useSelector(state => state.costs);
+  const hours = useSelector(state => state.hours);
   const plans = useSelector(state => state.plans);
 
   const inputRef = useRef(null);
@@ -50,15 +51,7 @@ const ModalDialog = () => {
         setWhen(formattedDate);
       }
 
-      if (modalName !== 'work') {
-        setWhat(
-          typeof currentItem.what === 'number'
-            ? currentItem.what.toFixed(2)
-            : currentItem.what,
-        );
-      }
-
-      if (modalName === 'work' || modalName === 'plan') {
+      if (modalName === 'hour' || modalName === 'plan') {
         setTimeStart(currentItem.timeStart);
         if (currentItem.timeStart) {
           setShowStartPicker(true);
@@ -68,6 +61,12 @@ const ModalDialog = () => {
           setShowEndPicker(true);
         }
       }
+
+      setWhat(
+        typeof currentItem.what === 'number'
+          ? currentItem.what.toFixed(2)
+          : currentItem.what,
+      );
     } else {
       if (modalName === 'habit' || modalName === 'task') {
         setWhen('');
@@ -96,7 +95,9 @@ const ModalDialog = () => {
       );
       Toast.show({
         type: 'add',
-        text1: `${formatDateWithDay(when)}`,
+        text1: `${formatDateWithDay(when)}${
+          timeStart ? ` | ${timeStart}` : ''
+        }${timeEnd ? ` - ${timeEnd}` : ''}`,
         text2: `${what}`,
         topOffset: DIMENSIONS.padding,
         visibilityTime: 2500,
@@ -125,7 +126,9 @@ const ModalDialog = () => {
         );
         Toast.show({
           type: 'update',
-          text1: `${formatDateWithDay(when)}`,
+          text1: `${formatDateWithDay(when)}${
+            timeStart ? ` | ${timeStart}` : ''
+          }${timeEnd ? ` - ${timeEnd}` : ''}`,
           text2: `${what}`,
           topOffset: DIMENSIONS.padding,
           visibilityTime: 2500,
@@ -148,7 +151,9 @@ const ModalDialog = () => {
         deleteItem(modalName, currentItem.id);
         Toast.show({
           type: 'delete',
-          text1: `${formatDateWithDay(when)}`,
+          text1: `${formatDateWithDay(when)}${
+            timeStart ? ` | ${timeStart}` : ''
+          }${timeEnd ? ` - ${timeEnd}` : ''}`,
           text2: `${what}`,
           topOffset: DIMENSIONS.padding,
           visibilityTime: 2500,
@@ -263,6 +268,13 @@ const ModalDialog = () => {
           <>
             {renderCalendar(costs)}
             {renderInput('numeric')}
+          </>
+        );
+      case 'hour':
+        return (
+          <>
+            {renderCalendar(hours)}
+            {renderClock('numeric')}
           </>
         );
       case 'plan':

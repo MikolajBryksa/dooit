@@ -1,11 +1,12 @@
 import realm from './schemas';
+import {calculateDuration} from '../utils';
 
 const getModel = name => {
   const models = {
     habit: 'Habit',
     weight: 'Weight',
     cost: 'Cost',
-    work: 'Work',
+    hour: 'Hour',
     plan: 'Plan',
     task: 'Task',
   };
@@ -20,11 +21,16 @@ const getNextId = model => {
 export const addItem = (name, when, what, timeStart, timeEnd) => {
   const model = getModel(name);
   const id = getNextId(model);
+
   if (model === 'Habit' || model === 'Task') {
     when = id;
   } else {
     when = new Date(when);
   }
+  if (model === 'Hour') {
+    what = calculateDuration(timeStart, timeEnd);
+  }
+
   let newItem;
   realm.write(() => {
     newItem = realm.create(model, {id, when, what, timeStart, timeEnd});
@@ -36,7 +42,7 @@ export const getEveryItem = (name, sort) => {
   const model = getModel(name);
   const sortFields = [['when', sort]];
 
-  if (name === 'plan' || name === 'work') {
+  if (name === 'plan' || name === 'hour') {
     sortFields.push(['timeStart', sort]);
   }
 
@@ -63,6 +69,9 @@ export const updateItem = (name, id, when, what, timeStart, timeEnd) => {
   const model = getModel(name);
   if (model === 'Habit' || model === 'Task') {
     when = parseInt(when, 10);
+  }
+  if (model === 'Hour') {
+    what = calculateDuration(timeStart, timeEnd);
   }
   let updatedItem;
   realm.write(() => {
