@@ -1,7 +1,6 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
 import {useDispatch} from 'react-redux';
-
 import {setCurrentItem, setModalName} from '../redux/actions';
 import {getItem} from '../storage/services';
 import {styles} from '../styles';
@@ -26,6 +25,8 @@ const TableItem = ({id, when, what, name, timeStart, timeEnd}) => {
         return 'kg';
       case 'cost':
         return 'zł';
+      case 'hour':
+        return 'h';
     }
   }
 

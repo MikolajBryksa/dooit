@@ -6,6 +6,13 @@ import {
   faChevronRight,
   faChevronUp,
   faChevronDown,
+  faCircleCheck,
+  faCoins,
+  faCalendar,
+  faList,
+  faWeight,
+  faCog,
+  faBriefcase,
 } from '@fortawesome/free-solid-svg-icons';
 
 export function formatToFloat(text, modalName) {
@@ -133,4 +140,39 @@ export function renderArrow(direction) {
 export function convertToISO(dateStr) {
   const [month, day, year] = dateStr.split('/');
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+export function assignScreenIcon(name, focused) {
+  let iconColor;
+  if (focused === true) {
+    iconColor = COLORS.text;
+  } else if (focused === false) {
+    iconColor = COLORS.primary;
+  } else {
+    iconColor = COLORS.secondary;
+  }
+
+  switch (name) {
+    case 'Habits':
+    case 'habit':
+      return <FontAwesomeIcon icon={faCircleCheck} color={iconColor} />;
+    case 'Weights':
+    case 'weight':
+      return <FontAwesomeIcon icon={faWeight} color={iconColor} />;
+    case 'Costs':
+    case 'cost':
+      return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
+    case 'Hours':
+    case 'hour':
+      return <FontAwesomeIcon icon={faBriefcase} color={iconColor} />;
+    case 'Plans':
+    case 'plan':
+      return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
+    case 'Tasks':
+    case 'task':
+      return <FontAwesomeIcon icon={faList} color={iconColor} />;
+    case 'Settings':
+    case 'settings':
+      return <FontAwesomeIcon icon={faCog} color={iconColor} />;
+  }
 }

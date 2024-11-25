@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import {setPlans, setModalName} from '../redux/actions';
@@ -14,6 +13,8 @@ const Plans = () => {
   const plans = useSelector(state => state.plans);
   const modalName = useSelector(state => state.modalName);
   const dispatch = useDispatch();
+
+  // Data
 
   async function fetchData() {
     const data = getEveryItem('plan', false);
@@ -33,11 +34,13 @@ const Plans = () => {
     dispatch(setModalName('plan'));
   }
 
+  // View
+
   return (
     <View style={styles.container}>
       {plans && (
         <>
-          <View style={styles.info}>
+          <View style={styles.header}>
             <Text style={styles.center}>{formatDateWithDay(new Date())}</Text>
           </View>
           <Table items={plans} name="plan" />

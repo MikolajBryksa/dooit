@@ -1,30 +1,36 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {TextInput, Modal, View, Text, TouchableOpacity} from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import {TimerPicker} from 'react-native-timer-picker';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
-
 import ControlButton from './ControlButton';
 import {setCurrentItem, setModalName} from '../redux/actions';
 import {addItem, updateItem, deleteItem} from '../storage/services';
 import {COLORS, DIMENSIONS, styles} from '../styles';
 import {
   formatToFloat,
-  formatDateWithDay,
   convertTimeToObject,
   getMarkedDates,
   renderArrow,
 } from '../utils';
-import {TimerPicker} from 'react-native-timer-picker';
 
-const ModalDialog = () => {
-  const modalName = useSelector(state => state.modalName);
-  const currentItem = useSelector(state => state.currentItem);
+const ModalDialog = ({name}) => {
+  const modalName = name;
+
+  let items;
+  if (modalName === 'weight') {
+    items = useSelector(state => state.weights);
+  } else if (modalName === 'cost') {
+    items = useSelector(state => state.costs);
+  } else if (modalName === 'hour') {
+    items = useSelector(state => state.hours);
+  } else if (modalName === 'plan') {
+    items = useSelector(state => state.plans);
+  }
+
   const dispatch = useDispatch();
-  const weights = useSelector(state => state.weights);
-  const costs = useSelector(state => state.costs);
-  const hours = useSelector(state => state.hours);
-  const plans = useSelector(state => state.plans);
+  const currentItem = useSelector(state => state.currentItem);
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -42,6 +48,7 @@ const ModalDialog = () => {
 
   useEffect(() => {
     if (currentItem) {
+      // Set When
       if (modalName === 'habit' || modalName === 'task') {
         setWhen(currentItem.when?.toString());
       } else {
@@ -51,6 +58,7 @@ const ModalDialog = () => {
         setWhen(formattedDate);
       }
 
+      // Set Timer
       if (modalName === 'hour' || modalName === 'plan') {
         setTimeStart(currentItem.timeStart);
         if (currentItem.timeStart) {
@@ -61,13 +69,14 @@ const ModalDialog = () => {
           setShowEndPicker(true);
         }
       }
-
+      // Set What
       setWhat(
         typeof currentItem.what === 'number'
           ? currentItem.what.toFixed(2)
           : currentItem.what,
       );
     } else {
+      // Reset
       if (modalName === 'habit' || modalName === 'task') {
         setWhen('');
       } else {
@@ -85,61 +94,39 @@ const ModalDialog = () => {
   }
 
   function handleAdd() {
-    try {
-      addItem(
-        modalName,
-        when,
-        formatToFloat(what, modalName),
-        timeStart,
-        timeEnd,
-      );
-      Toast.show({
-        type: 'add',
-        text1: `${formatDateWithDay(when)}${
-          timeStart ? ` | ${timeStart}` : ''
-        }${timeEnd ? ` - ${timeEnd}` : ''}`,
-        text2: `${what}`,
-        topOffset: DIMENSIONS.padding,
-        visibilityTime: 2500,
-      });
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: `${error}`,
-        topOffset: DIMENSIONS.padding,
-      });
-    }
+    addItem(
+      modalName,
+      when,
+      formatToFloat(what, modalName),
+      timeStart,
+      timeEnd,
+    );
+    Toast.show({
+      type: 'add',
+      text1: modalName,
+      topOffset: DIMENSIONS.padding,
+      visibilityTime: 1500,
+    });
     dispatch(setCurrentItem(null));
     dispatch(setModalName(null));
   }
 
   function handleUpdate() {
     if (currentItem) {
-      try {
-        updateItem(
-          modalName,
-          currentItem.id,
-          when,
-          formatToFloat(what, modalName),
-          timeStart,
-          timeEnd,
-        );
-        Toast.show({
-          type: 'update',
-          text1: `${formatDateWithDay(when)}${
-            timeStart ? ` | ${timeStart}` : ''
-          }${timeEnd ? ` - ${timeEnd}` : ''}`,
-          text2: `${what}`,
-          topOffset: DIMENSIONS.padding,
-          visibilityTime: 2500,
-        });
-      } catch (error) {
-        Toast.show({
-          type: 'error',
-          text1: `${error}`,
-          topOffset: DIMENSIONS.padding,
-        });
-      }
+      updateItem(
+        modalName,
+        currentItem.id,
+        when,
+        formatToFloat(what, modalName),
+        timeStart,
+        timeEnd,
+      );
+      Toast.show({
+        type: 'update',
+        text1: modalName,
+        topOffset: DIMENSIONS.padding,
+        visibilityTime: 1500,
+      });
     }
     dispatch(setCurrentItem(null));
     dispatch(setModalName(null));
@@ -147,24 +134,13 @@ const ModalDialog = () => {
 
   async function handleDelete() {
     if (currentItem) {
-      try {
-        deleteItem(modalName, currentItem.id);
-        Toast.show({
-          type: 'delete',
-          text1: `${formatDateWithDay(when)}${
-            timeStart ? ` | ${timeStart}` : ''
-          }${timeEnd ? ` - ${timeEnd}` : ''}`,
-          text2: `${what}`,
-          topOffset: DIMENSIONS.padding,
-          visibilityTime: 2500,
-        });
-      } catch (error) {
-        Toast.show({
-          type: 'error',
-          text1: `${error}`,
-          topOffset: DIMENSIONS.padding,
-        });
-      }
+      deleteItem(modalName, currentItem.id);
+      Toast.show({
+        type: 'delete',
+        text1: modalName,
+        topOffset: DIMENSIONS.padding,
+        visibilityTime: 1500,
+      });
     }
     dispatch(setCurrentItem(null));
     dispatch(setModalName(null));
@@ -257,30 +233,24 @@ const ModalDialog = () => {
   const renderDialog = () => {
     switch (modalName) {
       case 'weight':
-        return (
-          <>
-            {renderCalendar(weights)}
-            {renderInput('numeric')}
-          </>
-        );
       case 'cost':
         return (
           <>
-            {renderCalendar(costs)}
+            {renderCalendar(items)}
             {renderInput('numeric')}
           </>
         );
       case 'hour':
         return (
           <>
-            {renderCalendar(hours)}
+            {renderCalendar(items)}
             {renderClock('numeric')}
           </>
         );
       case 'plan':
         return (
           <>
-            {renderCalendar(plans)}
+            {renderCalendar(items)}
             {renderInput('text')}
             {renderClock('numeric')}
           </>

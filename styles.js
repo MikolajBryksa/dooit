@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     gap: DIMENSIONS.margin,
   },
   tableItem: {
@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
     textDisabledColor: COLORS.background,
     monthTextColor: COLORS.text,
   },
-  info: {
+  header: {
     height: DIMENSIONS.height,
     width: '100%',
     padding: DIMENSIONS.padding,

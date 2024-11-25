@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import {setHours, setModalName} from '../redux/actions';
@@ -15,6 +14,8 @@ const Hours = () => {
   const modalName = useSelector(state => state.modalName);
   const dispatch = useDispatch();
   const [averageWorkTime, setAverageWorkTime] = useState(0);
+
+  // Data
 
   async function fetchData() {
     const data = getEveryItem('hour', true);
@@ -33,13 +34,14 @@ const Hours = () => {
     dispatch(setModalName('hour'));
   }
 
+  // Header
+
   function calcAverageWorkTime(hours) {
     if (!Array.isArray(hours) || hours.length === 0) {
       return 0;
     }
 
     const validHours = hours.filter(hour => hour.what);
-
     const totalMinutes = validHours.reduce((sum, hour) => {
       return sum + timeToMinutes(hour.what);
     }, 0);
@@ -58,12 +60,14 @@ const Hours = () => {
     setAverageWorkTime(averageWorkTime);
   }, [hours]);
 
+  // View
+
   return (
     <View style={styles.container}>
       {hours && (
         <>
-          <View style={styles.info}>
-            <Text style={styles.center}>{averageWorkTime} / day</Text>
+          <View style={styles.header}>
+            <Text style={styles.center}>{averageWorkTime} h / day</Text>
           </View>
           <Table items={hours} name="hour" />
           <View style={styles.controllers}>

@@ -12,43 +12,13 @@ import Settings from './views/settings';
 import ModalDialog from './components/ModalDialog';
 import toastConfig from './components/Toast';
 import Toast from 'react-native-toast-message';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faCircleCheck,
-  faCoins,
-  faCalendar,
-  faList,
-  faWeight,
-  faCog,
-  faBriefcase,
-} from '@fortawesome/free-solid-svg-icons';
-import 'react-native-gesture-handler';
 
+import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
+import {assignScreenIcon} from './utils';
 
 const Tab = createBottomTabNavigator();
-
-function assignScreenIcon(routeName: any, focused: any) {
-  const iconColor = focused ? COLORS.text : COLORS.primary;
-
-  switch (routeName) {
-    case 'Habits':
-      return <FontAwesomeIcon icon={faCircleCheck} color={iconColor} />;
-    case 'Weights':
-      return <FontAwesomeIcon icon={faWeight} color={iconColor} />;
-    case 'Costs':
-      return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
-    case 'Hours':
-      return <FontAwesomeIcon icon={faBriefcase} color={iconColor} />;
-    case 'Plans':
-      return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
-    case 'Tasks':
-      return <FontAwesomeIcon icon={faList} color={iconColor} />;
-    case 'Settings':
-      return <FontAwesomeIcon icon={faCog} color={iconColor} />;
-  }
-}
 
 function AppContent() {
   const modalName = useSelector(

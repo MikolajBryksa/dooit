@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import ControlButton from '../components/ControlButton';
 import List from '../components/List';
 import {setTasks, setModalName} from '../redux/actions';
@@ -12,6 +11,8 @@ const Tasks = () => {
   const tasks = useSelector(state => state.tasks);
   const modalName = useSelector(state => state.modalName);
   const dispatch = useDispatch();
+
+  // Data
 
   async function fetchData() {
     const tasks = getEveryItem('task', false);
@@ -30,6 +31,8 @@ const Tasks = () => {
   function handleAdd() {
     dispatch(setModalName('task'));
   }
+
+  // View
 
   return (
     <View style={styles.container}>

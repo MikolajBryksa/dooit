@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-
 import ControlButton from '../components/ControlButton';
 import Table from '../components/Table';
 import {setWeights, setModalName} from '../redux/actions';
@@ -15,6 +14,8 @@ const Weights = () => {
   const dispatch = useDispatch();
   const [weightChange, setWeightChange] = useState(0);
   const [dayDifference, setDayDifference] = useState(0);
+
+  // Data
 
   async function fetchData() {
     const data = getEveryItem('weight', true);
@@ -33,6 +34,8 @@ const Weights = () => {
   function handleAdd() {
     dispatch(setModalName('weight'));
   }
+
+  // Header
 
   function calcWeightChange(weights) {
     if (!Array.isArray(weights) || weights.length === 0) {
@@ -62,12 +65,14 @@ const Weights = () => {
     setDayDifference(dayDifference);
   }, [weights]);
 
+  // View
+
   return (
     <View style={styles.container}>
       {weights && (
         <>
           {weights.length > 1 && (
-            <View style={styles.info}>
+            <View style={styles.header}>
               <Text style={styles.center}>
                 {weightChange} kg / {dayDifference} days
               </Text>

@@ -19,6 +19,8 @@ const Habits = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [todayPlans, setTodayPlans] = useState([]);
 
+  // Data
+
   async function fetchData() {
     const habits = getEveryItem('habit', false);
     const formattedHabits = habits.map(item => ({
@@ -81,6 +83,8 @@ const Habits = () => {
     }
   }
 
+  // View
+
   return (
     <View style={styles.container}>
       {habits && !play && (
@@ -94,7 +98,7 @@ const Habits = () => {
       )}
       {habits && play && (
         <>
-          <View style={styles.info}>
+          <View style={styles.header}>
             <Text style={styles.center}>{currentHabit.what}</Text>
           </View>
           <Table items={todayPlans} name="plan" />
