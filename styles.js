@@ -54,17 +54,27 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
   },
   inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     height: DIMENSIONS.height,
     width: '100%',
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
+    alignItems: 'center',
   },
   input: {
+    flex: 1,
     height: '100%',
     color: COLORS.text,
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  incrementator: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 25,
   },
   setter: {
     height: '100%',

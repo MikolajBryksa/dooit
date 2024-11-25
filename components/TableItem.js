@@ -47,9 +47,11 @@ const TableItem = ({id, when, what, name, timeStart, timeEnd}) => {
           {timeStart && ` | ${timeStart}`}
           {timeEnd && ` - ${timeEnd}`}
         </Text>
-        <Text style={styles.what}>
-          {what} {assignUnit(name)}
-        </Text>
+        {what && (
+          <Text style={styles.what}>
+            {what} {assignUnit(name)}
+          </Text>
+        )}
       </Pressable>
     </>
   );

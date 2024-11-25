@@ -14,6 +14,7 @@ import {
   getMarkedDates,
   renderArrow,
   formatDateWithDay,
+  getCurrentTime,
 } from '../utils';
 
 const ModalDialog = ({name}) => {
@@ -82,6 +83,9 @@ const ModalDialog = ({name}) => {
       } else {
         const today = new Date().toISOString().split('T')[0];
         setWhen(today);
+      }
+      if (modalName === 'weight' && items.length > 0) {
+        setWhat(items[0].what);
       }
       setTimeStart('');
       setTimeEnd('');
@@ -169,8 +173,21 @@ const ModalDialog = ({name}) => {
       </TouchableOpacity>
     );
 
-  const renderInput = (inputModeType = 'numeric') => (
+  const renderInput = (inputModeType = 'numeric', incrementator) => (
     <View style={styles.inputContainer}>
+      {incrementator && (
+        <>
+          <TouchableOpacity
+            style={styles.incrementator}
+            onPress={() => {
+              const increasedValue =
+                parseFloat(Number(what)) + parseFloat(incrementator);
+              setWhat(increasedValue.toFixed(2));
+            }}>
+            {renderArrow('up')}
+          </TouchableOpacity>
+        </>
+      )}
       <TextInput
         ref={inputRef}
         style={styles.input}
@@ -180,6 +197,19 @@ const ModalDialog = ({name}) => {
         placeholder={`Enter ${modalName}`}
         placeholderTextColor={COLORS.primary}
       />
+      {incrementator && (
+        <>
+          <TouchableOpacity
+            style={styles.incrementator}
+            onPress={() => {
+              const decreasedValue =
+                parseFloat(Number(what)) - parseFloat(incrementator);
+              setWhat(decreasedValue.toFixed(2));
+            }}>
+            {renderArrow('down')}
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 
@@ -194,7 +224,7 @@ const ModalDialog = ({name}) => {
             minuteLabel={false}
             styles={styles.clock}
             padHoursWithZero={true}
-            initialValue={convertTimeToObject(timeStart)}
+            initialValue={convertTimeToObject(getCurrentTime())}
             onDurationChange={duration => {
               const hours = duration.hours.toString().padStart(2, '0');
               const minutes = duration.minutes.toString().padStart(2, '0');
@@ -219,7 +249,7 @@ const ModalDialog = ({name}) => {
             minuteLabel={false}
             styles={styles.clock}
             padHoursWithZero={true}
-            initialValue={convertTimeToObject(timeEnd)}
+            initialValue={convertTimeToObject(getCurrentTime())}
             onDurationChange={duration => {
               const hours = duration.hours.toString().padStart(2, '0');
               const minutes = duration.minutes.toString().padStart(2, '0');
@@ -240,11 +270,17 @@ const ModalDialog = ({name}) => {
   const renderDialog = () => {
     switch (modalName) {
       case 'weight':
+        return (
+          <>
+            {renderCalendar(items)}
+            {renderInput('numeric', 0.5)}
+          </>
+        );
       case 'cost':
         return (
           <>
             {renderCalendar(items)}
-            {renderInput('numeric')}
+            {renderInput('numeric', 1)}
           </>
         );
       case 'hour':
@@ -283,10 +319,24 @@ const ModalDialog = ({name}) => {
           {currentItem !== null ? (
             <>
               <ControlButton type="delete" press={handleDelete} />
-              <ControlButton type="accept" press={handleUpdate} />
+              <ControlButton
+                type="accept"
+                press={handleUpdate}
+                disabled={
+                  (!what && modalName !== 'hour') ||
+                  (modalName === 'hour' && !timeStart)
+                }
+              />
             </>
           ) : (
-            <ControlButton type="accept" press={handleAdd} />
+            <ControlButton
+              type="accept"
+              press={handleAdd}
+              disabled={
+                (!what && modalName !== 'hour') ||
+                (modalName === 'hour' && !timeStart)
+              }
+            />
           )}
         </View>
       </View>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Pressable} from 'react-native';
-
 import {styles, COLORS} from '../styles';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -12,7 +11,7 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
-const ControlButton = ({type, press}) => {
+const ControlButton = ({type, press, disabled}) => {
   function handlePress() {
     press && press();
   }
@@ -41,13 +40,14 @@ const ControlButton = ({type, press}) => {
       break;
   }
 
+  const dynamicStyle = ({pressed}) => [
+    styles.controlButton,
+    {opacity: pressed ? 0.8 : 1},
+    disabled && {opacity: 0.5},
+  ];
+
   return (
-    <Pressable
-      style={({pressed}) => [
-        styles.controlButton,
-        {opacity: pressed ? 0.8 : 1},
-      ]}
-      onPress={handlePress}>
+    <Pressable style={dynamicStyle} onPress={handlePress} disabled={disabled}>
       {icon}
     </Pressable>
   );

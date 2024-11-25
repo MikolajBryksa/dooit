@@ -75,6 +75,13 @@ export function calculateDuration(timeStart, timeEnd) {
   }
 }
 
+export function getCurrentTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
 export function getMarkedDates(items, when) {
   const marked = {};
 
@@ -110,31 +117,6 @@ export function getMarkedDates(items, when) {
     };
   }
   return marked;
-}
-
-export function renderArrow(direction) {
-  let icon;
-  switch (direction) {
-    case 'left':
-      icon = faChevronLeft;
-      break;
-    case 'right':
-      icon = faChevronRight;
-      break;
-    case 'up':
-      icon = faChevronUp;
-      break;
-    case 'down':
-      icon = faChevronDown;
-      break;
-  }
-
-  return (
-    <FontAwesomeIcon
-      icon={icon}
-      style={[styles.icon, {color: COLORS.primary}]}
-    />
-  );
 }
 
 export function convertToISO(dateStr) {
@@ -175,4 +157,29 @@ export function assignScreenIcon(name, focused) {
     case 'settings':
       return <FontAwesomeIcon icon={faCog} color={iconColor} />;
   }
+}
+
+export function renderArrow(direction) {
+  let icon;
+  switch (direction) {
+    case 'left':
+      icon = faChevronLeft;
+      break;
+    case 'right':
+      icon = faChevronRight;
+      break;
+    case 'up':
+      icon = faChevronUp;
+      break;
+    case 'down':
+      icon = faChevronDown;
+      break;
+  }
+
+  return (
+    <FontAwesomeIcon
+      icon={icon}
+      style={[styles.icon, {color: COLORS.primary}]}
+    />
+  );
 }
