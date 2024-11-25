@@ -92,7 +92,6 @@ export const styles = StyleSheet.create({
     text: {
       color: COLORS.text,
     },
-
     pickerItemContainer: {
       width: '95%',
     },
@@ -123,7 +122,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  lisItemWhat: {
+  listItemWhat: {
     color: COLORS.text,
   },
   listItemActive: {

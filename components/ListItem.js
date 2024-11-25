@@ -29,7 +29,7 @@ const ListItem = ({id, what, name, drag, isActive}) => {
         ]}
         onPress={() => handlePress()}
         onLongPress={drag}>
-        <Text style={styles.lisItemWhat}>{what}</Text>
+        <Text style={styles.listItemWhat}>{what}</Text>
       </Pressable>
     </>
   );

@@ -13,6 +13,7 @@ import {
   convertTimeToObject,
   getMarkedDates,
   renderArrow,
+  formatDateWithDay,
 } from '../utils';
 
 const ModalDialog = ({name}) => {
@@ -39,12 +40,11 @@ const ModalDialog = ({name}) => {
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
-
   const [timeStart, setTimeStart] = useState('');
   const [showStartPicker, setShowStartPicker] = useState(false);
-
   const [timeEnd, setTimeEnd] = useState('');
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   useEffect(() => {
     if (currentItem) {
@@ -146,21 +146,28 @@ const ModalDialog = ({name}) => {
     dispatch(setModalName(null));
   }
 
-  const renderCalendar = data => (
-    <View style={styles.calendar}>
-      <Calendar
-        onDayPress={day => {
-          setWhen(day.dateString);
-        }}
-        initialDate={when}
-        firstDay={1}
-        markedDates={getMarkedDates(data, when)}
-        renderArrow={renderArrow}
-        theme={styles.calendarTheme}
-        hideExtraDays={true}
-      />
-    </View>
-  );
+  const renderCalendar = data =>
+    showCalendar || modalName === 'plan' ? (
+      <View style={styles.calendar}>
+        <Calendar
+          onDayPress={day => {
+            setWhen(day.dateString);
+          }}
+          initialDate={when}
+          firstDay={1}
+          markedDates={getMarkedDates(data, when)}
+          renderArrow={renderArrow}
+          theme={styles.calendarTheme}
+          hideExtraDays={true}
+        />
+      </View>
+    ) : (
+      <TouchableOpacity
+        style={styles.inputContainer}
+        onPress={() => setShowCalendar(true)}>
+        <Text style={styles.input}>{formatDateWithDay(when)}</Text>
+      </TouchableOpacity>
+    );
 
   const renderInput = (inputModeType = 'numeric') => (
     <View style={styles.inputContainer}>
