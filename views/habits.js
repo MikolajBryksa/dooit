@@ -91,6 +91,9 @@ const Habits = () => {
     <View style={styles.container}>
       {habits && !play && (
         <>
+          <View style={styles.header}>
+            <Text style={styles.center}>Dooit</Text>
+          </View>
           <List items={habits} name="habit" />
           <View style={styles.controllers}>
             <ControlButton type="play" press={handlePlay} />

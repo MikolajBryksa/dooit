@@ -41,18 +41,22 @@ const Hours = () => {
       return 0;
     }
 
-    const validHours = hours.filter(hour => hour.what);
-    const totalMinutes = validHours.reduce((sum, hour) => {
-      return sum + timeToMinutes(hour.what);
-    }, 0);
+    if (!hours[0].what) {
+      return '00:00';
+    } else {
+      const validHours = hours.filter(hour => hour.what);
+      const totalMinutes = validHours.reduce((sum, hour) => {
+        return sum + timeToMinutes(hour.what);
+      }, 0);
 
-    const averageWorkTimeMinutes = totalMinutes / validHours.length;
-    const averageHours = Math.floor(averageWorkTimeMinutes / 60);
-    const averageMinutes = Math.ceil(averageWorkTimeMinutes % 60);
+      const averageWorkTimeMinutes = totalMinutes / validHours.length;
+      const averageHours = Math.floor(averageWorkTimeMinutes / 60);
+      const averageMinutes = Math.ceil(averageWorkTimeMinutes % 60);
 
-    return `${averageHours.toString().padStart(2, '0')}:${averageMinutes
-      .toString()
-      .padStart(2, '0')}`;
+      return `${averageHours.toString().padStart(2, '0')}:${averageMinutes
+        .toString()
+        .padStart(2, '0')}`;
+    }
   }
 
   useEffect(() => {
@@ -66,7 +70,7 @@ const Hours = () => {
     <View style={styles.container}>
       {hours && (
         <>
-          {hours.length > 0 && (
+          {hours.length > 0 && hours[0].what && (
             <View style={styles.header}>
               <Text style={styles.center}>{averageWorkTime} h / day</Text>
             </View>

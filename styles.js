@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: DIMENSIONS.margin,
+    borderRadius: DIMENSIONS.margin,
   },
   tableItem: {
     height: DIMENSIONS.height,
@@ -42,6 +43,7 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
+    borderRadius: DIMENSIONS.margin,
   },
   when: {
     color: COLORS.primary,
@@ -59,6 +61,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
     alignItems: 'center',
+    borderRadius: DIMENSIONS.margin,
   },
   input: {
     flex: 1,
@@ -91,6 +94,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
+    borderRadius: DIMENSIONS.margin,
   },
   clock: {
     height: '100%',
@@ -127,6 +131,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
     alignItems: 'center',
+    borderRadius: DIMENSIONS.margin,
   },
   listItemWhat: {
     color: COLORS.text,
@@ -144,10 +149,12 @@ export const styles = StyleSheet.create({
   },
   calendar: {
     width: '100%',
-    height: 365,
+    height: 368,
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
+    paddingTop: 3,
+    borderRadius: DIMENSIONS.margin,
   },
   calendarTheme: {
     backgroundColor: COLORS.background,
@@ -168,6 +175,7 @@ export const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: DIMENSIONS.margin,
   },
   controllers: {
     flexDirection: 'row',
@@ -179,6 +187,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    borderRadius: DIMENSIONS.margin,
   },
   icon: {
     fontSize: DIMENSIONS.height,

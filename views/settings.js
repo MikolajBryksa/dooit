@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, ScrollView, Text, Pressable} from 'react-native';
 import {styles} from '../styles';
+import packageJson from '../package.json';
+import ControlButton from '../components/ControlButton';
 
 const Settings = () => {
   const dynamicStyle = ({pressed}) => [
@@ -12,12 +14,20 @@ const Settings = () => {
     console.log('Settings');
   }
 
+  function handleReset() {
+    console.log('Settings');
+  }
+
+  function handleSupport() {
+    console.log('Settings');
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.input}>Say Thanks with a Coffee</Text>
-        </Pressable>
+        <View style={styles.header}>
+          <Text style={styles.center}>Version {packageJson.version}</Text>
+        </View>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
           <Text style={styles.when}>Language</Text>
           <Text style={styles.what}>English</Text>
@@ -66,10 +76,11 @@ const Settings = () => {
           <Text style={styles.when}>Tasks tab</Text>
           <Text style={styles.what}>On</Text>
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.input}>Reset all data</Text>
-        </Pressable>
       </ScrollView>
+      <View style={styles.controllers}>
+        <ControlButton type="reset" press={handleReset} />
+        <ControlButton type="support" press={handleSupport} />
+      </View>
     </View>
   );
 };

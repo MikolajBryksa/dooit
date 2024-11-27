@@ -64,6 +64,12 @@ Before you begin, ensure you have met the following requirements:
     npm run android
 ```
 
+- **Uninstall the app from Android Simulator**:
+
+```
+    Settings > Apps > All apps > Dooit > Uninstall
+```
+
 - **Build the APK file**:
 
 ```

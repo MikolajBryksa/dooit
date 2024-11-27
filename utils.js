@@ -20,6 +20,8 @@ import {
   faStop,
   faTimes,
   faBasketShopping,
+  faTrashCan,
+  faMugHot,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 
@@ -203,6 +205,12 @@ export function renderControlIcon(type) {
       break;
     case 'item':
       icon = faBasketShopping;
+      break;
+    case 'reset':
+      icon = faTrashCan;
+      break;
+    case 'support':
+      icon = faMugHot;
       break;
   }
 

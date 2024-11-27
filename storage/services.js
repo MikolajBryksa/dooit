@@ -33,6 +33,9 @@ export const addItem = (name, when, what, timeStart, timeEnd, category) => {
 
   if (model === 'Task') {
     check = false;
+  } else {
+    check = null;
+    category = null;
   }
 
   let newItem;
