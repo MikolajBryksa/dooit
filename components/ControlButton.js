@@ -1,43 +1,11 @@
 import React from 'react';
 import {Pressable} from 'react-native';
-import {styles, COLORS} from '../styles';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faPlus,
-  faCheck,
-  faMinus,
-  faPlay,
-  faStop,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import {styles} from '../styles';
+import {renderControlIcon} from '../utils';
 
 const ControlButton = ({type, press, disabled}) => {
   function handlePress() {
     press && press();
-  }
-
-  const iconColor = COLORS.background;
-
-  let icon;
-  switch (type) {
-    case 'cancel':
-      icon = <FontAwesomeIcon icon={faTimes} color={iconColor} />;
-      break;
-    case 'delete':
-      icon = <FontAwesomeIcon icon={faMinus} color={iconColor} />;
-      break;
-    case 'accept':
-      icon = <FontAwesomeIcon icon={faCheck} color={iconColor} />;
-      break;
-    case 'add':
-      icon = <FontAwesomeIcon icon={faPlus} color={iconColor} />;
-      break;
-    case 'play':
-      icon = <FontAwesomeIcon icon={faPlay} color={iconColor} />;
-      break;
-    case 'stop':
-      icon = <FontAwesomeIcon icon={faStop} color={iconColor} />;
-      break;
   }
 
   const dynamicStyle = ({pressed}) => [
@@ -48,7 +16,7 @@ const ControlButton = ({type, press, disabled}) => {
 
   return (
     <Pressable style={dynamicStyle} onPress={handlePress} disabled={disabled}>
-      {icon}
+      {renderControlIcon(type)}
     </Pressable>
   );
 };

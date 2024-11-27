@@ -49,9 +49,6 @@ export const styles = StyleSheet.create({
   what: {
     color: COLORS.text,
     textAlign: 'right',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
   },
   inputContainer: {
     display: 'flex',
@@ -115,13 +112,13 @@ export const styles = StyleSheet.create({
   },
   center: {
     color: COLORS.secondary,
-    paddingTop: 3,
   },
   centerIcon: {
     fontSize: DIMENSIONS.height / 2,
     color: COLORS.secondary,
   },
   listItem: {
+    display: 'flex',
     flexDirection: 'row',
     height: DIMENSIONS.height,
     width: '100%',
@@ -129,10 +126,17 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   listItemWhat: {
+    color: COLORS.text,
+    flex: 1,
+  },
+  listItemCheck: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingLeft: DIMENSIONS.padding * 2,
     color: COLORS.text,
   },
   listItemActive: {

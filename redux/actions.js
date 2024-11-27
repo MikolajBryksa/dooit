@@ -6,6 +6,7 @@ export const SET_HOURS = 'SET_HOURS';
 export const SET_PLANS = 'SET_PLANS';
 export const SET_TASKS = 'SET_TASKS';
 export const SET_MODAL_NAME = 'SET_MODAL_NAME';
+export const SET_CATEGORY = 'SET_CATEGORY';
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,
@@ -45,4 +46,9 @@ export const setTasks = tasks => ({
 export const setModalName = modalName => ({
   type: SET_MODAL_NAME,
   payload: modalName,
+});
+
+export const setCategory = category => ({
+  type: SET_CATEGORY,
+  payload: category,
 });

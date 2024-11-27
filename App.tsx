@@ -16,7 +16,7 @@ import Toast from 'react-native-toast-message';
 import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {assignScreenIcon} from './utils';
+import {renderViewIcon} from './utils';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +33,7 @@ function AppContent() {
           tabBarStyle: {
             ...styles.footer,
           },
-          tabBarIcon: ({focused}) => assignScreenIcon(route.name, focused),
+          tabBarIcon: ({focused}) => renderViewIcon(route.name, focused),
           tabBarLabelStyle: {
             display: 'none',
           },

@@ -7,6 +7,7 @@ import {
   SET_PLANS,
   SET_TASKS,
   SET_MODAL_NAME,
+  SET_CATEGORY,
 } from './actions';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   plans: [],
   tasks: [],
   modalName: null,
+  category: 'task',
 };
 
 const reducer = (state = initialState, action) => {
@@ -61,6 +63,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         modalName: action.payload,
+      };
+    case SET_CATEGORY:
+      return {
+        ...state,
+        category: action.payload,
       };
     default:
       return state;

@@ -66,9 +66,12 @@ const Hours = () => {
     <View style={styles.container}>
       {hours && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>{averageWorkTime} h / day</Text>
-          </View>
+          {hours.length > 0 && (
+            <View style={styles.header}>
+              <Text style={styles.center}>{averageWorkTime} h / day</Text>
+            </View>
+          )}
+
           <Table items={hours} name="hour" />
           <View style={styles.controllers}>
             <ControlButton type="add" press={handleAdd} />

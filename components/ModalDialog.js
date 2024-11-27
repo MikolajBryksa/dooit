@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {TextInput, Modal, View, Text, TouchableOpacity} from 'react-native';
+import {TextInput, Modal, View, Text, Pressable} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {TimerPicker} from 'react-native-timer-picker';
 import Toast from 'react-native-toast-message';
@@ -18,17 +18,18 @@ import {
 } from '../utils';
 
 const ModalDialog = ({name}) => {
-  const modalName = name;
-
   let items;
-  if (modalName === 'weight') {
+  let category;
+  if (name === 'weight') {
     items = useSelector(state => state.weights);
-  } else if (modalName === 'cost') {
+  } else if (name === 'cost') {
     items = useSelector(state => state.costs);
-  } else if (modalName === 'hour') {
+  } else if (name === 'hour') {
     items = useSelector(state => state.hours);
-  } else if (modalName === 'plan') {
+  } else if (name === 'plan') {
     items = useSelector(state => state.plans);
+  } else if (name === 'task') {
+    category = useSelector(state => state.category);
   }
 
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const ModalDialog = ({name}) => {
   useEffect(() => {
     if (currentItem) {
       // Set When
-      if (modalName === 'habit' || modalName === 'task') {
+      if (name === 'habit' || name === 'task') {
         setWhen(currentItem.when?.toString());
       } else {
         const formattedDate = currentItem.when
@@ -60,7 +61,7 @@ const ModalDialog = ({name}) => {
       }
 
       // Set Timer
-      if (modalName === 'hour' || modalName === 'plan') {
+      if (name === 'hour' || name === 'plan') {
         setTimeStart(currentItem.timeStart);
         if (currentItem.timeStart) {
           setShowStartPicker(true);
@@ -78,13 +79,13 @@ const ModalDialog = ({name}) => {
       );
     } else {
       // Reset
-      if (modalName === 'habit' || modalName === 'task') {
+      if (name === 'habit' || name === 'task') {
         setWhen('');
       } else {
         const today = new Date().toISOString().split('T')[0];
         setWhen(today);
       }
-      if (modalName === 'weight' && items.length > 0) {
+      if (name === 'weight' && items.length > 0) {
         setWhat(items[0].what);
       }
       setTimeStart('');
@@ -99,15 +100,16 @@ const ModalDialog = ({name}) => {
 
   function handleAdd() {
     addItem(
-      modalName,
+      name,
       when,
-      formatToFloat(what, modalName),
+      formatToFloat(what, name),
       timeStart,
       timeEnd,
+      category,
     );
     Toast.show({
       type: 'add',
-      text1: modalName,
+      text1: name,
       topOffset: DIMENSIONS.padding,
       visibilityTime: 1500,
     });
@@ -118,16 +120,18 @@ const ModalDialog = ({name}) => {
   function handleUpdate() {
     if (currentItem) {
       updateItem(
-        modalName,
+        name,
         currentItem.id,
         when,
-        formatToFloat(what, modalName),
+        formatToFloat(what, name),
         timeStart,
         timeEnd,
+        check,
+        category,
       );
       Toast.show({
         type: 'update',
-        text1: modalName,
+        text1: name,
         topOffset: DIMENSIONS.padding,
         visibilityTime: 1500,
       });
@@ -138,10 +142,10 @@ const ModalDialog = ({name}) => {
 
   async function handleDelete() {
     if (currentItem) {
-      deleteItem(modalName, currentItem.id);
+      deleteItem(name, currentItem.id);
       Toast.show({
         type: 'delete',
-        text1: modalName,
+        text1: name,
         topOffset: DIMENSIONS.padding,
         visibilityTime: 1500,
       });
@@ -151,7 +155,7 @@ const ModalDialog = ({name}) => {
   }
 
   const renderCalendar = data =>
-    showCalendar || modalName === 'plan' ? (
+    showCalendar || name === 'plan' ? (
       <View style={styles.calendar}>
         <Calendar
           onDayPress={day => {
@@ -166,18 +170,18 @@ const ModalDialog = ({name}) => {
         />
       </View>
     ) : (
-      <TouchableOpacity
+      <Pressable
         style={styles.inputContainer}
         onPress={() => setShowCalendar(true)}>
         <Text style={styles.input}>{formatDateWithDay(when)}</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
 
   const renderInput = (inputModeType = 'numeric', incrementator) => (
     <View style={styles.inputContainer}>
       {incrementator && (
         <>
-          <TouchableOpacity
+          <Pressable
             style={styles.incrementator}
             onPress={() => {
               const increasedValue =
@@ -185,7 +189,7 @@ const ModalDialog = ({name}) => {
               setWhat(increasedValue.toFixed(2));
             }}>
             {renderArrow('up')}
-          </TouchableOpacity>
+          </Pressable>
         </>
       )}
       <TextInput
@@ -194,12 +198,13 @@ const ModalDialog = ({name}) => {
         value={what}
         onChangeText={text => setWhat(text)}
         inputMode={inputModeType}
-        placeholder={`Enter ${modalName}`}
+        placeholder={name === 'task' ? `Enter ${category}` : `Enter ${name}`}
         placeholderTextColor={COLORS.primary}
+        maxLength={60}
       />
       {incrementator && (
         <>
-          <TouchableOpacity
+          <Pressable
             style={styles.incrementator}
             onPress={() => {
               const decreasedValue =
@@ -207,7 +212,7 @@ const ModalDialog = ({name}) => {
               setWhat(decreasedValue.toFixed(2));
             }}>
             {renderArrow('down')}
-          </TouchableOpacity>
+          </Pressable>
         </>
       )}
     </View>
@@ -224,7 +229,11 @@ const ModalDialog = ({name}) => {
             minuteLabel={false}
             styles={styles.clock}
             padHoursWithZero={true}
-            initialValue={convertTimeToObject(getCurrentTime())}
+            initialValue={
+              timeStart
+                ? convertTimeToObject(timeStart)
+                : convertTimeToObject(getCurrentTime())
+            }
             onDurationChange={duration => {
               const hours = duration.hours.toString().padStart(2, '0');
               const minutes = duration.minutes.toString().padStart(2, '0');
@@ -233,11 +242,11 @@ const ModalDialog = ({name}) => {
           />
         </View>
       ) : (
-        <TouchableOpacity
+        <Pressable
           style={styles.clockContainer}
           onPress={() => setShowStartPicker(true)}>
           <Text style={styles.setter}>Set start time</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
 
       {showEndPicker ? (
@@ -249,7 +258,11 @@ const ModalDialog = ({name}) => {
             minuteLabel={false}
             styles={styles.clock}
             padHoursWithZero={true}
-            initialValue={convertTimeToObject(getCurrentTime())}
+            initialValue={
+              timeEnd
+                ? convertTimeToObject(timeEnd)
+                : convertTimeToObject(getCurrentTime())
+            }
             onDurationChange={duration => {
               const hours = duration.hours.toString().padStart(2, '0');
               const minutes = duration.minutes.toString().padStart(2, '0');
@@ -258,22 +271,22 @@ const ModalDialog = ({name}) => {
           />
         </View>
       ) : (
-        <TouchableOpacity
+        <Pressable
           style={styles.clockContainer}
           onPress={() => setShowEndPicker(true)}>
           <Text style={styles.setter}>Set end time</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );
 
   const renderDialog = () => {
-    switch (modalName) {
+    switch (name) {
       case 'weight':
         return (
           <>
             {renderCalendar(items)}
-            {renderInput('numeric', 0.5)}
+            {renderInput('numeric', 0.05)}
           </>
         );
       case 'cost':
@@ -310,7 +323,7 @@ const ModalDialog = ({name}) => {
     <Modal
       transparent
       animationType="fade"
-      visible={modalName !== null}
+      visible={name !== null}
       onRequestClose={handleClose}>
       <View style={styles.container}>
         {renderDialog()}
@@ -323,8 +336,7 @@ const ModalDialog = ({name}) => {
                 type="accept"
                 press={handleUpdate}
                 disabled={
-                  (!what && modalName !== 'hour') ||
-                  (modalName === 'hour' && !timeStart)
+                  (!what && name !== 'hour') || (name === 'hour' && !timeStart)
                 }
               />
             </>
@@ -333,8 +345,7 @@ const ModalDialog = ({name}) => {
               type="accept"
               press={handleAdd}
               disabled={
-                (!what && modalName !== 'hour') ||
-                (modalName === 'hour' && !timeStart)
+                (!what && name !== 'hour') || (name === 'hour' && !timeStart)
               }
             />
           )}

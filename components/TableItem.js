@@ -48,7 +48,7 @@ const TableItem = ({id, when, what, name, timeStart, timeEnd}) => {
           {timeEnd && ` - ${timeEnd}`}
         </Text>
         {what && (
-          <Text style={styles.what}>
+          <Text style={styles.what} numberOfLines={1} ellipsizeMode="head">
             {what} {assignUnit(name)}
           </Text>
         )}

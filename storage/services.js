@@ -18,7 +18,7 @@ const getNextId = model => {
   return lastItem ? lastItem.id + 1 : 1;
 };
 
-export const addItem = (name, when, what, timeStart, timeEnd) => {
+export const addItem = (name, when, what, timeStart, timeEnd, category) => {
   const model = getModel(name);
   const id = getNextId(model);
 
@@ -31,9 +31,21 @@ export const addItem = (name, when, what, timeStart, timeEnd) => {
     what = calculateDuration(timeStart, timeEnd);
   }
 
+  if (model === 'Task') {
+    check = false;
+  }
+
   let newItem;
   realm.write(() => {
-    newItem = realm.create(model, {id, when, what, timeStart, timeEnd});
+    newItem = realm.create(model, {
+      id,
+      when,
+      what,
+      timeStart,
+      timeEnd,
+      check,
+      category,
+    });
   });
   return newItem;
 };
@@ -41,13 +53,8 @@ export const addItem = (name, when, what, timeStart, timeEnd) => {
 export const getEveryItem = (name, sort) => {
   const model = getModel(name);
   const sortFields = [['when', sort]];
-
-  if (name === 'plan' || name === 'hour') {
-    sortFields.push(['timeStart', sort]);
-  }
-
+  (name === 'plan' || name === 'hour') && sortFields.push(['timeStart', sort]);
   sortFields.push(['id', true]);
-
   const results = realm.objects(model).sorted(sortFields);
   return results.slice(0, 90);
 };
@@ -65,7 +72,16 @@ export const getItem = (name, id) => {
   return item;
 };
 
-export const updateItem = (name, id, when, what, timeStart, timeEnd) => {
+export const updateItem = (
+  name,
+  id,
+  when,
+  what,
+  timeStart,
+  timeEnd,
+  check,
+  category,
+) => {
   const model = getModel(name);
   if (model === 'Habit' || model === 'Task') {
     when = parseInt(when, 10);
@@ -73,11 +89,12 @@ export const updateItem = (name, id, when, what, timeStart, timeEnd) => {
   if (model === 'Hour') {
     what = calculateDuration(timeStart, timeEnd);
   }
+
   let updatedItem;
   realm.write(() => {
     updatedItem = realm.create(
       model,
-      {id, when, what, timeStart, timeEnd},
+      {id, when, what, timeStart, timeEnd, check, category},
       'modified',
     );
   });

@@ -63,6 +63,8 @@ const Habits = () => {
     dispatch(setModalName('habit'));
   }
 
+  // Mode
+
   function handlePlay() {
     setCurrentHabit(habits[0]);
     setCurrentIndex(0);

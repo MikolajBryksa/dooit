@@ -64,9 +64,12 @@ const Costs = () => {
     <View style={styles.container}>
       {costs && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>{averageCost} zł / day</Text>
-          </View>
+          {costs.length > 0 && (
+            <View style={styles.header}>
+              <Text style={styles.center}>{averageCost} zł / day</Text>
+            </View>
+          )}
+
           <Table items={costs} name="cost" />
           <View style={styles.controllers}>
             <ControlButton type="add" press={handleAdd} />

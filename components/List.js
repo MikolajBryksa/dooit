@@ -27,6 +27,8 @@ const List = ({items, name}) => {
           name={name}
           drag={drag}
           isActive={isActive}
+          check={name === 'task' ? item.check : null}
+          category={name === 'task' ? item.category : null}
         />
       );
     },

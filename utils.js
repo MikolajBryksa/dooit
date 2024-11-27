@@ -6,14 +6,22 @@ import {
   faChevronRight,
   faChevronUp,
   faChevronDown,
-  faCircleCheck,
+  faPlay,
   faCoins,
   faCalendar,
   faList,
   faWeight,
   faCog,
   faBriefcase,
+  faCircleCheck,
+  faPlus,
+  faCheck,
+  faMinus,
+  faStop,
+  faTimes,
+  faBasketShopping,
 } from '@fortawesome/free-solid-svg-icons';
+import {faCircle} from '@fortawesome/free-regular-svg-icons';
 
 export function formatToFloat(text, modalName) {
   if (modalName === 'cost' || modalName === 'weight') {
@@ -124,8 +132,9 @@ export function convertToISO(dateStr) {
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }
 
-export function assignScreenIcon(name, focused) {
+export function renderViewIcon(name, focused) {
   let iconColor;
+
   if (focused === true) {
     iconColor = COLORS.text;
   } else if (focused === false) {
@@ -137,30 +146,77 @@ export function assignScreenIcon(name, focused) {
   switch (name) {
     case 'Habits':
     case 'habit':
-      return <FontAwesomeIcon icon={faCircleCheck} color={iconColor} />;
+      icon = faPlay;
+      break;
     case 'Weights':
     case 'weight':
-      return <FontAwesomeIcon icon={faWeight} color={iconColor} />;
+      icon = faWeight;
+      break;
     case 'Costs':
     case 'cost':
-      return <FontAwesomeIcon icon={faCoins} color={iconColor} />;
+      icon = faCoins;
+      break;
     case 'Hours':
     case 'hour':
-      return <FontAwesomeIcon icon={faBriefcase} color={iconColor} />;
+      icon = faBriefcase;
+      break;
     case 'Plans':
     case 'plan':
-      return <FontAwesomeIcon icon={faCalendar} color={iconColor} />;
+      icon = faCalendar;
+      break;
     case 'Tasks':
     case 'task':
-      return <FontAwesomeIcon icon={faList} color={iconColor} />;
+      icon = faList;
+      break;
     case 'Settings':
     case 'settings':
-      return <FontAwesomeIcon icon={faCog} color={iconColor} />;
+      icon = faCog;
+      break;
   }
+
+  return (
+    <FontAwesomeIcon icon={icon} style={[styles.icon, {color: iconColor}]} />
+  );
+}
+
+export function renderControlIcon(type) {
+  let icon;
+
+  switch (type) {
+    case 'cancel':
+      icon = faTimes;
+      break;
+    case 'delete':
+      icon = faMinus;
+      break;
+    case 'accept':
+      icon = faCheck;
+      break;
+    case 'add':
+      icon = faPlus;
+      break;
+    case 'play':
+      icon = faPlay;
+      break;
+    case 'stop':
+      icon = faStop;
+      break;
+    case 'item':
+      icon = faBasketShopping;
+      break;
+  }
+
+  return (
+    <FontAwesomeIcon
+      icon={icon}
+      style={[styles.icon, {color: COLORS.background}]}
+    />
+  );
 }
 
 export function renderArrow(direction) {
   let icon;
+
   switch (direction) {
     case 'left':
       icon = faChevronLeft;
@@ -173,6 +229,26 @@ export function renderArrow(direction) {
       break;
     case 'down':
       icon = faChevronDown;
+      break;
+  }
+
+  return (
+    <FontAwesomeIcon
+      icon={icon}
+      style={[styles.icon, {color: COLORS.primary}]}
+    />
+  );
+}
+
+export function renderCheck(check) {
+  let icon;
+
+  switch (check) {
+    case true:
+      icon = faCircleCheck;
+      break;
+    case false:
+      icon = faCircle;
       break;
   }
 

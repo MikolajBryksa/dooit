@@ -67,29 +67,37 @@ Task.schema = {
     id: 'int',
     when: 'int',
     what: 'string',
+    check: 'bool',
+    category: 'string',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Weight, Cost, Hour, Plan, Task],
-  schemaVersion: 3,
+  schemaVersion: 1,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 1) {
-      const oldObjects = oldRealm.objects('Plan');
-      const newObjects = newRealm.objects('Plan');
+      const oldPlanObjects = oldRealm.objects('Plan');
+      const newPlanObjects = newRealm.objects('Plan');
 
-      for (let i = 0; i < oldObjects.length; i++) {
-        newObjects[i].timeStart = '';
-        newObjects[i].timeEnd = '';
+      for (let i = 0; i < oldPlanObjects.length; i++) {
+        newPlanObjects[i].timeStart = '';
+        newPlanObjects[i].timeEnd = '';
       }
-    }
 
-    if (oldRealm.schemaVersion < 3) {
       const oldHourObjects = oldRealm.objects('Hour');
       const newHourObjects = newRealm.objects('Hour');
 
       for (let i = 0; i < oldHourObjects.length; i++) {
         newHourObjects[i].what = oldHourObjects[i].what || '';
+      }
+
+      const oldTaskObjects = oldRealm.objects('Task');
+      const newTaskObjects = newRealm.objects('Task');
+
+      for (let i = 0; i < oldTaskObjects.length; i++) {
+        newTaskObjects[i].check = false;
+        newTaskObjects[i].category = 'task';
       }
     }
   },
