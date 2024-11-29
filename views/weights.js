@@ -71,7 +71,7 @@ const Weights = () => {
     <View style={styles.container}>
       {weights && (
         <>
-          {weights.length > 1 && (
+          {weights.length > 0 && (
             <View style={styles.header}>
               <Text style={styles.center}>
                 {weightChange} kg / {dayDifference} days

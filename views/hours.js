@@ -13,7 +13,7 @@ const Hours = () => {
   const hours = useSelector(state => state.hours);
   const modalName = useSelector(state => state.modalName);
   const dispatch = useDispatch();
-  const [averageWorkTime, setAverageWorkTime] = useState(0);
+  const [averageWorkTime, setAverageWorkTime] = useState('00:00');
 
   // Data
 
@@ -38,18 +38,36 @@ const Hours = () => {
 
   function calcAverageWorkTime(hours) {
     if (!Array.isArray(hours) || hours.length === 0) {
-      return 0;
+      return '00:00';
     }
 
     if (!hours[0].what) {
       return '00:00';
     } else {
-      const validHours = hours.filter(hour => hour.what);
-      const totalMinutes = validHours.reduce((sum, hour) => {
-        return sum + timeToMinutes(hour.what);
-      }, 0);
+      const groupedByDate = hours.reduce((acc, hour) => {
+        const date = new Date(hour.when).toISOString().split('T')[0];
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(hour);
+        return acc;
+      }, {});
 
-      const averageWorkTimeMinutes = totalMinutes / validHours.length;
+      const totalMinutesByDate = Object.values(groupedByDate).map(
+        hoursForDate => {
+          return hoursForDate.reduce((sum, hour) => {
+            return sum + timeToMinutes(hour.what);
+          }, 0);
+        },
+      );
+
+      const totalMinutes = totalMinutesByDate.reduce(
+        (sum, minutes) => sum + minutes,
+        0,
+      );
+      const numberOfDays = totalMinutesByDate.length;
+
+      const averageWorkTimeMinutes = totalMinutes / numberOfDays;
       const averageHours = Math.floor(averageWorkTimeMinutes / 60);
       const averageMinutes = Math.ceil(averageWorkTimeMinutes % 60);
 
@@ -70,7 +88,7 @@ const Hours = () => {
     <View style={styles.container}>
       {hours && (
         <>
-          {hours.length > 0 && hours[0].what && (
+          {hours.length > 0 && (
             <View style={styles.header}>
               <Text style={styles.center}>{averageWorkTime} h / day</Text>
             </View>

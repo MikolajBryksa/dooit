@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     width: '95%',
     borderColor: COLORS.secondary,
     borderWidth: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.secondary,
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,11 +115,12 @@ export const styles = StyleSheet.create({
     },
   },
   center: {
-    color: COLORS.secondary,
+    color: COLORS.background,
+    fontWeight: 'bold',
   },
   centerIcon: {
     fontSize: DIMENSIONS.height / 2,
-    color: COLORS.secondary,
+    color: COLORS.background,
   },
   listItem: {
     display: 'flex',
@@ -171,6 +172,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.secondary,
+    backgroundColor: COLORS.secondary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',

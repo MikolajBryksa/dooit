@@ -142,7 +142,7 @@ export function renderViewIcon(name, focused) {
   } else if (focused === false) {
     iconColor = COLORS.primary;
   } else {
-    iconColor = COLORS.secondary;
+    iconColor = COLORS.background;
   }
 
   switch (name) {
