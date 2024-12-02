@@ -2,6 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export const COLORS = {
   primary: '#836FFF',
+  primary50: '#836FFF50',
+  primary25: '#836FFF25',
   secondary: '#15F5BA',
   text: '#F0F3FF',
   background: '#211951',
@@ -28,7 +30,7 @@ export const styles = StyleSheet.create({
     width: '95%',
     borderColor: COLORS.secondary,
     borderWidth: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.background,
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,12 +117,11 @@ export const styles = StyleSheet.create({
     },
   },
   center: {
-    color: COLORS.background,
-    fontWeight: 'bold',
+    color: COLORS.secondary,
   },
   centerIcon: {
     fontSize: DIMENSIONS.height / 2,
-    color: COLORS.background,
+    color: COLORS.secondary,
   },
   listItem: {
     display: 'flex',
@@ -145,6 +146,10 @@ export const styles = StyleSheet.create({
     paddingLeft: DIMENSIONS.padding * 2,
     color: COLORS.text,
   },
+  listItemChange: {
+    color: COLORS.primary,
+  },
+  switch: {},
   listItemActive: {
     borderColor: COLORS.secondary,
   },
@@ -172,7 +177,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     padding: DIMENSIONS.padding,
     borderColor: COLORS.secondary,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.background,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
     justifyContent: 'center',

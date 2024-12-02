@@ -41,40 +41,39 @@ const Hours = () => {
       return '00:00';
     }
 
-    if (!hours[0].what) {
-      return '00:00';
-    } else {
-      const groupedByDate = hours.reduce((acc, hour) => {
-        const date = new Date(hour.when).toISOString().split('T')[0];
-        if (!acc[date]) {
-          acc[date] = [];
-        }
-        acc[date].push(hour);
-        return acc;
-      }, {});
+    const groupedByDate = hours.reduce((acc, hour) => {
+      const date = new Date(hour.when).toISOString().split('T')[0];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(hour);
+      return acc;
+    }, {});
 
-      const totalMinutesByDate = Object.values(groupedByDate).map(
-        hoursForDate => {
-          return hoursForDate.reduce((sum, hour) => {
+    const totalMinutesByDate = Object.values(groupedByDate).map(
+      hoursForDate => {
+        return hoursForDate.reduce((sum, hour) => {
+          if (hour.what) {
             return sum + timeToMinutes(hour.what);
-          }, 0);
-        },
-      );
+          }
+          return sum;
+        }, 0);
+      },
+    );
 
-      const totalMinutes = totalMinutesByDate.reduce(
-        (sum, minutes) => sum + minutes,
-        0,
-      );
-      const numberOfDays = totalMinutesByDate.length;
+    const totalMinutes = totalMinutesByDate.reduce(
+      (sum, minutes) => sum + minutes,
+      0,
+    );
+    const numberOfDays = totalMinutesByDate.length;
 
-      const averageWorkTimeMinutes = totalMinutes / numberOfDays;
-      const averageHours = Math.floor(averageWorkTimeMinutes / 60);
-      const averageMinutes = Math.ceil(averageWorkTimeMinutes % 60);
+    const averageWorkTimeMinutes = totalMinutes / numberOfDays;
+    const averageHours = Math.floor(averageWorkTimeMinutes / 60);
+    const averageMinutes = Math.ceil(averageWorkTimeMinutes % 60);
 
-      return `${averageHours.toString().padStart(2, '0')}:${averageMinutes
-        .toString()
-        .padStart(2, '0')}`;
-    }
+    return `${averageHours.toString().padStart(2, '0')}:${averageMinutes
+      .toString()
+      .padStart(2, '0')}`;
   }
 
   useEffect(() => {

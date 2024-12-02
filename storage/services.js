@@ -27,7 +27,7 @@ export const addItem = (name, when, what, timeStart, timeEnd, category) => {
   } else {
     when = new Date(when);
   }
-  if (model === 'Hour') {
+  if (model === 'Hour' && timeStart && timeEnd) {
     what = calculateDuration(timeStart, timeEnd);
   }
 
@@ -89,7 +89,7 @@ export const updateItem = (
   if (model === 'Habit' || model === 'Task') {
     when = parseInt(when, 10);
   }
-  if (model === 'Hour') {
+  if (model === 'Hour' && timeStart && timeEnd) {
     what = calculateDuration(timeStart, timeEnd);
   }
 

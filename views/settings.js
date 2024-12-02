@@ -1,17 +1,36 @@
-import React from 'react';
-import {View, ScrollView, Text, Pressable} from 'react-native';
-import {styles} from '../styles';
+import React, {useState} from 'react';
+import {View, ScrollView, Text, Pressable, Switch} from 'react-native';
+import {COLORS, styles} from '../styles';
 import packageJson from '../package.json';
 import ControlButton from '../components/ControlButton';
 
 const Settings = () => {
   const dynamicStyle = ({pressed}) => [
-    styles.tableItem,
+    styles.listItem,
     {opacity: pressed ? 0.8 : 1},
   ];
 
-  function handlePress() {
-    console.log('Settings');
+  const [habitsTab, setHabitsTab] = useState(true);
+  const [weightsTab, setWeightsTab] = useState(true);
+  const [costsTab, setCostsTab] = useState(true);
+  const [hoursTab, setHoursTab] = useState(true);
+  const [plansTab, setPlansTab] = useState(true);
+  const [tasksTab, setTasksTab] = useState(true);
+
+  function handlePress(name) {
+    if (name === 'habits') {
+      setHabitsTab(!habitsTab);
+    } else if (name === 'weights') {
+      setWeightsTab(!weightsTab);
+    } else if (name === 'costs') {
+      setCostsTab(!costsTab);
+    } else if (name === 'hours') {
+      setHoursTab(!hoursTab);
+    } else if (name === 'plans') {
+      setPlansTab(!plansTab);
+    } else if (name === 'tasks') {
+      setTasksTab(!tasksTab);
+    }
   }
 
   function handleReset() {
@@ -29,52 +48,106 @@ const Settings = () => {
           <Text style={styles.center}>Version {packageJson.version}</Text>
         </View>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Language</Text>
-          <Text style={styles.what}>English</Text>
+          <Text style={styles.listItemWhat}>Language</Text>
+          <Text style={styles.listItemChange}>English</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Weight unit</Text>
-          <Text style={styles.what}>kg</Text>
+          <Text style={styles.listItemWhat}>Weight unit</Text>
+          <Text style={styles.listItemChange}>kg</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Currency</Text>
-          <Text style={styles.what}>zł</Text>
+          <Text style={styles.listItemWhat}>Currency</Text>
+          <Text style={styles.listItemChange}>zł</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Clock format</Text>
-          <Text style={styles.what}>24h</Text>
+          <Text style={styles.listItemWhat}>Clock format</Text>
+          <Text style={styles.listItemChange}>24h</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>First day in calendar</Text>
-          <Text style={styles.what}>Monday</Text>
+          <Text style={styles.listItemWhat}>First day in calendar</Text>
+          <Text style={styles.listItemChange}>Monday</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Max number of rows</Text>
-          <Text style={styles.what}>90</Text>
+          <Text style={styles.listItemWhat}>Max number of rows</Text>
+          <Text style={styles.listItemChange}>90</Text>
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Habits tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('habits')}>
+          <Text style={styles.listItemWhat}>Habits tab</Text>
+          <Switch
+            style={styles.switch}
+            value={habitsTab}
+            onValueChange={() => handlePress('habits')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Weights tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('weights')}>
+          <Text style={styles.listItemWhat}>Weights tab</Text>
+          <Switch
+            style={styles.switch}
+            value={weightsTab}
+            onValueChange={() => handlePress('weights')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Costs tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('costs')}>
+          <Text style={styles.listItemWhat}>Costs tab</Text>
+          <Switch
+            style={styles.switch}
+            value={costsTab}
+            onValueChange={() => handlePress('costs')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Hours tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('hours')}>
+          <Text style={styles.listItemWhat}>Hours tab</Text>
+          <Switch
+            style={styles.switch}
+            value={hoursTab}
+            onValueChange={() => handlePress('hours')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Plans tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('plans')}>
+          <Text style={styles.listItemWhat}>Plans tab</Text>
+          <Switch
+            style={styles.switch}
+            value={plansTab}
+            onValueChange={() => handlePress('plans')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.when}>Tasks tab</Text>
-          <Text style={styles.what}>On</Text>
+        <Pressable style={dynamicStyle} onPress={() => handlePress('tasks')}>
+          <Text style={styles.listItemWhat}>Tasks tab</Text>
+          <Switch
+            style={styles.switch}
+            value={tasksTab}
+            onValueChange={() => handlePress('tasks')}
+            trackColor={{
+              false: COLORS.primary25,
+              true: COLORS.primary50,
+            }}
+            thumbColor={COLORS.primary}
+          />
         </Pressable>
       </ScrollView>
       <View style={styles.controllers}>
