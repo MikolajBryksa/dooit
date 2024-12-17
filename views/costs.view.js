@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setCosts, setCurrentView} from '../redux/actions';
+import {setCosts} from '../redux/actions';
 import {getEveryCost} from '../services/costs.service';
 import {styles} from '../styles';
 import {convertToISO} from '../utils';
@@ -11,8 +11,8 @@ import CostItem from '../items/cost.item';
 
 const CostsView = () => {
   const costs = useSelector(state => state.costs);
-  const currentView = useSelector(state => state.currentView);
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [averageCost, setAverageCost] = useState(0);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const CostsView = () => {
       dispatch(setCosts(formattedData));
     }
     fetchData();
-  }, [currentView]);
+  }, [showModal]);
 
   useEffect(() => {
     function calcAverageCost(costs) {
@@ -50,12 +50,12 @@ const CostsView = () => {
   }, [costs]);
 
   function handleAdd() {
-    dispatch(setCurrentView('costs'));
+    setShowModal(true);
   }
 
   return (
     <View style={styles.container}>
-      {currentView === 'costs' && <CostsModal />}
+      {showModal && <CostsModal setShowModal={setShowModal} />}
       {costs && (
         <>
           {costs.length > 0 && (
@@ -71,6 +71,7 @@ const CostsView = () => {
                 id={item.id}
                 when={item.when}
                 what={item.what}
+                setShowModal={setShowModal}
               />
             ))}
           </ScrollView>

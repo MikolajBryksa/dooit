@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import PlanItem from '../items/plan.item';
-import {setPlans, setCurrentView} from '../redux/actions';
+import {setPlans} from '../redux/actions';
 import {getEveryPlan} from '../services/plans.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
@@ -12,8 +12,8 @@ import PlansModal from '../modals/plans.modal';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
-  const currentView = useSelector(state => state.currentView);
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,15 +26,15 @@ const PlansView = () => {
       dispatch(setPlans(formattedData));
     }
     fetchData();
-  }, [currentView]);
+  }, [showModal]);
 
   function handleAdd() {
-    dispatch(setCurrentView('plans'));
+    setShowModal(true);
   }
 
   return (
     <View style={styles.container}>
-      {currentView === 'plans' && <PlansModal />}
+      {showModal && <PlansModal setShowModal={setShowModal} />}
       {plans && (
         <>
           <View style={styles.header}>
@@ -49,6 +49,7 @@ const PlansView = () => {
                 when={item.when}
                 what={item.what}
                 time={item.time}
+                setShowModal={setShowModal}
               />
             ))}
           </ScrollView>

@@ -3,12 +3,12 @@ import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {setCurrentItem} from '../redux/actions';
 import {addCost, updateCost, deleteCost} from '../services/costs.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput} from '../components/inputs';
 
-const CostsModal = () => {
+const CostsModal = ({setShowModal}) => {
   const costs = useSelector(state => state.costs);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const CostsModal = () => {
 
   function handleClose() {
     dispatch(setCurrentItem(null));
-    dispatch(setCurrentView(null));
+    setShowModal(false);
   }
 
   function handleAdd() {

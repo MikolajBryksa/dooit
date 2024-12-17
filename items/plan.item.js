@@ -6,17 +6,13 @@ import {getPlan} from '../services/plans.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const PlanItem = ({id, when, what, time}) => {
+const PlanItem = ({id, when, what, time, setShowModal}) => {
   const dispatch = useDispatch();
 
-  async function fetchData() {
+  function handlePress() {
     const data = getPlan(id);
     dispatch(setCurrentItem(data));
-  }
-
-  function handlePress() {
-    dispatch(setCurrentView('plans'));
-    fetchData();
+    setShowModal(true);
   }
 
   const today = new Date();

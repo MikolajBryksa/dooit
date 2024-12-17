@@ -3,7 +3,7 @@ import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {setCurrentItem} from '../redux/actions';
 import {
   addWeight,
   updateWeight,
@@ -12,7 +12,7 @@ import {
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput} from '../components/inputs';
 
-const WeightsModal = () => {
+const WeightsModal = ({setShowModal}) => {
   const weights = useSelector(state => state.weights);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const WeightsModal = () => {
 
   function handleClose() {
     dispatch(setCurrentItem(null));
-    dispatch(setCurrentView(null));
+    setShowModal(false);
   }
 
   function handleAdd() {

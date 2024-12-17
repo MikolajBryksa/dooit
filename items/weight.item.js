@@ -6,17 +6,13 @@ import {getWeight} from '../services/weights.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const WeightItem = ({id, when, what}) => {
+const WeightItem = ({id, when, what, setShowModal}) => {
   const dispatch = useDispatch();
 
-  async function fetchData() {
+  function handlePress() {
     const data = getWeight(id);
     dispatch(setCurrentItem(data));
-  }
-
-  function handlePress() {
-    dispatch(setCurrentView('weights'));
-    fetchData();
+    setShowModal(true);
   }
 
   const dynamicStyle = ({pressed}) => [

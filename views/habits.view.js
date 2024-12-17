@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setHabits, setPlans, setCurrentView} from '../redux/actions';
+import {setHabits, setPlans} from '../redux/actions';
 import {getEveryHabit} from '../services/habits.service';
 import {getEveryPlan} from '../services/plans.service';
 import {styles} from '../styles';
@@ -19,8 +19,8 @@ import PlanItem from '../items/plan.item';
 const HabitsView = () => {
   const habits = useSelector(state => state.habits);
   const plans = useSelector(state => state.plans);
-  const currentView = useSelector(state => state.currentView);
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [play, setPlay] = useState(false);
   const [currentHabit, setCurrentHabit] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,7 +47,7 @@ const HabitsView = () => {
       dispatch(setPlans(formattedPlans));
     }
     fetchData();
-  }, [currentView]);
+  }, [showModal]);
 
   useEffect(() => {
     const today = new Date();
@@ -66,7 +66,7 @@ const HabitsView = () => {
   }, [plans]);
 
   function handleAdd() {
-    dispatch(setCurrentView('habits'));
+    setShowModal(true);
   }
 
   function handlePlay() {
@@ -98,6 +98,7 @@ const HabitsView = () => {
         what={item.what}
         drag={drag}
         isActive={isActive}
+        setShowModal={setShowModal}
       />
     );
   }, []);
@@ -120,8 +121,8 @@ const HabitsView = () => {
 
   return (
     <View style={styles.container}>
-      {currentView === 'plans' && <PlansModal />}
-      {currentView === 'habits' && <HabitsModal />}
+      {play && showModal && <PlansModal setShowModal={setShowModal} />}
+      {!play && showModal && <HabitsModal setShowModal={setShowModal} />}
       {habits && !play && (
         <>
           <View style={styles.header}>
@@ -157,6 +158,7 @@ const HabitsView = () => {
                 when={item.when}
                 what={item.what}
                 time={item.time}
+                setShowModal={setShowModal}
               />
             ))}
           </ScrollView>

@@ -6,6 +6,7 @@ import {
   faChevronRight,
   faChevronUp,
   faChevronDown,
+  faClock,
   faPlay,
   faCoins,
   faCalendar,
@@ -25,24 +26,10 @@ import {
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
 
-export function getNextId(name) {
-  const lastItem = realm.objects(name).sorted('id', true)[0];
+export function getNextId(itemName) {
+  const lastItem = realm.objects(itemName).sorted('id', true)[0];
   return lastItem ? lastItem.id + 1 : 1;
 }
-
-export function formatToFloat(text, view) {
-  if (view === 'cost' || view === 'weight') {
-    const formattedText = text.replace(',', '.');
-    const floatRegex = /^(\d+)?([.]\d*)?$/;
-    if (floatRegex.test(formattedText)) {
-      const floatValue = parseFloat(formattedText);
-      return isNaN(floatValue) ? text : parseFloat(floatValue.toFixed(2));
-    }
-  } else {
-    return text;
-  }
-}
-
 export function formatDateWithDay(when) {
   if (when.length < 3) {
     return '';
@@ -60,34 +47,6 @@ export function convertTimeToObject(time) {
   if (!time) return {hours: 0, minutes: 0};
   const [hours, minutes] = time.split(':').map(Number);
   return {hours, minutes};
-}
-
-export function timeToMinutes(time) {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
-}
-
-export function calculateDuration(timeStart, timeEnd) {
-  if (timeStart === '' || timeEnd === '') {
-    return null;
-  } else {
-    const startTotalMinutes = timeToMinutes(timeStart);
-    const endTotalMinutes = timeToMinutes(timeEnd);
-
-    let durationMinutes = endTotalMinutes - startTotalMinutes;
-    if (durationMinutes < 0) {
-      durationMinutes += 24 * 60;
-    }
-
-    const durationHours = Math.floor(durationMinutes / 60);
-    const durationRemainingMinutes = durationMinutes % 60;
-
-    return `${durationHours
-      .toString()
-      .padStart(2, '0')}:${durationRemainingMinutes
-      .toString()
-      .padStart(2, '0')}`;
-  }
 }
 
 export function getCurrentTime() {
@@ -152,7 +111,7 @@ export function renderViewIcon(name, focused) {
 
   switch (name) {
     case 'habits':
-      icon = faPlay;
+      icon = faClock;
       break;
     case 'weights':
       icon = faWeight;

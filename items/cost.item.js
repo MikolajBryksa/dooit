@@ -1,22 +1,18 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {setCurrentItem} from '../redux/actions';
 import {getCost} from '../services/costs.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const CostItem = ({id, when, what}) => {
+const CostItem = ({id, when, what, setShowModal}) => {
   const dispatch = useDispatch();
 
-  async function fetchData() {
+  function handlePress() {
     const data = getCost(id);
     dispatch(setCurrentItem(data));
-  }
-
-  function handlePress() {
-    dispatch(setCurrentView('costs'));
-    fetchData();
+    setShowModal(true);
   }
 
   const dynamicStyle = ({pressed}) => [

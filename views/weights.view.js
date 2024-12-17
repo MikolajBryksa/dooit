@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setWeights, setCurrentView} from '../redux/actions';
+import {setWeights} from '../redux/actions';
 import {getEveryWeight} from '../services/weights.service';
 import {styles} from '../styles';
 import {convertToISO} from '../utils';
@@ -11,8 +11,8 @@ import WeightItem from '../items/weight.item';
 
 const WeightsView = () => {
   const weights = useSelector(state => state.weights);
-  const currentView = useSelector(state => state.currentView);
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [weightChange, setWeightChange] = useState(0);
   const [dayDifference, setDayDifference] = useState(0);
 
@@ -27,7 +27,7 @@ const WeightsView = () => {
       dispatch(setWeights(formattedData));
     }
     fetchData();
-  }, [currentView]);
+  }, [showModal]);
 
   useEffect(() => {
     function calcWeightChange(weights) {
@@ -57,12 +57,12 @@ const WeightsView = () => {
   }, [weights]);
 
   function handleAdd() {
-    dispatch(setCurrentView('weights'));
+    setShowModal(true);
   }
 
   return (
     <View style={styles.container}>
-      {currentView === 'weights' && <WeightsModal />}
+      {showModal && <WeightsModal setShowModal={setShowModal} />}
       {weights && (
         <>
           {weights.length > 0 && (
@@ -80,6 +80,7 @@ const WeightsView = () => {
                 id={item.id}
                 when={item.when}
                 what={item.what}
+                setShowModal={setShowModal}
               />
             ))}
           </ScrollView>

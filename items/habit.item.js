@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import {Pressable, Text} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {setCurrentItem, setCurrentView, setTasks} from '../redux/actions';
+import {useDispatch} from 'react-redux';
+import {setCurrentItem} from '../redux/actions';
 import {getHabit} from '../services/habits.service';
 import {styles} from '../styles';
 
-const HabitItem = ({id, what, drag, isActive}) => {
+const HabitItem = ({id, what, drag, isActive, setShowModal}) => {
   const dispatch = useDispatch();
 
   function handlePress() {
-    dispatch(setCurrentView('habits'));
     const data = getHabit(id);
     dispatch(setCurrentItem(data));
+    setShowModal(true);
   }
 
   const dynamicStyle = ({pressed}) => [

@@ -1,13 +1,21 @@
 import React, {useState} from 'react';
 import {Pressable, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {setCurrentItem, setCurrentView, setTasks} from '../redux/actions';
+import {setCurrentItem, setTasks} from '../redux/actions';
 import {getTask} from '../services/tasks.service';
 import {updateTask} from '../services/tasks.service';
 import {styles} from '../styles';
 import {renderCheck} from '../utils';
 
-const TaskItem = ({id, when, what, drag, isActive, check: initialCheck}) => {
+const TaskItem = ({
+  id,
+  when,
+  what,
+  drag,
+  isActive,
+  check: initialCheck,
+  setShowModal,
+}) => {
   const dispatch = useDispatch();
   const tasks = useSelector(state => state.tasks);
   const [check, setCheck] = useState(initialCheck);
@@ -23,9 +31,9 @@ const TaskItem = ({id, when, what, drag, isActive, check: initialCheck}) => {
   };
 
   function handlePress() {
-    dispatch(setCurrentView('tasks'));
     const data = getTask(id);
     dispatch(setCurrentItem(data));
+    setShowModal(true);
   }
 
   const dynamicStyle = ({pressed}) => [

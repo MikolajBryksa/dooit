@@ -3,12 +3,12 @@ import {Modal, View, Pressable, Text} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {setCurrentItem} from '../redux/actions';
 import {addPlan, updatePlan, deletePlan} from '../services/plans.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput, TimeInput} from '../components/inputs';
 
-const PlansModal = () => {
+const PlansModal = ({setShowModal}) => {
   const plans = useSelector(state => state.plans);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const PlansModal = () => {
 
   function handleClose() {
     dispatch(setCurrentItem(null));
-    dispatch(setCurrentView(null));
+    setShowModal(false);
   }
 
   function handleAdd() {

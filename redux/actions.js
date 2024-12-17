@@ -1,4 +1,3 @@
-export const SET_CURRENT_VIEW = 'SET_CURRENT_VIEW';
 export const SET_CURRENT_ITEM = 'SET_CURRENT_ITEM';
 export const SET_HABITS = 'SET_HABITS';
 export const SET_WEIGHTS = 'SET_WEIGHTS';
@@ -6,11 +5,6 @@ export const SET_COSTS = 'SET_COSTS';
 export const SET_PLANS = 'SET_PLANS';
 export const SET_TASKS = 'SET_TASKS';
 export const SET_CATEGORY = 'SET_CATEGORY';
-
-export const setCurrentView = view => ({
-  type: SET_CURRENT_VIEW,
-  payload: view,
-});
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,

@@ -1,5 +1,4 @@
 import {
-  SET_CURRENT_VIEW,
   SET_CURRENT_ITEM,
   SET_HABITS,
   SET_WEIGHTS,
@@ -10,7 +9,6 @@ import {
 } from './actions';
 
 const initialState = {
-  currentView: null,
   currentItem: null,
   habits: [],
   weights: [],
@@ -22,11 +20,6 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_CURRENT_VIEW:
-      return {
-        ...state,
-        currentView: action.payload,
-      };
     case SET_CURRENT_ITEM:
       return {
         ...state,

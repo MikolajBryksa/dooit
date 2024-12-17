@@ -2,7 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setTasks, setCurrentView, setCategory} from '../redux/actions';
+import {setTasks, setCategory} from '../redux/actions';
 import {getEveryTask} from '../services/tasks.service';
 import {styles} from '../styles';
 import TasksModal from '../modals/tasks.modal';
@@ -14,9 +14,9 @@ import realm from '../storage/schemas';
 
 const TasksView = () => {
   const tasks = useSelector(state => state.tasks);
-  const currentView = useSelector(state => state.currentView);
   const category = useSelector(state => state.category);
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [itemMode, setItemMode] = useState(false);
   const [doneTasks, setDoneTasks] = useState(0);
   const [data, setData] = useState(tasks);
@@ -35,10 +35,10 @@ const TasksView = () => {
       dispatch(setTasks(categorizedTasks));
     }
     fetchData();
-  }, [currentView, itemMode]);
+  }, [showModal, itemMode]);
 
   function handleAdd() {
-    dispatch(setCurrentView('tasks'));
+    setShowModal(true);
   }
 
   function handleItems() {
@@ -70,6 +70,7 @@ const TasksView = () => {
         isActive={isActive}
         check={item.check}
         category={item.category}
+        setShowModal={setShowModal}
       />
     );
   }, []);
@@ -92,7 +93,7 @@ const TasksView = () => {
 
   return (
     <View style={styles.container}>
-      {currentView === 'tasks' && <TasksModal />}
+      {showModal && <TasksModal setShowModal={setShowModal} />}
       {tasks && (
         <>
           <View style={styles.header}>

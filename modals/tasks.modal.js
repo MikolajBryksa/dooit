@@ -3,12 +3,12 @@ import {Modal, View, TextInput} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {setCurrentItem} from '../redux/actions';
 import {addTask, updateTask, deleteTask} from '../services/tasks.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhatInput} from '../components/inputs';
 
-const TasksModal = () => {
+const TasksModal = ({setShowModal}) => {
   const category = useSelector(state => state.category);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const TasksModal = () => {
 
   function handleClose() {
     dispatch(setCurrentItem(null));
-    dispatch(setCurrentView(null));
+    setShowModal(false);
   }
 
   function handleAdd() {
