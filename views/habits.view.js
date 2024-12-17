@@ -22,10 +22,12 @@ const HabitsView = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [play, setPlay] = useState(false);
+  const [endDay, setEndDay] = useState(false);
   const [currentHabit, setCurrentHabit] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [data, setData] = useState(habits);
   const [todayPlans, setTodayPlans] = useState([]);
+  const [tomorrowPlans, setTomorrowPlans] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -51,17 +53,31 @@ const HabitsView = () => {
 
   useEffect(() => {
     const today = new Date();
+
     const startOfDay = new Date(today.setHours(0, 0, 0, 0));
     const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const startOfTomorrow = new Date(today);
+    startOfTomorrow.setDate(today.getDate() + 1);
+    startOfTomorrow.setHours(0, 0, 0, 0);
+    const endOfTomorrow = new Date(today);
+    endOfTomorrow.setDate(today.getDate() + 1);
+    endOfTomorrow.setHours(23, 59, 59, 999);
 
     if (Array.isArray(plans) && plans.length > 0) {
       const todaysPlans = plans.filter(plan => {
         const planDate = new Date(plan.when);
         return planDate >= startOfDay && planDate <= endOfDay;
       });
+      const tomorrowsPlans = plans.filter(plan => {
+        const planDate = new Date(plan.when);
+        return planDate >= startOfTomorrow && planDate <= endOfTomorrow;
+      });
       setTodayPlans(todaysPlans);
+      setTomorrowPlans(tomorrowsPlans);
     } else {
       setTodayPlans([]);
+      setTomorrowPlans([]);
     }
   }, [plans]);
 
@@ -77,12 +93,13 @@ const HabitsView = () => {
 
   function handleStop() {
     setPlay(false);
+    setEndDay(false);
   }
 
   function handleDone() {
     const newIndex = (currentIndex + 1) % habits.length;
     if (newIndex === 0) {
-      setPlay(false);
+      setEndDay(true);
     } else {
       setCurrentHabit(habits[newIndex]);
       setCurrentIndex(newIndex);
@@ -119,6 +136,9 @@ const HabitsView = () => {
     dispatch(setHabits(newData));
   };
 
+  const plansToShow = !endDay ? todayPlans : tomorrowPlans;
+  const headerText = !endDay ? currentHabit?.what : 'All done today!';
+
   return (
     <View style={styles.container}>
       {play && showModal && <PlansModal setShowModal={setShowModal} />}
@@ -147,11 +167,11 @@ const HabitsView = () => {
       {habits && play && (
         <>
           <View style={styles.header}>
-            <Text style={styles.center}>{currentHabit.what}</Text>
+            <Text style={styles.center}>{headerText}</Text>
           </View>
 
           <ScrollView style={styles.scrollView}>
-            {todayPlans.map((item, index) => (
+            {plansToShow.map((item, index) => (
               <PlanItem
                 key={index}
                 id={item.id}
@@ -162,11 +182,16 @@ const HabitsView = () => {
               />
             ))}
           </ScrollView>
-
-          <View style={styles.controllers}>
-            <ControlButton type="stop" press={handleStop} />
-            <ControlButton type="accept" press={handleDone} />
-          </View>
+          {!endDay ? (
+            <View style={styles.controllers}>
+              <ControlButton type="stop" press={handleStop} />
+              <ControlButton type="accept" press={handleDone} />
+            </View>
+          ) : (
+            <View style={styles.controllers}>
+              <ControlButton type="accept" press={handleStop} />
+            </View>
+          )}
         </>
       )}
     </View>
