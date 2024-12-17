@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {View, ScrollView, Text, Pressable, Switch} from 'react-native';
 import {COLORS, styles} from '../styles';
 import packageJson from '../package.json';
-import ControlButton from '../components/ControlButton';
+import ControlButton from '../components/control.button';
 
-const Settings = () => {
+const SettingsView = () => {
   const dynamicStyle = ({pressed}) => [
     styles.listItem,
     {opacity: pressed ? 0.8 : 1},
@@ -13,7 +13,6 @@ const Settings = () => {
   const [habitsTab, setHabitsTab] = useState(true);
   const [weightsTab, setWeightsTab] = useState(true);
   const [costsTab, setCostsTab] = useState(true);
-  const [hoursTab, setHoursTab] = useState(true);
   const [plansTab, setPlansTab] = useState(true);
   const [tasksTab, setTasksTab] = useState(true);
 
@@ -24,8 +23,6 @@ const Settings = () => {
       setWeightsTab(!weightsTab);
     } else if (name === 'costs') {
       setCostsTab(!costsTab);
-    } else if (name === 'hours') {
-      setHoursTab(!hoursTab);
     } else if (name === 'plans') {
       setPlansTab(!plansTab);
     } else if (name === 'tasks') {
@@ -110,19 +107,6 @@ const Settings = () => {
             thumbColor={COLORS.primary}
           />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('hours')}>
-          <Text style={styles.listItemWhat}>Hours tab</Text>
-          <Switch
-            style={styles.switch}
-            value={hoursTab}
-            onValueChange={() => handlePress('hours')}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
-        </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handlePress('plans')}>
           <Text style={styles.listItemWhat}>Plans tab</Text>
           <Switch
@@ -158,4 +142,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsView;

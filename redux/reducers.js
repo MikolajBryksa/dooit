@@ -1,29 +1,32 @@
 import {
+  SET_CURRENT_VIEW,
   SET_CURRENT_ITEM,
   SET_HABITS,
   SET_WEIGHTS,
   SET_COSTS,
-  SET_HOURS,
   SET_PLANS,
   SET_TASKS,
-  SET_MODAL_NAME,
   SET_CATEGORY,
 } from './actions';
 
 const initialState = {
+  currentView: null,
   currentItem: null,
   habits: [],
   weights: [],
   costs: [],
-  hours: [],
   plans: [],
   tasks: [],
-  modalName: null,
   category: 'task',
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_CURRENT_VIEW:
+      return {
+        ...state,
+        currentView: action.payload,
+      };
     case SET_CURRENT_ITEM:
       return {
         ...state,
@@ -44,11 +47,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         costs: action.payload,
       };
-    case SET_HOURS:
-      return {
-        ...state,
-        hours: action.payload,
-      };
     case SET_PLANS:
       return {
         ...state,
@@ -58,11 +56,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         tasks: action.payload,
-      };
-    case SET_MODAL_NAME:
-      return {
-        ...state,
-        modalName: action.payload,
       };
     case SET_CATEGORY:
       return {

@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
       color: COLORS.text,
     },
     pickerItemContainer: {
-      width: '95%',
+      width: '100%',
     },
     pickerLabelContainer: {
       right: -20,

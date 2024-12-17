@@ -1,18 +1,15 @@
 import React from 'react';
 import {styles, COLORS} from './styles';
-import {useSelector, Provider} from 'react-redux';
+import {Provider} from 'react-redux';
 import store from './redux/store';
-import Habits from './views/habits';
-import Weights from './views/weights';
-import Costs from './views/costs';
-import Hours from './views/hours';
-import Plans from './views/plans';
-import Tasks from './views/tasks';
-import Settings from './views/settings';
-import ModalDialog from './components/ModalDialog';
-import toastConfig from './components/Toast';
+import HabitsView from './views/habits.view';
+import WeightsView from './views/weights.view';
+import CostsView from './views/costs.view';
+import PlansView from './views/plans.view';
+import TasksView from './views/tasks.view';
+import SettingsView from './views/settings.view';
+import toastConfig from './components/toast';
 import Toast from 'react-native-toast-message';
-
 import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
@@ -21,10 +18,6 @@ import {renderViewIcon} from './utils';
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
-  const modalName = useSelector(
-    (state: {modalName: string}) => state.modalName,
-  );
-
   return (
     <>
       <Tab.Navigator
@@ -38,18 +31,13 @@ function AppContent() {
             display: 'none',
           },
         })}>
-        <Tab.Screen name="Habits" component={Habits} />
-        <Tab.Screen name="Weights" component={Weights} />
-        <Tab.Screen name="Costs" component={Costs} />
-        <Tab.Screen name="Hours" component={Hours} />
-        <Tab.Screen name="Plans" component={Plans} />
-        <Tab.Screen name="Tasks" component={Tasks} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen name="habits" component={HabitsView} />
+        <Tab.Screen name="weights" component={WeightsView} />
+        <Tab.Screen name="costs" component={CostsView} />
+        <Tab.Screen name="plans" component={PlansView} />
+        <Tab.Screen name="tasks" component={TasksView} />
+        <Tab.Screen name="settings" component={SettingsView} />
       </Tab.Navigator>
-      {modalName && (
-        // @ts-ignore
-        <ModalDialog name={modalName} />
-      )}
 
       <React.Fragment>
         {/* @ts-ignore */}

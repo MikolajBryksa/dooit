@@ -12,7 +12,6 @@ import {
   faList,
   faWeight,
   faCog,
-  faBriefcase,
   faCircleCheck,
   faPlus,
   faCheck,
@@ -24,9 +23,15 @@ import {
   faMugHot,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
+import realm from './storage/schemas';
 
-export function formatToFloat(text, modalName) {
-  if (modalName === 'cost' || modalName === 'weight') {
+export function getNextId(name) {
+  const lastItem = realm.objects(name).sorted('id', true)[0];
+  return lastItem ? lastItem.id + 1 : 1;
+}
+
+export function formatToFloat(text, view) {
+  if (view === 'cost' || view === 'weight') {
     const formattedText = text.replace(',', '.');
     const floatRegex = /^(\d+)?([.]\d*)?$/;
     if (floatRegex.test(formattedText)) {
@@ -146,31 +151,21 @@ export function renderViewIcon(name, focused) {
   }
 
   switch (name) {
-    case 'Habits':
-    case 'habit':
+    case 'habits':
       icon = faPlay;
       break;
-    case 'Weights':
-    case 'weight':
+    case 'weights':
       icon = faWeight;
       break;
-    case 'Costs':
-    case 'cost':
+    case 'costs':
       icon = faCoins;
       break;
-    case 'Hours':
-    case 'hour':
-      icon = faBriefcase;
-      break;
-    case 'Plans':
-    case 'plan':
+    case 'plans':
       icon = faCalendar;
       break;
-    case 'Tasks':
-    case 'task':
+    case 'tasks':
       icon = faList;
       break;
-    case 'Settings':
     case 'settings':
       icon = faCog;
       break;
