@@ -81,11 +81,29 @@ export const WhenInput = ({
       />
     </View>
   ) : (
-    <Pressable
-      style={styles.inputContainer}
-      onPress={() => setShowCalendar(true)}>
-      <Text style={styles.input}>{formatDateWithDay(when)}</Text>
-    </Pressable>
+    <View style={styles.inputContainer}>
+      <Pressable
+        style={styles.incrementator}
+        onPress={() => {
+          const currentDate = new Date(when);
+          currentDate.setDate(currentDate.getDate() - 1);
+          setWhen(currentDate.toISOString().split('T')[0]);
+        }}>
+        {renderArrow('left')}
+      </Pressable>
+      <Pressable style={styles.input} onPress={() => setShowCalendar(true)}>
+        <Text style={styles.input}>{formatDateWithDay(when)}</Text>
+      </Pressable>
+      <Pressable
+        style={styles.incrementator}
+        onPress={() => {
+          const currentDate = new Date(when);
+          currentDate.setDate(currentDate.getDate() + 1);
+          setWhen(currentDate.toISOString().split('T')[0]);
+        }}>
+        {renderArrow('right')}
+      </Pressable>
+    </View>
   );
 
 export const TimeInput = ({

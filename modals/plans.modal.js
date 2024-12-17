@@ -21,7 +21,7 @@ const PlansModal = ({setShowModal}) => {
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
   const [time, setTime] = useState('');
-  const [showCalendar, setShowCalendar] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   useEffect(() => {
