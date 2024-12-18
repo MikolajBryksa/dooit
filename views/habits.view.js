@@ -5,6 +5,7 @@ import ControlButton from '../components/control.button';
 import {setHabits, setPlans} from '../redux/actions';
 import {getEveryHabit} from '../services/habits.service';
 import {getEveryPlan} from '../services/plans.service';
+import {getTemp, updateTemp} from '../services/temp.service';
 import {styles} from '../styles';
 import {convertToISO} from '../utils';
 import HabitsModal from '../modals/habits.modal';
@@ -28,6 +29,18 @@ const HabitsView = () => {
   const [data, setData] = useState(habits);
   const [todayPlans, setTodayPlans] = useState([]);
   const [tomorrowPlans, setTomorrowPlans] = useState([]);
+
+  useEffect(() => {
+    async function fetchTemp() {
+      const temp = getTemp();
+      if (temp) {
+        setCurrentHabit(habits.find(item => item.id === temp.habitId));
+        setCurrentIndex(temp.habitId - 1);
+        setPlay(temp.habitPlay);
+      }
+    }
+    fetchTemp();
+  }, [habits]);
 
   useEffect(() => {
     async function fetchData() {
@@ -89,20 +102,24 @@ const HabitsView = () => {
     setCurrentHabit(habits[0]);
     setCurrentIndex(0);
     setPlay(true);
+    updateTemp(0, true);
   }
 
   function handleStop() {
     setPlay(false);
     setEndDay(false);
+    updateTemp(0, false);
   }
 
   function handleDone() {
     const newIndex = (currentIndex + 1) % habits.length;
     if (newIndex === 0) {
       setEndDay(true);
+      updateTemp(0, false);
     } else {
       setCurrentHabit(habits[newIndex]);
       setCurrentIndex(newIndex);
+      updateTemp(habits[newIndex].id, true);
     }
   }
 

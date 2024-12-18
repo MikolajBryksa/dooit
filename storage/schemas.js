@@ -1,5 +1,16 @@
 import Realm from 'realm';
 
+class Temp extends Realm.Object {}
+Temp.schema = {
+  name: 'Temp',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    habitId: 'int',
+    habitPlay: 'bool',
+  },
+};
+
 class Habit extends Realm.Object {}
 Habit.schema = {
   name: 'Habit',
@@ -59,7 +70,7 @@ Task.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Weight, Cost, Plan, Task],
+  schema: [Temp, Habit, Weight, Cost, Plan, Task],
   schemaVersion: 2,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 2) {
