@@ -11,12 +11,14 @@ import {
 } from '../services/weights.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput} from '../components/inputs';
+import {useTranslation} from 'react-i18next';
 
 const WeightsModal = ({setShowModal}) => {
   const weights = useSelector(state => state.weights);
   const currentItem = useSelector(state => state.currentItem);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -91,12 +93,13 @@ const WeightsModal = ({setShowModal}) => {
           setWhen={setWhen}
           data={weights}
           firstDay={settings.firstDay}
+          language={settings.language}
         />
         <WhatInput
           inputRef={inputRef}
           what={what}
           setWhat={setWhat}
-          placeholder="Enter weight"
+          placeholder={t('enter-weight')}
           category=""
           inputModeType="numeric"
           incrementator={settings.weightGain}

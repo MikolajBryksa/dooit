@@ -74,6 +74,7 @@ export const WhenInput = ({
   setWhen,
   data,
   firstDay,
+  language,
 }) =>
   showCalendar ? (
     <View style={styles.calendar}>
@@ -101,7 +102,7 @@ export const WhenInput = ({
         {renderArrow('left')}
       </Pressable>
       <Pressable style={styles.input} onPress={() => setShowCalendar(true)}>
-        <Text style={styles.input}>{formatDateWithDay(when)}</Text>
+        <Text style={styles.input}>{formatDateWithDay(when, language)}</Text>
       </Pressable>
       <Pressable
         style={styles.incrementator}
@@ -121,6 +122,7 @@ export const TimeInput = ({
   time,
   setTime,
   clockFormat,
+  placeholder,
 }) => (
   <View style={styles.timer}>
     {showTimePicker ? (
@@ -149,7 +151,7 @@ export const TimeInput = ({
       <Pressable
         style={styles.clockContainer}
         onPress={() => setShowTimePicker(true)}>
-        <Text style={styles.setter}>Set time</Text>
+        <Text style={styles.setter}>{placeholder}</Text>
       </Pressable>
     )}
   </View>

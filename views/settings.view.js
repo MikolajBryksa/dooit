@@ -6,10 +6,14 @@ import packageJson from '../package.json';
 import ControlButton from '../components/control.button';
 import {setSettings} from '../redux/actions';
 import {updateSettingValue} from '../services/settings.service';
+import i18next from '../i18next';
+import {useTranslation} from 'react-i18next';
+import {LocaleConfig} from 'react-native-calendars';
 
 const SettingsView = () => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const [language, setLanguage] = useState(settings.language);
   const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
@@ -27,6 +31,8 @@ const SettingsView = () => {
 
   function handleLanguage() {
     const newLanguage = language === 'English' ? 'Polski' : 'English';
+    i18next.changeLanguage(newLanguage === 'English' ? 'en' : 'pl');
+    LocaleConfig.defaultLocale = newLanguage === 'English' ? 'en' : 'pl';
     setLanguage(newLanguage);
     updateSettingValue('language', newLanguage);
     const updatedSettings = {...settings, language: newLanguage};
@@ -163,21 +169,23 @@ const SettingsView = () => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
-          <Text style={styles.center}>Version {packageJson.version}</Text>
+          <Text style={styles.center}>
+            {t('version')} {packageJson.version}
+          </Text>
         </View>
         <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
-          <Text style={styles.listItemWhat}>Language</Text>
+          <Text style={styles.listItemWhat}>{t('language')} </Text>
           <Text style={styles.listItemChange}>{settings.language}</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleRowsNumber()}>
-          <Text style={styles.listItemWhat}>Rows number</Text>
+          <Text style={styles.listItemWhat}>{t('rows-number')} </Text>
           <Text style={styles.listItemChange}>{settings.rowsNumber}</Text>
         </Pressable>
 
         <View style={styles.gap} />
 
         {/* <Pressable style={dynamicStyle} onPress={() => handleHabitsTab()}>
-          <Text style={styles.listItemWhat}>Habits tab</Text>
+          <Text style={styles.listItemWhat}>{t('habits')}</Text>
           <Switch
             style={styles.switch}
             value={habitsTab}
@@ -193,7 +201,7 @@ const SettingsView = () => {
         <View style={styles.gap} /> */}
 
         <Pressable style={dynamicStyle} onPress={() => handleWeightsTab()}>
-          <Text style={styles.listItemWhat}>Weights tab</Text>
+          <Text style={styles.listItemWhat}>{t('weights')}</Text>
           <Switch
             style={styles.switch}
             value={weightsTab}
@@ -206,18 +214,18 @@ const SettingsView = () => {
           />
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleWeightUnit()}>
-          <Text style={styles.listItemWhat}>Weight unit</Text>
+          <Text style={styles.listItemWhat}>{t('weight-unit')}</Text>
           <Text style={styles.listItemChange}>{settings.weightUnit}</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleWeightGain()}>
-          <Text style={styles.listItemWhat}>Weight gain</Text>
+          <Text style={styles.listItemWhat}>{t('weight-gain')}</Text>
           <Text style={styles.listItemChange}>{settings.weightGain}</Text>
         </Pressable>
 
         <View style={styles.gap} />
 
         <Pressable style={dynamicStyle} onPress={() => handleCostsTab()}>
-          <Text style={styles.listItemWhat}>Costs tab</Text>
+          <Text style={styles.listItemWhat}>{t('costs')}</Text>
           <Switch
             style={styles.switch}
             value={costsTab}
@@ -230,18 +238,18 @@ const SettingsView = () => {
           />
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleCurrency()}>
-          <Text style={styles.listItemWhat}>Currency</Text>
+          <Text style={styles.listItemWhat}>{t('currency')}</Text>
           <Text style={styles.listItemChange}>{settings.currency}</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleCostGain()}>
-          <Text style={styles.listItemWhat}>Cost gain</Text>
+          <Text style={styles.listItemWhat}>{t('cost-gain')}</Text>
           <Text style={styles.listItemChange}>{settings.costGain}</Text>
         </Pressable>
 
         <View style={styles.gap} />
 
         <Pressable style={dynamicStyle} onPress={() => handlePlansTab()}>
-          <Text style={styles.listItemWhat}>Plans tab</Text>
+          <Text style={styles.listItemWhat}>{t('plans')}</Text>
           <Switch
             style={styles.switch}
             value={plansTab}
@@ -254,18 +262,18 @@ const SettingsView = () => {
           />
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleClockFormat()}>
-          <Text style={styles.listItemWhat}>Clock format</Text>
+          <Text style={styles.listItemWhat}>{t('clock-format')}</Text>
           <Text style={styles.listItemChange}>{settings.clockFormat}</Text>
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleFirstDay()}>
-          <Text style={styles.listItemWhat}>First day in calendar</Text>
+          <Text style={styles.listItemWhat}>{t('first-day')}</Text>
           <Text style={styles.listItemChange}>{settings.firstDay}</Text>
         </Pressable>
 
         <View style={styles.gap} />
 
         <Pressable style={dynamicStyle} onPress={() => handleTasksTab()}>
-          <Text style={styles.listItemWhat}>Tasks tab</Text>
+          <Text style={styles.listItemWhat}>{t('tasks')}</Text>
           <Switch
             style={styles.switch}
             value={tasksTab}

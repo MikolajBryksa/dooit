@@ -16,6 +16,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {renderViewIcon} from './utils';
 import {getSettings} from './services/settings.service';
 import {setSettings} from './redux/actions';
+import i18next from './i18next';
+import {LocaleConfig} from 'react-native-calendars';
+import {plLocaleConfig, enLocaleConfig} from './translation/calendar';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,10 +26,16 @@ function AppContent() {
   const settings = useSelector((state: any) => state.settings);
   const dispatch = useDispatch();
 
+  LocaleConfig.locales['pl'] = plLocaleConfig;
+  LocaleConfig.locales['en'] = enLocaleConfig;
+
   useEffect(() => {
     const settings = getSettings();
     if (settings) {
       dispatch(setSettings(settings));
+      i18next.changeLanguage(settings.language === 'English' ? 'en' : 'pl');
+      LocaleConfig.defaultLocale =
+        settings.language === 'English' ? 'en' : 'pl';
     }
   }, []);
 

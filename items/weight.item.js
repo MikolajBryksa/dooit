@@ -23,7 +23,9 @@ const WeightItem = ({id, when, what, setShowModal}) => {
 
   return (
     <Pressable style={dynamicStyle} onPress={handlePress}>
-      <Text style={styles.when}>{formatDateWithDay(when)}</Text>
+      <Text style={styles.when}>
+        {formatDateWithDay(when, settings.language)}
+      </Text>
       {what && (
         <Text style={styles.what} numberOfLines={1} ellipsizeMode="head">
           {what} {settings.weightUnit}

@@ -39,7 +39,9 @@ const PlansView = () => {
       {plans && (
         <>
           <View style={styles.header}>
-            <Text style={styles.center}>{formatDateWithDay(new Date())}</Text>
+            <Text style={styles.center}>
+              {formatDateWithDay(new Date(), settings.language)}
+            </Text>
           </View>
 
           <ScrollView style={styles.scrollView}>

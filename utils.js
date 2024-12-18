@@ -30,14 +30,16 @@ export function getNextId(itemName) {
   const lastItem = realm.objects(itemName).sorted('id', true)[0];
   return lastItem ? lastItem.id + 1 : 1;
 }
-export function formatDateWithDay(when) {
+export function formatDateWithDay(when, language) {
   if (when.length < 3) {
     return '';
   }
+  language = language === 'English' ? 'en' : 'pl';
   const date = new Date(when);
-  const dayOfWeek = date.toLocaleDateString('en-US', {weekday: 'long'});
-  const month = date.toLocaleDateString('en-US', {month: '2-digit'});
-  const day = date.toLocaleDateString('en-US', {day: '2-digit'});
+  let dayOfWeek = date.toLocaleDateString(language, {weekday: 'long'});
+  const month = date.toLocaleDateString(language, {month: '2-digit'});
+  const day = date.toLocaleDateString(language, {day: '2-digit'});
+  dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
 
   return `${day}.${month} ${dayOfWeek}`;
 }
@@ -99,13 +101,13 @@ export function getMarkedDates(items, when) {
       marked[item.when] = {
         selected: true,
         selectedColor: COLORS.background,
-        selectedTextColor: COLORS.text,
+        selectedTextColor: COLORS.secondary,
       };
     } else {
       marked[item.when] = {
         selected: true,
         selectedColor: COLORS.background,
-        selectedTextColor: COLORS.secondary,
+        selectedTextColor: COLORS.text,
       };
     }
   });
@@ -114,7 +116,7 @@ export function getMarkedDates(items, when) {
     marked[when] = {
       selected: true,
       selectedColor: COLORS.background,
-      selectedTextColor: COLORS.text,
+      selectedTextColor: COLORS.secondary,
     };
   }
 
@@ -122,7 +124,7 @@ export function getMarkedDates(items, when) {
     marked[when] = {
       selected: true,
       selectedColor: COLORS.background,
-      selectedTextColor: COLORS.text,
+      selectedTextColor: COLORS.secondary,
     };
   }
   return marked;

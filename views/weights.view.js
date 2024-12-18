@@ -8,11 +8,13 @@ import {styles} from '../styles';
 import {convertToISO} from '../utils';
 import WeightsModal from '../modals/weights.modal';
 import WeightItem from '../items/weight.item';
+import {useTranslation} from 'react-i18next';
 
 const WeightsView = () => {
   const weights = useSelector(state => state.weights);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [weightChange, setWeightChange] = useState(0);
   const [dayDifference, setDayDifference] = useState(0);
@@ -69,7 +71,8 @@ const WeightsView = () => {
           {weights.length > 0 && (
             <View style={styles.header}>
               <Text style={styles.center}>
-                {weightChange} {settings.weightUnit} / {dayDifference} days
+                {weightChange} {settings.weightUnit} / {dayDifference}{' '}
+                {t('days')}
               </Text>
             </View>
           )}

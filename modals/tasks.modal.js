@@ -7,11 +7,13 @@ import {setCurrentItem} from '../redux/actions';
 import {addTask, updateTask, deleteTask} from '../services/tasks.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhatInput} from '../components/inputs';
+import {useTranslation} from 'react-i18next';
 
 const TasksModal = ({setShowModal}) => {
   const category = useSelector(state => state.category);
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -80,7 +82,7 @@ const TasksModal = ({setShowModal}) => {
           inputRef={inputRef}
           what={what}
           setWhat={setWhat}
-          placeholder={`Enter ${category}`}
+          placeholder={category === 'task' ? t('enter-task') : t('enter-item')}
           inputModeType="text"
         />
         <View style={styles.controllers}>

@@ -33,7 +33,7 @@ const PlanItem = ({id, when, what, time, setShowModal}) => {
   return (
     <Pressable style={dynamicStyle} onPress={handlePress}>
       <Text style={styles.when}>
-        {formatDateWithDay(when)}
+        {formatDateWithDay(when, settings.language)}
         {time && ` | ${time}`}
       </Text>
       {what && (

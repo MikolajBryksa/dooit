@@ -1,0 +1,29 @@
+{
+  "enter-habit": "Wpisz nawyk",
+  "enter-weight": "Wpisz wagę",
+  "enter-cost": "Wpisz koszt",
+  "enter-plan": "Wpisz plan",
+  "set-time": "Ustaw czas",
+  "enter-task": "Wpisz zadanie",
+  "enter-item": "Wpisz produkt",
+
+  "days": "dni",
+  "day": "dzień",
+  "done": "zrobione",
+  "bought": "kupione",
+
+  "version": "Wersja",
+  "language": "Język",
+  "rows-number": "Ilość wierszy",
+  "habits": "Nawyki",
+  "weights": "Pomiary wagi",
+  "weight-unit": "Jednostka wagi",
+  "weight-gain": "Przyrost wagi",
+  "costs": "Koszta",
+  "currency": "Waluta",
+  "cost-gain": "Przyrost kosztów",
+  "plans": "Plany",
+  "clock-format": "Format zegara",
+  "first-day": "Pierwszy dzień",
+  "tasks": "Zadania"
+}

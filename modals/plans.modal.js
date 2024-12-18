@@ -7,12 +7,14 @@ import {setCurrentItem} from '../redux/actions';
 import {addPlan, updatePlan, deletePlan} from '../services/plans.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput, TimeInput} from '../components/inputs';
+import {useTranslation} from 'react-i18next';
 
 const PlansModal = ({setShowModal}) => {
   const plans = useSelector(state => state.plans);
   const currentItem = useSelector(state => state.currentItem);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -94,12 +96,13 @@ const PlansModal = ({setShowModal}) => {
           setWhen={setWhen}
           data={plans}
           firstDay={settings.firstDay}
+          language={settings.language}
         />
         <WhatInput
           inputRef={inputRef}
           what={what}
           setWhat={setWhat}
-          placeholder="Enter plan"
+          placeholder={t('enter-plan')}
           inputModeType="text"
         />
         <TimeInput
@@ -108,6 +111,7 @@ const PlansModal = ({setShowModal}) => {
           showTimePicker={showTimePicker}
           setShowTimePicker={setShowTimePicker}
           clockFormat={settings.clockFormat}
+          placeholder={t('set-time')}
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

@@ -7,12 +7,14 @@ import {setCurrentItem} from '../redux/actions';
 import {addCost, updateCost, deleteCost} from '../services/costs.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput} from '../components/inputs';
+import {useTranslation} from 'react-i18next';
 
 const CostsModal = ({setShowModal}) => {
   const costs = useSelector(state => state.costs);
   const currentItem = useSelector(state => state.currentItem);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -87,12 +89,13 @@ const CostsModal = ({setShowModal}) => {
           setWhen={setWhen}
           data={costs}
           firstDay={settings.firstDay}
+          language={settings.language}
         />
         <WhatInput
           inputRef={inputRef}
           what={what}
           setWhat={setWhat}
-          placeholder="Enter cost"
+          placeholder={t('enter-cost')}
           inputModeType="numeric"
           incrementator={settings.costGain}
         />

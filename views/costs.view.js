@@ -8,11 +8,13 @@ import {styles} from '../styles';
 import {convertToISO} from '../utils';
 import CostsModal from '../modals/costs.modal';
 import CostItem from '../items/cost.item';
+import {useTranslation} from 'react-i18next';
 
 const CostsView = () => {
   const costs = useSelector(state => state.costs);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [averageCost, setAverageCost] = useState(0);
 
@@ -62,7 +64,7 @@ const CostsView = () => {
           {costs.length > 0 && (
             <View style={styles.header}>
               <Text style={styles.center}>
-                {averageCost} {settings.currency} / day
+                {averageCost} {settings.currency} / {t('day')}
               </Text>
             </View>
           )}

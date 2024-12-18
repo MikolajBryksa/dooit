@@ -11,11 +11,13 @@ import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import realm from '../storage/schemas';
+import {useTranslation} from 'react-i18next';
 
 const TasksView = () => {
   const tasks = useSelector(state => state.tasks);
   const category = useSelector(state => state.category);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [itemMode, setItemMode] = useState(false);
   const [doneTasks, setDoneTasks] = useState(0);
@@ -98,7 +100,7 @@ const TasksView = () => {
         <>
           <View style={styles.header}>
             <Text style={styles.center}>
-              {doneTasks} / {tasks.length} {itemMode ? 'bought' : 'done'}
+              {doneTasks} / {tasks.length} {itemMode ? t('bought') : t('done')}
             </Text>
           </View>
 

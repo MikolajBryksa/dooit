@@ -7,10 +7,12 @@ import {setCurrentItem} from '../redux/actions';
 import {addHabit, updateHabit, deleteHabit} from '../services/habits.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhatInput} from '../components/inputs';
+import {useTranslation} from 'react-i18next';
 
 const HabitsModal = ({setShowModal}) => {
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -79,7 +81,7 @@ const HabitsModal = ({setShowModal}) => {
           inputRef={inputRef}
           what={what}
           setWhat={setWhat}
-          placeholder="Enter habit"
+          placeholder={t('enter-habit')}
           inputModeType="text"
         />
         <View style={styles.controllers}>

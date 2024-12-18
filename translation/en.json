@@ -1,0 +1,29 @@
+{
+  "enter-habit": "Enter habit",
+  "enter-weight": "Enter weight",
+  "enter-cost": "Enter cost",
+  "enter-plan": "Enter plan",
+  "set-time": "Set time",
+  "enter-task": "Enter task",
+  "enter-item": "Enter item",
+
+  "days": "days",
+  "day": "day",
+  "done": "done",
+  "bought": "bought",
+
+  "version": "Version",
+  "language": "Language",
+  "rows-number": "Rows number",
+  "habits": "Habits",
+  "weights": "Weights",
+  "weight-unit": "Weight unit",
+  "weight-gain": "Weight gain",
+  "costs": "Costs",
+  "currency": "Currency",
+  "cost-gain": "Cost gain",
+  "plans": "Plans",
+  "clock-format": "Clock format",
+  "first-day": "First day",
+  "tasks": "Tasks"
+}
