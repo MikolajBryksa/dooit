@@ -19,7 +19,7 @@ export const addHabit = (when, what) => {
 export const getEveryHabit = () => {
   const sortFields = [['when', false]];
   const results = realm.objects('Habit').sorted(sortFields);
-  return results.slice(0, 90);
+  return results.slice(0, 180);
 };
 
 export const getHabit = id => {

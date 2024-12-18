@@ -16,13 +16,13 @@ export const addWeight = (when, what) => {
   return newWeight;
 };
 
-export const getEveryWeight = () => {
+export const getEveryWeight = rowsNumber => {
   const sortFields = [
     ['when', true],
     ['id', true],
   ];
   const results = realm.objects('Weight').sorted(sortFields);
-  return results.slice(0, 90);
+  return results.slice(0, rowsNumber);
 };
 
 export const getWeight = id => {

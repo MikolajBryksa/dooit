@@ -25,6 +25,13 @@ export const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     flex: 1,
   },
+  gap: {
+    width: '100%',
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    borderRadius: DIMENSIONS.margin,
+  },
   toast: {
     height: DIMENSIONS.height,
     width: '95%',
@@ -114,6 +121,10 @@ export const styles = StyleSheet.create({
       bottom: 6,
       width: 40,
       alignItems: 'center',
+    },
+    pickerAmPmContainer: {
+      right: 30,
+      top: 10,
     },
   },
   center: {

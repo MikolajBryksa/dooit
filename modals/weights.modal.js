@@ -15,6 +15,7 @@ import {WhenInput, WhatInput} from '../components/inputs';
 const WeightsModal = ({setShowModal}) => {
   const weights = useSelector(state => state.weights);
   const currentItem = useSelector(state => state.currentItem);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   const inputRef = useRef(null);
@@ -34,7 +35,7 @@ const WeightsModal = ({setShowModal}) => {
     } else {
       const today = new Date().toISOString().split('T')[0];
       setWhen(today);
-      setWhat('');
+      setWhat(weights.length ? weights[0].what : '');
     }
   }, [currentItem]);
 
@@ -49,7 +50,7 @@ const WeightsModal = ({setShowModal}) => {
       type: 'add',
       text1: 'weights',
       topOffset: DIMENSIONS.padding,
-      visibilityTime: 1500,
+      visibilityTime: 1200,
     });
     handleClose();
   }
@@ -61,7 +62,7 @@ const WeightsModal = ({setShowModal}) => {
         type: 'update',
         text1: 'weights',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -74,7 +75,7 @@ const WeightsModal = ({setShowModal}) => {
         type: 'delete',
         text1: 'weights',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -89,6 +90,7 @@ const WeightsModal = ({setShowModal}) => {
           when={when}
           setWhen={setWhen}
           data={weights}
+          firstDay={settings.firstDay}
         />
         <WhatInput
           inputRef={inputRef}
@@ -97,7 +99,7 @@ const WeightsModal = ({setShowModal}) => {
           placeholder="Enter weight"
           category=""
           inputModeType="numeric"
-          incrementator={1}
+          incrementator={settings.weightGain}
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

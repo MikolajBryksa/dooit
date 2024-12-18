@@ -11,6 +11,7 @@ import WeightItem from '../items/weight.item';
 
 const WeightsView = () => {
   const weights = useSelector(state => state.weights);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [weightChange, setWeightChange] = useState(0);
@@ -18,7 +19,7 @@ const WeightsView = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const data = getEveryWeight();
+      const data = getEveryWeight(settings.rowsNumber);
       const formattedData = data.map(item => ({
         ...item,
         what: item.what.toFixed(2),
@@ -27,7 +28,7 @@ const WeightsView = () => {
       dispatch(setWeights(formattedData));
     }
     fetchData();
-  }, [showModal]);
+  }, [showModal, settings.rowsNumber]);
 
   useEffect(() => {
     function calcWeightChange(weights) {
@@ -68,7 +69,7 @@ const WeightsView = () => {
           {weights.length > 0 && (
             <View style={styles.header}>
               <Text style={styles.center}>
-                {weightChange} kg / {dayDifference} days
+                {weightChange} {settings.weightUnit} / {dayDifference} days
               </Text>
             </View>
           )}

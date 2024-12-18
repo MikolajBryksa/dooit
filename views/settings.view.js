@@ -1,33 +1,149 @@
 import React, {useState} from 'react';
 import {View, ScrollView, Text, Pressable, Switch} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {COLORS, styles} from '../styles';
 import packageJson from '../package.json';
 import ControlButton from '../components/control.button';
+import {setSettings} from '../redux/actions';
+import {updateSettingValue} from '../services/settings.service';
 
 const SettingsView = () => {
-  const dynamicStyle = ({pressed}) => [
-    styles.listItem,
-    {opacity: pressed ? 0.8 : 1},
-  ];
+  const settings = useSelector(state => state.settings);
+  const dispatch = useDispatch();
 
-  const [habitsTab, setHabitsTab] = useState(true);
-  const [weightsTab, setWeightsTab] = useState(true);
-  const [costsTab, setCostsTab] = useState(true);
-  const [plansTab, setPlansTab] = useState(true);
-  const [tasksTab, setTasksTab] = useState(true);
+  const [language, setLanguage] = useState(settings.language);
+  const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
+  //   const [habitsTab, setHabitsTab] = useState(settings.habitsTab);
+  const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
+  const [weightUnit, setWeightUnit] = useState(settings.weightUnit);
+  const [weightGain, setWeightGain] = useState(settings.weightGain);
+  const [costsTab, setCostsTab] = useState(settings.costsTab);
+  const [currency, setCurrency] = useState(settings.currency);
+  const [costGain, setCostGain] = useState(settings.costGain);
+  const [plansTab, setPlansTab] = useState(settings.plansTab);
+  const [clockFormat, setClockFormat] = useState(settings.clockFormat);
+  const [firstDay, setFirstDay] = useState(settings.firstDay);
+  const [tasksTab, setTasksTab] = useState(settings.tasksTab);
 
-  function handlePress(name) {
-    if (name === 'habits') {
-      setHabitsTab(!habitsTab);
-    } else if (name === 'weights') {
-      setWeightsTab(!weightsTab);
-    } else if (name === 'costs') {
-      setCostsTab(!costsTab);
-    } else if (name === 'plans') {
-      setPlansTab(!plansTab);
-    } else if (name === 'tasks') {
-      setTasksTab(!tasksTab);
+  function handleLanguage() {
+    const newLanguage = language === 'English' ? 'Polski' : 'English';
+    setLanguage(newLanguage);
+    updateSettingValue('language', newLanguage);
+    const updatedSettings = {...settings, language: newLanguage};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleRowsNumber() {
+    const rowsNumbers = [30, 45, 60, 90, 180];
+    const currentIndex = rowsNumbers.indexOf(rowsNumber);
+    const newRowsNumber = rowsNumbers[(currentIndex + 1) % rowsNumbers.length];
+
+    setRowsNumber(newRowsNumber);
+    updateSettingValue('rowsNumber', newRowsNumber);
+    const updatedSettings = {...settings, rowsNumber: newRowsNumber};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  //   function handleHabitsTab() {
+  //     const newHabitsTabValue = !habitsTab;
+  //     setHabitsTab(newHabitsTabValue);
+  //     updateSettingValue('habitsTab', newHabitsTabValue);
+  //     const updatedSettings = {...settings, habitsTab: newHabitsTabValue};
+  //     dispatch(setSettings(updatedSettings));
+  //   }
+
+  function handleWeightsTab() {
+    const newWeightsTabValue = !weightsTab;
+    setWeightsTab(newWeightsTabValue);
+    updateSettingValue('weightsTab', newWeightsTabValue);
+    const updatedSettings = {...settings, weightsTab: newWeightsTabValue};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleWeightUnit() {
+    const newWeightUnit = weightUnit === 'kg' ? 'lb' : 'kg';
+    setWeightUnit(newWeightUnit);
+    updateSettingValue('weightUnit', newWeightUnit);
+    const updatedSettings = {...settings, weightUnit: newWeightUnit};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleWeightGain() {
+    let newWeightGain;
+    if (weightGain === 0.05) {
+      newWeightGain = 0.1;
+    } else if (weightGain === 0.1) {
+      newWeightGain = 0.5;
+    } else if (weightGain === 0.5) {
+      newWeightGain = 1;
+    } else {
+      newWeightGain = 0.05;
     }
+    newWeightGain = parseFloat(newWeightGain.toFixed(2));
+    setWeightGain(newWeightGain);
+    updateSettingValue('weightGain', newWeightGain);
+    const updatedSettings = {...settings, weightGain: newWeightGain};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleCostsTab() {
+    const newCostsTabValue = !costsTab;
+    setCostsTab(newCostsTabValue);
+    updateSettingValue('costsTab', newCostsTabValue);
+    const updatedSettings = {...settings, costsTab: newCostsTabValue};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleCurrency() {
+    const currencies = ['zł', '$', '€'];
+    const currentIndex = currencies.indexOf(currency);
+    const newCurrency = currencies[(currentIndex + 1) % currencies.length];
+    setCurrency(newCurrency);
+    updateSettingValue('currency', newCurrency);
+    const updatedSettings = {...settings, currency: newCurrency};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleCostGain() {
+    const costGains = [0.5, 1, 0.1];
+    const currentIndex = costGains.indexOf(costGain);
+    const newCostGain = costGains[(currentIndex + 1) % costGains.length];
+    setCostGain(newCostGain);
+    updateSettingValue('costGain', newCostGain);
+    const updatedSettings = {...settings, costGain: newCostGain};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handlePlansTab() {
+    const newPlansTabValue = !plansTab;
+    setPlansTab(newPlansTabValue);
+    updateSettingValue('plansTab', newPlansTabValue);
+    const updatedSettings = {...settings, plansTab: newPlansTabValue};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleClockFormat() {
+    const newClockFormat = clockFormat === '24h' ? '12h' : '24h';
+    setClockFormat(newClockFormat);
+    updateSettingValue('clockFormat', newClockFormat);
+    const updatedSettings = {...settings, clockFormat: newClockFormat};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleFirstDay() {
+    const newFirstDay = firstDay === 'Monday' ? 'Sunday' : 'Monday';
+    setFirstDay(newFirstDay);
+    updateSettingValue('firstDay', newFirstDay);
+    const updatedSettings = {...settings, firstDay: newFirstDay};
+    dispatch(setSettings(updatedSettings));
+  }
+
+  function handleTasksTab() {
+    const newTasksTabValue = !tasksTab;
+    setTasksTab(newTasksTabValue);
+    updateSettingValue('tasksTab', newTasksTabValue);
+    const updatedSettings = {...settings, tasksTab: newTasksTabValue};
+    dispatch(setSettings(updatedSettings));
   }
 
   function handleReset() {
@@ -38,42 +154,34 @@ const SettingsView = () => {
     console.log('Settings');
   }
 
+  const dynamicStyle = ({pressed}) => [
+    styles.listItem,
+    {opacity: pressed ? 0.8 : 1},
+  ];
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
           <Text style={styles.center}>Version {packageJson.version}</Text>
         </View>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
+        <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
           <Text style={styles.listItemWhat}>Language</Text>
-          <Text style={styles.listItemChange}>English</Text>
+          <Text style={styles.listItemChange}>{settings.language}</Text>
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.listItemWhat}>Weight unit</Text>
-          <Text style={styles.listItemChange}>kg</Text>
+        <Pressable style={dynamicStyle} onPress={() => handleRowsNumber()}>
+          <Text style={styles.listItemWhat}>Rows number</Text>
+          <Text style={styles.listItemChange}>{settings.rowsNumber}</Text>
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.listItemWhat}>Currency</Text>
-          <Text style={styles.listItemChange}>zł</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.listItemWhat}>Clock format</Text>
-          <Text style={styles.listItemChange}>24h</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.listItemWhat}>First day in calendar</Text>
-          <Text style={styles.listItemChange}>Monday</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress()}>
-          <Text style={styles.listItemWhat}>Max number of rows</Text>
-          <Text style={styles.listItemChange}>90</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('habits')}>
+
+        <View style={styles.gap} />
+
+        {/* <Pressable style={dynamicStyle} onPress={() => handleHabitsTab()}>
           <Text style={styles.listItemWhat}>Habits tab</Text>
           <Switch
             style={styles.switch}
             value={habitsTab}
-            onValueChange={() => handlePress('habits')}
+            onValueChange={() => handleHabitsTab()}
             trackColor={{
               false: COLORS.primary25,
               true: COLORS.primary50,
@@ -81,12 +189,15 @@ const SettingsView = () => {
             thumbColor={COLORS.primary}
           />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('weights')}>
+
+        <View style={styles.gap} /> */}
+
+        <Pressable style={dynamicStyle} onPress={() => handleWeightsTab()}>
           <Text style={styles.listItemWhat}>Weights tab</Text>
           <Switch
             style={styles.switch}
             value={weightsTab}
-            onValueChange={() => handlePress('weights')}
+            onValueChange={() => handleWeightsTab()}
             trackColor={{
               false: COLORS.primary25,
               true: COLORS.primary50,
@@ -94,12 +205,23 @@ const SettingsView = () => {
             thumbColor={COLORS.primary}
           />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('costs')}>
+        <Pressable style={dynamicStyle} onPress={() => handleWeightUnit()}>
+          <Text style={styles.listItemWhat}>Weight unit</Text>
+          <Text style={styles.listItemChange}>{settings.weightUnit}</Text>
+        </Pressable>
+        <Pressable style={dynamicStyle} onPress={() => handleWeightGain()}>
+          <Text style={styles.listItemWhat}>Weight gain</Text>
+          <Text style={styles.listItemChange}>{settings.weightGain}</Text>
+        </Pressable>
+
+        <View style={styles.gap} />
+
+        <Pressable style={dynamicStyle} onPress={() => handleCostsTab()}>
           <Text style={styles.listItemWhat}>Costs tab</Text>
           <Switch
             style={styles.switch}
             value={costsTab}
-            onValueChange={() => handlePress('costs')}
+            onValueChange={() => handleCostsTab()}
             trackColor={{
               false: COLORS.primary25,
               true: COLORS.primary50,
@@ -107,12 +229,23 @@ const SettingsView = () => {
             thumbColor={COLORS.primary}
           />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('plans')}>
+        <Pressable style={dynamicStyle} onPress={() => handleCurrency()}>
+          <Text style={styles.listItemWhat}>Currency</Text>
+          <Text style={styles.listItemChange}>{settings.currency}</Text>
+        </Pressable>
+        <Pressable style={dynamicStyle} onPress={() => handleCostGain()}>
+          <Text style={styles.listItemWhat}>Cost gain</Text>
+          <Text style={styles.listItemChange}>{settings.costGain}</Text>
+        </Pressable>
+
+        <View style={styles.gap} />
+
+        <Pressable style={dynamicStyle} onPress={() => handlePlansTab()}>
           <Text style={styles.listItemWhat}>Plans tab</Text>
           <Switch
             style={styles.switch}
             value={plansTab}
-            onValueChange={() => handlePress('plans')}
+            onValueChange={() => handlePlansTab()}
             trackColor={{
               false: COLORS.primary25,
               true: COLORS.primary50,
@@ -120,12 +253,23 @@ const SettingsView = () => {
             thumbColor={COLORS.primary}
           />
         </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handlePress('tasks')}>
+        <Pressable style={dynamicStyle} onPress={() => handleClockFormat()}>
+          <Text style={styles.listItemWhat}>Clock format</Text>
+          <Text style={styles.listItemChange}>{settings.clockFormat}</Text>
+        </Pressable>
+        <Pressable style={dynamicStyle} onPress={() => handleFirstDay()}>
+          <Text style={styles.listItemWhat}>First day in calendar</Text>
+          <Text style={styles.listItemChange}>{settings.firstDay}</Text>
+        </Pressable>
+
+        <View style={styles.gap} />
+
+        <Pressable style={dynamicStyle} onPress={() => handleTasksTab()}>
           <Text style={styles.listItemWhat}>Tasks tab</Text>
           <Switch
             style={styles.switch}
             value={tasksTab}
-            onValueChange={() => handlePress('tasks')}
+            onValueChange={() => handleTasksTab()}
             trackColor={{
               false: COLORS.primary25,
               true: COLORS.primary50,

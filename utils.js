@@ -35,12 +35,40 @@ export function formatDateWithDay(when) {
     return '';
   }
   const date = new Date(when);
-
   const dayOfWeek = date.toLocaleDateString('en-US', {weekday: 'long'});
   const month = date.toLocaleDateString('en-US', {month: '2-digit'});
   const day = date.toLocaleDateString('en-US', {day: '2-digit'});
 
   return `${day}.${month} ${dayOfWeek}`;
+}
+
+export function formatNumericInput(text) {
+  let sanitizedText = text.replace(/[^0-9]/g, '.');
+  const parts = sanitizedText.split('.');
+
+  if (parts.length === 2) {
+    sanitizedText = parts[0] + '.' + parts[1].slice(0, 2);
+  }
+
+  if (parts.length > 2) {
+    sanitizedText = parts[0] + '.' + parts.slice(1).join('');
+  }
+
+  if (sanitizedText.length > 12) {
+    sanitizedText = sanitizedText.slice(0, 12);
+  }
+
+  return sanitizedText;
+}
+
+export function limitTextInput(text) {
+  let sanitizedText = text;
+
+  if (sanitizedText.length > 60) {
+    sanitizedText = sanitizedText.slice(0, 60);
+  }
+
+  return sanitizedText;
 }
 
 export function convertTimeToObject(time) {
@@ -54,6 +82,13 @@ export function getCurrentTime() {
   const hours = now.getHours().toString().padStart(2, '0');
   const minutes = now.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
+}
+
+export function convertTo12HourFormat(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  const suffix = hours >= 12 ? 'pm' : 'am';
+  const hours12 = hours % 12 || 12;
+  return `${hours12}:${minutes < 10 ? '0' : ''}${minutes} ${suffix}`;
 }
 
 export function getMarkedDates(items, when) {
@@ -191,6 +226,12 @@ export function renderArrow(direction) {
       break;
     case 'down':
       icon = faChevronDown;
+      break;
+    case 'minus':
+      icon = faMinus;
+      break;
+    case 'plus':
+      icon = faPlus;
       break;
   }
 

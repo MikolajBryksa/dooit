@@ -6,6 +6,7 @@ import {
   SET_PLANS,
   SET_TASKS,
   SET_CATEGORY,
+  SET_SETTINGS,
 } from './actions';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   plans: [],
   tasks: [],
   category: 'task',
+  settings: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -54,6 +56,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         category: action.payload,
+      };
+    case SET_SETTINGS:
+      return {
+        ...state,
+        settings: action.payload,
       };
     default:
       return state;

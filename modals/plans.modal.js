@@ -11,6 +11,7 @@ import {WhenInput, WhatInput, TimeInput} from '../components/inputs';
 const PlansModal = ({setShowModal}) => {
   const plans = useSelector(state => state.plans);
   const currentItem = useSelector(state => state.currentItem);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   const inputRef = useRef(null);
@@ -52,7 +53,7 @@ const PlansModal = ({setShowModal}) => {
       type: 'add',
       text1: 'plans',
       topOffset: DIMENSIONS.padding,
-      visibilityTime: 1500,
+      visibilityTime: 1200,
     });
     handleClose();
   }
@@ -64,7 +65,7 @@ const PlansModal = ({setShowModal}) => {
         type: 'update',
         text1: 'plans',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -77,7 +78,7 @@ const PlansModal = ({setShowModal}) => {
         type: 'delete',
         text1: 'plans',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -92,6 +93,7 @@ const PlansModal = ({setShowModal}) => {
           when={when}
           setWhen={setWhen}
           data={plans}
+          firstDay={settings.firstDay}
         />
         <WhatInput
           inputRef={inputRef}
@@ -105,6 +107,7 @@ const PlansModal = ({setShowModal}) => {
           setTime={setTime}
           showTimePicker={showTimePicker}
           setShowTimePicker={setShowTimePicker}
+          clockFormat={settings.clockFormat}
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

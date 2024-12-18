@@ -11,6 +11,7 @@ import {WhenInput, WhatInput} from '../components/inputs';
 const CostsModal = ({setShowModal}) => {
   const costs = useSelector(state => state.costs);
   const currentItem = useSelector(state => state.currentItem);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   const inputRef = useRef(null);
@@ -45,7 +46,7 @@ const CostsModal = ({setShowModal}) => {
       type: 'add',
       text1: 'costs',
       topOffset: DIMENSIONS.padding,
-      visibilityTime: 1500,
+      visibilityTime: 1200,
     });
     handleClose();
   }
@@ -57,7 +58,7 @@ const CostsModal = ({setShowModal}) => {
         type: 'update',
         text1: 'costs',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -70,7 +71,7 @@ const CostsModal = ({setShowModal}) => {
         type: 'delete',
         text1: 'costs',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -85,6 +86,7 @@ const CostsModal = ({setShowModal}) => {
           when={when}
           setWhen={setWhen}
           data={costs}
+          firstDay={settings.firstDay}
         />
         <WhatInput
           inputRef={inputRef}
@@ -92,7 +94,7 @@ const CostsModal = ({setShowModal}) => {
           setWhat={setWhat}
           placeholder="Enter cost"
           inputModeType="numeric"
-          incrementator={1}
+          incrementator={settings.costGain}
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

@@ -1,12 +1,13 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setCurrentItem} from '../redux/actions';
 import {getCost} from '../services/costs.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
 const CostItem = ({id, when, what, setShowModal}) => {
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   function handlePress() {
@@ -25,7 +26,7 @@ const CostItem = ({id, when, what, setShowModal}) => {
       <Text style={styles.when}>{formatDateWithDay(when)}</Text>
       {what && (
         <Text style={styles.what} numberOfLines={1} ellipsizeMode="head">
-          {what} zł
+          {what} {settings.currency}
         </Text>
       )}
     </Pressable>

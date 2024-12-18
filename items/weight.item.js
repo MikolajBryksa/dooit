@@ -1,12 +1,13 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {setCurrentItem, setCurrentView} from '../redux/actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {setCurrentItem} from '../redux/actions';
 import {getWeight} from '../services/weights.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
 const WeightItem = ({id, when, what, setShowModal}) => {
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   function handlePress() {
@@ -25,7 +26,7 @@ const WeightItem = ({id, when, what, setShowModal}) => {
       <Text style={styles.when}>{formatDateWithDay(when)}</Text>
       {what && (
         <Text style={styles.what} numberOfLines={1} ellipsizeMode="head">
-          {what} kg
+          {what} {settings.weightUnit}
         </Text>
       )}
     </Pressable>

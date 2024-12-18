@@ -5,6 +5,7 @@ export const SET_COSTS = 'SET_COSTS';
 export const SET_PLANS = 'SET_PLANS';
 export const SET_TASKS = 'SET_TASKS';
 export const SET_CATEGORY = 'SET_CATEGORY';
+export const SET_SETTINGS = 'SET_SETTINGS';
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,
@@ -39,4 +40,9 @@ export const setTasks = tasks => ({
 export const setCategory = category => ({
   type: SET_CATEGORY,
   payload: category,
+});
+
+export const setSettings = settings => ({
+  type: SET_SETTINGS,
+  payload: settings,
 });

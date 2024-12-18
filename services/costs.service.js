@@ -16,13 +16,13 @@ export const addCost = (when, what) => {
   return newCost;
 };
 
-export const getEveryCost = () => {
+export const getEveryCost = rowsNumber => {
   const sortFields = [
     ['when', true],
     ['id', true],
   ];
   const results = realm.objects('Cost').sorted(sortFields);
-  return results.slice(0, 90);
+  return results.slice(0, rowsNumber);
 };
 
 export const getCost = id => {

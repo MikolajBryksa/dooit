@@ -11,13 +11,14 @@ import CostItem from '../items/cost.item';
 
 const CostsView = () => {
   const costs = useSelector(state => state.costs);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [averageCost, setAverageCost] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
-      const data = getEveryCost();
+      const data = getEveryCost(settings.rowsNumber);
       const formattedData = data.map(item => ({
         ...item,
         what: item.what.toFixed(2),
@@ -26,7 +27,7 @@ const CostsView = () => {
       dispatch(setCosts(formattedData));
     }
     fetchData();
-  }, [showModal]);
+  }, [showModal, settings.rowsNumber]);
 
   useEffect(() => {
     function calcAverageCost(costs) {
@@ -60,7 +61,9 @@ const CostsView = () => {
         <>
           {costs.length > 0 && (
             <View style={styles.header}>
-              <Text style={styles.center}>{averageCost} zł / day</Text>
+              <Text style={styles.center}>
+                {averageCost} {settings.currency} / day
+              </Text>
             </View>
           )}
 

@@ -9,6 +9,8 @@ import {
   getCurrentTime,
   formatDateWithDay,
   getMarkedDates,
+  formatNumericInput,
+  limitTextInput,
 } from '../utils';
 
 export const WhatInput = ({
@@ -25,11 +27,11 @@ export const WhatInput = ({
         <Pressable
           style={styles.incrementator}
           onPress={() => {
-            const increasedValue =
-              parseFloat(Number(what)) + parseFloat(incrementator);
-            setWhat(increasedValue.toFixed(2));
+            const decreasedValue =
+              parseFloat(Number(what)) - parseFloat(incrementator);
+            setWhat(decreasedValue.toFixed(2));
           }}>
-          {renderArrow('up')}
+          {renderArrow('minus')}
         </Pressable>
       </>
     )}
@@ -37,7 +39,13 @@ export const WhatInput = ({
       ref={inputRef}
       style={styles.input}
       value={what}
-      onChangeText={text => setWhat(text)}
+      onChangeText={text => {
+        if (inputModeType === 'numeric') {
+          setWhat(formatNumericInput(text));
+        } else {
+          setWhat(limitTextInput(text));
+        }
+      }}
       inputMode={inputModeType}
       placeholder={placeholder}
       placeholderTextColor={COLORS.primary}
@@ -48,11 +56,11 @@ export const WhatInput = ({
         <Pressable
           style={styles.incrementator}
           onPress={() => {
-            const decreasedValue =
-              parseFloat(Number(what)) - parseFloat(incrementator);
-            setWhat(decreasedValue.toFixed(2));
+            const increasedValue =
+              parseFloat(Number(what)) + parseFloat(incrementator);
+            setWhat(increasedValue.toFixed(2));
           }}>
-          {renderArrow('down')}
+          {renderArrow('plus')}
         </Pressable>
       </>
     )}
@@ -65,6 +73,7 @@ export const WhenInput = ({
   when,
   setWhen,
   data,
+  firstDay,
 }) =>
   showCalendar ? (
     <View style={styles.calendar}>
@@ -73,7 +82,7 @@ export const WhenInput = ({
           setWhen(day.dateString);
         }}
         initialDate={when}
-        firstDay={1}
+        firstDay={firstDay === 'Sunday' ? 0 : 1}
         markedDates={getMarkedDates(data, when)}
         renderArrow={renderArrow}
         theme={styles.calendarTheme}
@@ -111,11 +120,13 @@ export const TimeInput = ({
   setShowTimePicker,
   time,
   setTime,
+  clockFormat,
 }) => (
   <View style={styles.timer}>
     {showTimePicker ? (
       <View style={styles.clockContainer}>
         <TimerPicker
+          use12HourPicker={clockFormat === '12h'}
           padWithNItems={0}
           hideSeconds={true}
           hourLabel=":"

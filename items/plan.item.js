@@ -1,12 +1,14 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setCurrentItem, setCurrentView} from '../redux/actions';
 import {getPlan} from '../services/plans.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
+import {convertTo12HourFormat} from '../utils';
 
 const PlanItem = ({id, when, what, time, setShowModal}) => {
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
   function handlePress() {
@@ -23,6 +25,10 @@ const PlanItem = ({id, when, what, time, setShowModal}) => {
     {opacity: pressed ? 0.8 : 1},
     isPastDate && {opacity: pressed ? 0.3 : 0.5},
   ];
+
+  if (time && settings.clockFormat === '12h') {
+    time = convertTo12HourFormat(time);
+  }
 
   return (
     <Pressable style={dynamicStyle} onPress={handlePress}>

@@ -41,7 +41,7 @@ const HabitsModal = ({setShowModal}) => {
       type: 'add',
       text1: 'habits',
       topOffset: DIMENSIONS.padding,
-      visibilityTime: 1500,
+      visibilityTime: 1200,
     });
     handleClose();
   }
@@ -53,7 +53,7 @@ const HabitsModal = ({setShowModal}) => {
         type: 'update',
         text1: 'habits',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -66,7 +66,7 @@ const HabitsModal = ({setShowModal}) => {
         type: 'delete',
         text1: 'habits',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();

@@ -12,12 +12,13 @@ import PlansModal from '../modals/plans.modal';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      const data = getEveryPlan();
+      const data = getEveryPlan(settings.rowsNumber);
       const formattedData = data.map(item => ({
         ...item,
         what: item.what,
@@ -26,7 +27,7 @@ const PlansView = () => {
       dispatch(setPlans(formattedData));
     }
     fetchData();
-  }, [showModal]);
+  }, [showModal, settings.rowsNumber]);
 
   function handleAdd() {
     setShowModal(true);

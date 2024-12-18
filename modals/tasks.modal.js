@@ -42,7 +42,7 @@ const TasksModal = ({setShowModal}) => {
       type: 'add',
       text1: 'tasks',
       topOffset: DIMENSIONS.padding,
-      visibilityTime: 1500,
+      visibilityTime: 1200,
     });
     handleClose();
   }
@@ -54,7 +54,7 @@ const TasksModal = ({setShowModal}) => {
         type: 'update',
         text1: 'tasks',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
@@ -67,7 +67,7 @@ const TasksModal = ({setShowModal}) => {
         type: 'delete',
         text1: 'tasks',
         topOffset: DIMENSIONS.padding,
-        visibilityTime: 1500,
+        visibilityTime: 1200,
       });
     }
     handleClose();
