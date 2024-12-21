@@ -1,4 +1,13 @@
 {
+  "no-habits": "Kliknij przycisk plus, aby dodać nawyk",
+  "play-habits": "Kliknij przycisk start, aby zacząć dzień",
+  "done-habits": "Wszystko dzisiaj zrobione!",
+  "no-weights": "Kliknij przycisk plus, aby dodać swoją wagę",
+  "no-costs": "Kliknij przycisk plus, aby dodać koszt",
+  "no-plans": "Kliknij przycisk plus, aby dodać plan",
+  "no-tasks-done": "Kliknij przycisk plus, aby dodać zadanie do zrobienia",
+  "no-items-bought": "Kliknij przycisk plus, aby dodać rzecz do kupienia",
+
   "enter-habit": "Wpisz nawyk",
   "enter-weight": "Wpisz wagę",
   "enter-cost": "Wpisz koszt",
@@ -25,5 +34,7 @@
   "plans": "Plany",
   "clock-format": "Format zegara",
   "first-day": "Pierwszy dzień",
+  "first-day-monday": "Poniedziałek",
+  "first-day-sunday": "Niedziela",
   "tasks": "Zadania"
 }

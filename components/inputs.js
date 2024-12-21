@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View, TextInput, Pressable, Text} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {TimerPicker} from 'react-native-timer-picker';
@@ -14,58 +14,66 @@ import {
 } from '../utils';
 
 export const WhatInput = ({
-  inputRef,
   what,
   setWhat,
   placeholder,
   inputModeType = 'numeric',
   incrementator,
-}) => (
-  <View style={styles.inputContainer}>
-    {incrementator && (
-      <>
-        <Pressable
-          style={styles.incrementator}
-          onPress={() => {
-            const decreasedValue =
-              parseFloat(Number(what)) - parseFloat(incrementator);
-            setWhat(decreasedValue.toFixed(2));
-          }}>
-          {renderArrow('minus')}
-        </Pressable>
-      </>
-    )}
-    <TextInput
-      ref={inputRef}
-      style={styles.input}
-      value={what}
-      onChangeText={text => {
-        if (inputModeType === 'numeric') {
-          setWhat(formatNumericInput(text));
-        } else {
-          setWhat(limitTextInput(text));
-        }
-      }}
-      inputMode={inputModeType}
-      placeholder={placeholder}
-      placeholderTextColor={COLORS.primary}
-      maxLength={60}
-    />
-    {incrementator && (
-      <>
-        <Pressable
-          style={styles.incrementator}
-          onPress={() => {
-            const increasedValue =
-              parseFloat(Number(what)) + parseFloat(incrementator);
-            setWhat(increasedValue.toFixed(2));
-          }}>
-          {renderArrow('plus')}
-        </Pressable>
-      </>
-    )}
-  </View>
-);
+}) => {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current && inputRef.current.focus();
+  }, []);
+
+  return (
+    <>
+      <View style={styles.inputContainer}>
+        {incrementator && (
+          <>
+            <Pressable
+              style={styles.incrementator}
+              onPress={() => {
+                const decreasedValue =
+                  parseFloat(Number(what)) - parseFloat(incrementator);
+                setWhat(decreasedValue.toFixed(2));
+              }}>
+              {renderArrow('minus')}
+            </Pressable>
+          </>
+        )}
+        <TextInput
+          ref={inputRef}
+          style={styles.input}
+          value={what}
+          onChangeText={text => {
+            if (inputModeType === 'numeric') {
+              setWhat(formatNumericInput(text));
+            } else {
+              setWhat(limitTextInput(text));
+            }
+          }}
+          inputMode={inputModeType}
+          placeholder={placeholder}
+          placeholderTextColor={COLORS.primary}
+          maxLength={60}
+        />
+        {incrementator && (
+          <>
+            <Pressable
+              style={styles.incrementator}
+              onPress={() => {
+                const increasedValue =
+                  parseFloat(Number(what)) + parseFloat(incrementator);
+                setWhat(increasedValue.toFixed(2));
+              }}>
+              {renderArrow('plus')}
+            </Pressable>
+          </>
+        )}
+      </View>
+    </>
+  );
+};
 
 export const WhenInput = ({
   showCalendar,

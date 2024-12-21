@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Modal, View, TextInput} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
@@ -14,11 +14,6 @@ const TasksModal = ({setShowModal}) => {
   const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-
-  const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current && inputRef.current.focus();
-  }, []);
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
@@ -79,7 +74,6 @@ const TasksModal = ({setShowModal}) => {
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
         <WhatInput
-          inputRef={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={category === 'task' ? t('enter-task') : t('enter-item')}

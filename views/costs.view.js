@@ -61,13 +61,13 @@ const CostsView = () => {
       {showModal && <CostsModal setShowModal={setShowModal} />}
       {costs && (
         <>
-          {costs.length > 0 && (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {averageCost} {settings.currency} / {t('day')}
-              </Text>
-            </View>
-          )}
+          <View style={styles.header}>
+            <Text style={styles.center}>
+              {costs.length > 0
+                ? `${averageCost} ${settings.currency} / ${t('day')}`
+                : t('no-costs')}
+            </Text>
+          </View>
 
           <ScrollView style={styles.scrollView}>
             {costs.map((item, index) => (

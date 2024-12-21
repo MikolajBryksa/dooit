@@ -1,4 +1,13 @@
 {
+  "no-habits": "Click plus button to add a habit",
+  "play-habits": "Click play button to start your day",
+  "done-habits": "All done today!",
+  "no-weights": "Click plus button to add your weight",
+  "no-costs": "Click plus button to add a cost",
+  "no-plans": "Click plus button to add a plan",
+  "no-tasks-done": "Click plus button to add a task to do",
+  "no-items-bought": "Click plus button to add a item to buy",
+
   "enter-habit": "Enter habit",
   "enter-weight": "Enter weight",
   "enter-cost": "Enter cost",
@@ -25,5 +34,7 @@
   "plans": "Plans",
   "clock-format": "Clock format",
   "first-day": "First day",
+  "first-day-monday": "Monday",
+  "first-day-sunday": "Sunday",
   "tasks": "Tasks"
 }

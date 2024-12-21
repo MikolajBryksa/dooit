@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Modal, View, Pressable, Text} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
@@ -15,11 +15,6 @@ const PlansModal = ({setShowModal}) => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-
-  const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current && inputRef.current.focus();
-  }, []);
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
@@ -99,7 +94,6 @@ const PlansModal = ({setShowModal}) => {
           language={settings.language}
         />
         <WhatInput
-          inputRef={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={t('enter-plan')}

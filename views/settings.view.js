@@ -152,10 +152,6 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
-  function handleReset() {
-    console.log('Settings');
-  }
-
   function handleSupport() {
     console.log('Settings');
   }
@@ -267,7 +263,11 @@ const SettingsView = () => {
         </Pressable>
         <Pressable style={dynamicStyle} onPress={() => handleFirstDay()}>
           <Text style={styles.listItemWhat}>{t('first-day')}</Text>
-          <Text style={styles.listItemChange}>{settings.firstDay}</Text>
+          <Text style={styles.listItemChange}>
+            {settings.firstDay === 'Monday'
+              ? t('first-day-monday')
+              : t('first-day-sunday')}
+          </Text>
         </Pressable>
 
         <View style={styles.gap} />
@@ -287,7 +287,6 @@ const SettingsView = () => {
         </Pressable>
       </ScrollView>
       <View style={styles.controllers}>
-        <ControlButton type="reset" press={handleReset} />
         <ControlButton type="support" press={handleSupport} />
       </View>
     </View>

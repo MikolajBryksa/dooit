@@ -16,11 +16,13 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 import realm from '../storage/schemas';
 import HabitItem from '../items/habit.item';
 import PlanItem from '../items/plan.item';
+import {useTranslation} from 'react-i18next';
 
 const HabitsView = () => {
   const habits = useSelector(state => state.habits);
   const plans = useSelector(state => state.plans);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [play, setPlay] = useState(false);
   const [endDay, setEndDay] = useState(false);
@@ -154,7 +156,7 @@ const HabitsView = () => {
   };
 
   const plansToShow = !endDay ? todayPlans : tomorrowPlans;
-  const headerText = !endDay ? currentHabit?.what : 'All done today!';
+  const headerText = !endDay ? currentHabit?.what : t('done-habits');
 
   return (
     <View style={styles.container}>
@@ -163,7 +165,9 @@ const HabitsView = () => {
       {habits && !play && (
         <>
           <View style={styles.header}>
-            <Text style={styles.center}>Dooit</Text>
+            <Text style={styles.center}>
+              {habits.length > 0 ? t('play-habits') : t('no-habits')}
+            </Text>
           </View>
 
           <GestureHandlerRootView style={styles.scrollView}>
@@ -176,7 +180,11 @@ const HabitsView = () => {
           </GestureHandlerRootView>
 
           <View style={styles.controllers}>
-            <ControlButton type="play" press={handlePlay} />
+            <ControlButton
+              type="play"
+              press={handlePlay}
+              disabled={habits.length === 0}
+            />
             <ControlButton type="add" press={handleAdd} />
           </View>
         </>

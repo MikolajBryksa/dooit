@@ -68,14 +68,15 @@ const WeightsView = () => {
       {showModal && <WeightsModal setShowModal={setShowModal} />}
       {weights && (
         <>
-          {weights.length > 0 && (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {weightChange} {settings.weightUnit} / {dayDifference}{' '}
-                {t('days')}
-              </Text>
-            </View>
-          )}
+          <View style={styles.header}>
+            <Text style={styles.center}>
+              {weights.length > 0
+                ? `${weightChange} ${
+                    settings.weightUnit
+                  } / ${dayDifference} ${t('days')}`
+                : t('no-weights')}
+            </Text>
+          </View>
 
           <ScrollView style={styles.scrollView}>
             {weights.map((item, index) => (

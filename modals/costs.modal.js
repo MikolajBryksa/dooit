@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -15,11 +15,6 @@ const CostsModal = ({setShowModal}) => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-
-  const inputRef = useRef(null);
-  useEffect(() => {
-    inputRef.current && inputRef.current.focus();
-  }, []);
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
@@ -92,7 +87,6 @@ const CostsModal = ({setShowModal}) => {
           language={settings.language}
         />
         <WhatInput
-          inputRef={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={t('enter-cost')}

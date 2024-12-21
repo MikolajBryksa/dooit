@@ -9,11 +9,13 @@ import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 import {convertToISO} from '../utils';
 import PlansModal from '../modals/plans.modal';
+import {useTranslation} from 'react-i18next';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -40,7 +42,9 @@ const PlansView = () => {
         <>
           <View style={styles.header}>
             <Text style={styles.center}>
-              {formatDateWithDay(new Date(), settings.language)}
+              {plans.length > 0
+                ? formatDateWithDay(new Date(), settings.language)
+                : t('no-plans')}
             </Text>
           </View>
 

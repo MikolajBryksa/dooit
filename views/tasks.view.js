@@ -35,6 +35,7 @@ const TasksView = () => {
         item => item.category === category,
       );
       dispatch(setTasks(categorizedTasks));
+      setData(categorizedTasks);
     }
     fetchData();
   }, [showModal, itemMode]);
@@ -71,7 +72,6 @@ const TasksView = () => {
         drag={drag}
         isActive={isActive}
         check={item.check}
-        category={item.category}
         setShowModal={setShowModal}
       />
     );
@@ -100,7 +100,13 @@ const TasksView = () => {
         <>
           <View style={styles.header}>
             <Text style={styles.center}>
-              {doneTasks} / {tasks.length} {itemMode ? t('bought') : t('done')}
+              {tasks.length > 0
+                ? `${doneTasks} / ${tasks.length} ${
+                    itemMode ? t('bought') : t('done')
+                  }`
+                : itemMode
+                ? t('no-items-bought')
+                : t('no-tasks-done')}
             </Text>
           </View>
 
