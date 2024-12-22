@@ -6,7 +6,7 @@ Temp.schema = {
   primaryKey: 'id',
   properties: {
     id: 'int',
-    habitId: 'int',
+    habitIndex: 'int',
     habitPlay: 'bool',
   },
 };
@@ -93,7 +93,7 @@ Settings.schema = {
 
 const realmConfig = {
   schema: [Temp, Habit, Weight, Cost, Plan, Task, Settings],
-  schemaVersion: 2,
+  schemaVersion: 3,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 2) {
       const oldPlanObjects = oldRealm.objects('Plan');
@@ -103,6 +103,15 @@ const realmConfig = {
         const oldPlan = oldPlanObjects[i];
         const newPlan = newPlanObjects[i];
         newPlan.time = null;
+      }
+    }
+
+    if (oldRealm.schemaVersion < 3) {
+      const oldObjects = oldRealm.objects('Temp');
+      const newObjects = newRealm.objects('Temp');
+
+      for (let i = 0; i < oldObjects.length; i++) {
+        newObjects[i].habitIndex = oldObjects[i].habitId;
       }
     }
   },

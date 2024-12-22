@@ -6,15 +6,19 @@ export const getTemp = () => {
 
   return {
     id: temp.id,
-    habitId: temp.habitId,
+    habitIndex: temp.habitIndex,
     habitPlay: temp.habitPlay,
   };
 };
 
-export const updateTemp = (habitId, habitPlay) => {
+export const updateTemp = (habitIndex, habitPlay) => {
   let updatedTemp;
   realm.write(() => {
-    updatedTemp = realm.create('Temp', {id: 1, habitId, habitPlay}, 'modified');
+    updatedTemp = realm.create(
+      'Temp',
+      {id: 1, habitIndex, habitPlay},
+      'modified',
+    );
   });
   return updatedTemp;
 };

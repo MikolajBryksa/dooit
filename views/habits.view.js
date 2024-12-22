@@ -36,8 +36,8 @@ const HabitsView = () => {
     async function fetchTemp() {
       const temp = getTemp();
       if (temp) {
-        setCurrentHabit(habits.find(item => item.id === temp.habitId));
-        setCurrentIndex(temp.habitId - 1);
+        setCurrentHabit(habits[temp.habitIndex]);
+        setCurrentIndex(temp.habitIndex);
         setPlay(temp.habitPlay);
       }
     }
@@ -121,7 +121,7 @@ const HabitsView = () => {
     } else {
       setCurrentHabit(habits[newIndex]);
       setCurrentIndex(newIndex);
-      updateTemp(habits[newIndex].id, true);
+      updateTemp(newIndex, true);
     }
   }
 
