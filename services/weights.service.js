@@ -4,6 +4,7 @@ import {getNextId} from '../utils';
 export const addWeight = (when, what) => {
   const id = getNextId('Weight');
   when = new Date(when);
+  what = parseFloat(parseFloat(what).toFixed(2));
 
   let newWeight;
   realm.write(() => {
@@ -32,6 +33,7 @@ export const getWeight = id => {
   const serializableWeight = {
     ...weight,
     when: weight.when instanceof Date ? weight.when.toISOString() : weight.when,
+    what: parseFloat(parseFloat(weight.what).toFixed(2)),
   };
 
   return serializableWeight;
@@ -39,6 +41,8 @@ export const getWeight = id => {
 
 export const updateWeight = (id, when, what) => {
   when = new Date(when);
+  what = parseFloat(parseFloat(what).toFixed(2));
+
   let updatedWeight;
   realm.write(() => {
     updatedWeight = realm.create('Weight', {id, when, what}, 'modified');

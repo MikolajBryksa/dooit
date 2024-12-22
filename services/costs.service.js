@@ -4,6 +4,7 @@ import {getNextId} from '../utils';
 export const addCost = (when, what) => {
   const id = getNextId('Cost');
   when = new Date(when);
+  what = parseFloat(parseFloat(what).toFixed(2));
 
   let newCost;
   realm.write(() => {
@@ -32,11 +33,14 @@ export const getCost = id => {
   return {
     ...cost,
     when: cost.when instanceof Date ? cost.when.toISOString() : cost.when,
+    what: parseFloat(parseFloat(cost.what).toFixed(2)),
   };
 };
 
 export const updateCost = (id, when, what) => {
   when = new Date(when);
+  what = parseFloat(parseFloat(what).toFixed(2));
+
   let updatedCost;
   realm.write(() => {
     updatedCost = realm.create('Cost', {id, when, what}, 'modified');

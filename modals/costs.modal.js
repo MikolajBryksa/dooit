@@ -38,7 +38,7 @@ const CostsModal = ({setShowModal}) => {
   }
 
   function handleAdd() {
-    addCost(when, parseFloat(what));
+    addCost(when, what);
     Toast.show({
       type: 'add',
       text1: 'costs',
@@ -50,7 +50,7 @@ const CostsModal = ({setShowModal}) => {
 
   function handleUpdate() {
     if (currentItem) {
-      updateCost(currentItem.id, when, parseFloat(what));
+      updateCost(currentItem.id, when, what);
       Toast.show({
         type: 'update',
         text1: 'costs',

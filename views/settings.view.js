@@ -9,11 +9,13 @@ import {updateSettingValue} from '../services/settings.service';
 import i18next from '../i18next';
 import {useTranslation} from 'react-i18next';
 import {LocaleConfig} from 'react-native-calendars';
+import IncomeModal from '../modals/income.modal';
 
 const SettingsView = () => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
+  const [showModal, setShowModal] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
@@ -152,8 +154,8 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
-  function handleSupport() {
-    console.log('Settings');
+  function handleIncome() {
+    setShowModal(true);
   }
 
   const dynamicStyle = ({pressed}) => [
@@ -163,6 +165,7 @@ const SettingsView = () => {
 
   return (
     <View style={styles.container}>
+      {showModal && <IncomeModal setShowModal={setShowModal} />}
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
           <Text style={styles.center}>
@@ -287,7 +290,7 @@ const SettingsView = () => {
         </Pressable>
       </ScrollView>
       <View style={styles.controllers}>
-        <ControlButton type="support" press={handleSupport} />
+        <ControlButton type="income" press={handleIncome} />
       </View>
     </View>
   );

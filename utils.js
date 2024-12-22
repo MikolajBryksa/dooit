@@ -138,9 +138,7 @@ export function convertToISO(dateStr) {
 export function renderViewIcon(name, focused) {
   let iconColor;
 
-  if (focused === true) {
-    iconColor = COLORS.text;
-  } else if (focused === false) {
+  if (focused === false) {
     iconColor = COLORS.primary;
   } else {
     iconColor = COLORS.secondary;
@@ -200,7 +198,7 @@ export function renderControlIcon(type) {
     case 'reset':
       icon = faTrashCan;
       break;
-    case 'support':
+    case 'income':
       icon = faMugHot;
       break;
   }

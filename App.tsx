@@ -92,6 +92,7 @@ function AppContent() {
           tabBarLabelStyle: {
             display: 'none',
           },
+          animation: 'shift',
         })}>
         {settings.habitsTab && (
           <Tab.Screen name="habits" component={HabitsView} />

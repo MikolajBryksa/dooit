@@ -42,7 +42,7 @@ const WeightsModal = ({setShowModal}) => {
   }
 
   function handleAdd() {
-    addWeight(when, parseFloat(what));
+    addWeight(when, what);
     Toast.show({
       type: 'add',
       text1: 'weights',
@@ -54,7 +54,7 @@ const WeightsModal = ({setShowModal}) => {
 
   function handleUpdate() {
     if (currentItem) {
-      updateWeight(currentItem.id, when, parseFloat(what));
+      updateWeight(currentItem.id, when, what);
       Toast.show({
         type: 'update',
         text1: 'weights',
