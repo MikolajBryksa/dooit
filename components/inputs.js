@@ -11,6 +11,7 @@ import {
   getMarkedDates,
   formatNumericInput,
   limitTextInput,
+  formatDate,
 } from '../utils';
 
 export const WhatInput = ({
@@ -105,7 +106,7 @@ export const WhenInput = ({
         onPress={() => {
           const currentDate = new Date(when);
           currentDate.setDate(currentDate.getDate() - 1);
-          setWhen(currentDate.toISOString().split('T')[0]);
+          setWhen(formatDate(currentDate));
         }}>
         {renderArrow('left')}
       </Pressable>
@@ -117,7 +118,7 @@ export const WhenInput = ({
         onPress={() => {
           const currentDate = new Date(when);
           currentDate.setDate(currentDate.getDate() + 1);
-          setWhen(currentDate.toISOString().split('T')[0]);
+          setWhen(formatDate(currentDate));
         }}>
         {renderArrow('right')}
       </Pressable>

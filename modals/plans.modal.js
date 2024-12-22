@@ -8,6 +8,7 @@ import {addPlan, updatePlan, deletePlan} from '../services/plans.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput, TimeInput} from '../components/inputs';
 import {useTranslation} from 'react-i18next';
+import {formatDate} from '../utils';
 
 const PlansModal = ({setShowModal}) => {
   const plans = useSelector(state => state.plans);
@@ -24,7 +25,7 @@ const PlansModal = ({setShowModal}) => {
 
   useEffect(() => {
     if (currentItem) {
-      const date = new Date(currentItem.when).toISOString().split('T')[0];
+      const date = formatDate(currentItem.when);
       setWhen(date);
       setWhat(currentItem.what);
       setTime(currentItem.time);
@@ -32,7 +33,7 @@ const PlansModal = ({setShowModal}) => {
         setShowTimePicker(true);
       }
     } else {
-      const today = new Date().toISOString().split('T')[0];
+      const today = formatDate();
       setWhen(today);
       setWhat('');
       setTime('');

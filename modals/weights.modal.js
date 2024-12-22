@@ -12,6 +12,7 @@ import {
 import {DIMENSIONS, styles} from '../styles';
 import {WhenInput, WhatInput} from '../components/inputs';
 import {useTranslation} from 'react-i18next';
+import {formatDate} from '../utils';
 
 const WeightsModal = ({setShowModal}) => {
   const weights = useSelector(state => state.weights);
@@ -26,11 +27,11 @@ const WeightsModal = ({setShowModal}) => {
 
   useEffect(() => {
     if (currentItem) {
-      const date = new Date(currentItem.when).toISOString().split('T')[0];
+      const date = formatDate(currentItem.when);
       setWhen(date);
       setWhat(currentItem.what.toFixed(2));
     } else {
-      const today = new Date().toISOString().split('T')[0];
+      const today = formatDate();
       setWhen(today);
       setWhat(weights.length ? weights[0].what : '');
     }

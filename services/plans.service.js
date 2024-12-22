@@ -1,5 +1,5 @@
 import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import {getNextId, formatDate} from '../utils';
 
 export const addPlan = (when, what, time) => {
   const id = getNextId('Plan');
@@ -33,7 +33,7 @@ export const getPlan = id => {
 
   const serializablePlan = {
     ...plan,
-    when: plan.when instanceof Date ? plan.when.toISOString() : plan.when,
+    when: plan.when instanceof Date ? formatDate(plan.when) : plan.when,
   };
 
   return serializablePlan;

@@ -1,5 +1,5 @@
 import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import {getNextId, formatDate} from '../utils';
 
 export const addCost = (when, what) => {
   const id = getNextId('Cost');
@@ -32,7 +32,7 @@ export const getCost = id => {
 
   return {
     ...cost,
-    when: cost.when instanceof Date ? cost.when.toISOString() : cost.when,
+    when: cost.when instanceof Date ? formatDate(cost.when) : cost.when,
     what: parseFloat(parseFloat(cost.what).toFixed(2)),
   };
 };

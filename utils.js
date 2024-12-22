@@ -30,6 +30,16 @@ export function getNextId(itemName) {
   const lastItem = realm.objects(itemName).sorted('id', true)[0];
   return lastItem ? lastItem.id + 1 : 1;
 }
+
+export function formatDate(when) {
+  const today = when ? new Date(when) : new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const localToday = `${year}-${month}-${day}`;
+  return localToday;
+}
+
 export function formatDateWithDay(when, language) {
   if (when.length < 3) {
     return '';
@@ -266,6 +276,6 @@ export function renderCheck(check) {
 export const convertRealmObjects = realmObjects => {
   return realmObjects.map(obj => ({
     ...obj,
-    when: obj.when instanceof Date ? obj.when.toISOString() : obj.when,
+    when: obj.when instanceof Date ? formatDate(obj.when) : obj.when,
   }));
 };

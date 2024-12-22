@@ -1,5 +1,5 @@
 import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import {getNextId, formatDate} from '../utils';
 
 export const addWeight = (when, what) => {
   const id = getNextId('Weight');
@@ -32,7 +32,7 @@ export const getWeight = id => {
 
   const serializableWeight = {
     ...weight,
-    when: weight.when instanceof Date ? weight.when.toISOString() : weight.when,
+    when: weight.when instanceof Date ? formatDate(weight.when) : weight.when,
     what: parseFloat(parseFloat(weight.what).toFixed(2)),
   };
 
