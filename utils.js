@@ -264,3 +264,10 @@ export function renderCheck(check) {
     />
   );
 }
+
+export const convertRealmObjects = realmObjects => {
+  return realmObjects.map(obj => ({
+    ...obj,
+    when: obj.when instanceof Date ? obj.when.toISOString() : obj.when,
+  }));
+};

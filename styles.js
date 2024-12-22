@@ -21,6 +21,12 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     flex: 1,
   },
+  loading: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.background,
+    flex: 1,
+  },
   scrollView: {
     marginBottom: DIMENSIONS.margin,
     flex: 1,

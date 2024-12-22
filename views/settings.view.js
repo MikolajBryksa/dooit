@@ -17,7 +17,7 @@ const SettingsView = () => {
 
   const [language, setLanguage] = useState(settings.language);
   const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
-  //   const [habitsTab, setHabitsTab] = useState(settings.habitsTab);
+  const [habitsTab, setHabitsTab] = useState(settings.habitsTab);
   const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
   const [weightUnit, setWeightUnit] = useState(settings.weightUnit);
   const [weightGain, setWeightGain] = useState(settings.weightGain);
@@ -50,13 +50,13 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
-  //   function handleHabitsTab() {
-  //     const newHabitsTabValue = !habitsTab;
-  //     setHabitsTab(newHabitsTabValue);
-  //     updateSettingValue('habitsTab', newHabitsTabValue);
-  //     const updatedSettings = {...settings, habitsTab: newHabitsTabValue};
-  //     dispatch(setSettings(updatedSettings));
-  //   }
+  function handleHabitsTab() {
+    const newHabitsTabValue = !habitsTab;
+    setHabitsTab(newHabitsTabValue);
+    updateSettingValue('habitsTab', newHabitsTabValue);
+    const updatedSettings = {...settings, habitsTab: newHabitsTabValue};
+    dispatch(setSettings(updatedSettings));
+  }
 
   function handleWeightsTab() {
     const newWeightsTabValue = !weightsTab;
@@ -180,7 +180,7 @@ const SettingsView = () => {
 
         <View style={styles.gap} />
 
-        {/* <Pressable style={dynamicStyle} onPress={() => handleHabitsTab()}>
+        <Pressable style={dynamicStyle} onPress={() => handleHabitsTab()}>
           <Text style={styles.listItemWhat}>{t('habits')}</Text>
           <Switch
             style={styles.switch}
@@ -194,7 +194,7 @@ const SettingsView = () => {
           />
         </Pressable>
 
-        <View style={styles.gap} /> */}
+        <View style={styles.gap} />
 
         <Pressable style={dynamicStyle} onPress={() => handleWeightsTab()}>
           <Text style={styles.listItemWhat}>{t('weights')}</Text>
