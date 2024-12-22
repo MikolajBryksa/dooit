@@ -88,12 +88,13 @@ Settings.schema = {
     clockFormat: 'string',
     firstDay: 'string',
     tasksTab: 'bool',
+    firstLaunch: 'bool',
   },
 };
 
 const realmConfig = {
   schema: [Temp, Habit, Weight, Cost, Plan, Task, Settings],
-  schemaVersion: 3,
+  schemaVersion: 4,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 2) {
       const oldPlanObjects = oldRealm.objects('Plan');
@@ -112,6 +113,15 @@ const realmConfig = {
 
       for (let i = 0; i < oldObjects.length; i++) {
         newObjects[i].habitIndex = oldObjects[i].habitId;
+      }
+    }
+
+    if (oldRealm.schemaVersion < 4) {
+      const oldObjects = oldRealm.objects('Settings');
+      const newObjects = newRealm.objects('Settings');
+
+      for (let i = 0; i < oldObjects.length; i++) {
+        newObjects[i].firstLaunch = true;
       }
     }
   },
@@ -146,6 +156,7 @@ realm.write(() => {
       clockFormat: '24h',
       firstDay: 'Monday',
       tasksTab: true,
+      firstLaunch: true,
     });
   }
 });

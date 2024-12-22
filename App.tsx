@@ -18,7 +18,6 @@ import {renderViewIcon} from './utils';
 import i18next from './i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {plLocaleConfig, enLocaleConfig} from './translation/calendar';
-
 import {getEveryHabit} from './services/habits.service';
 import {getEveryWeight} from './services/weights.service';
 import {getEveryCost} from './services/costs.service';
@@ -34,6 +33,7 @@ import {
   setSettings,
 } from './redux/actions';
 import {convertRealmObjects} from './utils';
+import OnboardingModal from './modals/onboarding.modal';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,6 +41,7 @@ function AppContent() {
   const settings = useSelector((state: any) => state.settings);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   LocaleConfig.locales['pl'] = plLocaleConfig;
   LocaleConfig.locales['en'] = enLocaleConfig;
@@ -50,6 +51,7 @@ function AppContent() {
       const settings = getSettings();
       if (settings) {
         dispatch(setSettings(settings));
+        settings.firstLaunch && setShowModal(true);
         i18next.changeLanguage(settings.language === 'English' ? 'en' : 'pl');
         LocaleConfig.defaultLocale =
           settings.language === 'English' ? 'en' : 'pl';
@@ -82,6 +84,7 @@ function AppContent() {
 
   return (
     <>
+      {showModal && <OnboardingModal setShowModal={setShowModal} />}
       <Tab.Navigator
         screenOptions={({route}) => ({
           headerShown: false,

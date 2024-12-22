@@ -19,6 +19,7 @@ export const getSettings = () => {
     clockFormat: settings.clockFormat,
     firstDay: settings.firstDay,
     tasksTab: settings.tasksTab,
+    firstLaunch: settings.firstLaunch,
   };
 };
 
