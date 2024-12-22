@@ -3,7 +3,7 @@ import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import {setWeights} from '../redux/actions';
-import {getEveryWeight} from '../services/weights.service';
+import {getEveryWeight, calcWeightChange} from '../services/weights.service';
 import {styles} from '../styles';
 import {convertToISO} from '../utils';
 import WeightsModal from '../modals/weights.modal';
@@ -33,30 +33,12 @@ const WeightsView = () => {
   }, [showModal, settings.rowsNumber]);
 
   useEffect(() => {
-    function calcWeightChange(weights) {
-      if (!Array.isArray(weights) || weights.length === 0) {
-        return 0;
-      }
-
-      const firstWeight = weights[0].what;
-      const lastWeight = weights[weights.length - 1].what;
-      let weightChange = firstWeight - lastWeight;
-      weightChange = parseFloat(weightChange.toFixed(2));
-
-      if (weightChange > 0) {
-        weightChange = `+${weightChange}`;
-      }
-
-      const firstDate = new Date(weights[0].when);
-      const lastDate = new Date(weights[weights.length - 1].when);
-      const timeDifference = Math.abs(lastDate - firstDate);
-      const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
-      return {weightChange, dayDifference};
+    async function calculateWeightChange() {
+      const {weightChange, dayDifference} = calcWeightChange();
+      setWeightChange(weightChange);
+      setDayDifference(dayDifference);
     }
-    const {weightChange, dayDifference} = calcWeightChange(weights);
-    setWeightChange(weightChange);
-    setDayDifference(dayDifference);
+    calculateWeightChange();
   }, [weights]);
 
   function handleAdd() {
