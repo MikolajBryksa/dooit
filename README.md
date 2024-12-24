@@ -95,3 +95,11 @@ Before you begin, ensure you have met the following requirements:
 ```
     https://icon.kitchen/
 ```
+
+- **Publish**:
+
+```
+    Paste to android/app 2 files:
+    - dooit-release-key.keystore
+    - secrets.json
+```
