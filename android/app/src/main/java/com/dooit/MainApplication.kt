@@ -1,4 +1,4 @@
-package com.dooit
+package com.dooit.bryksa
 
 import android.app.Application
 import com.facebook.react.PackageList

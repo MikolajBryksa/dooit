@@ -1,4 +1,4 @@
-package com.dooit
+package com.dooit.bryksa
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
