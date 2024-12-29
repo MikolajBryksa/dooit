@@ -23,6 +23,7 @@ const OnboardingModal = ({setShowModal}) => {
   function handleAccept() {
     setShowModal(false);
     dispatch(setSettings({...settings, firstLaunch: false}));
+    updateSettingValue('firstLaunch', false);
   }
 
   function handleLanguage() {

@@ -68,25 +68,25 @@ const HabitsView = () => {
 
   useEffect(() => {
     const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
 
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
-    const startOfTomorrow = new Date(today);
-    startOfTomorrow.setDate(today.getDate() + 1);
-    startOfTomorrow.setHours(0, 0, 0, 0);
-    const endOfTomorrow = new Date(today);
-    endOfTomorrow.setDate(today.getDate() + 1);
-    endOfTomorrow.setHours(23, 59, 59, 999);
+    const isSameDay = (date1, date2) => {
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+      );
+    };
 
     if (Array.isArray(plans) && plans.length > 0) {
       const todaysPlans = plans.filter(plan => {
         const planDate = new Date(plan.when);
-        return planDate >= startOfDay && planDate <= endOfDay;
+        return isSameDay(planDate, today);
       });
       const tomorrowsPlans = plans.filter(plan => {
         const planDate = new Date(plan.when);
-        return planDate >= startOfTomorrow && planDate <= endOfTomorrow;
+        return isSameDay(planDate, tomorrow);
       });
       setTodayPlans(todaysPlans);
       setTomorrowPlans(tomorrowsPlans);
@@ -117,7 +117,6 @@ const HabitsView = () => {
     const newIndex = (currentIndex + 1) % habits.length;
     if (newIndex === 0) {
       setEndDay(true);
-      updateTemp(0, false);
     } else {
       setCurrentHabit(habits[newIndex]);
       setCurrentIndex(newIndex);

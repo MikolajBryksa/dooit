@@ -82,6 +82,18 @@ Before you begin, ensure you have met the following requirements:
     android/app/build/outputs/apk/release/app-release.apk
 ```
 
+- **Build the Android App Bundle**:
+
+```
+    npm run build-bundle
+```
+
+- **Find the Android App Bundle**:
+
+```
+    android/app/build/outputs/bundle/release/app-release.aab
+```
+
 ### Development
 
 - **Run tests**:

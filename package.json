@@ -5,6 +5,7 @@
   "scripts": {
     "start": "react-native start",
     "build": "cd android && ./gradlew assembleRelease",
+    "build-bundle": "cd android && ./gradlew :app:bundle",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",

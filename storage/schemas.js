@@ -94,37 +94,11 @@ Settings.schema = {
 
 const realmConfig = {
   schema: [Temp, Habit, Weight, Cost, Plan, Task, Settings],
-  schemaVersion: 4,
-  migration: (oldRealm, newRealm) => {
-    if (oldRealm.schemaVersion < 2) {
-      const oldPlanObjects = oldRealm.objects('Plan');
-      const newPlanObjects = newRealm.objects('Plan');
-
-      for (let i = 0; i < oldPlanObjects.length; i++) {
-        const oldPlan = oldPlanObjects[i];
-        const newPlan = newPlanObjects[i];
-        newPlan.time = null;
-      }
-    }
-
-    if (oldRealm.schemaVersion < 3) {
-      const oldObjects = oldRealm.objects('Temp');
-      const newObjects = newRealm.objects('Temp');
-
-      for (let i = 0; i < oldObjects.length; i++) {
-        newObjects[i].habitIndex = oldObjects[i].habitId;
-      }
-    }
-
-    if (oldRealm.schemaVersion < 4) {
-      const oldObjects = oldRealm.objects('Settings');
-      const newObjects = newRealm.objects('Settings');
-
-      for (let i = 0; i < oldObjects.length; i++) {
-        newObjects[i].firstLaunch = true;
-      }
-    }
-  },
+  schemaVersion: 1,
+  //   migration: (oldRealm, newRealm) => {
+  //     if (oldRealm.schemaVersion < 2) {
+  //     }
+  //   },
 };
 
 const realm = new Realm(realmConfig);
@@ -134,7 +108,7 @@ realm.write(() => {
   if (!existingTemp) {
     realm.create('Temp', {
       id: 1,
-      habitId: 0,
+      habitIndex: 0,
       habitPlay: false,
     });
   }
@@ -151,7 +125,7 @@ realm.write(() => {
       weightGain: parseFloat((0.05).toFixed(2)),
       costsTab: true,
       currency: 'zł',
-      costGain: 0.5,
+      costGain: parseFloat((0.5).toFixed(2)),
       plansTab: true,
       clockFormat: '24h',
       firstDay: 'Monday',
