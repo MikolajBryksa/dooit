@@ -113,8 +113,7 @@ android {
         }
         release {
             signingConfig signingConfigs.release
-            shrinkResources true
-            minifyEnabled true
+            minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }

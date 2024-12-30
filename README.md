@@ -1,6 +1,6 @@
 # Dooit
 
-Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily tasks and ensure you stay on top of your goals.
+Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily tasks, weight changes, current expenses, plans and things to buy.
 
 ## Tech Stack
 
