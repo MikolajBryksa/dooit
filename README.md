@@ -45,73 +45,88 @@ Before you begin, ensure you have met the following requirements:
 
 - **Clone the repository**:
 
-```
-    git clone https://github.com/MikolajBryksa/dooit.git
-```
+  ```
+      git clone https://github.com/MikolajBryksa/dooit.git
+  ```
 
 - **Install dependencies:**:
 
-```
-    cd dooit
-    npm install
-```
+  ```
+      cd dooit
+      npm install
+  ```
 
 ### Launch
 
-- **Run the app in Android Studio**:
-
-```
-    npm run android
-```
-
-- **Uninstall the app from Android Simulator**:
-
-```
-    Settings > Apps > All apps > Dooit > Uninstall
-```
-
 - **Build the APK file**:
 
-```
-    npm run build
-```
+  ```
+      npm run build
+  ```
 
 - **Find the APK file**:
 
-```
-    android/app/build/outputs/apk/release/app-release.apk
-```
+  ```
+      android/app/build/outputs/apk/release/app-release.apk
+  ```
 
-- **Build the Android App Bundle**:
+- **Run the app in Android Studio**:
 
-```
-    npm run build-bundle
-```
+  ```
+      npm run android
+  ```
 
-- **Find the Android App Bundle**:
+- **Uninstall the app from Android Simulator**:
 
-```
-    android/app/build/outputs/bundle/release/app-release.aab
-```
+  ```
+      Settings > Apps > All apps > Dooit > Uninstall
+  ```
 
 ### Development
 
 - **Run tests**:
 
-```
-    npm run test
-```
+  ```
+      npm run test
+  ```
 
 - **Change the app icon**:
 
-```
-    https://icon.kitchen/
-```
+  ```
+      https://icon.kitchen/
+  ```
 
-- **Publish**:
+- **Prepare to publish**:
 
-```
-    Paste to android/app 2 files:
-    - dooit-release-key.keystore
-    - secrets.json
-```
+  ```
+      Paste to android/app 2 files:
+      - dooit-release-key.keystore
+      - secrets.json
+  ```
+
+- **Update version**:
+
+  ```
+      Change version in package.json
+      Change versionCode and versionName in android/app/build.gradle
+  ```
+
+- **Build the Android App Bundle**:
+
+  ```
+      npm run build-bundle
+  ```
+
+- **Find the Android App Bundle**:
+
+  ```
+      android/app/build/outputs/bundle/release/app-release.aab
+  ```
+
+- **Submit new version to Google Play**:
+
+  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/bundle-explorer-selector
+
+- **Create new version for testers**:
+
+  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/tracks/4698028729410342214?tab=releases
