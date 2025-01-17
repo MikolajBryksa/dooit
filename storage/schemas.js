@@ -1,27 +1,5 @@
 import Realm from 'realm';
 
-class Temp extends Realm.Object {}
-Temp.schema = {
-  name: 'Temp',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    habitIndex: 'int',
-    habitPlay: 'bool',
-  },
-};
-
-class Habit extends Realm.Object {}
-Habit.schema = {
-  name: 'Habit',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    when: 'int',
-    what: 'string',
-  },
-};
-
 class Weight extends Realm.Object {}
 Weight.schema = {
   name: 'Weight',
@@ -56,6 +34,17 @@ Plan.schema = {
   },
 };
 
+class Habit extends Realm.Object {}
+Habit.schema = {
+  name: 'Habit',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    when: 'int',
+    what: 'string',
+  },
+};
+
 class Task extends Realm.Object {}
 Task.schema = {
   name: 'Task',
@@ -77,7 +66,6 @@ Settings.schema = {
     id: 'int',
     language: 'string',
     rowsNumber: 'int',
-    habitsTab: 'bool',
     weightsTab: 'bool',
     weightUnit: 'string',
     weightGain: 'float',
@@ -93,7 +81,7 @@ Settings.schema = {
 };
 
 const realmConfig = {
-  schema: [Temp, Habit, Weight, Cost, Plan, Task, Settings],
+  schema: [Habit, Weight, Cost, Plan, Task, Settings],
   schemaVersion: 1,
   //   migration: (oldRealm, newRealm) => {
   //     if (oldRealm.schemaVersion < 2) {
@@ -104,22 +92,12 @@ const realmConfig = {
 const realm = new Realm(realmConfig);
 
 realm.write(() => {
-  const existingTemp = realm.objects('Temp')[0];
-  if (!existingTemp) {
-    realm.create('Temp', {
-      id: 1,
-      habitIndex: 0,
-      habitPlay: false,
-    });
-  }
-
   const existingSettings = realm.objects('Settings')[0];
   if (!existingSettings) {
     realm.create('Settings', {
       id: 1,
       language: 'English',
       rowsNumber: 45,
-      habitsTab: true,
       weightsTab: true,
       weightUnit: 'kg',
       weightGain: parseFloat((0.05).toFixed(2)),

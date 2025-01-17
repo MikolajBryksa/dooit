@@ -19,7 +19,6 @@ const SettingsView = () => {
 
   const [language, setLanguage] = useState(settings.language);
   const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
-  const [habitsTab, setHabitsTab] = useState(settings.habitsTab);
   const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
   const [weightUnit, setWeightUnit] = useState(settings.weightUnit);
   const [weightGain, setWeightGain] = useState(settings.weightGain);
@@ -49,14 +48,6 @@ const SettingsView = () => {
     setRowsNumber(newRowsNumber);
     updateSettingValue('rowsNumber', newRowsNumber);
     const updatedSettings = {...settings, rowsNumber: newRowsNumber};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleHabitsTab() {
-    const newHabitsTabValue = !habitsTab;
-    setHabitsTab(newHabitsTabValue);
-    updateSettingValue('habitsTab', newHabitsTabValue);
-    const updatedSettings = {...settings, habitsTab: newHabitsTabValue};
     dispatch(setSettings(updatedSettings));
   }
 
@@ -179,22 +170,6 @@ const SettingsView = () => {
         <Pressable style={dynamicStyle} onPress={() => handleRowsNumber()}>
           <Text style={styles.listItemWhat}>{t('rows-number')} </Text>
           <Text style={styles.listItemChange}>{settings.rowsNumber}</Text>
-        </Pressable>
-
-        <View style={styles.gap} />
-
-        <Pressable style={dynamicStyle} onPress={() => handleHabitsTab()}>
-          <Text style={styles.listItemWhat}>{t('habits')}</Text>
-          <Switch
-            style={styles.switch}
-            value={habitsTab}
-            onValueChange={() => handleHabitsTab()}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
         </Pressable>
 
         <View style={styles.gap} />

@@ -16,6 +16,7 @@ const CostsView = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
+  const [budgetMode, setBudgetMode] = useState(false);
   const [averageCost, setAverageCost] = useState(0);
 
   useEffect(() => {
@@ -56,10 +57,20 @@ const CostsView = () => {
     setShowModal(true);
   }
 
+  function handleMode() {
+    if (budgetMode) {
+      setBudgetMode(false);
+    } else {
+      setBudgetMode(true);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      {showModal && <CostsModal setShowModal={setShowModal} />}
-      {costs && (
+      {!budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
+      {budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
+
+      {!budgetMode && costs && (
         <>
           <View style={styles.header}>
             <Text style={styles.center}>
@@ -80,12 +91,24 @@ const CostsView = () => {
               />
             ))}
           </ScrollView>
-
-          <View style={styles.controllers}>
-            <ControlButton type="add" press={handleAdd} />
-          </View>
         </>
       )}
+
+      {budgetMode && costs && (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.center}></Text>
+          </View>
+
+          <ScrollView style={styles.scrollView}></ScrollView>
+        </>
+      )}
+
+      <View style={styles.controllers}>
+        {!budgetMode && <ControlButton type="budget" press={handleMode} />}
+        {budgetMode && <ControlButton type="back" press={handleMode} />}
+        <ControlButton type="add" press={handleAdd} />
+      </View>
     </View>
   );
 };

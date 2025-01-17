@@ -3,7 +3,7 @@ import {styles} from './styles';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './redux/store';
 import LoadingView from './views/loading.view';
-import HabitsView from './views/habits.view';
+import HomeView from './views/home.view';
 import WeightsView from './views/weights.view';
 import CostsView from './views/costs.view';
 import PlansView from './views/plans.view';
@@ -57,9 +57,6 @@ function AppContent() {
           settings.language === 'English' ? 'en' : 'pl';
       }
 
-      const habits = getEveryHabit();
-      dispatch(setHabits(convertRealmObjects(habits)));
-
       const weights = getEveryWeight();
       dispatch(setWeights(convertRealmObjects(weights)));
 
@@ -68,6 +65,9 @@ function AppContent() {
 
       const plans = getEveryPlan();
       dispatch(setPlans(convertRealmObjects(plans)));
+
+      const habits = getEveryHabit();
+      dispatch(setHabits(convertRealmObjects(habits)));
 
       const tasks = getEveryTask();
       dispatch(setTasks(convertRealmObjects(tasks)));
@@ -97,9 +97,7 @@ function AppContent() {
           },
           animation: 'shift',
         })}>
-        {settings.habitsTab && (
-          <Tab.Screen name="habits" component={HabitsView} />
-        )}
+        <Tab.Screen name="home" component={HomeView} />
         {settings.weightsTab && (
           <Tab.Screen name="weights" component={WeightsView} />
         )}

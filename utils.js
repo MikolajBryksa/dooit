@@ -22,6 +22,8 @@ import {
   faBasketShopping,
   faTrashCan,
   faMugHot,
+  faRepeat,
+  faWallet,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
@@ -155,7 +157,7 @@ export function renderViewIcon(name, focused) {
   }
 
   switch (name) {
-    case 'habits':
+    case 'home':
       icon = faClock;
       break;
     case 'weights':
@@ -202,7 +204,16 @@ export function renderControlIcon(type) {
     case 'stop':
       icon = faStop;
       break;
-    case 'item':
+    case 'back':
+      icon = faChevronLeft;
+      break;
+    case 'budget':
+      icon = faWallet;
+      break;
+    case 'habits':
+      icon = faRepeat;
+      break;
+    case 'shop':
       icon = faBasketShopping;
       break;
     case 'reset':

@@ -1,11 +1,9 @@
 {
   "welcome": "Welcome to Dooit, choose your settings",
-  "no-habits": "Click plus button to add a habit",
-  "play-habits": "Click play button to start your day",
-  "done-habits": "All done! Below tomorrow's plans",
   "no-weights": "Click plus button to add your weight",
   "no-costs": "Click plus button to add a cost",
   "no-plans": "Click plus button to add a plan",
+  "no-habits": "Click plus button to add a habit",
   "no-tasks-done": "Click plus button to add a task to do",
   "no-items-bought": "Click plus button to add a item to buy",
   "income": "Will you support me with coffee? :)",

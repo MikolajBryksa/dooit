@@ -19,7 +19,7 @@ const TasksView = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
-  const [itemMode, setItemMode] = useState(false);
+  const [shopMode, setShopMode] = useState(false);
   const [doneTasks, setDoneTasks] = useState(0);
   const [data, setData] = useState(tasks);
 
@@ -38,18 +38,18 @@ const TasksView = () => {
       setData(categorizedTasks);
     }
     fetchData();
-  }, [showModal, itemMode]);
+  }, [showModal, shopMode]);
 
   function handleAdd() {
     setShowModal(true);
   }
 
-  function handleItems() {
-    if (itemMode) {
-      setItemMode(false);
+  function handleMode() {
+    if (shopMode) {
+      setShopMode(false);
       dispatch(setCategory('task'));
     } else {
-      setItemMode(true);
+      setShopMode(true);
       dispatch(setCategory('item'));
     }
   }
@@ -102,9 +102,9 @@ const TasksView = () => {
             <Text style={styles.center}>
               {tasks.length > 0
                 ? `${doneTasks} / ${tasks.length} ${
-                    itemMode ? t('bought') : t('done')
+                    shopMode ? t('bought') : t('done')
                   }`
-                : itemMode
+                : shopMode
                 ? t('no-items-bought')
                 : t('no-tasks-done')}
             </Text>
@@ -120,8 +120,8 @@ const TasksView = () => {
           </GestureHandlerRootView>
 
           <View style={styles.controllers}>
-            {!itemMode && <ControlButton type="item" press={handleItems} />}
-            {itemMode && <ControlButton type="cancel" press={handleItems} />}
+            {!shopMode && <ControlButton type="shop" press={handleMode} />}
+            {shopMode && <ControlButton type="back" press={handleMode} />}
             <ControlButton type="add" press={handleAdd} />
           </View>
         </>
