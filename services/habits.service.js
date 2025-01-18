@@ -83,3 +83,11 @@ export const deleteHabit = id => {
   });
   return deletedHabit;
 };
+
+export const getTodayHabits = () => {
+  const dayOfWeek = new Date()
+    .toLocaleString('en-US', {weekday: 'long'})
+    .toLowerCase();
+  const results = realm.objects('Habit').filtered(`${dayOfWeek} == true`);
+  return results;
+};

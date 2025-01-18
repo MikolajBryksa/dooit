@@ -307,3 +307,17 @@ export const isDaily = currentItem => {
 
   return days.every(day => day === true);
 };
+
+export const isNever = currentItem => {
+  const days = [
+    currentItem.monday,
+    currentItem.tuesday,
+    currentItem.wednesday,
+    currentItem.thursday,
+    currentItem.friday,
+    currentItem.saturday,
+    currentItem.sunday,
+  ];
+
+  return days.every(day => day === false);
+};

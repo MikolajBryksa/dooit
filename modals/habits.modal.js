@@ -8,7 +8,7 @@ import {addHabit, updateHabit, deleteHabit} from '../services/habits.service';
 import {DIMENSIONS, styles} from '../styles';
 import {WhatInput, TimeInput, DaysInput} from '../components/inputs';
 import {useTranslation} from 'react-i18next';
-import {isDaily} from '../utils';
+import {isDaily, isNever} from '../utils';
 
 const HabitsModal = ({setShowModal}) => {
   const currentItem = useSelector(state => state.currentItem);
@@ -136,11 +136,15 @@ const HabitsModal = ({setShowModal}) => {
               <ControlButton
                 type="accept"
                 press={handleUpdate}
-                disabled={!what}
+                disabled={!what || isNever(days)}
               />
             </>
           ) : (
-            <ControlButton type="accept" press={handleAdd} disabled={!what} />
+            <ControlButton
+              type="accept"
+              press={handleAdd}
+              disabled={!what || isNever(days)}
+            />
           )}
         </View>
       </View>

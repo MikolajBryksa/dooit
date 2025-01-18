@@ -73,3 +73,16 @@ export const deletePlan = id => {
   });
   return deletedPlan;
 };
+
+export const getTodayPlans = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  const results = realm
+    .objects('Plan')
+    .filtered('when >= $0 && when < $1', today, tomorrow);
+  return results;
+};
