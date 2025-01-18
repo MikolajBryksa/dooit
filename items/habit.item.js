@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Pressable, Text} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setCurrentItem} from '../redux/actions';
 import {getHabit} from '../services/habits.service';
 import {styles} from '../styles';
@@ -24,6 +24,12 @@ const HabitItem = ({
 }) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
+  const settings = useSelector(state => state.settings);
+  const [firstDay, setFirstDay] = useState(settings.firstDay);
+
+  useEffect(() => {
+    setFirstDay(settings.firstDay);
+  }, [settings]);
 
   function handlePress() {
     const data = getHabit(id);
@@ -48,13 +54,14 @@ const HabitItem = ({
             t('daily') + ' '
           ) : (
             <>
+              {firstDay === 'Sunday' && sunday && t('sun') + ' '}
               {monday && t('mon') + ' '}
               {tuesday && t('tue') + ' '}
               {wednesday && t('wed') + ' '}
               {thursday && t('thu') + ' '}
               {friday && t('fri') + ' '}
               {saturday && t('sat') + ' '}
-              {sunday && t('sun') + ' '}
+              {firstDay === 'Monday' && sunday && t('sun') + ' '}
             </>
           )}
           {time && `| ${time}`}

@@ -68,17 +68,23 @@ const CostsView = () => {
   return (
     <View style={styles.container}>
       {!budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
-      {budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
+      {/* {budgetMode && showModal && <CostsModal setShowModal={setShowModal} />} */}
 
       {!budgetMode && costs && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>
-              {costs.length > 0
-                ? `${averageCost} ${settings.currency} / ${t('day')}`
-                : t('no-costs')}
-            </Text>
-          </View>
+          {costs.length > 0 ? (
+            <View style={styles.header}>
+              <Text style={styles.center}>
+                {averageCost} {settings.currency} / {t('day')}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.center}>{t('no-costs')}</Text>
+              <ControlButton type="add" press={handleAdd} shape="circle" />
+              {/* <ControlButton type="budget" press={handleMode} shape="shadow" /> */}
+            </View>
+          )}
 
           <ScrollView style={styles.scrollView}>
             {costs.map((item, index) => (
@@ -104,11 +110,13 @@ const CostsView = () => {
         </>
       )}
 
-      <View style={styles.controllers}>
-        {!budgetMode && <ControlButton type="budget" press={handleMode} />}
-        {budgetMode && <ControlButton type="back" press={handleMode} />}
-        <ControlButton type="add" press={handleAdd} />
-      </View>
+      {costs && costs.length > 0 && (
+        <View style={styles.controllers}>
+          {/* {!budgetMode && <ControlButton type="budget" press={handleMode} />}
+          {budgetMode && <ControlButton type="back" press={handleMode} />} */}
+          <ControlButton type="add" press={handleAdd} />
+        </View>
+      )}
     </View>
   );
 };

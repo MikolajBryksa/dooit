@@ -1,11 +1,11 @@
 {
   "welcome": "Welcome to Dooit, choose your settings",
-  "no-weights": "Click plus button to add your weight",
-  "no-costs": "Click plus button to add a cost",
-  "no-plans": "Click plus button to add a plan",
-  "no-habits": "Click plus button to add a habit",
-  "no-tasks-done": "Click plus button to add a task to do",
-  "no-items-bought": "Click plus button to add a item to buy",
+  "no-weights": "Add weight",
+  "no-costs": "Add cost",
+  "no-plans": "Add plan",
+  "no-habits": "Add habit",
+  "no-tasks-done": "Add task",
+  "no-items-bought": "Add item",
   "income": "Will you support me with coffee? :)",
 
   "enter-habit": "Enter habit",
@@ -24,7 +24,7 @@
 
   "version": "Version",
   "language": "Language",
-  "rows-number": "Rows number",
+  "rows-number": "Data limitation",
   "habits": "Habits",
   "weights": "Weights",
   "weight-unit": "Weight unit",

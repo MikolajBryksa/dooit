@@ -193,6 +193,16 @@ export const DaysInput = ({
   const [saturdayCheck, setSaturdayCheck] = useState(days.saturday || false);
   const [sundayCheck, setSundayCheck] = useState(days.sunday || false);
 
+  const falseDays = {
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false,
+  };
+
   useEffect(() => {
     setMondayCheck(days.monday || false);
     setTuesdayCheck(days.tuesday || false);
@@ -350,7 +360,12 @@ export const DaysInput = ({
     </View>
   ) : (
     <View style={styles.inputContainer}>
-      <Pressable style={styles.input} onPress={() => setShowDaysPicker(true)}>
+      <Pressable
+        style={styles.input}
+        onPress={() => {
+          setShowDaysPicker(true);
+          setDays(falseDays);
+        }}>
         <Text style={styles.setter}>{placeholder}</Text>
       </Pressable>
     </View>

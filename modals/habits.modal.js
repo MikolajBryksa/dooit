@@ -22,17 +22,17 @@ const HabitsModal = ({setShowModal}) => {
   const [showDaysPicker, setShowDaysPicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const defaultDays = {
-    monday: false,
-    tuesday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-    sunday: false,
+  const trueDays = {
+    monday: true,
+    tuesday: true,
+    wednesday: true,
+    thursday: true,
+    friday: true,
+    saturday: true,
+    sunday: true,
   };
 
-  const [days, setDays] = useState(defaultDays);
+  const [days, setDays] = useState(trueDays);
 
   useEffect(() => {
     if (currentItem) {
@@ -58,7 +58,7 @@ const HabitsModal = ({setShowModal}) => {
       setWhen('');
       setWhat('');
       setTime('');
-      setDays(defaultDays);
+      setDays(trueDays);
     }
   }, [currentItem]);
 

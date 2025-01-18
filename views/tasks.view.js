@@ -98,17 +98,26 @@ const TasksView = () => {
       {showModal && <TasksModal setShowModal={setShowModal} />}
       {tasks && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>
-              {tasks.length > 0
-                ? `${doneTasks} / ${tasks.length} ${
-                    shopMode ? t('bought') : t('done')
-                  }`
-                : shopMode
-                ? t('no-items-bought')
-                : t('no-tasks-done')}
-            </Text>
-          </View>
+          {tasks.length > 0 ? (
+            <View style={styles.header}>
+              <Text style={styles.center}>
+                {doneTasks} / {tasks.length}{' '}
+                {shopMode ? t('bought') : t('done')}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.center}>
+                {shopMode ? t('no-items-bought') : t('no-tasks-done')}
+              </Text>
+              <ControlButton type="add" press={handleAdd} shape="circle" />
+              {shopMode ? (
+                <ControlButton type="back" press={handleMode} shape="shadow" />
+              ) : (
+                <ControlButton type="shop" press={handleMode} shape="shadow" />
+              )}
+            </View>
+          )}
 
           <GestureHandlerRootView style={styles.scrollView}>
             <DraggableFlatList
@@ -119,11 +128,18 @@ const TasksView = () => {
             />
           </GestureHandlerRootView>
 
-          <View style={styles.controllers}>
-            {!shopMode && <ControlButton type="shop" press={handleMode} />}
-            {shopMode && <ControlButton type="back" press={handleMode} />}
-            <ControlButton type="add" press={handleAdd} />
-          </View>
+          {tasks && tasks.length > 0 && !shopMode && (
+            <View style={styles.controllers}>
+              <ControlButton type="shop" press={handleMode} />
+              <ControlButton type="add" press={handleAdd} />
+            </View>
+          )}
+          {tasks && tasks.length > 0 && shopMode && (
+            <View style={styles.controllers}>
+              <ControlButton type="back" press={handleMode} />
+              <ControlButton type="add" press={handleAdd} />
+            </View>
+          )}
         </>
       )}
     </View>

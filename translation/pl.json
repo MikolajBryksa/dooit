@@ -1,11 +1,11 @@
 {
   "welcome": "Witam w Dooit, wybierz swoje ustawienia",
-  "no-weights": "Kliknij przycisk plus, aby dodać swoją wagę",
-  "no-costs": "Kliknij przycisk plus, aby dodać koszt",
-  "no-plans": "Kliknij przycisk plus, aby dodać plan",
-  "no-habits": "Kliknij przycisk plus, aby dodać nawyk",
-  "no-tasks-done": "Kliknij przycisk plus, aby dodać zadanie do zrobienia",
-  "no-items-bought": "Kliknij przycisk plus, aby dodać rzecz do kupienia",
+  "no-weights": "Dodaj wagę",
+  "no-costs": "Dodaj koszt",
+  "no-plans": "Dodaj plan",
+  "no-habits": "Dodaj nawyk",
+  "no-tasks-done": "Dodaj zadanie",
+  "no-items-bought": "Dodaj produkt",
   "income": "Czy jako wsparcie postawisz mi kawusię? :)",
 
   "enter-habit": "Wpisz nawyk",
@@ -24,7 +24,7 @@
 
   "version": "Wersja",
   "language": "Język",
-  "rows-number": "Ilość wierszy",
+  "rows-number": "Limit danych",
   "habits": "Nawyki",
   "weights": "Pomiary wagi",
   "weight-unit": "Jednostka wagi",

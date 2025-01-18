@@ -20,11 +20,10 @@ import {
   faStop,
   faTimes,
   faBasketShopping,
-  faTrashCan,
   faMugHot,
-  faRepeat,
   faWallet,
   faUtensils,
+  faCrosshairs,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
@@ -183,8 +182,14 @@ export function renderViewIcon(name, focused) {
   );
 }
 
-export function renderControlIcon(type) {
-  let icon;
+export function renderControlIcon(type, shape) {
+  let iconColor;
+
+  if (shape === 'shadow') {
+    iconColor = COLORS.primary;
+  } else {
+    iconColor = COLORS.background;
+  }
 
   switch (type) {
     case 'cancel':
@@ -215,7 +220,7 @@ export function renderControlIcon(type) {
       icon = faWallet;
       break;
     case 'habits':
-      icon = faRepeat;
+      icon = faCrosshairs;
       break;
     case 'shop':
       icon = faBasketShopping;
@@ -226,10 +231,7 @@ export function renderControlIcon(type) {
   }
 
   return (
-    <FontAwesomeIcon
-      icon={icon}
-      style={[styles.icon, {color: COLORS.background}]}
-    />
+    <FontAwesomeIcon icon={icon} style={[styles.icon, {color: iconColor}]} />
   );
 }
 

@@ -109,13 +109,20 @@ const PlansView = () => {
 
       {plans && !habitsMode && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>
-              {plans.length > 0
-                ? formatDateWithDay(new Date(), settings.language)
-                : t('no-plans')}
-            </Text>
-          </View>
+          {plans.length > 0 ? (
+            <View style={styles.header}>
+              <Text style={styles.center}>
+                {formatDateWithDay(new Date(), settings.language)}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.center}>{t('no-plans')}</Text>
+              <ControlButton type="add" press={handleAdd} shape="circle" />
+              <ControlButton type="habits" press={handleMode} shape="shadow" />
+            </View>
+          )}
+
           <ScrollView style={styles.scrollView}>
             {plans.map((item, index) => (
               <PlanItem
@@ -133,13 +140,19 @@ const PlansView = () => {
 
       {habits && habitsMode && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}>
-              {habits.length > 0
-                ? formatDateWithDay(new Date(), settings.language)
-                : t('no-habits')}
-            </Text>
-          </View>
+          {habits.length > 0 ? (
+            <View style={styles.header}>
+              <Text style={styles.center}>
+                {formatDateWithDay(new Date(), settings.language)}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.center}>{t('no-habits')}</Text>
+              <ControlButton type="add" press={handleAdd} shape="circle" />
+              <ControlButton type="back" press={handleMode} shape="shadow" />
+            </View>
+          )}
 
           <GestureHandlerRootView style={styles.scrollView}>
             <DraggableFlatList
@@ -152,11 +165,18 @@ const PlansView = () => {
         </>
       )}
 
-      <View style={styles.controllers}>
-        {!habitsMode && <ControlButton type="habits" press={handleMode} />}
-        {habitsMode && <ControlButton type="back" press={handleMode} />}
-        <ControlButton type="add" press={handleAdd} />
-      </View>
+      {plans && plans.length > 0 && !habitsMode && (
+        <View style={styles.controllers}>
+          <ControlButton type="habits" press={handleMode} />
+          <ControlButton type="add" press={handleAdd} />
+        </View>
+      )}
+      {habits && habits.length > 0 && habitsMode && (
+        <View style={styles.controllers}>
+          <ControlButton type="back" press={handleMode} />
+          <ControlButton type="add" press={handleAdd} />
+        </View>
+      )}
     </View>
   );
 };

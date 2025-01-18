@@ -228,6 +228,28 @@ export const styles = StyleSheet.create({
     flex: 1,
     borderRadius: DIMENSIONS.margin,
   },
+  empty: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: DIMENSIONS.margin,
+  },
+  circleButton: {
+    marginTop: DIMENSIONS.padding,
+    width: DIMENSIONS.height * 1.5,
+    height: DIMENSIONS.height * 1.5,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: DIMENSIONS.height * 0.75,
+  },
+  shadowButton: {
+    marginTop: DIMENSIONS.padding,
+    width: DIMENSIONS.height,
+    height: DIMENSIONS.height,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   icon: {
     fontSize: DIMENSIONS.height,
     color: COLORS.background,
