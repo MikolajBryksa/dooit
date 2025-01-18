@@ -14,7 +14,6 @@ const HomeView = () => {
   const plans = useSelector(state => state.plans);
   const habits = useSelector(state => state.habits);
   const settings = useSelector(state => state.settings);
-  const {t} = useTranslation();
   const [todayPlans, setTodayPlans] = useState([]);
   const [todayHabits, setTodayHabits] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -57,7 +56,7 @@ const HomeView = () => {
               setMode={setMode}
             />
           ))}
-          <View style={styles.gap} />
+          {todayPlans.length > 0 && <View style={styles.gap} />}
           {todayHabits.map((item, index) => (
             <HomeItem
               key={index}

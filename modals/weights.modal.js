@@ -33,7 +33,7 @@ const WeightsModal = ({setShowModal}) => {
     } else {
       const today = formatDate();
       setWhen(today);
-      setWhat(weights.length ? weights[0].what : '');
+      setWhat(weights.length ? weights[0].what.toFixed(2) : '');
     }
   }, [currentItem]);
 
