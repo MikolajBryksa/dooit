@@ -75,7 +75,6 @@ Settings.schema = {
   properties: {
     id: 'int',
     language: 'string',
-    rowsNumber: 'int',
     weightsTab: 'bool',
     weightUnit: 'string',
     weightGain: 'double',
@@ -107,7 +106,6 @@ realm.write(() => {
     realm.create('Settings', {
       id: 1,
       language: 'English',
-      rowsNumber: 45,
       weightsTab: true,
       weightUnit: 'kg',
       weightGain: 0.05,

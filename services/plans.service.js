@@ -18,14 +18,14 @@ export const addPlan = (when, what, time) => {
   return newPlan;
 };
 
-export const getEveryPlan = rowsNumber => {
+export const getEveryPlan = () => {
   const sortFields = [
     ['when', false],
     ['time', false],
     ['id', true],
   ];
   const results = realm.objects('Plan').sorted(sortFields);
-  return results.slice(0, rowsNumber);
+  return results;
 };
 
 export const getPlan = id => {

@@ -12,6 +12,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import realm from '../storage/schemas';
 import {useTranslation} from 'react-i18next';
+import {convertRealmObjects} from '../utils';
 
 const TasksView = () => {
   const tasks = useSelector(state => state.tasks);
@@ -25,12 +26,9 @@ const TasksView = () => {
 
   const fetchData = async () => {
     const tasks = getEveryTask();
-    const formattedTasks = tasks.map(item => ({
-      ...item,
-      what: item.what,
-      when: item.when,
-    }));
-    const categorizedTasks = formattedTasks.filter(
+    const convertedTasks = convertRealmObjects(tasks);
+
+    const categorizedTasks = convertedTasks.filter(
       item => item.category === category,
     );
     dispatch(setTasks(categorizedTasks));

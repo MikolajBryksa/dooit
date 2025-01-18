@@ -7,7 +7,6 @@ export const getSettings = () => {
   return {
     id: settings.id,
     language: settings.language,
-    rowsNumber: settings.rowsNumber,
     weightsTab: settings.weightsTab,
     weightUnit: settings.weightUnit,
     weightGain: parseFloat(settings.weightGain.toFixed(2)),

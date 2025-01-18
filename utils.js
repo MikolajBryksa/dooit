@@ -169,6 +169,9 @@ export function renderViewIcon(name, focused) {
     case 'plans':
       icon = faCalendar;
       break;
+    case 'habits':
+      icon = faCrosshairs;
+      break;
     case 'tasks':
       icon = faList;
       break;

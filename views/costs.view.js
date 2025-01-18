@@ -5,10 +5,10 @@ import ControlButton from '../components/control.button';
 import {setCosts} from '../redux/actions';
 import {calcAverageCost, getEveryCost} from '../services/costs.service';
 import {styles} from '../styles';
-import {convertToISO} from '../utils';
 import CostsModal from '../modals/costs.modal';
 import CostItem from '../items/cost.item';
 import {useTranslation} from 'react-i18next';
+import {convertRealmObjects} from '../utils';
 
 const CostsView = () => {
   const costs = useSelector(state => state.costs);
@@ -20,18 +20,13 @@ const CostsView = () => {
   const [averageCost, setAverageCost] = useState(0);
 
   const fetchData = async () => {
-    const data = getEveryCost(settings.rowsNumber);
-    const formattedData = data.map(item => ({
-      ...item,
-      what: item.what.toFixed(2),
-      when: convertToISO(new Date(item.when).toLocaleDateString()),
-    }));
-    dispatch(setCosts(formattedData));
+    const costs = getEveryCost();
+    dispatch(setCosts(convertRealmObjects(costs)));
   };
 
   useEffect(() => {
     fetchData();
-  }, [showModal, budgetMode, settings.rowsNumber]);
+  }, [showModal, budgetMode]);
 
   useEffect(() => {
     async function calculateDailyCost() {

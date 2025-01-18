@@ -21,7 +21,7 @@ export const addTask = (when, what, category) => {
 export const getEveryTask = () => {
   const sortFields = [['when', false]];
   const results = realm.objects('Task').sorted(sortFields);
-  return results.slice(0, 180);
+  return results;
 };
 
 export const getTask = id => {

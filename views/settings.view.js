@@ -18,7 +18,6 @@ const SettingsView = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [rowsNumber, setRowsNumber] = useState(settings.rowsNumber);
   const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
   const [weightUnit, setWeightUnit] = useState(settings.weightUnit);
   const [weightGain, setWeightGain] = useState(settings.weightGain);
@@ -37,17 +36,6 @@ const SettingsView = () => {
     setLanguage(newLanguage);
     updateSettingValue('language', newLanguage);
     const updatedSettings = {...settings, language: newLanguage};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleRowsNumber() {
-    const rowsNumbers = [30, 45, 60, 90, 180];
-    const currentIndex = rowsNumbers.indexOf(rowsNumber);
-    const newRowsNumber = rowsNumbers[(currentIndex + 1) % rowsNumbers.length];
-
-    setRowsNumber(newRowsNumber);
-    updateSettingValue('rowsNumber', newRowsNumber);
-    const updatedSettings = {...settings, rowsNumber: newRowsNumber};
     dispatch(setSettings(updatedSettings));
   }
 
@@ -166,10 +154,6 @@ const SettingsView = () => {
         <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
           <Text style={styles.listItemWhat}>{t('language')} </Text>
           <Text style={styles.listItemChange}>{settings.language}</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleRowsNumber()}>
-          <Text style={styles.listItemWhat}>{t('rows-number')} </Text>
-          <Text style={styles.listItemChange}>{settings.rowsNumber}</Text>
         </Pressable>
 
         <View style={styles.gap} />

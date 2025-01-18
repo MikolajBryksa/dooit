@@ -10,13 +10,13 @@ import {getEveryPlan} from '../services/plans.service';
 import {getEveryHabit} from '../services/habits.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
-import {convertToISO} from '../utils';
 import PlansModal from '../modals/plans.modal';
 import HabitsModal from '../modals/habits.modal';
 import {useTranslation} from 'react-i18next';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {isDaily} from '../utils';
+import {convertRealmObjects} from '../utils';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
@@ -29,27 +29,18 @@ const PlansView = () => {
   const [data, setData] = useState(habits);
 
   const fetchData = async () => {
-    const plans = getEveryPlan(settings.rowsNumber);
-    const formattedData = plans.map(item => ({
-      ...item,
-      what: item.what,
-      when: convertToISO(new Date(item.when).toLocaleDateString()),
-    }));
-    dispatch(setPlans(formattedData));
+    const plans = getEveryPlan();
+    dispatch(setPlans(convertRealmObjects(plans)));
 
     const habits = getEveryHabit();
-    const formattedHabits = habits.map(item => ({
-      ...item,
-      what: item.what,
-      when: item.when,
-    }));
-    dispatch(setHabits(formattedHabits));
-    setData(formattedHabits);
+    const convertedHabits = convertRealmObjects(habits);
+    dispatch(setHabits(convertedHabits));
+    setData(convertRealmObjects(convertedHabits));
   };
 
   useEffect(() => {
     fetchData();
-  }, [showModal, habitsMode, settings.rowsNumber]);
+  }, [showModal, habitsMode]);
 
   function handleAdd() {
     setShowModal(true);

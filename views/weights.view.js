@@ -5,10 +5,10 @@ import ControlButton from '../components/control.button';
 import {setWeights} from '../redux/actions';
 import {getEveryWeight, calcWeightChange} from '../services/weights.service';
 import {styles} from '../styles';
-import {convertToISO} from '../utils';
 import WeightsModal from '../modals/weights.modal';
 import WeightItem from '../items/weight.item';
 import {useTranslation} from 'react-i18next';
+import {convertRealmObjects} from '../utils';
 
 const WeightsView = () => {
   const weights = useSelector(state => state.weights);
@@ -21,18 +21,13 @@ const WeightsView = () => {
   const [dayDifference, setDayDifference] = useState(0);
 
   const fetchData = async () => {
-    const data = getEveryWeight(settings.rowsNumber);
-    const formattedData = data.map(item => ({
-      ...item,
-      what: item.what.toFixed(2),
-      when: convertToISO(new Date(item.when).toLocaleDateString()),
-    }));
-    dispatch(setWeights(formattedData));
+    const weights = getEveryWeight();
+    dispatch(setWeights(convertRealmObjects(weights)));
   };
 
   useEffect(() => {
     fetchData();
-  }, [showModal, mealsMode, settings.rowsNumber]);
+  }, [showModal, mealsMode]);
 
   useEffect(() => {
     async function calculateWeightChange() {

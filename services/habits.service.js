@@ -28,7 +28,7 @@ export const addHabit = (when, what, time, days) => {
 export const getEveryHabit = () => {
   const sortFields = [['when', false]];
   const results = realm.objects('Habit').sorted(sortFields);
-  return results.slice(0, 180);
+  return results;
 };
 
 export const getHabit = id => {
