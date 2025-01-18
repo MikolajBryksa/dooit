@@ -31,6 +31,7 @@ Plan.schema = {
     when: 'date',
     what: 'string',
     time: 'string?',
+    check: 'bool',
   },
 };
 
@@ -42,6 +43,15 @@ Habit.schema = {
     id: 'int',
     when: 'int',
     what: 'string',
+    time: 'string?',
+    monday: 'bool',
+    tuesday: 'bool',
+    wednesday: 'bool',
+    thursday: 'bool',
+    friday: 'bool',
+    saturday: 'bool',
+    sunday: 'bool',
+    check: 'bool',
   },
 };
 

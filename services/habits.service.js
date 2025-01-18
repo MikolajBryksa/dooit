@@ -1,7 +1,7 @@
 import realm from '../storage/schemas';
 import {getNextId} from '../utils';
 
-export const addHabit = (when, what) => {
+export const addHabit = (when, what, time, days) => {
   const id = getNextId('Habit');
   when = id;
 
@@ -11,6 +11,15 @@ export const addHabit = (when, what) => {
       id,
       when,
       what,
+      time,
+      check: false,
+      monday: days.monday,
+      tuesday: days.tuesday,
+      wednesday: days.wednesday,
+      thursday: days.thursday,
+      friday: days.friday,
+      saturday: days.saturday,
+      sunday: days.sunday,
     });
   });
   return newHabit;
@@ -32,18 +41,30 @@ export const getHabit = id => {
   };
 };
 
-export const updateHabit = (id, when, what) => {
+export const updateHabit = (id, when, what, time, days, check) => {
   when = parseInt(when, 10);
 
   let updatedHabit;
   realm.write(() => {
     const habit = realm.objectForPrimaryKey('Habit', id);
+    check = check !== null ? check : habit.check;
+
     updatedHabit = realm.create(
       'Habit',
       {
         id,
         when,
         what,
+        time,
+        check,
+        monday: days.monday !== undefined ? days.monday : habit.monday,
+        tuesday: days.tuesday !== undefined ? days.tuesday : habit.tuesday,
+        wednesday:
+          days.wednesday !== undefined ? days.wednesday : habit.wednesday,
+        thursday: days.thursday !== undefined ? days.thursday : habit.thursday,
+        friday: days.friday !== undefined ? days.friday : habit.friday,
+        saturday: days.saturday !== undefined ? days.saturday : habit.saturday,
+        sunday: days.sunday !== undefined ? days.sunday : habit.sunday,
       },
       'modified',
     );

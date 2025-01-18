@@ -16,6 +16,7 @@ import HabitsModal from '../modals/habits.modal';
 import {useTranslation} from 'react-i18next';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import {isDaily} from '../utils';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
@@ -72,6 +73,15 @@ const PlansView = () => {
         drag={drag}
         isActive={isActive}
         setShowModal={setShowModal}
+        time={item.time}
+        monday={item.monday}
+        tuesday={item.tuesday}
+        wednesday={item.wednesday}
+        thursday={item.thursday}
+        friday={item.friday}
+        saturday={item.saturday}
+        sunday={item.sunday}
+        daily={isDaily(item)}
       />
     );
   }, []);

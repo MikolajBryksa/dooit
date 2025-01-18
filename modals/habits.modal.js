@@ -6,24 +6,59 @@ import ControlButton from '../components/control.button';
 import {setCurrentItem} from '../redux/actions';
 import {addHabit, updateHabit, deleteHabit} from '../services/habits.service';
 import {DIMENSIONS, styles} from '../styles';
-import {WhatInput} from '../components/inputs';
+import {WhatInput, TimeInput, DaysInput} from '../components/inputs';
 import {useTranslation} from 'react-i18next';
+import {isDaily} from '../utils';
 
 const HabitsModal = ({setShowModal}) => {
   const currentItem = useSelector(state => state.currentItem);
+  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
+  const [time, setTime] = useState('');
+  const [showDaysPicker, setShowDaysPicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const defaultDays = {
+    monday: false,
+    tuesday: false,
+    wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false,
+  };
+
+  const [days, setDays] = useState(defaultDays);
 
   useEffect(() => {
     if (currentItem) {
       setWhen(currentItem.when?.toString());
       setWhat(currentItem.what);
+      setTime(currentItem.time);
+      if (currentItem.time) {
+        setShowTimePicker(true);
+      }
+      setDays({
+        monday: currentItem.monday,
+        tuesday: currentItem.tuesday,
+        wednesday: currentItem.wednesday,
+        thursday: currentItem.thursday,
+        friday: currentItem.friday,
+        saturday: currentItem.saturday,
+        sunday: currentItem.sunday,
+      });
+      if (!isDaily(currentItem)) {
+        setShowDaysPicker(true);
+      }
     } else {
       setWhen('');
       setWhat('');
+      setTime('');
+      setDays(defaultDays);
     }
   }, [currentItem]);
 
@@ -31,9 +66,8 @@ const HabitsModal = ({setShowModal}) => {
     dispatch(setCurrentItem(null));
     setShowModal(false);
   }
-
   function handleAdd() {
-    addHabit(when, what);
+    addHabit(when, what, time, days);
     Toast.show({
       type: 'add',
       text1: 'habits',
@@ -45,7 +79,7 @@ const HabitsModal = ({setShowModal}) => {
 
   function handleUpdate() {
     if (currentItem) {
-      updateHabit(currentItem.id, when, what);
+      updateHabit(currentItem.id, when, what, time, days, currentItem.check);
       Toast.show({
         type: 'update',
         text1: 'habits',
@@ -72,11 +106,27 @@ const HabitsModal = ({setShowModal}) => {
   return (
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
+        <DaysInput
+          showDaysPicker={showDaysPicker}
+          setShowDaysPicker={setShowDaysPicker}
+          days={days}
+          setDays={setDays}
+          firstDay={settings.firstDay}
+          placeholder={t('set-days')}
+        />
         <WhatInput
           what={what}
           setWhat={setWhat}
           placeholder={t('enter-habit')}
           inputModeType="text"
+        />
+        <TimeInput
+          time={time}
+          setTime={setTime}
+          showTimePicker={showTimePicker}
+          setShowTimePicker={setShowTimePicker}
+          clockFormat={settings.clockFormat}
+          placeholder={t('set-time')}
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

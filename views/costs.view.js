@@ -30,7 +30,7 @@ const CostsView = () => {
       dispatch(setCosts(formattedData));
     }
     fetchData();
-  }, [showModal, settings.rowsNumber]);
+  }, [showModal, budgetMode, settings.rowsNumber]);
 
   useEffect(() => {
     function calcAverageCost(costs) {

@@ -16,6 +16,7 @@ const WeightsView = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
+  const [mealsMode, setMealsMode] = useState(false);
   const [weightChange, setWeightChange] = useState(0);
   const [dayDifference, setDayDifference] = useState(0);
 
@@ -30,7 +31,7 @@ const WeightsView = () => {
       dispatch(setWeights(formattedData));
     }
     fetchData();
-  }, [showModal, settings.rowsNumber]);
+  }, [showModal, mealsMode, settings.rowsNumber]);
 
   useEffect(() => {
     async function calculateWeightChange() {
@@ -45,10 +46,20 @@ const WeightsView = () => {
     setShowModal(true);
   }
 
+  function handleMode() {
+    if (mealsMode) {
+      setMealsMode(false);
+    } else {
+      setMealsMode(true);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      {showModal && <WeightsModal setShowModal={setShowModal} />}
-      {weights && (
+      {!mealsMode && showModal && <WeightsModal setShowModal={setShowModal} />}
+      {mealsMode && showModal && <WeightsModal setShowModal={setShowModal} />}
+
+      {!mealsMode && weights && (
         <>
           <View style={styles.header}>
             <Text style={styles.center}>
@@ -71,12 +82,24 @@ const WeightsView = () => {
               />
             ))}
           </ScrollView>
-
-          <View style={styles.controllers}>
-            <ControlButton type="add" press={handleAdd} />
-          </View>
         </>
       )}
+
+      {mealsMode && weights && (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.center}></Text>
+          </View>
+
+          <ScrollView style={styles.scrollView}></ScrollView>
+        </>
+      )}
+
+      <View style={styles.controllers}>
+        {!mealsMode && <ControlButton type="meals" press={handleMode} />}
+        {mealsMode && <ControlButton type="back" press={handleMode} />}
+        <ControlButton type="add" press={handleAdd} />
+      </View>
     </View>
   );
 };

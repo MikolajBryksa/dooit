@@ -12,6 +12,7 @@ export const addPlan = (when, what, time) => {
       when,
       what,
       time,
+      check: false,
     });
   });
   return newPlan;
@@ -39,11 +40,24 @@ export const getPlan = id => {
   return serializablePlan;
 };
 
-export const updatePlan = (id, when, what, time) => {
+export const updatePlan = (id, when, what, time, check) => {
   when = new Date(when);
+
   let updatedPlan;
   realm.write(() => {
-    updatedPlan = realm.create('Plan', {id, when, what, time}, 'modified');
+    const plan = realm.objectForPrimaryKey('Plan', id);
+    check = check !== null ? check : plan.check;
+    updatedPlan = realm.create(
+      'Plan',
+      {
+        id,
+        when,
+        what,
+        time,
+        check,
+      },
+      'modified',
+    );
   });
   return updatedPlan;
 };

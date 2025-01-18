@@ -13,6 +13,7 @@
   "enter-cost": "Enter cost",
   "enter-plan": "Enter plan",
   "set-time": "Set time",
+  "set-days": "Daily",
   "enter-task": "Enter task",
   "enter-item": "Enter item",
 
@@ -36,5 +37,21 @@
   "first-day": "First day",
   "first-day-monday": "Monday",
   "first-day-sunday": "Sunday",
-  "tasks": "Tasks"
+  "tasks": "Tasks",
+
+  "daily": "Daily",
+  "mondays": "Mondays",
+  "tuesdays": "Tuesdays",
+  "wednesdays": "Wednesdays",
+  "thursdays": "Thursdays",
+  "fridays": "Fridays",
+  "saturdays": "Saturdays",
+  "sundays": "Sundays",
+  "mon": "Mon",
+  "tue": "Tue",
+  "wed": "Wed",
+  "thu": "Thu",
+  "fri": "Fri",
+  "sat": "Sat",
+  "sun": "Sun"
 }

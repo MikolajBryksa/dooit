@@ -13,6 +13,7 @@
   "enter-cost": "Wpisz koszt",
   "enter-plan": "Wpisz plan",
   "set-time": "Ustaw czas",
+  "set-days": "Codziennie",
   "enter-task": "Wpisz zadanie",
   "enter-item": "Wpisz produkt",
 
@@ -36,5 +37,21 @@
   "first-day": "Pierwszy dzień",
   "first-day-monday": "Poniedziałek",
   "first-day-sunday": "Niedziela",
-  "tasks": "Zadania"
+  "tasks": "Zadania",
+
+  "daily": "Codziennie",
+  "mondays": "Poniedziałki",
+  "tuesdays": "Wtorki",
+  "wednesdays": "Środy",
+  "thursdays": "Czwartki",
+  "fridays": "Piątki",
+  "saturdays": "Soboty",
+  "sundays": "Niedziele",
+  "mon": "Pon",
+  "tue": "Wto",
+  "wed": "Śro",
+  "thu": "Czw",
+  "fri": "Pią",
+  "sat": "Sob",
+  "sun": "Nie"
 }

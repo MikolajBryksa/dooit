@@ -4,7 +4,6 @@ import {getNextId} from '../utils';
 export const addTask = (when, what, category) => {
   const id = getNextId('Task');
   when = id;
-  const check = false;
 
   let newTask;
   realm.write(() => {
@@ -12,7 +11,7 @@ export const addTask = (when, what, category) => {
       id,
       when,
       what,
-      check,
+      check: false,
       category,
     });
   });

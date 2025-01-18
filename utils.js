@@ -24,6 +24,7 @@ import {
   faMugHot,
   faRepeat,
   faWallet,
+  faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
@@ -207,6 +208,9 @@ export function renderControlIcon(type) {
     case 'back':
       icon = faChevronLeft;
       break;
+    case 'meals':
+      icon = faUtensils;
+      break;
     case 'budget':
       icon = faWallet;
       break;
@@ -215,9 +219,6 @@ export function renderControlIcon(type) {
       break;
     case 'shop':
       icon = faBasketShopping;
-      break;
-    case 'reset':
-      icon = faTrashCan;
       break;
     case 'income':
       icon = faMugHot;
@@ -289,4 +290,18 @@ export const convertRealmObjects = realmObjects => {
     ...obj,
     when: obj.when instanceof Date ? formatDate(obj.when) : obj.when,
   }));
+};
+
+export const isDaily = currentItem => {
+  const days = [
+    currentItem.monday,
+    currentItem.tuesday,
+    currentItem.wednesday,
+    currentItem.thursday,
+    currentItem.friday,
+    currentItem.saturday,
+    currentItem.sunday,
+  ];
+
+  return days.every(day => day === true);
 };

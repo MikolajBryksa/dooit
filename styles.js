@@ -133,6 +133,13 @@ export const styles = StyleSheet.create({
       top: 10,
     },
   },
+  daysContainer: {
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+    borderRadius: DIMENSIONS.margin,
+  },
   center: {
     color: COLORS.secondary,
   },
@@ -151,6 +158,14 @@ export const styles = StyleSheet.create({
     marginBottom: DIMENSIONS.margin,
     alignItems: 'center',
     borderRadius: DIMENSIONS.margin,
+  },
+  listItemDay: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: DIMENSIONS.height * 0.8,
+    width: '100%',
+    padding: DIMENSIONS.padding,
+    alignItems: 'center',
   },
   listItemWhat: {
     color: COLORS.text,

@@ -1,7 +1,8 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {View, TextInput, Pressable, Text} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {TimerPicker} from 'react-native-timer-picker';
+import {renderCheck} from '../utils';
 import {styles, COLORS} from '../styles';
 import {
   renderArrow,
@@ -13,6 +14,7 @@ import {
   limitTextInput,
   formatDate,
 } from '../utils';
+import {useTranslation} from 'react-i18next';
 
 export const WhatInput = ({
   what,
@@ -165,3 +167,192 @@ export const TimeInput = ({
     )}
   </View>
 );
+
+const toggleCheck = (value, setter, day, days, setDays) => {
+  const newCheck = !value;
+  setter(newCheck);
+
+  const newDays = {...days, [day]: newCheck};
+  setDays(newDays);
+};
+
+export const DaysInput = ({
+  showDaysPicker,
+  setShowDaysPicker,
+  days,
+  setDays,
+  firstDay,
+  placeholder,
+}) => {
+  const {t} = useTranslation();
+  const [mondayCheck, setMondayCheck] = useState(days.monday || false);
+  const [tuesdayCheck, setTuesdayCheck] = useState(days.tuesday || false);
+  const [wednesdayCheck, setWednesdayCheck] = useState(days.wednesday || false);
+  const [thursdayCheck, setThursdayCheck] = useState(days.thursday || false);
+  const [fridayCheck, setFridayCheck] = useState(days.friday || false);
+  const [saturdayCheck, setSaturdayCheck] = useState(days.saturday || false);
+  const [sundayCheck, setSundayCheck] = useState(days.sunday || false);
+
+  useEffect(() => {
+    setMondayCheck(days.monday || false);
+    setTuesdayCheck(days.tuesday || false);
+    setWednesdayCheck(days.wednesday || false);
+    setThursdayCheck(days.thursday || false);
+    setFridayCheck(days.friday || false);
+    setSaturdayCheck(days.saturday || false);
+    setSundayCheck(days.sunday || false);
+  }, [days]);
+
+  return showDaysPicker ? (
+    <View style={styles.daysContainer}>
+      {firstDay === 'Sunday' && (
+        <View style={styles.listItemDay}>
+          <Text
+            style={styles.listItemWhat}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {t('sundays')}
+          </Text>
+          <Pressable
+            style={styles.listItemCheck}
+            onPress={() =>
+              toggleCheck(sundayCheck, setSundayCheck, 'sunday', days, setDays)
+            }>
+            {renderCheck(sundayCheck)}
+          </Pressable>
+        </View>
+      )}
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('mondays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(mondayCheck, setMondayCheck, 'monday', days, setDays)
+          }>
+          {renderCheck(mondayCheck)}
+        </Pressable>
+      </View>
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('tuesdays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(tuesdayCheck, setTuesdayCheck, 'tuesday', days, setDays)
+          }>
+          {renderCheck(tuesdayCheck)}
+        </Pressable>
+      </View>
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('wednesdays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(
+              wednesdayCheck,
+              setWednesdayCheck,
+              'wednesday',
+              days,
+              setDays,
+            )
+          }>
+          {renderCheck(wednesdayCheck)}
+        </Pressable>
+      </View>
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('thursdays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(
+              thursdayCheck,
+              setThursdayCheck,
+              'thursday',
+              days,
+              setDays,
+            )
+          }>
+          {renderCheck(thursdayCheck)}
+        </Pressable>
+      </View>
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('fridays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(fridayCheck, setFridayCheck, 'friday', days, setDays)
+          }>
+          {renderCheck(fridayCheck)}
+        </Pressable>
+      </View>
+      <View style={styles.listItemDay}>
+        <Text
+          style={styles.listItemWhat}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {t('saturdays')}
+        </Text>
+        <Pressable
+          style={styles.listItemCheck}
+          onPress={() =>
+            toggleCheck(
+              saturdayCheck,
+              setSaturdayCheck,
+              'saturday',
+              days,
+              setDays,
+            )
+          }>
+          {renderCheck(saturdayCheck)}
+        </Pressable>
+      </View>
+      {firstDay === 'Monday' && (
+        <View style={styles.listItemDay}>
+          <Text
+            style={styles.listItemWhat}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {t('sundays')}
+          </Text>
+          <Pressable
+            style={styles.listItemCheck}
+            onPress={() =>
+              toggleCheck(sundayCheck, setSundayCheck, 'sunday', days, setDays)
+            }>
+            {renderCheck(sundayCheck)}
+          </Pressable>
+        </View>
+      )}
+    </View>
+  ) : (
+    <View style={styles.inputContainer}>
+      <Pressable style={styles.input} onPress={() => setShowDaysPicker(true)}>
+        <Text style={styles.setter}>{placeholder}</Text>
+      </Pressable>
+    </View>
+  );
+};
