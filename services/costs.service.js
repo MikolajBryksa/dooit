@@ -59,3 +59,32 @@ export const deleteCost = id => {
   });
   return deletedCost;
 };
+
+export const getAllCosts = () => {
+  const sortFields = [
+    ['when', true],
+    ['id', true],
+  ];
+  return realm.objects('Cost').sorted(sortFields);
+};
+
+export const calcAverageCost = () => {
+  const costs = getAllCosts();
+
+  if (costs.length === 0) {
+    return 0;
+  }
+
+  const totalCost = costs.reduce((sum, cost) => sum + parseFloat(cost.what), 0);
+
+  const firstDate = new Date(costs[0].when);
+  const lastDate = new Date(costs[costs.length - 1].when);
+  const timeDifference = Math.abs(lastDate - firstDate);
+  const days = Math.max(
+    Math.ceil(timeDifference / (1000 * 60 * 60 * 24)) + 1,
+    1,
+  );
+  const averageCost = totalCost / days;
+
+  return parseFloat(averageCost.toFixed(2));
+};

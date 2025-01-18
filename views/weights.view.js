@@ -20,16 +20,17 @@ const WeightsView = () => {
   const [weightChange, setWeightChange] = useState(0);
   const [dayDifference, setDayDifference] = useState(0);
 
+  const fetchData = async () => {
+    const data = getEveryWeight(settings.rowsNumber);
+    const formattedData = data.map(item => ({
+      ...item,
+      what: item.what.toFixed(2),
+      when: convertToISO(new Date(item.when).toLocaleDateString()),
+    }));
+    dispatch(setWeights(formattedData));
+  };
+
   useEffect(() => {
-    async function fetchData() {
-      const data = getEveryWeight(settings.rowsNumber);
-      const formattedData = data.map(item => ({
-        ...item,
-        what: item.what.toFixed(2),
-        when: convertToISO(new Date(item.when).toLocaleDateString()),
-      }));
-      dispatch(setWeights(formattedData));
-    }
     fetchData();
   }, [showModal, mealsMode, settings.rowsNumber]);
 
@@ -64,8 +65,13 @@ const WeightsView = () => {
           {weights.length > 0 ? (
             <View style={styles.header}>
               <Text style={styles.center}>
-                {weightChange} {settings.weightUnit} / {dayDifference}{' '}
-                {t('days')}
+                {weights.length === 1
+                  ? `${t('initial-weight')}: ${weights[0].what} ${
+                      settings.weightUnit
+                    }`
+                  : `${weightChange} ${
+                      settings.weightUnit
+                    } / ${dayDifference} ${t('days')}`}
               </Text>
             </View>
           ) : (

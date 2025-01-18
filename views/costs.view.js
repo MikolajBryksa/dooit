@@ -3,7 +3,7 @@ import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import {setCosts} from '../redux/actions';
-import {getEveryCost} from '../services/costs.service';
+import {calcAverageCost, getEveryCost} from '../services/costs.service';
 import {styles} from '../styles';
 import {convertToISO} from '../utils';
 import CostsModal from '../modals/costs.modal';
@@ -19,38 +19,26 @@ const CostsView = () => {
   const [budgetMode, setBudgetMode] = useState(false);
   const [averageCost, setAverageCost] = useState(0);
 
+  const fetchData = async () => {
+    const data = getEveryCost(settings.rowsNumber);
+    const formattedData = data.map(item => ({
+      ...item,
+      what: item.what.toFixed(2),
+      when: convertToISO(new Date(item.when).toLocaleDateString()),
+    }));
+    dispatch(setCosts(formattedData));
+  };
+
   useEffect(() => {
-    async function fetchData() {
-      const data = getEveryCost(settings.rowsNumber);
-      const formattedData = data.map(item => ({
-        ...item,
-        what: item.what.toFixed(2),
-        when: convertToISO(new Date(item.when).toLocaleDateString()),
-      }));
-      dispatch(setCosts(formattedData));
-    }
     fetchData();
   }, [showModal, budgetMode, settings.rowsNumber]);
 
   useEffect(() => {
-    function calcAverageCost(costs) {
-      if (!Array.isArray(costs) || costs.length === 0) {
-        return 0;
-      }
-      const totalCost = costs.reduce(
-        (sum, cost) => sum + parseFloat(cost.what),
-        0,
-      );
-
-      const firstDate = new Date();
-      const lastDate = new Date(costs[costs.length - 1].when);
-      const timeDifference = Math.abs(lastDate - firstDate);
-      const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-      const averageCost = totalCost / days;
-      return averageCost.toFixed(2);
+    async function calculateDailyCost() {
+      const averageCost = calcAverageCost();
+      setAverageCost(averageCost);
     }
-    const averageCost = calcAverageCost(costs);
-    setAverageCost(averageCost);
+    calculateDailyCost();
   }, [costs]);
 
   function handleAdd() {

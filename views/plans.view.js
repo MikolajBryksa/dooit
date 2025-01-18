@@ -28,26 +28,26 @@ const PlansView = () => {
   const [habitsMode, setHabitsMode] = useState(false);
   const [data, setData] = useState(habits);
 
+  const fetchData = async () => {
+    const plans = getEveryPlan(settings.rowsNumber);
+    const formattedData = plans.map(item => ({
+      ...item,
+      what: item.what,
+      when: convertToISO(new Date(item.when).toLocaleDateString()),
+    }));
+    dispatch(setPlans(formattedData));
+
+    const habits = getEveryHabit();
+    const formattedHabits = habits.map(item => ({
+      ...item,
+      what: item.what,
+      when: item.when,
+    }));
+    dispatch(setHabits(formattedHabits));
+    setData(formattedHabits);
+  };
+
   useEffect(() => {
-    async function fetchData() {
-      const plans = getEveryPlan(settings.rowsNumber);
-      const formattedData = plans.map(item => ({
-        ...item,
-        what: item.what,
-        when: convertToISO(new Date(item.when).toLocaleDateString()),
-      }));
-      dispatch(setPlans(formattedData));
-
-      const habits = getEveryHabit();
-      const formattedHabits = habits.map(item => ({
-        ...item,
-        what: item.what,
-        when: item.when,
-      }));
-      dispatch(setHabits(formattedHabits));
-      setData(formattedHabits);
-    }
-
     fetchData();
   }, [showModal, habitsMode, settings.rowsNumber]);
 

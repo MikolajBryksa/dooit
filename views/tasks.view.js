@@ -23,20 +23,21 @@ const TasksView = () => {
   const [doneTasks, setDoneTasks] = useState(0);
   const [data, setData] = useState(tasks);
 
+  const fetchData = async () => {
+    const tasks = getEveryTask();
+    const formattedTasks = tasks.map(item => ({
+      ...item,
+      what: item.what,
+      when: item.when,
+    }));
+    const categorizedTasks = formattedTasks.filter(
+      item => item.category === category,
+    );
+    dispatch(setTasks(categorizedTasks));
+    setData(categorizedTasks);
+  };
+
   useEffect(() => {
-    async function fetchData() {
-      const tasks = getEveryTask();
-      const formattedTasks = tasks.map(item => ({
-        ...item,
-        what: item.what,
-        when: item.when,
-      }));
-      const categorizedTasks = formattedTasks.filter(
-        item => item.category === category,
-      );
-      dispatch(setTasks(categorizedTasks));
-      setData(categorizedTasks);
-    }
     fetchData();
   }, [showModal, shopMode]);
 

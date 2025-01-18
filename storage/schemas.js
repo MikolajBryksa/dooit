@@ -7,7 +7,7 @@ Weight.schema = {
   properties: {
     id: 'int',
     when: 'date',
-    what: 'float',
+    what: 'double',
   },
 };
 
@@ -18,7 +18,7 @@ Cost.schema = {
   properties: {
     id: 'int',
     when: 'date',
-    what: 'float',
+    what: 'double',
   },
 };
 
@@ -78,10 +78,10 @@ Settings.schema = {
     rowsNumber: 'int',
     weightsTab: 'bool',
     weightUnit: 'string',
-    weightGain: 'float',
+    weightGain: 'double',
     costsTab: 'bool',
     currency: 'string',
-    costGain: 'float',
+    costGain: 'double',
     plansTab: 'bool',
     clockFormat: 'string',
     firstDay: 'string',
@@ -110,10 +110,10 @@ realm.write(() => {
       rowsNumber: 45,
       weightsTab: true,
       weightUnit: 'kg',
-      weightGain: parseFloat((0.05).toFixed(2)),
+      weightGain: 0.05,
       costsTab: true,
       currency: 'zł',
-      costGain: parseFloat((0.5).toFixed(2)),
+      costGain: 0.5,
       plansTab: true,
       clockFormat: '24h',
       firstDay: 'Monday',
