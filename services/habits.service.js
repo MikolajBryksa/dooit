@@ -84,10 +84,19 @@ export const deleteHabit = id => {
   return deletedHabit;
 };
 
-export const getTodayHabits = () => {
-  const dayOfWeek = new Date()
+export const getTodayHabits = selectedDay => {
+  const dayOfWeek = new Date(selectedDay)
     .toLocaleString('en-US', {weekday: 'long'})
     .toLowerCase();
   const results = realm.objects('Habit').filtered(`${dayOfWeek} == true`);
   return results;
+};
+
+export const resetHabitsCheck = () => {
+  realm.write(() => {
+    const habits = realm.objects('Habit').filtered('check == true');
+    habits.forEach(habit => {
+      habit.check = false;
+    });
+  });
 };

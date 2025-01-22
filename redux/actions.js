@@ -1,3 +1,4 @@
+export const SET_SELECTED_DAY = 'SET_SELECTED_DAY';
 export const SET_CURRENT_ITEM = 'SET_CURRENT_ITEM';
 export const SET_HABITS = 'SET_HABITS';
 export const SET_WEIGHTS = 'SET_WEIGHTS';
@@ -6,6 +7,11 @@ export const SET_PLANS = 'SET_PLANS';
 export const SET_TASKS = 'SET_TASKS';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const SET_SETTINGS = 'SET_SETTINGS';
+
+export const setSelectedDay = item => ({
+  type: SET_SELECTED_DAY,
+  payload: item,
+});
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,

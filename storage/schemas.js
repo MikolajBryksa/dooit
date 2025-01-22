@@ -89,8 +89,18 @@ Settings.schema = {
   },
 };
 
+class Temp extends Realm.Object {}
+Temp.schema = {
+  name: 'Temp',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    selectedDay: 'date',
+  },
+};
+
 const realmConfig = {
-  schema: [Habit, Weight, Cost, Plan, Task, Settings],
+  schema: [Habit, Weight, Cost, Plan, Task, Settings, Temp],
   schemaVersion: 1,
   //   migration: (oldRealm, newRealm) => {
   //     if (oldRealm.schemaVersion < 2) {
@@ -101,6 +111,14 @@ const realmConfig = {
 const realm = new Realm(realmConfig);
 
 realm.write(() => {
+  const existingTemp = realm.objects('Temp')[0];
+  if (!existingTemp) {
+    realm.create('Temp', {
+      id: 1,
+      selectedDay: new Date(),
+    });
+  }
+
   const existingSettings = realm.objects('Settings')[0];
   if (!existingSettings) {
     realm.create('Settings', {

@@ -1,4 +1,5 @@
 import {
+  SET_SELECTED_DAY,
   SET_CURRENT_ITEM,
   SET_HABITS,
   SET_WEIGHTS,
@@ -10,6 +11,7 @@ import {
 } from './actions';
 
 const initialState = {
+  selectedDay: null,
   currentItem: null,
   habits: [],
   weights: [],
@@ -22,6 +24,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_SELECTED_DAY:
+      return {
+        ...state,
+        selectedDay: action.payload,
+      };
     case SET_CURRENT_ITEM:
       return {
         ...state,

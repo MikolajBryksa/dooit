@@ -24,6 +24,7 @@ import {getEveryCost} from './services/costs.service';
 import {getEveryPlan} from './services/plans.service';
 import {getEveryTask} from './services/tasks.service';
 import {getSettings} from './services/settings.service';
+import {getTempValue} from './services/temp.service';
 import {
   setHabits,
   setWeights,
@@ -31,9 +32,11 @@ import {
   setPlans,
   setTasks,
   setSettings,
+  setSelectedDay,
 } from './redux/actions';
 import {convertRealmObjects} from './utils';
 import OnboardingModal from './modals/onboarding.modal';
+import {formatDate} from './utils';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +59,9 @@ function AppContent() {
         LocaleConfig.defaultLocale =
           settings.language === 'English' ? 'en' : 'pl';
       }
+
+      const selectedDay = formatDate(getTempValue('selectedDay'));
+      dispatch(setSelectedDay(selectedDay));
 
       const weights = getEveryWeight();
       dispatch(setWeights(convertRealmObjects(weights)));

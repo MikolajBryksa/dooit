@@ -74,8 +74,8 @@ export const deletePlan = id => {
   return deletedPlan;
 };
 
-export const getTodayPlans = () => {
-  const today = new Date();
+export const getTodayPlans = selectedDay => {
+  const today = new Date(selectedDay);
   today.setHours(0, 0, 0, 0);
 
   const tomorrow = new Date(today);

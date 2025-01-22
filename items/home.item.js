@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Pressable, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCurrentItem} from '../redux/actions';
-import {getTask} from '../services/tasks.service';
 import {COLORS, styles} from '../styles';
 import {renderCheck} from '../utils';
 import {updatePlan} from '../services/plans.service';
@@ -14,6 +13,10 @@ const HomeItem = ({type, item, setShowModal, setMode}) => {
   const plans = useSelector(state => state.plans);
   const habits = useSelector(state => state.habits);
   const [check, setCheck] = useState(item.check);
+
+  useEffect(() => {
+    setCheck(item.check);
+  }, [item.check]);
 
   const toggleCheck = async () => {
     const newCheck = !check;

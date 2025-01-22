@@ -23,7 +23,8 @@ import {
   faMugHot,
   faWallet,
   faUtensils,
-  faCrosshairs,
+  faCalendarCheck,
+  faInfinity,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
@@ -170,7 +171,7 @@ export function renderViewIcon(name, focused) {
       icon = faCalendar;
       break;
     case 'habits':
-      icon = faCrosshairs;
+      icon = faInfinity;
       break;
     case 'tasks':
       icon = faList;
@@ -207,12 +208,6 @@ export function renderControlIcon(type, shape) {
     case 'add':
       icon = faPlus;
       break;
-    case 'play':
-      icon = faPlay;
-      break;
-    case 'stop':
-      icon = faStop;
-      break;
     case 'back':
       icon = faChevronLeft;
       break;
@@ -223,13 +218,16 @@ export function renderControlIcon(type, shape) {
       icon = faWallet;
       break;
     case 'habits':
-      icon = faCrosshairs;
+      icon = faInfinity;
       break;
     case 'shop':
       icon = faBasketShopping;
       break;
     case 'income':
       icon = faMugHot;
+      break;
+    case 'finish':
+      icon = faCalendarCheck;
       break;
   }
 
