@@ -17,6 +17,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {isDaily} from '../utils';
 import {convertRealmObjects} from '../utils';
+import {useFocusEffect} from '@react-navigation/native';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
@@ -41,6 +42,12 @@ const PlansView = () => {
   useEffect(() => {
     fetchData();
   }, [showModal, habitsMode]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, []),
+  );
 
   function handleAdd() {
     setShowModal(true);
@@ -123,6 +130,7 @@ const PlansView = () => {
                 what={item.what}
                 time={item.time}
                 setShowModal={setShowModal}
+                check={item.check}
               />
             ))}
           </ScrollView>

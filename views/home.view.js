@@ -66,7 +66,9 @@ const HomeView = () => {
             setMode={setMode}
           />
         ))}
-        {todayPlans.length > 0 && <View style={styles.gap} />}
+        {todayPlans.length > 0 && todayHabits.length > 0 && (
+          <View style={styles.gap} />
+        )}
         {todayHabits.map((item, index) => (
           <HomeItem
             key={index}

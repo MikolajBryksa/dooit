@@ -13,6 +13,7 @@ import {
   formatNumericInput,
   limitTextInput,
   formatDate,
+  renderControlIcon,
 } from '../utils';
 import {useTranslation} from 'react-i18next';
 
@@ -157,6 +158,11 @@ export const TimeInput = ({
             setTime(`${hours}:${minutes}`);
           }}
         />
+        {/* <Pressable
+          style={styles.cancel}
+          onPress={() => setShowTimePicker(false)}>
+          {renderControlIcon('cancel', 'shadow')}
+        </Pressable> */}
       </View>
     ) : (
       <Pressable

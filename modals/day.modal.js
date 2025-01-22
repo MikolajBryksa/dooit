@@ -23,10 +23,8 @@ const DayModal = ({setShowModal}) => {
     nextDay.setDate(nextDay.getDate() + 1);
     const formattedDay = formatDate(nextDay);
     resetHabitsCheck();
-
     updateTempValue('selectedDay', formattedDay);
     dispatch(setSelectedDay(formattedDay));
-
     handleClose();
   }
 
@@ -35,7 +33,6 @@ const DayModal = ({setShowModal}) => {
     previousDay.setDate(previousDay.getDate() - 1);
     const formattedDay = formatDate(previousDay);
     resetHabitsCheck();
-
     updateTempValue('selectedDay', formattedDay);
     dispatch(setSelectedDay(formattedDay));
     handleClose();
