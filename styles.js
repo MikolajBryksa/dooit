@@ -97,42 +97,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  timer: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: DIMENSIONS.margin,
-  },
-  clockContainer: {
-    flex: 1,
-    height: DIMENSIONS.height,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
-    borderRadius: DIMENSIONS.margin,
-  },
-  clock: {
-    height: '100%',
-    textAlign: 'center',
-    backgroundColor: COLORS.background,
-    text: {
-      color: COLORS.text,
-    },
-    pickerItemContainer: {
-      width: '100%',
-    },
-    pickerLabelContainer: {
-      right: -20,
-      top: 0,
-      bottom: 6,
-      width: 40,
-      alignItems: 'center',
-    },
-    pickerAmPmContainer: {
-      right: 30,
-      top: 10,
-    },
-  },
   daysContainer: {
     borderColor: COLORS.primary,
     borderWidth: 1,

@@ -86,17 +86,43 @@ export function limitTextInput(text) {
   return sanitizedText;
 }
 
-export function convertTimeToObject(time) {
-  if (!time) return {hours: 0, minutes: 0};
-  const [hours, minutes] = time.split(':').map(Number);
-  return {hours, minutes};
+export function convertTextToTime(time, clockFormat) {
+  let cleaned = time.replace(/[^\d:]/g, '');
+
+  if (cleaned.length === 1 && parseInt(cleaned, 10) > 2) {
+    cleaned = '0' + cleaned + ':';
+  }
+
+  if (cleaned.length > 5) {
+    cleaned = cleaned.slice(0, 5);
+  }
+
+  if (cleaned.length > 2 && !cleaned.includes(':')) {
+    cleaned = `${cleaned.slice(0, 2)}:${cleaned.slice(2)}`;
+  }
+
+  if (
+    cleaned.length > 3 &&
+    cleaned[3] !== ':' &&
+    (cleaned[3] < '0' || cleaned[3] > '5')
+  ) {
+    cleaned = cleaned.slice(0, 3);
+  }
+
+  if (clockFormat === '12h' && cleaned.length === 1 && cleaned[0] === '2') {
+    cleaned = '0' + cleaned + ':';
+  }
+
+  return cleaned;
 }
 
-export function getCurrentTime() {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
+export function convertPMto24HourFormat(time, timeMode) {
+  let formattedTime = time;
+  if (timeMode === 'PM') {
+    const [hours, minutes] = time.split(':').map(Number);
+    formattedTime = `${hours + 12}:${minutes}`;
+  }
+  return formattedTime;
 }
 
 export function convertTo12HourFormat(time) {

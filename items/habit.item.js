@@ -5,6 +5,7 @@ import {setCurrentItem} from '../redux/actions';
 import {getHabit} from '../services/habits.service';
 import {styles} from '../styles';
 import {useTranslation} from 'react-i18next';
+import {convertTo12HourFormat} from '../utils';
 
 const HabitItem = ({
   id,
@@ -42,6 +43,10 @@ const HabitItem = ({
     {opacity: pressed ? 0.8 : 1},
     isActive && styles.listItemActive,
   ];
+
+  if (time && settings.clockFormat === '12h') {
+    time = convertTo12HourFormat(time);
+  }
 
   return (
     <>

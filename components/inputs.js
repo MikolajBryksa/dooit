@@ -1,13 +1,11 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {View, TextInput, Pressable, Text} from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {TimerPicker} from 'react-native-timer-picker';
 import {renderCheck} from '../utils';
 import {styles, COLORS} from '../styles';
 import {
   renderArrow,
-  convertTimeToObject,
-  getCurrentTime,
+  convertTextToTime,
   formatDateWithDay,
   getMarkedDates,
   formatNumericInput,
@@ -128,51 +126,50 @@ export const WhenInput = ({
     </View>
   );
 
-export const TimeInput = ({
-  showTimePicker,
-  setShowTimePicker,
-  time,
-  setTime,
-  clockFormat,
-  placeholder,
-}) => (
-  <View style={styles.timer}>
-    {showTimePicker ? (
-      <View style={styles.clockContainer}>
-        <TimerPicker
-          use12HourPicker={clockFormat === '12h'}
-          padWithNItems={0}
-          hideSeconds={true}
-          hourLabel=":"
-          minuteLabel={false}
-          styles={styles.clock}
-          padHoursWithZero={true}
-          initialValue={
-            time
-              ? convertTimeToObject(time)
-              : convertTimeToObject(getCurrentTime())
-          }
-          onDurationChange={duration => {
-            const hours = duration.hours.toString().padStart(2, '0');
-            const minutes = duration.minutes.toString().padStart(2, '0');
-            setTime(`${hours}:${minutes}`);
-          }}
-        />
-        {/* <Pressable
-          style={styles.cancel}
-          onPress={() => setShowTimePicker(false)}>
-          {renderControlIcon('cancel', 'shadow')}
-        </Pressable> */}
-      </View>
-    ) : (
-      <Pressable
-        style={styles.clockContainer}
-        onPress={() => setShowTimePicker(true)}>
-        <Text style={styles.setter}>{placeholder}</Text>
+export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
+  const [timeMode, setTimeMode] = useState('AM');
+
+  return (
+    <View style={styles.inputContainer}>
+      <Pressable style={styles.incrementator} onPress={() => setTime('')}>
+        {time !== '' && renderControlIcon('cancel', 'shadow')}
       </Pressable>
-    )}
-  </View>
-);
+
+      <TextInput
+        style={styles.input}
+        value={time}
+        onChangeText={text => {
+          setTime(convertTextToTime(text, clockFormat));
+        }}
+        placeholder={placeholder}
+        placeholderTextColor={COLORS.primary}
+        maxLength={5}
+      />
+
+      {clockFormat === '12h' && time !== '' ? (
+        timeMode === 'AM' ? (
+          <Pressable
+            style={styles.incrementator}
+            onPress={() => setTimeMode('PM')}>
+            <Text style={styles.listItemChange}>AM</Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            style={styles.incrementator}
+            onPress={() => setTimeMode('AM')}>
+            <Text style={styles.listItemChange}>PM</Text>
+          </Pressable>
+        )
+      ) : (
+        <Pressable
+          style={[styles.incrementator, {opacity: 0}]}
+          onPress={() => setTime('')}>
+          {time !== '' && renderControlIcon('cancel', 'shadow')}
+        </Pressable>
+      )}
+    </View>
+  );
+};
 
 const toggleCheck = (value, setter, day, days, setDays) => {
   const newCheck = !value;

@@ -123,8 +123,6 @@ const HabitsModal = ({setShowModal}) => {
         <TimeInput
           time={time}
           setTime={setTime}
-          showTimePicker={showTimePicker}
-          setShowTimePicker={setShowTimePicker}
           clockFormat={settings.clockFormat}
           placeholder={t('set-time')}
         />

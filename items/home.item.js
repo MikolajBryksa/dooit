@@ -7,11 +7,13 @@ import {renderCheck} from '../utils';
 import {updatePlan} from '../services/plans.service';
 import {updateHabit} from '../services/habits.service';
 import {setPlans, setHabits} from '../redux/actions';
+import {convertTo12HourFormat} from '../utils';
 
 const HomeItem = ({type, item, setShowModal, setMode}) => {
   const dispatch = useDispatch();
   const plans = useSelector(state => state.plans);
   const habits = useSelector(state => state.habits);
+  const settings = useSelector(state => state.settings);
   const [check, setCheck] = useState(item.check);
 
   useEffect(() => {
@@ -76,7 +78,11 @@ const HomeItem = ({type, item, setShowModal, setMode}) => {
           numberOfLines={1}
           ellipsizeMode="tail">
           {item.time ? (
-            <Text style={{color: COLORS.primary}}>{`${item.time} | `}</Text>
+            <Text style={{color: COLORS.primary}}>
+              {settings.clockFormat === '12h'
+                ? `${convertTo12HourFormat(item.time)} | `
+                : `${item.time} | `}
+            </Text>
           ) : null}
           {item.what}
         </Text>
