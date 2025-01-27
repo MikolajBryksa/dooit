@@ -67,7 +67,7 @@ const HomeItem = ({type, item, setShowModal, setMode}) => {
   const dynamicStyle = ({pressed}) => [
     styles.listItem,
     {opacity: pressed ? 0.8 : 1},
-    check && {opacity: pressed ? 0.3 : 0.5},
+    check && {opacity: pressed ? 0.2 : 0.3},
   ];
 
   return (

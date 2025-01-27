@@ -23,7 +23,7 @@ const PlanItem = ({id, when, what, time, setShowModal}) => {
   const dynamicStyle = ({pressed}) => [
     styles.tableItem,
     {opacity: pressed ? 0.8 : 1},
-    isPastDate && {opacity: pressed ? 0.3 : 0.5},
+    isPastDate && {opacity: pressed ? 0.2 : 0.3},
   ];
 
   if (time && settings.clockFormat === '12h') {

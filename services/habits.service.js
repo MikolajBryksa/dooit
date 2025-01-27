@@ -88,7 +88,10 @@ export const getTodayHabits = selectedDay => {
   const dayOfWeek = new Date(selectedDay)
     .toLocaleString('en-US', {weekday: 'long'})
     .toLowerCase();
-  const results = realm.objects('Habit').filtered(`${dayOfWeek} == true`);
+  const results = realm
+    .objects('Habit')
+    .filtered(`${dayOfWeek} == true`)
+    .sorted('when');
   return results;
 };
 

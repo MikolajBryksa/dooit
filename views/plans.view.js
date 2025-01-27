@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
@@ -17,7 +18,6 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import {isDaily} from '../utils';
 import {convertRealmObjects} from '../utils';
-import {useFocusEffect} from '@react-navigation/native';
 
 const PlansView = () => {
   const plans = useSelector(state => state.plans);

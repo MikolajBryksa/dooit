@@ -40,7 +40,7 @@ const TaskItem = ({
     styles.listItem,
     {opacity: pressed ? 0.8 : 1},
     isActive && styles.listItemActive,
-    check && {opacity: pressed ? 0.3 : 0.5},
+    check && {opacity: pressed ? 0.2 : 0.3},
   ];
 
   return (

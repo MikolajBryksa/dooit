@@ -83,6 +83,7 @@ export const getTodayPlans = selectedDay => {
 
   const results = realm
     .objects('Plan')
-    .filtered('when >= $0 && when < $1', today, tomorrow);
+    .filtered('when >= $0 && when < $1', today, tomorrow)
+    .sorted('time');
   return results;
 };
