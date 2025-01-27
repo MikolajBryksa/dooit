@@ -2,6 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 import {setTasks, setCategory} from '../redux/actions';
 import {getEveryTask} from '../services/tasks.service';
 import {styles} from '../styles';
@@ -95,49 +96,54 @@ const TasksView = () => {
   return (
     <View style={styles.container}>
       {showModal && <TasksModal setShowModal={setShowModal} />}
+
+      <View style={styles.header}>
+        {!shopMode && (
+          <>
+            <HeaderButton name={t('header.tasks')} active={true} />
+            <HeaderButton
+              name={t('header.shop')}
+              press={handleMode}
+              active={false}
+            />
+          </>
+        )}
+        {shopMode && (
+          <>
+            <HeaderButton
+              name={t('header.tasks')}
+              press={handleMode}
+              active={false}
+            />
+            <HeaderButton name={t('header.shop')} active={true} />
+          </>
+        )}
+      </View>
+
       {tasks && (
         <>
-          {tasks.length > 0 ? (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {doneTasks} / {tasks.length}{' '}
-                {shopMode ? t('bought') : t('done')}
-              </Text>
-            </View>
-          ) : (
+          {tasks.length === 0 ? (
             <View style={styles.empty}>
               <Text style={styles.center}>
                 {shopMode ? t('no-items-bought') : t('no-tasks-done')}
               </Text>
               <ControlButton type="add" press={handleAdd} shape="circle" />
-              {shopMode ? (
-                <ControlButton type="back" press={handleMode} shape="shadow" />
-              ) : (
-                <ControlButton type="shop" press={handleMode} shape="shadow" />
-              )}
             </View>
-          )}
+          ) : (
+            <>
+              <GestureHandlerRootView style={styles.scrollView}>
+                <DraggableFlatList
+                  data={tasks}
+                  renderItem={renderItem}
+                  keyExtractor={item => `draggable-item-${item.id}`}
+                  onDragEnd={handleDragEnd}
+                />
+              </GestureHandlerRootView>
 
-          <GestureHandlerRootView style={styles.scrollView}>
-            <DraggableFlatList
-              data={tasks}
-              renderItem={renderItem}
-              keyExtractor={item => `draggable-item-${item.id}`}
-              onDragEnd={handleDragEnd}
-            />
-          </GestureHandlerRootView>
-
-          {tasks && tasks.length > 0 && !shopMode && (
-            <View style={styles.controllers}>
-              <ControlButton type="shop" press={handleMode} />
-              <ControlButton type="add" press={handleAdd} />
-            </View>
-          )}
-          {tasks && tasks.length > 0 && shopMode && (
-            <View style={styles.controllers}>
-              <ControlButton type="back" press={handleMode} />
-              <ControlButton type="add" press={handleAdd} />
-            </View>
+              <View style={styles.controllers}>
+                <ControlButton type="add" press={handleAdd} />
+              </View>
+            </>
           )}
         </>
       )}

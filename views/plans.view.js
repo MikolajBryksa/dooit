@@ -3,6 +3,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 import PlanItem from '../items/plan.item';
 import HabitItem from '../items/habit.item';
 import realm from '../storage/schemas';
@@ -10,7 +11,6 @@ import {setPlans, setHabits} from '../redux/actions';
 import {getEveryPlan} from '../services/plans.service';
 import {getEveryHabit} from '../services/habits.service';
 import {styles} from '../styles';
-import {formatDateWithDay} from '../utils';
 import PlansModal from '../modals/plans.modal';
 import HabitsModal from '../modals/habits.modal';
 import {useTranslation} from 'react-i18next';
@@ -22,7 +22,6 @@ import {convertRealmObjects} from '../utils';
 const PlansView = () => {
   const plans = useSelector(state => state.plans);
   const habits = useSelector(state => state.habits);
-  const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
@@ -105,76 +104,84 @@ const PlansView = () => {
       {!habitsMode && showModal && <PlansModal setShowModal={setShowModal} />}
       {habitsMode && showModal && <HabitsModal setShowModal={setShowModal} />}
 
+      <View style={styles.header}>
+        {!habitsMode && (
+          <>
+            <HeaderButton name={t('header.plans')} active={true} />
+            <HeaderButton
+              name={t('header.habits')}
+              press={handleMode}
+              active={false}
+            />
+          </>
+        )}
+        {habitsMode && (
+          <>
+            <HeaderButton
+              name={t('header.plans')}
+              press={handleMode}
+              active={false}
+            />
+            <HeaderButton name={t('header.habits')} active={true} />
+          </>
+        )}
+      </View>
+
       {plans && !habitsMode && (
         <>
-          {plans.length > 0 ? (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {formatDateWithDay(new Date(), settings.language)}
-              </Text>
-            </View>
-          ) : (
+          {plans.length === 0 ? (
             <View style={styles.empty}>
               <Text style={styles.center}>{t('no-plans')}</Text>
               <ControlButton type="add" press={handleAdd} shape="circle" />
-              <ControlButton type="habits" press={handleMode} shape="shadow" />
             </View>
-          )}
+          ) : (
+            <>
+              <ScrollView style={styles.scrollView}>
+                {plans.map((item, index) => (
+                  <PlanItem
+                    key={index}
+                    id={item.id}
+                    when={item.when}
+                    what={item.what}
+                    time={item.time}
+                    setShowModal={setShowModal}
+                    check={item.check}
+                  />
+                ))}
+              </ScrollView>
 
-          <ScrollView style={styles.scrollView}>
-            {plans.map((item, index) => (
-              <PlanItem
-                key={index}
-                id={item.id}
-                when={item.when}
-                what={item.what}
-                time={item.time}
-                setShowModal={setShowModal}
-                check={item.check}
-              />
-            ))}
-          </ScrollView>
+              <View style={styles.controllers}>
+                <ControlButton type="add" press={handleAdd} />
+              </View>
+            </>
+          )}
         </>
       )}
 
       {habits && habitsMode && (
         <>
-          {habits.length > 0 ? (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {formatDateWithDay(new Date(), settings.language)}
-              </Text>
-            </View>
-          ) : (
+          {habits.length === 0 ? (
             <View style={styles.empty}>
               <Text style={styles.center}>{t('no-habits')}</Text>
               <ControlButton type="add" press={handleAdd} shape="circle" />
-              <ControlButton type="back" press={handleMode} shape="shadow" />
             </View>
+          ) : (
+            <>
+              <GestureHandlerRootView style={styles.scrollView}>
+                <DraggableFlatList
+                  data={data}
+                  renderItem={renderItem}
+                  keyExtractor={item => `draggable-item-${item.id}`}
+                  onDragEnd={handleDragEnd}
+                />
+              </GestureHandlerRootView>
+
+              <View style={styles.controllers}>
+                <ControlButton type="add" press={handleAdd} />
+              </View>
+            </>
           )}
-
-          <GestureHandlerRootView style={styles.scrollView}>
-            <DraggableFlatList
-              data={data}
-              renderItem={renderItem}
-              keyExtractor={item => `draggable-item-${item.id}`}
-              onDragEnd={handleDragEnd}
-            />
-          </GestureHandlerRootView>
         </>
-      )}
-
-      {plans && plans.length > 0 && !habitsMode && (
-        <View style={styles.controllers}>
-          <ControlButton type="habits" press={handleMode} />
-          <ControlButton type="add" press={handleAdd} />
-        </View>
-      )}
-      {habits && habits.length > 0 && habitsMode && (
-        <View style={styles.controllers}>
-          <ControlButton type="back" press={handleMode} />
-          <ControlButton type="add" press={handleAdd} />
-        </View>
       )}
     </View>
   );

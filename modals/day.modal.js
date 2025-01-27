@@ -2,6 +2,7 @@ import React from 'react';
 import {Modal, View, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 import {styles} from '../styles';
 import {useTranslation} from 'react-i18next';
 import {updateTempValue} from '../services/temp.service';
@@ -42,7 +43,7 @@ const DayModal = ({setShowModal}) => {
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.center}>{t('finish-day')}</Text>
+          <HeaderButton name={t('finish-day')} active={true} />
         </View>
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />

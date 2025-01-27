@@ -55,5 +55,18 @@
   "thu": "Thu",
   "fri": "Fri",
   "sat": "Sat",
-  "sun": "Sun"
+  "sun": "Sun",
+
+  "header": {
+    "weights": "Weights",
+    "meals": "Meals",
+    "costs": "Costs",
+    "budget": "Budget",
+    "plans": "Plans",
+    "habits": "Habits",
+    "tasks": "Tasks",
+    "shop": "Shop",
+    "settings": "Settings",
+    "profile": "Profile"
+  }
 }

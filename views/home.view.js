@@ -10,6 +10,7 @@ import DayModal from '../modals/day.modal';
 import {getTodayPlans} from '../services/plans.service';
 import {getTodayHabits} from '../services/habits.service';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 
 const HomeView = () => {
   const selectedDay = useSelector(state => state.selectedDay);
@@ -51,9 +52,10 @@ const HomeView = () => {
       )}
 
       <View style={styles.header}>
-        <Text style={styles.center}>
-          {formatDateWithDay(selectedDay, settings.language)}
-        </Text>
+        <HeaderButton
+          name={`${formatDateWithDay(selectedDay, settings.language)}`}
+          active={true}
+        />
       </View>
 
       <ScrollView style={styles.scrollView}>

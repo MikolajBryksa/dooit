@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 import {setCosts} from '../redux/actions';
 import {calcAverageCost, getEveryCost} from '../services/costs.service';
 import {styles} from '../styles';
@@ -51,35 +52,57 @@ const CostsView = () => {
   return (
     <View style={styles.container}>
       {!budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
-      {/* {budgetMode && showModal && <CostsModal setShowModal={setShowModal} />} */}
+      {budgetMode && showModal && <CostsModal setShowModal={setShowModal} />}
+
+      <View style={styles.header}>
+        {!budgetMode && (
+          <>
+            <HeaderButton name={t('header.costs')} active={true} />
+            <HeaderButton
+              name={t('header.budget')}
+              press={handleMode}
+              active={false}
+            />
+          </>
+        )}
+        {budgetMode && (
+          <>
+            <HeaderButton
+              name={t('header.costs')}
+              press={handleMode}
+              active={false}
+            />
+            <HeaderButton name={t('header.budget')} active={true} />
+          </>
+        )}
+      </View>
 
       {!budgetMode && costs && (
         <>
-          {costs.length > 0 ? (
-            <View style={styles.header}>
-              <Text style={styles.center}>
-                {averageCost} {settings.currency} / {t('day')}
-              </Text>
-            </View>
-          ) : (
+          {costs.length === 0 ? (
             <View style={styles.empty}>
               <Text style={styles.center}>{t('no-costs')}</Text>
               <ControlButton type="add" press={handleAdd} shape="circle" />
-              {/* <ControlButton type="budget" press={handleMode} shape="shadow" /> */}
             </View>
-          )}
+          ) : (
+            <>
+              <ScrollView style={styles.scrollView}>
+                {costs.map((item, index) => (
+                  <CostItem
+                    key={index}
+                    id={item.id}
+                    when={item.when}
+                    what={item.what}
+                    setShowModal={setShowModal}
+                  />
+                ))}
+              </ScrollView>
 
-          <ScrollView style={styles.scrollView}>
-            {costs.map((item, index) => (
-              <CostItem
-                key={index}
-                id={item.id}
-                when={item.when}
-                what={item.what}
-                setShowModal={setShowModal}
-              />
-            ))}
-          </ScrollView>
+              <View style={styles.controllers}>
+                <ControlButton type="add" press={handleAdd} />
+              </View>
+            </>
+          )}
         </>
       )}
 
@@ -91,14 +114,6 @@ const CostsView = () => {
 
           <ScrollView style={styles.scrollView}></ScrollView>
         </>
-      )}
-
-      {costs && costs.length > 0 && (
-        <View style={styles.controllers}>
-          {/* {!budgetMode && <ControlButton type="budget" press={handleMode} />}
-          {budgetMode && <ControlButton type="back" press={handleMode} />} */}
-          <ControlButton type="add" press={handleAdd} />
-        </View>
       )}
     </View>
   );

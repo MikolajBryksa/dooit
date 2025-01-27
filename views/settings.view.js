@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {COLORS, styles} from '../styles';
 import packageJson from '../package.json';
 import ControlButton from '../components/control.button';
+import HeaderButton from '../components/header.button';
 import {setSettings} from '../redux/actions';
 import {updateSettingValue} from '../services/settings.service';
 import i18next from '../i18next';
@@ -145,11 +146,13 @@ const SettingsView = () => {
   return (
     <View style={styles.container}>
       {showModal && <IncomeModal setShowModal={setShowModal} />}
+
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
-          <Text style={styles.center}>
-            {t('version')} {packageJson.version}
-          </Text>
+          <HeaderButton
+            name={`${t('version')} ${packageJson.version}`}
+            active={true}
+          />
         </View>
         <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
           <Text style={styles.listItemWhat}>{t('language')} </Text>

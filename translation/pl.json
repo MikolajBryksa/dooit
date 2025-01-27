@@ -55,5 +55,18 @@
   "thu": "Czw",
   "fri": "Pią",
   "sat": "Sob",
-  "sun": "Nie"
+  "sun": "Nie",
+
+  "header": {
+    "weights": "Wagi",
+    "meals": "Posiłki",
+    "costs": "Koszty",
+    "budget": "Budżet",
+    "plans": "Plany",
+    "habits": "Nawyki",
+    "tasks": "Zadania",
+    "shop": "Sklep",
+    "settings": "Ustawienia",
+    "profile": "Profil"
+  }
 }
