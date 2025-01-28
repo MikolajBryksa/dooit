@@ -134,14 +134,18 @@ const HabitsModal = ({setShowModal}) => {
               <ControlButton
                 type="accept"
                 press={handleUpdate}
-                disabled={!what || isNever(days)}
+                disabled={
+                  !what || isNever(days) || (time !== '' && time.length !== 5)
+                }
               />
             </>
           ) : (
             <ControlButton
               type="accept"
               press={handleAdd}
-              disabled={!what || isNever(days)}
+              disabled={
+                !what || isNever(days) || (time !== '' && time.length !== 5)
+              }
             />
           )}
         </View>

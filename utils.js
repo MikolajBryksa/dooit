@@ -7,7 +7,6 @@ import {
   faChevronUp,
   faChevronDown,
   faClock,
-  faPlay,
   faCoins,
   faCalendar,
   faList,
@@ -17,7 +16,6 @@ import {
   faPlus,
   faCheck,
   faMinus,
-  faStop,
   faTimes,
   faBasketShopping,
   faMugHot,
@@ -89,8 +87,14 @@ export function limitTextInput(text) {
 export function convertTextToTime(time, clockFormat) {
   let cleaned = time.replace(/[^\d:]/g, '');
 
-  if (cleaned.length === 1 && parseInt(cleaned, 10) > 2) {
-    cleaned = '0' + cleaned + ':';
+  if (clockFormat === '12h') {
+    if (cleaned.length === 1 && parseInt(cleaned, 10) > 1) {
+      cleaned = '0' + cleaned + ':';
+    }
+  } else {
+    if (cleaned.length === 1 && parseInt(cleaned, 10) > 2) {
+      cleaned = '0' + cleaned + ':';
+    }
   }
 
   if (cleaned.length > 5) {
@@ -109,20 +113,71 @@ export function convertTextToTime(time, clockFormat) {
     cleaned = cleaned.slice(0, 3);
   }
 
-  if (clockFormat === '12h' && cleaned.length === 1 && cleaned[0] === '2') {
-    cleaned = '0' + cleaned + ':';
+  if (cleaned.length > 1 && cleaned[0] === '2' && cleaned[1] > '3') {
+    cleaned = cleaned[0] + '3' + cleaned.slice(2);
   }
 
+  if (clockFormat === '12h') {
+    const [hours, minutes] = cleaned.split(':');
+    if (hours && parseInt(hours, 10) > 12) {
+      cleaned = '12' + (minutes ? `:${minutes}` : '');
+    }
+  }
   return cleaned;
 }
 
-export function convertPMto24HourFormat(time, timeMode) {
+export function format24hTime(time) {
   let formattedTime = time;
-  if (timeMode === 'PM') {
-    const [hours, minutes] = time.split(':').map(Number);
-    formattedTime = `${hours + 12}:${minutes}`;
+  if (time.length === 1 || time.length === 2) {
+    formattedTime = time + ':00';
+  }
+  if (time.length === 3) {
+    formattedTime = time + '00';
+  }
+  if (time.slice(-2) === ':0') {
+    formattedTime = time + '0';
   }
   return formattedTime;
+}
+
+export function format12hTime(time, timeMode, clockFormat) {
+  let formattedTime = time;
+
+  if (clockFormat === '12h') {
+    let [hours, minutes] = formattedTime.split(':');
+    hours = parseInt(hours, 10);
+
+    if (timeMode === 'PM' && hours < 12) {
+      formattedTime = `${hours + 12}:${minutes}`;
+    }
+
+    if (timeMode === 'AM' && hours === 12) {
+      formattedTime = `00:${minutes}`;
+    }
+
+    if (timeMode === 'AM' && hours > 12) {
+      formattedTime = `${hours - 12}:${minutes}`;
+    }
+  }
+
+  let [hours, minutes] = formattedTime.split(':');
+  if (formattedTime.length === 4) {
+    formattedTime = `0${hours}:${minutes}`;
+  }
+
+  return formattedTime;
+}
+
+export function display12HourFormat(time, clockFormat) {
+  if (time) {
+    if (clockFormat === '12h') {
+      const [hours, minutes] = time.split(':').map(Number);
+      const hours12 = hours % 12 || 12;
+      return `${hours12}:${minutes < 10 ? '0' : ''}${minutes}`;
+    } else {
+      return time;
+    }
+  }
 }
 
 export function convertTo12HourFormat(time) {

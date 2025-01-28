@@ -5,13 +5,16 @@ import {renderCheck} from '../utils';
 import {styles, COLORS} from '../styles';
 import {
   renderArrow,
-  convertTextToTime,
   formatDateWithDay,
   getMarkedDates,
   formatNumericInput,
   limitTextInput,
   formatDate,
   renderControlIcon,
+  convertTextToTime,
+  format12hTime,
+  format24hTime,
+  display12HourFormat,
 } from '../utils';
 import {useTranslation} from 'react-i18next';
 
@@ -128,6 +131,26 @@ export const WhenInput = ({
 
 export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
   const [timeMode, setTimeMode] = useState('AM');
+  const [displayTime, setDisplayTime] = useState('');
+
+  useEffect(() => {
+    setTime(format24hTime(displayTime));
+  }, [displayTime]);
+
+  useEffect(() => {
+    let [hours, minutes] = time.split(':');
+    hours = parseInt(hours, 10);
+    if (hours >= 12) {
+      setTimeMode('PM');
+    }
+    if (time === '12:00' && timeMode === 'AM' && clockFormat === '12h') {
+      setTime('00:00');
+    }
+  }, [time]);
+
+  useEffect(() => {
+    setTime(format12hTime(time, timeMode, clockFormat));
+  }, [timeMode]);
 
   return (
     <View style={styles.inputContainer}>
@@ -137,9 +160,12 @@ export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
 
       <TextInput
         style={styles.input}
-        value={time}
+        value={
+          displayTime ? displayTime : display12HourFormat(time, clockFormat)
+        }
         onChangeText={text => {
-          setTime(convertTextToTime(text, clockFormat));
+          const convertedTime = convertTextToTime(text, clockFormat);
+          setDisplayTime(convertedTime);
         }}
         placeholder={placeholder}
         placeholderTextColor={COLORS.primary}

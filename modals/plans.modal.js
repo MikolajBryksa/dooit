@@ -114,11 +114,17 @@ const PlansModal = ({setShowModal}) => {
               <ControlButton
                 type="accept"
                 press={handleUpdate}
-                disabled={!what}
+                // disabled={!what || (time !== '' && time.length !== 5)}
+                disabled={time !== '' && time.length !== 5}
               />
             </>
           ) : (
-            <ControlButton type="accept" press={handleAdd} disabled={!what} />
+            <ControlButton
+              type="accept"
+              press={handleAdd}
+              //   disabled={!what || !(time === '' || time.length === 5)}
+              disabled={time !== '' && time.length !== 5}
+            />
           )}
         </View>
       </View>
