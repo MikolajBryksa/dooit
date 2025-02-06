@@ -84,85 +84,59 @@ export function limitTextInput(text) {
   return sanitizedText;
 }
 
-export function convertTextToTime(time, clockFormat) {
-  let cleaned = time.replace(/[^\d:]/g, '');
+export function convertTextToDisplayTime(text) {
+  let sanitizedText = text.replace(/[^0-9]/g, '.');
+  const parts = sanitizedText.split('.');
 
-  if (clockFormat === '12h') {
-    if (cleaned.length === 1 && parseInt(cleaned, 10) > 1) {
-      cleaned = '0' + cleaned + ':';
-    }
-  } else {
-    if (cleaned.length === 1 && parseInt(cleaned, 10) > 2) {
-      cleaned = '0' + cleaned + ':';
-    }
+  if (parts.length === 2) {
+    sanitizedText = parts[0] + '.' + parts[1].slice(0, 2);
   }
 
-  if (cleaned.length > 5) {
-    cleaned = cleaned.slice(0, 5);
+  if (parts.length > 2) {
+    sanitizedText = parts[0] + '.' + parts.slice(1).join('');
   }
 
-  if (cleaned.length > 2 && !cleaned.includes(':')) {
-    cleaned = `${cleaned.slice(0, 2)}:${cleaned.slice(2)}`;
+  if (sanitizedText.length === 3 && !sanitizedText.includes('.')) {
+    sanitizedText = sanitizedText.slice(0, 2) + '.' + sanitizedText.slice(2);
   }
 
-  if (
-    cleaned.length > 3 &&
-    cleaned[3] !== ':' &&
-    (cleaned[3] < '0' || cleaned[3] > '5')
-  ) {
-    cleaned = cleaned.slice(0, 3);
+  if (sanitizedText.length > 5) {
+    sanitizedText = sanitizedText.slice(0, 5);
   }
 
-  if (cleaned.length > 1 && cleaned[0] === '2' && cleaned[1] > '3') {
-    cleaned = cleaned[0] + '3' + cleaned.slice(2);
-  }
-
-  if (clockFormat === '12h') {
-    const [hours, minutes] = cleaned.split(':');
-    if (hours && parseInt(hours, 10) > 12) {
-      cleaned = '12' + (minutes ? `:${minutes}` : '');
-    }
-  }
-  return cleaned;
+  return sanitizedText;
 }
 
-export function format24hTime(time) {
-  let formattedTime = time;
-  if (time.length === 1 || time.length === 2) {
-    formattedTime = time + ':00';
-  }
-  if (time.length === 3) {
-    formattedTime = time + '00';
-  }
-  if (time.slice(-2) === ':0') {
-    formattedTime = time + '0';
-  }
-  return formattedTime;
-}
+export function convertDisplayTimeToTime(time, clockFormat, timeMode) {
+  let formattedTime = time.replace(/[^\d]/g, ':');
 
-export function format12hTime(time, timeMode, clockFormat) {
-  let formattedTime = time;
+  if (formattedTime.slice(-1) === ':') {
+    formattedTime = formattedTime + '00';
+  }
+  if (/:\d$/.test(formattedTime)) {
+    formattedTime = formattedTime + '0';
+  }
+  if (formattedTime.length === 1 || formattedTime.length === 2) {
+    formattedTime = formattedTime + ':00';
+  }
 
-  if (clockFormat === '12h') {
+  if (clockFormat === '12h' && formattedTime.length > 0) {
     let [hours, minutes] = formattedTime.split(':');
     hours = parseInt(hours, 10);
 
     if (timeMode === 'PM' && hours < 12) {
       formattedTime = `${hours + 12}:${minutes}`;
     }
-
     if (timeMode === 'AM' && hours === 12) {
       formattedTime = `00:${minutes}`;
     }
-
     if (timeMode === 'AM' && hours > 12) {
       formattedTime = `${hours - 12}:${minutes}`;
     }
   }
 
-  let [hours, minutes] = formattedTime.split(':');
   if (formattedTime.length === 4) {
-    formattedTime = `0${hours}:${minutes}`;
+    formattedTime = '0' + formattedTime;
   }
 
   return formattedTime;

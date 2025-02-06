@@ -11,10 +11,8 @@ import {
   limitTextInput,
   formatDate,
   renderControlIcon,
-  convertTextToTime,
-  format12hTime,
-  format24hTime,
-  display12HourFormat,
+  convertTextToDisplayTime,
+  convertDisplayTimeToTime,
 } from '../utils';
 import {useTranslation} from 'react-i18next';
 
@@ -130,43 +128,34 @@ export const WhenInput = ({
   );
 
 export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
-  const [timeMode, setTimeMode] = useState('AM');
+  const [timeMode, setTimeMode] = useState('');
   const [displayTime, setDisplayTime] = useState('');
 
   useEffect(() => {
-    setTime(format24hTime(displayTime));
-  }, [displayTime]);
-
-  useEffect(() => {
-    let [hours, minutes] = time.split(':');
-    hours = parseInt(hours, 10);
-    if (hours >= 12) {
-      setTimeMode('PM');
-    }
-    if (time === '12:00' && timeMode === 'AM' && clockFormat === '12h') {
-      setTime('00:00');
-    }
-  }, [time]);
-
-  useEffect(() => {
-    setTime(format12hTime(time, timeMode, clockFormat));
-  }, [timeMode]);
+    setTime(convertDisplayTimeToTime(displayTime, clockFormat, timeMode));
+  }, [displayTime, timeMode]);
 
   return (
     <View style={styles.inputContainer}>
-      <Pressable style={styles.incrementator} onPress={() => setTime('')}>
+      <Pressable
+        style={styles.incrementator}
+        onPress={() => {
+          setTime(''), setDisplayTime('');
+        }}>
         {time !== '' && renderControlIcon('cancel', 'shadow')}
       </Pressable>
 
       <TextInput
         style={styles.input}
         value={
-          displayTime ? displayTime : display12HourFormat(time, clockFormat)
+          displayTime
+            ? displayTime
+            : convertDisplayTimeToTime(time, clockFormat, timeMode)
         }
         onChangeText={text => {
-          const convertedTime = convertTextToTime(text, clockFormat);
-          setDisplayTime(convertedTime);
+          setDisplayTime(convertTextToDisplayTime(text));
         }}
+        inputMode="numeric"
         placeholder={placeholder}
         placeholderTextColor={COLORS.primary}
         maxLength={5}
@@ -189,7 +178,9 @@ export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
       ) : (
         <Pressable
           style={[styles.incrementator, {opacity: 0}]}
-          onPress={() => setTime('')}>
+          onPress={() => {
+            setTime(''), setDisplayTime('');
+          }}>
           {time !== '' && renderControlIcon('cancel', 'shadow')}
         </Pressable>
       )}
