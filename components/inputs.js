@@ -13,6 +13,7 @@ import {
   renderControlIcon,
   convertTextToDisplayTime,
   convertDisplayTimeToTime,
+  display12HourFormat,
 } from '../utils';
 import {useTranslation} from 'react-i18next';
 
@@ -128,8 +129,24 @@ export const WhenInput = ({
   );
 
 export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
-  const [timeMode, setTimeMode] = useState('');
+  const [timeMode, setTimeMode] = useState('AM');
   const [displayTime, setDisplayTime] = useState('');
+  const [initialRender, setInitialRender] = useState(true);
+
+  useEffect(() => {
+    if (initialRender && time !== '') {
+      let [hours] = time.split(':');
+      hours = parseInt(hours, 10);
+      const mode = hours >= 12 ? 'PM' : 'AM';
+      setTimeMode(mode);
+      if (clockFormat === '12h') {
+        setDisplayTime(display12HourFormat(time, clockFormat));
+      } else {
+        setDisplayTime(time);
+      }
+      setInitialRender(false);
+    }
+  }, [time]);
 
   useEffect(() => {
     setTime(convertDisplayTimeToTime(displayTime, clockFormat, timeMode));
@@ -147,13 +164,10 @@ export const TimeInput = ({time, setTime, clockFormat, placeholder}) => {
 
       <TextInput
         style={styles.input}
-        value={
-          displayTime
-            ? displayTime
-            : convertDisplayTimeToTime(time, clockFormat, timeMode)
-        }
+        value={displayTime}
         onChangeText={text => {
           setDisplayTime(convertTextToDisplayTime(text));
+          setInitialRender(false);
         }}
         inputMode="numeric"
         placeholder={placeholder}

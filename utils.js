@@ -86,6 +86,7 @@ export function limitTextInput(text) {
 
 export function convertTextToDisplayTime(text) {
   let sanitizedText = text.replace(/[^0-9]/g, '.');
+
   const parts = sanitizedText.split('.');
 
   if (parts.length === 2) {
@@ -102,6 +103,11 @@ export function convertTextToDisplayTime(text) {
 
   if (sanitizedText.length > 5) {
     sanitizedText = sanitizedText.slice(0, 5);
+  }
+
+  const dotIndex = sanitizedText.indexOf('.');
+  if (dotIndex !== -1 && sanitizedText.length > dotIndex + 3) {
+    sanitizedText = sanitizedText.slice(0, dotIndex + 3);
   }
 
   return sanitizedText;
