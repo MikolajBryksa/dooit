@@ -11,12 +11,14 @@ import i18next from '../i18next';
 import {useTranslation} from 'react-i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import IncomeModal from '../modals/income.modal';
+import ContactModal from '../modals/contact.modal';
 
 const SettingsView = () => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-  const [showModal, setShowModal] = useState(false);
+  const [showModalContact, setShowModalContact] = useState(false);
+  const [showModalIncome, setShowModalIncome] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
@@ -134,8 +136,12 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
+  function handleContact() {
+    setShowModalContact(true);
+  }
+
   function handleIncome() {
-    setShowModal(true);
+    setShowModalIncome(true);
   }
 
   const dynamicStyle = ({pressed}) => [
@@ -145,7 +151,8 @@ const SettingsView = () => {
 
   return (
     <View style={styles.container}>
-      {showModal && <IncomeModal setShowModal={setShowModal} />}
+      {showModalContact && <ContactModal setShowModal={setShowModalContact} />}
+      {showModalIncome && <IncomeModal setShowModal={setShowModalIncome} />}
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
@@ -252,6 +259,7 @@ const SettingsView = () => {
         </Pressable>
       </ScrollView>
       <View style={styles.controllers}>
+        <ControlButton type="contact" press={handleContact} />
         <ControlButton type="income" press={handleIncome} />
       </View>
     </View>

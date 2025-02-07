@@ -23,6 +23,7 @@ import {
   faUtensils,
   faCalendarCheck,
   faInfinity,
+  faCommentDots,
 } from '@fortawesome/free-solid-svg-icons';
 import {faCircle} from '@fortawesome/free-regular-svg-icons';
 import realm from './storage/schemas';
@@ -283,6 +284,9 @@ export function renderControlIcon(type, shape) {
       break;
     case 'shop':
       icon = faBasketShopping;
+      break;
+    case 'contact':
+      icon = faCommentDots;
       break;
     case 'income':
       icon = faMugHot;
