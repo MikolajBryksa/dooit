@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,7 +20,15 @@ const HabitsModal = ({setShowModal}) => {
   const [what, setWhat] = useState('');
   const [time, setTime] = useState('');
   const [showDaysPicker, setShowDaysPicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+  }, []);
 
   const trueDays = {
     monday: true,
@@ -39,9 +47,6 @@ const HabitsModal = ({setShowModal}) => {
       setWhen(currentItem.when?.toString());
       setWhat(currentItem.what);
       setTime(currentItem.time);
-      if (currentItem.time) {
-        setShowTimePicker(true);
-      }
       setDays({
         monday: currentItem.monday,
         tuesday: currentItem.tuesday,
@@ -115,6 +120,7 @@ const HabitsModal = ({setShowModal}) => {
           placeholder={t('set-days')}
         />
         <WhatInput
+          ref={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={t('enter-habit')}

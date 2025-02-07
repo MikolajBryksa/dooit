@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,6 +17,15 @@ const TasksModal = ({setShowModal}) => {
 
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (currentItem) {
@@ -74,6 +83,7 @@ const TasksModal = ({setShowModal}) => {
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
         <WhatInput
+          ref={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={category === 'task' ? t('enter-task') : t('enter-item')}

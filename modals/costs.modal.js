@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Modal, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,6 +20,15 @@ const CostsModal = ({setShowModal}) => {
   const [when, setWhen] = useState('');
   const [what, setWhat] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (currentItem) {
@@ -88,6 +97,7 @@ const CostsModal = ({setShowModal}) => {
           language={settings.language}
         />
         <WhatInput
+          ref={inputRef}
           what={what}
           setWhat={setWhat}
           placeholder={t('enter-cost')}
