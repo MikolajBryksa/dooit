@@ -229,6 +229,9 @@ export function renderViewIcon(name, focused) {
     case 'costs':
       icon = faCoins;
       break;
+    case 'budgets':
+      icon = faWallet;
+      break;
     case 'plans':
       icon = faCalendar;
       break;

@@ -1,10 +1,11 @@
 import {
   SET_SELECTED_DAY,
   SET_CURRENT_ITEM,
-  SET_HABITS,
   SET_WEIGHTS,
   SET_COSTS,
+  SET_BUDGETS,
   SET_PLANS,
+  SET_HABITS,
   SET_TASKS,
   SET_CATEGORY,
   SET_SETTINGS,
@@ -13,10 +14,11 @@ import {
 const initialState = {
   selectedDay: null,
   currentItem: null,
-  habits: [],
   weights: [],
   costs: [],
+  budgets: [],
   plans: [],
+  habits: [],
   tasks: [],
   category: 'task',
   settings: {},
@@ -34,11 +36,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         currentItem: action.payload,
       };
-    case SET_HABITS:
-      return {
-        ...state,
-        habits: action.payload,
-      };
     case SET_WEIGHTS:
       return {
         ...state,
@@ -49,10 +46,20 @@ const reducer = (state = initialState, action) => {
         ...state,
         costs: action.payload,
       };
+    case SET_BUDGETS:
+      return {
+        ...state,
+        budgets: action.payload,
+      };
     case SET_PLANS:
       return {
         ...state,
         plans: action.payload,
+      };
+    case SET_HABITS:
+      return {
+        ...state,
+        habits: action.payload,
       };
     case SET_TASKS:
       return {

@@ -22,6 +22,19 @@ Cost.schema = {
   },
 };
 
+class Budget extends Realm.Object {}
+Budget.schema = {
+  name: 'Budget',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    type: 'string',
+    period: 'string',
+    name: 'string',
+    what: 'double',
+  },
+};
+
 class Plan extends Realm.Object {}
 Plan.schema = {
   name: 'Plan',
@@ -100,7 +113,7 @@ Temp.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Weight, Cost, Plan, Task, Settings, Temp],
+  schema: [Habit, Weight, Cost, Budget, Plan, Task, Settings, Temp],
   schemaVersion: 1,
   //   migration: (oldRealm, newRealm) => {
   //     if (oldRealm.schemaVersion < 2) {

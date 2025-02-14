@@ -21,7 +21,7 @@ const IncomeModal = ({setShowModal}) => {
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <HeaderButton name={t('income')} active={true} />
+          <HeaderButton name={t('coffee')} active={true} />
         </View>
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />
