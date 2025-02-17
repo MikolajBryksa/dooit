@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import HeaderButton from '../components/header.button';
 import {setWeights} from '../redux/actions';
-import {getEveryWeight, calcWeightChange} from '../services/weights.service';
+import {getEveryWeight, getWeightSummary} from '../services/weights.service';
 import {styles} from '../styles';
 import WeightsModal from '../modals/weights.modal';
 import WeightItem from '../items/weight.item';
@@ -18,8 +18,7 @@ const WeightsView = () => {
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [mealsMode, setMealsMode] = useState(false);
-  const [weightChange, setWeightChange] = useState(0);
-  const [dayDifference, setDayDifference] = useState(0);
+  const [weightSummary, setWeightSummary] = useState(0);
 
   const fetchData = async () => {
     const weights = getEveryWeight();
@@ -31,12 +30,8 @@ const WeightsView = () => {
   }, [showModal, mealsMode]);
 
   useEffect(() => {
-    async function calculateWeightChange() {
-      const {weightChange, dayDifference} = calcWeightChange();
-      setWeightChange(weightChange);
-      setDayDifference(dayDifference);
-    }
-    calculateWeightChange();
+    const summary = getWeightSummary();
+    setWeightSummary(summary);
   }, [weights]);
 
   function handleAdd() {
@@ -59,7 +54,13 @@ const WeightsView = () => {
       <View style={styles.header}>
         {!mealsMode && (
           <>
-            <HeaderButton name={t('header.weights')} active={true} />
+            <HeaderButton
+              name={`${t('header.weights')}: ${weightSummary} ${
+                settings.weightUnit
+              }`}
+              press={handleMode}
+              active={true}
+            />
             <HeaderButton
               name={t('header.meals')}
               press={handleMode}
@@ -70,7 +71,9 @@ const WeightsView = () => {
         {mealsMode && (
           <>
             <HeaderButton
-              name={t('header.weights')}
+              name={`${t('header.weights')}: ${weightSummary} ${
+                settings.weightUnit
+              }`}
               press={handleMode}
               active={false}
             />

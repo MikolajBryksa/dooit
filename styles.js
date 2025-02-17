@@ -116,7 +116,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     height: DIMENSIONS.height,
     width: '100%',
-    padding: DIMENSIONS.padding,
+    paddingLeft: DIMENSIONS.padding,
     borderColor: COLORS.primary,
     borderWidth: 1,
     marginBottom: DIMENSIONS.margin,
@@ -141,9 +141,11 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingLeft: DIMENSIONS.padding * 2,
     color: COLORS.text,
+    paddingRight: DIMENSIONS.padding,
   },
   listItemChange: {
     color: COLORS.primary,
+    paddingRight: DIMENSIONS.padding,
   },
   switch: {},
   listItemActive: {

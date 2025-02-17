@@ -6,7 +6,7 @@ import {getCost} from '../services/costs.service';
 import {styles} from '../styles';
 import {formatDateWithDay} from '../utils';
 
-const CostItem = ({id, when, what, setShowModal}) => {
+const CostItem = ({id, when, name, what, setShowModal}) => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
 
@@ -25,6 +25,7 @@ const CostItem = ({id, when, what, setShowModal}) => {
     <Pressable style={dynamicStyle} onPress={handlePress}>
       <Text style={styles.when}>
         {formatDateWithDay(when, settings.language)}
+        {name && ` | ${name}`}
       </Text>
       {what && (
         <Text style={styles.what} numberOfLines={1} ellipsizeMode="head">

@@ -18,6 +18,7 @@ const CostsModal = ({setShowModal}) => {
   const {t} = useTranslation();
 
   const [when, setWhen] = useState('');
+  const [name, setName] = useState('');
   const [what, setWhat] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -34,10 +35,12 @@ const CostsModal = ({setShowModal}) => {
     if (currentItem) {
       const date = formatDate(currentItem.when);
       setWhen(date);
+      setName(currentItem.name);
       setWhat(currentItem.what.toFixed(2));
     } else {
       const today = formatDate();
       setWhen(today);
+      setName('');
       setWhat('');
     }
   }, [currentItem]);
@@ -48,7 +51,7 @@ const CostsModal = ({setShowModal}) => {
   }
 
   function handleAdd() {
-    addCost(when, what);
+    addCost(when, name, what);
     Toast.show({
       type: 'add',
       text1: 'costs',
@@ -60,7 +63,7 @@ const CostsModal = ({setShowModal}) => {
 
   function handleUpdate() {
     if (currentItem) {
-      updateCost(currentItem.id, when, what);
+      updateCost(currentItem.id, when, name, what);
       Toast.show({
         type: 'update',
         text1: 'costs',
@@ -95,6 +98,12 @@ const CostsModal = ({setShowModal}) => {
           data={costs}
           firstDay={settings.firstDay}
           language={settings.language}
+        />
+        <WhatInput
+          what={name}
+          setWhat={setName}
+          placeholder={t('enter-name')}
+          inputModeType="text"
         />
         <WhatInput
           ref={inputRef}

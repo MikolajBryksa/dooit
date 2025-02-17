@@ -8,6 +8,7 @@ import {setSettings} from '../redux/actions';
 import i18next from '../i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {updateSettingValue} from '../services/settings.service';
+import HeaderButton from '../components/header.button';
 
 const OnboardingModal = ({setShowModal}) => {
   const settings = useSelector(state => state.settings);
@@ -79,7 +80,7 @@ const OnboardingModal = ({setShowModal}) => {
     <Modal transparent animationType="fade">
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.center}>{t('welcome')}</Text>
+          <HeaderButton name={t('welcome')} active={true} />
         </View>
 
         <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>

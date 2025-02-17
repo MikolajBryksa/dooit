@@ -1,8 +1,8 @@
 {
   "welcome": "Welcome to Dooit, choose your settings",
   "no-weights": "Add weight",
-  "no-costs": "Add cost",
-  "no-budgets": "Add budget",
+  "no-costs": "Add cost not included in budget",
+  "no-budgets": "Add income or regular expense",
   "no-plans": "Add plan",
   "no-habits": "Add habit",
   "no-tasks-done": "Add task",
@@ -69,7 +69,7 @@
   "sun": "Sun",
 
   "header": {
-    "weights": "Weights",
+    "weights": "Weight",
     "meals": "Meals",
     "costs": "Costs",
     "budget": "Budget",

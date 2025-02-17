@@ -67,6 +67,10 @@ export const deleteBudget = id => {
 export const getBudgetSummary = () => {
   const budgets = realm.objects('Budget');
 
+  if (budgets.length === 0) {
+    return 0;
+  }
+
   const income = budgets.filtered('type == "income"');
   const totalIncome = income.reduce((sum, item) => sum + item.what, 0);
 

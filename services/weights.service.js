@@ -62,19 +62,17 @@ export const deleteWeight = id => {
   return deletedWeight;
 };
 
-export const getAllWeights = () => {
+export const getWeightSummary = () => {
   const sortFields = [
     ['when', true],
     ['id', true],
   ];
-  return realm.objects('Weight').sorted(sortFields);
-};
-
-export const calcWeightChange = () => {
-  const weights = getAllWeights();
+  const weights = realm.objects('Weight').sorted(sortFields);
 
   if (weights.length === 0) {
-    return {weightChange: 0, dayDifference: 0};
+    return 0;
+  } else if (weights.length === 1) {
+    return weights[0].what;
   }
 
   const firstWeight = weights[0].what;
@@ -86,10 +84,5 @@ export const calcWeightChange = () => {
     weightChange = `+${weightChange}`;
   }
 
-  const firstDate = new Date(weights[0].when);
-  const lastDate = new Date(weights[weights.length - 1].when);
-  const timeDifference = Math.abs(lastDate - firstDate);
-  const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
-  return {weightChange, dayDifference};
+  return weightChange;
 };

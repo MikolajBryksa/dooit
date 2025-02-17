@@ -18,6 +18,7 @@ Cost.schema = {
   properties: {
     id: 'int',
     when: 'date',
+    name: 'string?',
     what: 'double',
   },
 };
@@ -114,11 +115,17 @@ Temp.schema = {
 
 const realmConfig = {
   schema: [Habit, Weight, Cost, Budget, Plan, Task, Settings, Temp],
-  schemaVersion: 1,
-  //   migration: (oldRealm, newRealm) => {
-  //     if (oldRealm.schemaVersion < 2) {
-  //     }
-  //   },
+  schemaVersion: 2,
+  migration: (oldRealm, newRealm) => {
+    if (oldRealm.schemaVersion < 2) {
+      const oldCosts = oldRealm.objects('Cost');
+      const newCosts = newRealm.objects('Cost');
+
+      for (let i = 0; i < oldCosts.length; i++) {
+        newCosts[i].name = null;
+      }
+    }
+  },
 };
 
 const realm = new Realm(realmConfig);

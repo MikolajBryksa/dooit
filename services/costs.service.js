@@ -2,7 +2,7 @@ import realm from '../storage/schemas';
 import {getNextId, formatDate} from '../utils';
 import {getBudgetSummary} from './budgets.service';
 
-export const addCost = (when, what) => {
+export const addCost = (when, name, what) => {
   const id = getNextId('Cost');
   when = new Date(when);
   what = parseFloat(parseFloat(what).toFixed(2));
@@ -12,6 +12,7 @@ export const addCost = (when, what) => {
     newCost = realm.create('Cost', {
       id,
       when,
+      name,
       what,
     });
   });
@@ -38,13 +39,13 @@ export const getCost = id => {
   };
 };
 
-export const updateCost = (id, when, what) => {
+export const updateCost = (id, when, name, what) => {
   when = new Date(when);
   what = parseFloat(parseFloat(what).toFixed(2));
 
   let updatedCost;
   realm.write(() => {
-    updatedCost = realm.create('Cost', {id, when, what}, 'modified');
+    updatedCost = realm.create('Cost', {id, when, name, what}, 'modified');
   });
   return updatedCost;
 };
@@ -64,8 +65,12 @@ export const deleteCost = id => {
 export const getCostsSummary = () => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-
   const costs = realm.objects('Cost');
+
+  if (costs.length === 0) {
+    return 0;
+  }
+
   const filteredCosts = costs.filter(cost => {
     const costDate = new Date(cost.when);
     return (
@@ -75,5 +80,5 @@ export const getCostsSummary = () => {
   });
 
   const totalCosts = filteredCosts.reduce((sum, cost) => sum + cost.what, 0);
-  return totalCosts;
+  return totalCosts % 1 === 0 ? totalCosts.toString() : totalCosts.toFixed(2);
 };

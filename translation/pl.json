@@ -1,8 +1,8 @@
 {
   "welcome": "Witam w Dooit, wybierz swoje ustawienia",
   "no-weights": "Dodaj wagę",
-  "no-costs": "Dodaj koszt",
-  "no-budgets": "Dodaj budżet",
+  "no-costs": "Dodaj koszt nieuwzględniony w budżecie",
+  "no-budgets": "Dodaj zarobek lub regularny wydatek",
   "no-plans": "Dodaj plan",
   "no-habits": "Dodaj nawyk",
   "no-tasks-done": "Dodaj zadanie",
@@ -69,7 +69,7 @@
   "sun": "Nie",
 
   "header": {
-    "weights": "Wagi",
+    "weights": "Waga",
     "meals": "Posiłki",
     "costs": "Koszty",
     "budget": "Budżet",

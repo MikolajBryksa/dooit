@@ -52,7 +52,7 @@ export const WhatInput = forwardRef(
             inputMode={inputModeType}
             placeholder={placeholder}
             placeholderTextColor={COLORS.primary}
-            maxLength={60}
+            maxLength={55}
           />
           {incrementator && (
             <>

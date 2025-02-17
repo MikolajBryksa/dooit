@@ -117,6 +117,7 @@ const CostsView = () => {
                     key={index}
                     id={item.id}
                     when={item.when}
+                    name={item.name}
                     what={item.what}
                     setShowModal={setShowModal}
                   />
