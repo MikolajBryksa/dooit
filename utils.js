@@ -226,6 +226,9 @@ export function renderViewIcon(name, focused) {
     case 'weights':
       icon = faWeight;
       break;
+    case 'menu':
+      icon = faUtensils;
+      break;
     case 'costs':
       icon = faCoins;
       break;

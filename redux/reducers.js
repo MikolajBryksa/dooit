@@ -2,6 +2,7 @@ import {
   SET_SELECTED_DAY,
   SET_CURRENT_ITEM,
   SET_WEIGHTS,
+  SET_MENU,
   SET_COSTS,
   SET_BUDGETS,
   SET_PLANS,
@@ -15,6 +16,7 @@ const initialState = {
   selectedDay: null,
   currentItem: null,
   weights: [],
+  menu: [],
   costs: [],
   budgets: [],
   plans: [],
@@ -40,6 +42,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         weights: action.payload,
+      };
+    case SET_MENU:
+      return {
+        ...state,
+        menu: action.payload,
       };
     case SET_COSTS:
       return {

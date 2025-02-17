@@ -1,6 +1,7 @@
 export const SET_SELECTED_DAY = 'SET_SELECTED_DAY';
 export const SET_CURRENT_ITEM = 'SET_CURRENT_ITEM';
 export const SET_WEIGHTS = 'SET_WEIGHTS';
+export const SET_MENU = 'SET_MENU';
 export const SET_COSTS = 'SET_COSTS';
 export const SET_BUDGETS = 'SET_BUDGETS';
 export const SET_PLANS = 'SET_PLANS';
@@ -22,6 +23,11 @@ export const setCurrentItem = item => ({
 export const setWeights = weights => ({
   type: SET_WEIGHTS,
   payload: weights,
+});
+
+export const setMenu = menu => ({
+  type: SET_MENU,
+  payload: menu,
 });
 
 export const setCosts = costs => ({

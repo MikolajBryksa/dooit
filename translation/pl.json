@@ -1,12 +1,13 @@
 {
   "welcome": "Witam w Dooit, wybierz swoje ustawienia",
-  "no-weights": "Dodaj wagę",
+  "no-weights": "Dodaj swoją wagę",
+  "no-menu": "Dodaj plan posiłków",
   "no-costs": "Dodaj koszt nieuwzględniony w budżecie",
   "no-budgets": "Dodaj zarobek lub regularny wydatek",
-  "no-plans": "Dodaj plan",
-  "no-habits": "Dodaj nawyk",
-  "no-tasks-done": "Dodaj zadanie",
-  "no-items-bought": "Dodaj produkt",
+  "no-plans": "Dodaj plan na wybrany dzień",
+  "no-habits": "Dodaj regularnie wykonywaną czynność",
+  "no-tasks-done": "Dodaj zadanie do wykonania",
+  "no-items-bought": "Dodaj przedmiot na listę zakupów",
   "contact": "Czy chcesz do mnie napisać na Linkedin?",
   "coffee": "Czy jako wsparcie postawisz mi kawusię?",
 
@@ -68,9 +69,17 @@
   "sat": "Sob",
   "sun": "Nie",
 
+  "show-menu": "Pokaż menu",
+  "hide-menu": "Ukryj menu",
+  "meal1": "Śniadanie",
+  "meal2": "Drugie śniadanie",
+  "meal3": "Obiad",
+  "meal4": "Przekąska",
+  "meal5": "Kolacja",
+
   "header": {
     "weights": "Waga",
-    "meals": "Posiłki",
+    "menu": "Menu",
     "costs": "Koszty",
     "budget": "Budżet",
     "plans": "Plany",

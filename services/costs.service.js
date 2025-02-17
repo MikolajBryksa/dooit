@@ -1,6 +1,5 @@
 import realm from '../storage/schemas';
 import {getNextId, formatDate} from '../utils';
-import {getBudgetSummary} from './budgets.service';
 
 export const addCost = (when, name, what) => {
   const id = getNextId('Cost');

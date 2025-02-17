@@ -1,12 +1,13 @@
 {
   "welcome": "Welcome to Dooit, choose your settings",
-  "no-weights": "Add weight",
+  "no-weights": "Add your weight",
+  "no-menu": "Add meal plan",
   "no-costs": "Add cost not included in budget",
   "no-budgets": "Add income or regular expense",
-  "no-plans": "Add plan",
-  "no-habits": "Add habit",
-  "no-tasks-done": "Add task",
-  "no-items-bought": "Add item",
+  "no-plans": "Add plan for selected day",
+  "no-habits": "Add activity performed regularly",
+  "no-tasks-done": "Add task to do",
+  "no-items-bought": "Add item to shopping list",
   "contact": "Would you write to me on Linkedin?",
   "coffee": "Would you support me with coffee?",
 
@@ -68,9 +69,17 @@
   "sat": "Sat",
   "sun": "Sun",
 
+  "show-menu": "Show menu",
+  "hide-menu": "Hide menu",
+  "meal1": "Breakfast",
+  "meal2": "Second breakfast",
+  "meal3": "Lunch",
+  "meal4": "Afternoon snack",
+  "meal5": "Dinner",
+
   "header": {
     "weights": "Weight",
-    "meals": "Meals",
+    "menu": "Menu",
     "costs": "Costs",
     "budget": "Budget",
     "plans": "Plans",

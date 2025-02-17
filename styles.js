@@ -131,8 +131,16 @@ export const styles = StyleSheet.create({
     padding: DIMENSIONS.padding,
     alignItems: 'center',
   },
+  menuContainer: {
+    borderColor: COLORS.primary,
+    borderWidth: 1,
+    marginBottom: DIMENSIONS.margin,
+    justifyContent: 'center',
+    borderRadius: DIMENSIONS.margin,
+    padding: DIMENSIONS.padding,
+  },
   listItemWhat: {
-    color: COLORS.text,
+    color: COLORS.primary,
     flex: 1,
   },
   listItemCheck: {
@@ -144,7 +152,7 @@ export const styles = StyleSheet.create({
     paddingRight: DIMENSIONS.padding,
   },
   listItemChange: {
-    color: COLORS.primary,
+    color: COLORS.text,
     paddingRight: DIMENSIONS.padding,
   },
   switch: {},

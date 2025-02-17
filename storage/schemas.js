@@ -11,6 +11,21 @@ Weight.schema = {
   },
 };
 
+class Menu extends Realm.Object {}
+Menu.schema = {
+  name: 'Menu',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    when: 'date',
+    meal1: 'string?',
+    meal2: 'string?',
+    meal3: 'string?',
+    meal4: 'string?',
+    meal5: 'string?',
+  },
+};
+
 class Cost extends Realm.Object {}
 Cost.schema = {
   name: 'Cost',
@@ -114,7 +129,7 @@ Temp.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Weight, Cost, Budget, Plan, Task, Settings, Temp],
+  schema: [Weight, Menu, Cost, Budget, Plan, Habit, Task, Settings, Temp],
   schemaVersion: 2,
   migration: (oldRealm, newRealm) => {
     if (oldRealm.schemaVersion < 2) {

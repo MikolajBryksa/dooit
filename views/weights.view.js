@@ -3,31 +3,38 @@ import {View, Text, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import HeaderButton from '../components/header.button';
-import {setWeights} from '../redux/actions';
+import {setWeights, setMenu} from '../redux/actions';
 import {getEveryWeight, getWeightSummary} from '../services/weights.service';
+import {getEveryMenu} from '../services/menu.service';
 import {styles} from '../styles';
 import WeightsModal from '../modals/weights.modal';
 import WeightItem from '../items/weight.item';
+import MenuModal from '../modals/menu.modal';
+import MenuItem from '../items/menu.item';
 import {useTranslation} from 'react-i18next';
 import {convertRealmObjects} from '../utils';
 
 const WeightsView = () => {
   const weights = useSelector(state => state.weights);
+  const menu = useSelector(state => state.menu);
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [showModal, setShowModal] = useState(false);
-  const [mealsMode, setMealsMode] = useState(false);
+  const [menuMode, setMenuMode] = useState(false);
   const [weightSummary, setWeightSummary] = useState(0);
 
   const fetchData = async () => {
     const weights = getEveryWeight();
     dispatch(setWeights(convertRealmObjects(weights)));
+
+    const menu = getEveryMenu();
+    dispatch(setMenu(convertRealmObjects(menu)));
   };
 
   useEffect(() => {
     fetchData();
-  }, [showModal, mealsMode]);
+  }, [showModal, menuMode]);
 
   useEffect(() => {
     const summary = getWeightSummary();
@@ -39,20 +46,20 @@ const WeightsView = () => {
   }
 
   function handleMode() {
-    if (mealsMode) {
-      setMealsMode(false);
+    if (menuMode) {
+      setMenuMode(false);
     } else {
-      setMealsMode(true);
+      setMenuMode(true);
     }
   }
 
   return (
     <View style={styles.container}>
-      {!mealsMode && showModal && <WeightsModal setShowModal={setShowModal} />}
-      {mealsMode && showModal && <WeightsModal setShowModal={setShowModal} />}
+      {!menuMode && showModal && <WeightsModal setShowModal={setShowModal} />}
+      {menuMode && showModal && <MenuModal setShowModal={setShowModal} />}
 
       <View style={styles.header}>
-        {!mealsMode && (
+        {!menuMode && (
           <>
             <HeaderButton
               name={`${t('header.weights')}: ${weightSummary} ${
@@ -62,13 +69,13 @@ const WeightsView = () => {
               active={true}
             />
             <HeaderButton
-              name={t('header.meals')}
+              name={t('header.menu')}
               press={handleMode}
               active={false}
             />
           </>
         )}
-        {mealsMode && (
+        {menuMode && (
           <>
             <HeaderButton
               name={`${t('header.weights')}: ${weightSummary} ${
@@ -77,12 +84,12 @@ const WeightsView = () => {
               press={handleMode}
               active={false}
             />
-            <HeaderButton name={t('header.meals')} active={true} />
+            <HeaderButton name={t('header.menu')} active={true} />
           </>
         )}
       </View>
 
-      {!mealsMode && weights && (
+      {!menuMode && weights && (
         <>
           {weights.length === 0 ? (
             <View style={styles.empty}>
@@ -111,13 +118,36 @@ const WeightsView = () => {
         </>
       )}
 
-      {mealsMode && weights && (
+      {menuMode && menu && (
         <>
-          <View style={styles.header}>
-            <Text style={styles.center}></Text>
-          </View>
+          {menu.length === 0 ? (
+            <View style={styles.empty}>
+              <Text style={styles.center}>{t('no-menu')}</Text>
+              <ControlButton type="add" press={handleAdd} shape="circle" />
+            </View>
+          ) : (
+            <>
+              <ScrollView style={styles.scrollView}>
+                {menu.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    id={item.id}
+                    when={item.when}
+                    meal1={item.meal1}
+                    meal2={item.meal2}
+                    meal3={item.meal3}
+                    meal4={item.meal4}
+                    meal5={item.meal5}
+                    setShowModal={setShowModal}
+                  />
+                ))}
+              </ScrollView>
 
-          <ScrollView style={styles.scrollView}></ScrollView>
+              <View style={styles.controllers}>
+                <ControlButton type="add" press={handleAdd} />
+              </View>
+            </>
+          )}
         </>
       )}
     </View>

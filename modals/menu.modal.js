@@ -4,23 +4,26 @@ import Toast from 'react-native-toast-message';
 import {useDispatch, useSelector} from 'react-redux';
 import ControlButton from '../components/control.button';
 import {setCurrentItem} from '../redux/actions';
-import {addPlan, updatePlan, deletePlan} from '../services/plans.service';
+import {addMenu, updateMenu, deleteMenu} from '../services/menu.service';
 import {DIMENSIONS, styles} from '../styles';
-import {WhenInput, WhatInput, TimeInput} from '../components/inputs';
+import {WhatInput, WhenInput} from '../components/inputs';
 import {useTranslation} from 'react-i18next';
 import {formatDate} from '../utils';
 
-const PlansModal = ({setShowModal}) => {
-  const plans = useSelector(state => state.plans);
-  const currentItem = useSelector(state => state.currentItem);
+const MenuModal = ({setShowModal}) => {
+  const menu = useSelector(state => state.menu);
   const settings = useSelector(state => state.settings);
+  const currentItem = useSelector(state => state.currentItem);
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
   const [when, setWhen] = useState('');
-  const [what, setWhat] = useState('');
-  const [time, setTime] = useState('');
-  const [showCalendar, setShowCalendar] = useState(true);
+  const [meal1, setMeal1] = useState('');
+  const [meal2, setMeal2] = useState('');
+  const [meal3, setMeal3] = useState('');
+  const [meal4, setMeal4] = useState('');
+  const [meal5, setMeal5] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -35,13 +38,19 @@ const PlansModal = ({setShowModal}) => {
     if (currentItem) {
       const date = formatDate(currentItem.when);
       setWhen(date);
-      setWhat(currentItem.what);
-      setTime(currentItem.time);
+      setMeal1(currentItem.meal1);
+      setMeal2(currentItem.meal2);
+      setMeal3(currentItem.meal3);
+      setMeal4(currentItem.meal4);
+      setMeal5(currentItem.meal5);
     } else {
       const today = formatDate();
       setWhen(today);
-      setWhat('');
-      setTime('');
+      setMeal1('');
+      setMeal2('');
+      setMeal3('');
+      setMeal4('');
+      setMeal5('');
     }
   }, [currentItem]);
 
@@ -51,10 +60,10 @@ const PlansModal = ({setShowModal}) => {
   }
 
   function handleAdd() {
-    addPlan(when, what, time);
+    addMenu(when, meal1, meal2, meal3, meal4, meal5);
     Toast.show({
       type: 'add',
-      text1: 'plans',
+      text1: 'menu',
       topOffset: DIMENSIONS.padding,
       visibilityTime: 1200,
     });
@@ -63,10 +72,10 @@ const PlansModal = ({setShowModal}) => {
 
   function handleUpdate() {
     if (currentItem) {
-      updatePlan(currentItem.id, when, what, time);
+      updateMenu(currentItem.id, when, meal1, meal2, meal3, meal4, meal5);
       Toast.show({
         type: 'update',
-        text1: 'plans',
+        text1: 'menu',
         topOffset: DIMENSIONS.padding,
         visibilityTime: 1200,
       });
@@ -76,10 +85,10 @@ const PlansModal = ({setShowModal}) => {
 
   async function handleDelete() {
     if (currentItem) {
-      deletePlan(currentItem.id);
+      deleteMenu(currentItem.id);
       Toast.show({
         type: 'delete',
-        text1: 'plans',
+        text1: 'menu',
         topOffset: DIMENSIONS.padding,
         visibilityTime: 1200,
       });
@@ -95,22 +104,40 @@ const PlansModal = ({setShowModal}) => {
           setShowCalendar={setShowCalendar}
           when={when}
           setWhen={setWhen}
-          data={plans}
+          data={menu}
           firstDay={settings.firstDay}
           language={settings.language}
         />
         <WhatInput
           ref={inputRef}
-          what={what}
-          setWhat={setWhat}
-          placeholder={t('enter-plan')}
+          what={meal1}
+          setWhat={setMeal1}
+          placeholder={t('meal1')}
           inputModeType="text"
         />
-        <TimeInput
-          time={time}
-          setTime={setTime}
-          clockFormat={settings.clockFormat}
-          placeholder={t('set-time')}
+        <WhatInput
+          what={meal2}
+          setWhat={setMeal2}
+          placeholder={t('meal2')}
+          inputModeType="text"
+        />
+        <WhatInput
+          what={meal3}
+          setWhat={setMeal3}
+          placeholder={t('meal3')}
+          inputModeType="text"
+        />
+        <WhatInput
+          what={meal4}
+          setWhat={setMeal4}
+          placeholder={t('meal4')}
+          inputModeType="text"
+        />
+        <WhatInput
+          what={meal5}
+          setWhat={setMeal5}
+          placeholder={t('meal5')}
+          inputModeType="text"
         />
         <View style={styles.controllers}>
           <ControlButton type="cancel" press={handleClose} />
@@ -120,11 +147,15 @@ const PlansModal = ({setShowModal}) => {
               <ControlButton
                 type="accept"
                 press={handleUpdate}
-                disabled={!what}
+                disabled={!meal1 && !meal2 && !meal3 && !meal4 && !meal5}
               />
             </>
           ) : (
-            <ControlButton type="accept" press={handleAdd} disabled={!what} />
+            <ControlButton
+              type="accept"
+              press={handleAdd}
+              disabled={!meal1 && !meal2 && !meal3 && !meal4 && !meal5}
+            />
           )}
         </View>
       </View>
@@ -132,4 +163,4 @@ const PlansModal = ({setShowModal}) => {
   );
 };
 
-export default PlansModal;
+export default MenuModal;
