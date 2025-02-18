@@ -140,6 +140,10 @@ export const styles = StyleSheet.create({
     padding: DIMENSIONS.padding,
   },
   listItemWhat: {
+    color: COLORS.text,
+    flex: 1,
+  },
+  listItemDesc: {
     color: COLORS.primary,
     flex: 1,
   },
@@ -218,7 +222,7 @@ export const styles = StyleSheet.create({
     borderRadius: DIMENSIONS.margin,
   },
   empty: {
-    height: '85%',
+    height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
     gap: DIMENSIONS.margin,

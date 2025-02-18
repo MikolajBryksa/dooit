@@ -32,7 +32,7 @@ const MenuItem = ({
   const dynamicStyle = ({pressed}) => [
     styles.menuContainer,
     {opacity: pressed ? 0.8 : 1},
-    isPastDate && {opacity: pressed ? 0.2 : 0.3},
+    isPastDate && !home && {opacity: pressed ? 0.2 : 0.3},
     home && {
       borderTopWidth: 0,
       borderTopLeftRadius: 0,

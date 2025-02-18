@@ -18,25 +18,29 @@ import {renderViewIcon} from './utils';
 import i18next from './i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {plLocaleConfig, enLocaleConfig} from './translation/calendar';
-import {getEveryHabit} from './services/habits.service';
 import {getEveryWeight} from './services/weights.service';
+import {getEveryMenu} from './services/menu.service';
 import {getEveryCost} from './services/costs.service';
+import {getEveryBudget} from './services/budgets.service';
 import {getEveryPlan} from './services/plans.service';
+import {getEveryHabit} from './services/habits.service';
 import {getEveryTask} from './services/tasks.service';
 import {getSettings} from './services/settings.service';
 import {getTempValue} from './services/temp.service';
 import {
-  setHabits,
+  setSelectedDay,
   setWeights,
+  setMenu,
   setCosts,
+  setBudgets,
   setPlans,
+  setHabits,
   setTasks,
   setSettings,
-  setSelectedDay,
 } from './redux/actions';
 import {convertRealmObjects} from './utils';
-import OnboardingModal from './modals/onboarding.modal';
 import {formatDate} from './utils';
+import OnboardingModal from './modals/onboarding.modal';
 
 const Tab = createBottomTabNavigator();
 
@@ -66,8 +70,14 @@ function AppContent() {
       const weights = getEveryWeight();
       dispatch(setWeights(convertRealmObjects(weights)));
 
+      const menu = getEveryMenu();
+      dispatch(setMenu(convertRealmObjects(menu)));
+
       const costs = getEveryCost();
       dispatch(setCosts(convertRealmObjects(costs)));
+
+      const budgets = getEveryBudget();
+      dispatch(setBudgets(convertRealmObjects(budgets)));
 
       const plans = getEveryPlan();
       dispatch(setPlans(convertRealmObjects(plans)));

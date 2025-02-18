@@ -108,12 +108,12 @@ const BudgetsModal = ({setShowModal}) => {
     <Modal transparent animationType="fade" onRequestClose={handleClose}>
       <View style={styles.container}>
         <Pressable style={dynamicStyle} onPress={() => handleType()}>
-          <Text style={styles.listItemWhat}>{t('entry-type')} </Text>
+          <Text style={styles.listItemDesc}>{t('entry-type')} </Text>
           <Text style={styles.listItemChange}>{t(`${type}`)}</Text>
         </Pressable>
 
         <Pressable style={dynamicStyle} onPress={() => handlePeriod()}>
-          <Text style={styles.listItemWhat}>{t('entry-period')} </Text>
+          <Text style={styles.listItemDesc}>{t('entry-period')} </Text>
           <Text style={styles.listItemChange}>{t(`${period}`)}</Text>
         </Pressable>
 

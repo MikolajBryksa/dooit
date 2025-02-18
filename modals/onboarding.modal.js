@@ -84,27 +84,27 @@ const OnboardingModal = ({setShowModal}) => {
         </View>
 
         <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
-          <Text style={styles.listItemWhat}>{t('language')} </Text>
+          <Text style={styles.listItemDesc}>{t('language')} </Text>
           <Text style={styles.listItemChange}>{settings.language}</Text>
         </Pressable>
 
         <Pressable style={dynamicStyle} onPress={() => handleWeightUnit()}>
-          <Text style={styles.listItemWhat}>{t('weight-unit')}</Text>
+          <Text style={styles.listItemDesc}>{t('weight-unit')}</Text>
           <Text style={styles.listItemChange}>{settings.weightUnit}</Text>
         </Pressable>
 
         <Pressable style={dynamicStyle} onPress={() => handleCurrency()}>
-          <Text style={styles.listItemWhat}>{t('currency')}</Text>
+          <Text style={styles.listItemDesc}>{t('currency')}</Text>
           <Text style={styles.listItemChange}>{settings.currency}</Text>
         </Pressable>
 
         <Pressable style={dynamicStyle} onPress={() => handleClockFormat()}>
-          <Text style={styles.listItemWhat}>{t('clock-format')}</Text>
+          <Text style={styles.listItemDesc}>{t('clock-format')}</Text>
           <Text style={styles.listItemChange}>{settings.clockFormat}</Text>
         </Pressable>
 
         <Pressable style={dynamicStyle} onPress={() => handleFirstDay()}>
-          <Text style={styles.listItemWhat}>{t('first-day')}</Text>
+          <Text style={styles.listItemDesc}>{t('first-day')}</Text>
           <Text style={styles.listItemChange}>
             {settings.firstDay === 'Monday'
               ? t('first-day-monday')

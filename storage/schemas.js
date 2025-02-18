@@ -130,17 +130,7 @@ Temp.schema = {
 
 const realmConfig = {
   schema: [Weight, Menu, Cost, Budget, Plan, Habit, Task, Settings, Temp],
-  schemaVersion: 2,
-  migration: (oldRealm, newRealm) => {
-    if (oldRealm.schemaVersion < 2) {
-      const oldCosts = oldRealm.objects('Cost');
-      const newCosts = newRealm.objects('Cost');
-
-      for (let i = 0; i < oldCosts.length; i++) {
-        newCosts[i].name = null;
-      }
-    }
-  },
+  schemaVersion: 1,
 };
 
 const realm = new Realm(realmConfig);

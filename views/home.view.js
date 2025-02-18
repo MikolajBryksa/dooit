@@ -63,6 +63,10 @@ const HomeView = () => {
     },
   ];
 
+  function handleAdd() {
+    setShowModal(true);
+  }
+
   const handleShowMenu = () => {
     setShowMenu(!showMenu);
     setMode('menu');
@@ -90,16 +94,32 @@ const HomeView = () => {
         />
       </View>
 
+      {todayMenu.length === 0 &&
+        todayPlans.length === 0 &&
+        todayHabits.length === 0 && (
+          <View style={styles.empty}>
+            <Text style={styles.center}>{t('no-today')}</Text>
+            <ControlButton
+              type="add"
+              press={() => {
+                setMode('plan');
+                handleAdd();
+              }}
+              shape="circle"
+            />
+          </View>
+        )}
+
       <ScrollView style={styles.scrollView}>
         {todayMenu.length > 0 && (
           <>
             {!showMenu ? (
               <Pressable style={dynamicStyle} onPress={handleShowMenu}>
                 <Text
-                  style={styles.listItemWhat}
+                  style={styles.listItemDesc}
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  <Text style={{color: COLORS.primary}}>{t('show-menu')}</Text>
+                  {t('show-menu')}
                 </Text>
                 <Pressable
                   style={styles.listItemCheck}
@@ -110,10 +130,10 @@ const HomeView = () => {
             ) : (
               <Pressable style={dynamicStyle} onPress={handleShowMenu}>
                 <Text
-                  style={styles.listItemWhat}
+                  style={styles.listItemDesc}
                   numberOfLines={1}
                   ellipsizeMode="tail">
-                  <Text style={{color: COLORS.primary}}>{t('hide-menu')}</Text>
+                  {t('hide-menu')}
                 </Text>
                 <Pressable
                   style={styles.listItemCheck}
