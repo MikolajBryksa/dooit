@@ -1,6 +1,6 @@
 {
   "name": "dooit",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "start": "react-native start",
@@ -27,11 +27,14 @@
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-gesture-handler": "^2.20.0",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-paper": "^5.13.1",
+    "react-native-paper-dates": "^0.22.34",
     "react-native-reanimated": "^3.15.5",
     "react-native-safe-area-context": "^4.11.0",
     "react-native-screens": "^3.34.0",
     "react-native-svg": "^15.7.1",
     "react-native-toast-message": "^2.2.1",
+    "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.1.2",
     "realm": "^20.0.0"
   },

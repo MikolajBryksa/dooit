@@ -1,99 +1,35 @@
 import Realm from 'realm';
 
-class Weight extends Realm.Object {}
-Weight.schema = {
-  name: 'Weight',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    when: 'date',
-    what: 'double',
-  },
-};
-
-class Menu extends Realm.Object {}
-Menu.schema = {
-  name: 'Menu',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    when: 'date',
-    meal1: 'string?',
-    meal2: 'string?',
-    meal3: 'string?',
-    meal4: 'string?',
-    meal5: 'string?',
-  },
-};
-
-class Cost extends Realm.Object {}
-Cost.schema = {
-  name: 'Cost',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    when: 'date',
-    name: 'string?',
-    what: 'double',
-  },
-};
-
-class Budget extends Realm.Object {}
-Budget.schema = {
-  name: 'Budget',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    type: 'string',
-    period: 'string',
-    name: 'string',
-    what: 'double',
-  },
-};
-
-class Plan extends Realm.Object {}
-Plan.schema = {
-  name: 'Plan',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    when: 'date',
-    what: 'string',
-    time: 'string?',
-    check: 'bool',
-  },
-};
-
 class Habit extends Realm.Object {}
 Habit.schema = {
   name: 'Habit',
   primaryKey: 'id',
   properties: {
     id: 'int',
-    when: 'int',
-    what: 'string',
-    time: 'string?',
-    monday: 'bool',
-    tuesday: 'bool',
-    wednesday: 'bool',
-    thursday: 'bool',
-    friday: 'bool',
-    saturday: 'bool',
-    sunday: 'bool',
-    check: 'bool',
+    habitName: 'string',
+    firstStep: 'string',
+    goalDesc: 'string',
+    motivation: 'string',
+    repeatDays: 'string[]',
+    habitStart: 'string',
+    progressType: 'string',
+    progressUnit: 'string',
+    targetScore: 'double',
   },
 };
 
-class Task extends Realm.Object {}
-Task.schema = {
-  name: 'Task',
+class Progress extends Realm.Object {}
+Progress.schema = {
+  name: 'Progress',
   primaryKey: 'id',
   properties: {
     id: 'int',
-    when: 'int',
-    what: 'string',
-    check: 'bool',
-    category: 'string',
+    habitId: 'int',
+    date: 'date',
+    progressAmount: 'int?',
+    progressValue: 'double?',
+    progressTime: 'int?',
+    checked: 'bool',
   },
 };
 
@@ -104,16 +40,8 @@ Settings.schema = {
   properties: {
     id: 'int',
     language: 'string',
-    weightsTab: 'bool',
-    weightUnit: 'string',
-    weightGain: 'double',
-    costsTab: 'bool',
-    currency: 'string',
-    costGain: 'double',
-    plansTab: 'bool',
     clockFormat: 'string',
     firstDay: 'string',
-    tasksTab: 'bool',
     firstLaunch: 'bool',
   },
 };
@@ -129,7 +57,7 @@ Temp.schema = {
 };
 
 const realmConfig = {
-  schema: [Weight, Menu, Cost, Budget, Plan, Habit, Task, Settings, Temp],
+  schema: [Habit, Progress, Settings, Temp],
   schemaVersion: 1,
 };
 
@@ -149,16 +77,8 @@ realm.write(() => {
     realm.create('Settings', {
       id: 1,
       language: 'English',
-      weightsTab: true,
-      weightUnit: 'kg',
-      weightGain: 0.05,
-      costsTab: true,
-      currency: 'zł',
-      costGain: 0.5,
-      plansTab: true,
       clockFormat: '24h',
       firstDay: 'Monday',
-      tasksTab: true,
       firstLaunch: true,
     });
   }

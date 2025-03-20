@@ -1,114 +1,52 @@
 import React, {useState} from 'react';
-import {View, ScrollView, Text, Pressable, Switch} from 'react-native';
+import {styles} from '../styles';
+import {View} from 'react-native';
+import {Appbar, Text, Divider, Card, Button} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {COLORS, styles} from '../styles';
-import packageJson from '../package.json';
-import ControlButton from '../components/control.button';
-import HeaderButton from '../components/header.button';
-import {setSettings} from '../redux/actions';
-import {updateSettingValue} from '../services/settings.service';
-import i18next from '../i18next';
 import {useTranslation} from 'react-i18next';
+import i18next from 'i18next';
+import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
-import IncomeModal from '../modals/income.modal';
-import ContactModal from '../modals/contact.modal';
+import {updateSettingValue} from '../services/settings.service';
+import {setSettings} from '../redux/actions';
+import ContactAuthorDialog from '../dialogs/contactAuthor.dialog';
+import SupportAuthorDialog from '../dialogs/supportAuthor.dialog';
 
 const SettingsView = () => {
   const settings = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-  const [showModalContact, setShowModalContact] = useState(false);
-  const [showModalIncome, setShowModalIncome] = useState(false);
+  const [visibleContactDialog, setVisibleContactDialog] = useState(false);
+  const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [weightsTab, setWeightsTab] = useState(settings.weightsTab);
-  const [weightUnit, setWeightUnit] = useState(settings.weightUnit);
-  const [weightGain, setWeightGain] = useState(settings.weightGain);
-  const [costsTab, setCostsTab] = useState(settings.costsTab);
-  const [currency, setCurrency] = useState(settings.currency);
-  const [costGain, setCostGain] = useState(settings.costGain);
-  const [plansTab, setPlansTab] = useState(settings.plansTab);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
-  const [tasksTab, setTasksTab] = useState(settings.tasksTab);
+
+  const handleContactDialog = () => {
+    setVisibleContactDialog(!visibleContactDialog);
+  };
+
+  const handleSupportDialog = () => {
+    setVisibleSupportDialog(!visibleSupportDialog);
+  };
 
   function handleLanguage() {
     const newLanguage = language === 'English' ? 'Polski' : 'English';
-    i18next.changeLanguage(newLanguage === 'English' ? 'en' : 'pl');
-    LocaleConfig.defaultLocale = newLanguage === 'English' ? 'en' : 'pl';
+    const newLocale = newLanguage === 'English' ? 'en' : 'pl';
+
+    i18next.changeLanguage(newLocale);
+    LocaleConfig.defaultLocale = newLocale;
+
+    if (newLocale === 'en') {
+      registerTranslation('en', en);
+    } else if (newLocale === 'pl') {
+      registerTranslation('pl', pl);
+    }
+
     setLanguage(newLanguage);
     updateSettingValue('language', newLanguage);
     const updatedSettings = {...settings, language: newLanguage};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleWeightsTab() {
-    const newWeightsTabValue = !weightsTab;
-    setWeightsTab(newWeightsTabValue);
-    updateSettingValue('weightsTab', newWeightsTabValue);
-    const updatedSettings = {...settings, weightsTab: newWeightsTabValue};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleWeightUnit() {
-    const newWeightUnit = weightUnit === 'kg' ? 'lb' : 'kg';
-    setWeightUnit(newWeightUnit);
-    updateSettingValue('weightUnit', newWeightUnit);
-    const updatedSettings = {...settings, weightUnit: newWeightUnit};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleWeightGain() {
-    let newWeightGain;
-    if (weightGain === 0.05) {
-      newWeightGain = 0.1;
-    } else if (weightGain === 0.1) {
-      newWeightGain = 0.5;
-    } else if (weightGain === 0.5) {
-      newWeightGain = 1;
-    } else {
-      newWeightGain = 0.05;
-    }
-    newWeightGain = parseFloat(newWeightGain.toFixed(2));
-    setWeightGain(newWeightGain);
-    updateSettingValue('weightGain', newWeightGain);
-    const updatedSettings = {...settings, weightGain: newWeightGain};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleCostsTab() {
-    const newCostsTabValue = !costsTab;
-    setCostsTab(newCostsTabValue);
-    updateSettingValue('costsTab', newCostsTabValue);
-    const updatedSettings = {...settings, costsTab: newCostsTabValue};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleCurrency() {
-    const currencies = ['zł', '$', '€'];
-    const currentIndex = currencies.indexOf(currency);
-    const newCurrency = currencies[(currentIndex + 1) % currencies.length];
-    setCurrency(newCurrency);
-    updateSettingValue('currency', newCurrency);
-    const updatedSettings = {...settings, currency: newCurrency};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleCostGain() {
-    const costGains = [0.5, 1, 0.1];
-    const currentIndex = costGains.indexOf(costGain);
-    const newCostGain = costGains[(currentIndex + 1) % costGains.length];
-    setCostGain(newCostGain);
-    updateSettingValue('costGain', newCostGain);
-    const updatedSettings = {...settings, costGain: newCostGain};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handlePlansTab() {
-    const newPlansTabValue = !plansTab;
-    setPlansTab(newPlansTabValue);
-    updateSettingValue('plansTab', newPlansTabValue);
-    const updatedSettings = {...settings, plansTab: newPlansTabValue};
     dispatch(setSettings(updatedSettings));
   }
 
@@ -128,141 +66,99 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
-  function handleTasksTab() {
-    const newTasksTabValue = !tasksTab;
-    setTasksTab(newTasksTabValue);
-    updateSettingValue('tasksTab', newTasksTabValue);
-    const updatedSettings = {...settings, tasksTab: newTasksTabValue};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleContact() {
-    setShowModalContact(true);
-  }
-
-  function handleIncome() {
-    setShowModalIncome(true);
-  }
-
-  const dynamicStyle = ({pressed}) => [
-    styles.listItem,
-    {opacity: pressed ? 0.8 : 1},
-  ];
-
   return (
-    <View style={styles.container}>
-      {showModalContact && <ContactModal setShowModal={setShowModalContact} />}
-      {showModalIncome && <IncomeModal setShowModal={setShowModalIncome} />}
+    <>
+      <Appbar.Header>
+        <Appbar.Content title={t('views.settings')} />
+        <Appbar.Action
+          icon="chat"
+          onPress={() => {
+            handleContactDialog();
+          }}
+        />
+        <Appbar.Action
+          icon="coffee"
+          onPress={() => {
+            handleSupportDialog();
+          }}
+        />
+      </Appbar.Header>
 
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
-          <HeaderButton
-            name={`${t('version')} ${packageJson.version}`}
-            active={true}
-          />
-        </View>
-        <Pressable style={dynamicStyle} onPress={() => handleLanguage()}>
-          <Text style={styles.listItemDesc}>{t('language')} </Text>
-          <Text style={styles.listItemChange}>{settings.language}</Text>
-        </Pressable>
+      <View style={styles.container}>
+        <ContactAuthorDialog
+          visible={visibleContactDialog}
+          onDismiss={handleContactDialog}
+          onDone={() => {
+            handleContactDialog();
+          }}
+        />
 
-        <View style={styles.gap} />
+        <SupportAuthorDialog
+          visible={visibleSupportDialog}
+          onDismiss={handleSupportDialog}
+          onDone={() => {
+            handleSupportDialog();
+          }}
+        />
 
-        <Pressable style={dynamicStyle} onPress={() => handleWeightsTab()}>
-          <Text style={styles.listItemDesc}>{t('weights')}</Text>
-          <Switch
-            style={styles.switch}
-            value={weightsTab}
-            onValueChange={() => handleWeightsTab()}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleWeightUnit()}>
-          <Text style={styles.listItemDesc}>{t('weight-unit')}</Text>
-          <Text style={styles.listItemChange}>{settings.weightUnit}</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleWeightGain()}>
-          <Text style={styles.listItemDesc}>{t('weight-gain')}</Text>
-          <Text style={styles.listItemChange}>{settings.weightGain}</Text>
-        </Pressable>
+        <Card style={styles.card}>
+          <Card.Content>
+            <View style={styles.title}>
+              <Text variant="titleLarge">{language}</Text>
+            </View>
+            <Divider style={styles.divider} />
+            <Text variant="bodyMedium">{t('settings.language')}</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button
+              mode="contained"
+              onPress={() => {
+                handleLanguage();
+              }}>
+              {t('button.change')}
+            </Button>
+          </Card.Actions>
+        </Card>
 
-        <View style={styles.gap} />
+        <Card style={styles.card}>
+          <Card.Content>
+            <View style={styles.title}>
+              <Text variant="titleLarge">{clockFormat}</Text>
+            </View>
+            <Divider style={styles.divider} />
+            <Text variant="bodyMedium">{t('settings.clock-format')}</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button
+              mode="contained"
+              onPress={() => {
+                handleClockFormat();
+              }}>
+              {t('button.change')}
+            </Button>
+          </Card.Actions>
+        </Card>
 
-        <Pressable style={dynamicStyle} onPress={() => handleCostsTab()}>
-          <Text style={styles.listItemDesc}>{t('costs')}</Text>
-          <Switch
-            style={styles.switch}
-            value={costsTab}
-            onValueChange={() => handleCostsTab()}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleCurrency()}>
-          <Text style={styles.listItemDesc}>{t('currency')}</Text>
-          <Text style={styles.listItemChange}>{settings.currency}</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleCostGain()}>
-          <Text style={styles.listItemDesc}>{t('cost-gain')}</Text>
-          <Text style={styles.listItemChange}>{settings.costGain}</Text>
-        </Pressable>
-
-        <View style={styles.gap} />
-
-        <Pressable style={dynamicStyle} onPress={() => handlePlansTab()}>
-          <Text style={styles.listItemDesc}>{t('plans')}</Text>
-          <Switch
-            style={styles.switch}
-            value={plansTab}
-            onValueChange={() => handlePlansTab()}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleClockFormat()}>
-          <Text style={styles.listItemDesc}>{t('clock-format')}</Text>
-          <Text style={styles.listItemChange}>{settings.clockFormat}</Text>
-        </Pressable>
-        <Pressable style={dynamicStyle} onPress={() => handleFirstDay()}>
-          <Text style={styles.listItemDesc}>{t('first-day')}</Text>
-          <Text style={styles.listItemChange}>
-            {settings.firstDay === 'Monday'
-              ? t('first-day-monday')
-              : t('first-day-sunday')}
-          </Text>
-        </Pressable>
-
-        <View style={styles.gap} />
-
-        <Pressable style={dynamicStyle} onPress={() => handleTasksTab()}>
-          <Text style={styles.listItemDesc}>{t('tasks')}</Text>
-          <Switch
-            style={styles.switch}
-            value={tasksTab}
-            onValueChange={() => handleTasksTab()}
-            trackColor={{
-              false: COLORS.primary25,
-              true: COLORS.primary50,
-            }}
-            thumbColor={COLORS.primary}
-          />
-        </Pressable>
-      </ScrollView>
-      <View style={styles.controllers}>
-        <ControlButton type="contact" press={handleContact} />
-        <ControlButton type="income" press={handleIncome} />
+        <Card style={styles.card}>
+          <Card.Content>
+            <View style={styles.title}>
+              <Text variant="titleLarge">{firstDay}</Text>
+            </View>
+            <Divider style={styles.divider} />
+            <Text variant="bodyMedium">{t('settings.first-day')}</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button
+              mode="contained"
+              onPress={() => {
+                handleFirstDay();
+              }}>
+              {t('button.change')}
+            </Button>
+          </Card.Actions>
+        </Card>
       </View>
-    </View>
+    </>
   );
 };
 

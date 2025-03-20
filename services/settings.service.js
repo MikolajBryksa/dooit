@@ -7,16 +7,8 @@ export const getSettings = () => {
   return {
     id: settings.id,
     language: settings.language,
-    weightsTab: settings.weightsTab,
-    weightUnit: settings.weightUnit,
-    weightGain: parseFloat(settings.weightGain.toFixed(2)),
-    costsTab: settings.costsTab,
-    currency: settings.currency,
-    costGain: parseFloat(settings.costGain.toFixed(2)),
-    plansTab: settings.plansTab,
     clockFormat: settings.clockFormat,
     firstDay: settings.firstDay,
-    tasksTab: settings.tasksTab,
     firstLaunch: settings.firstLaunch,
   };
 };

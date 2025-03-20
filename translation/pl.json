@@ -1,93 +1,127 @@
 {
-  "welcome": "Witam w Dooit, wybierz swoje ustawienia",
-  "no-today": "Tutaj zobaczysz dzisiejsze plany",
-  "no-weights": "Dodaj swoją wagę",
-  "no-menu": "Dodaj plan posiłków",
-  "no-costs": "Dodaj koszt nieuwzględniony w budżecie",
-  "no-budgets": "Dodaj zarobek lub regularny wydatek",
-  "no-plans": "Dodaj plan na wybrany dzień",
-  "no-habits": "Dodaj regularnie wykonywaną czynność",
-  "no-tasks-done": "Dodaj zadanie do wykonania",
-  "no-items-bought": "Dodaj przedmiot na listę zakupów",
-  "contact": "Czy chcesz do mnie napisać na Linkedin?",
-  "coffee": "Czy jako wsparcie postawisz mi kawusię?",
-
-  "finish-day": "Czy kończysz dzień?",
-  "enter-habit": "Wpisz nawyk",
-  "enter-weight": "Wpisz wagę",
-  "enter-cost": "Wpisz koszt",
-  "entry-type": "Typ wpisu",
-  "expense": "Wydatek",
-  "income": "Zarobek",
-  "entry-period": "Powtarzalność",
-  "monthly": "Miesięcznie",
-  "yearly": "Rocznie",
-  "single": "Jednorazowo",
-  "enter-name": "Wpisz nazwę",
-  "enter-amount": "Wpisz kwotę",
-  "enter-plan": "Wpisz plan",
-  "set-time": "Ustaw czas",
-  "set-days": "Codziennie",
-  "enter-task": "Wpisz zadanie",
-  "enter-item": "Wpisz produkt",
-
-  "initial-weight": "Waga początkowa",
-  "days": "dni",
-  "day": "dzień",
-  "done": "zrobione",
-  "bought": "kupione",
-
-  "version": "Wersja",
-  "language": "Język",
-  "rows-number": "Limit danych",
-  "habits": "Nawyki",
-  "weights": "Pomiary wagi",
-  "weight-unit": "Jednostka wagi",
-  "weight-gain": "Przyrost wagi",
-  "costs": "Koszta",
-  "currency": "Waluta",
-  "cost-gain": "Przyrost kosztów",
-  "plans": "Plany",
-  "clock-format": "Format zegara",
-  "first-day": "Pierwszy dzień",
-  "first-day-monday": "Poniedziałek",
-  "first-day-sunday": "Niedziela",
-  "tasks": "Zadania",
-
-  "daily": "Codziennie",
-  "mondays": "Poniedziałki",
-  "tuesdays": "Wtorki",
-  "wednesdays": "Środy",
-  "thursdays": "Czwartki",
-  "fridays": "Piątki",
-  "saturdays": "Soboty",
-  "sundays": "Niedziele",
-  "mon": "Pon",
-  "tue": "Wto",
-  "wed": "Śro",
-  "thu": "Czw",
-  "fri": "Pią",
-  "sat": "Sob",
-  "sun": "Nie",
-
-  "show-menu": "Pokaż menu",
-  "hide-menu": "Ukryj menu",
-  "meal1": "Śniadanie",
-  "meal2": "Drugie śniadanie",
-  "meal3": "Obiad",
-  "meal4": "Przekąska",
-  "meal5": "Kolacja",
-
-  "header": {
-    "weights": "Waga",
-    "menu": "Menu",
-    "costs": "Koszty",
-    "budget": "Budżet",
-    "plans": "Plany",
+  "views": {
+    "home": "Główna",
     "habits": "Nawyki",
-    "tasks": "Zadania",
-    "shop": "Sklep",
-    "settings": "Ustawienia",
-    "profile": "Profil"
+    "edit-habit": "Edytuj nawyk",
+    "stats": "Statystyki",
+    "settings": "Ustawienia"
+  },
+  "title": {
+    "add-habit": "Dodaj nawyk",
+    "edit-habit": "Edytuj nawyk",
+    "delete-habit": "Usuń nawyk",
+    "filter-habits": "Filtruj nawyki",
+    "no-habits": "Brak nawyków",
+    "choose-date": "Wybierz datę",
+    "contact-author": "Kontakt z autorem",
+    "support-author": "Wesprzyj autora"
+  },
+  "settings": {
+    "language": "Język",
+    "clock-format": "Format zegara",
+    "first-day": "Pierwszy dzień tygodnia"
+  },
+  "message": {
+    "delete-habit": "Czy na pewno chcesz pozbyć się nawyku",
+    "contact-author": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin",
+    "support-author": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) stawiając mu kawę",
+    "filter-habits": "Z jakich dni nawyki chcesz zobaczyć"
+  },
+  "button": {
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "change": "Zmień",
+    "contact": "Kontakt",
+    "support": "Wesprzyj",
+    "reset": "Reset",
+    "filter": "Filtruj",
+    "save": "Zapisz",
+    "edit": "Edytuj",
+    "add": "Dodaj",
+    "set": "Ustaw",
+    "today": "Dzisiaj",
+    "accept": "Akceptuj",
+    "start": "Start",
+    "stop": "Stop",
+    "table": "Tabela",
+    "back": "Wstecz",
+    "next": "Dalej"
+  },
+  "card": {
+    "first-step": "Pierwszy krok",
+    "goal-desc": "Cel",
+    "motivation": "Motywacja",
+    "in-progress": "W trakcie",
+    "target-measure": "Docelowy pomiar"
+  },
+  "table": {
+    "date": "Data",
+    "measure": "Pomiar",
+    "day": "Dzień",
+    "done": "Zrobione",
+    "yes": "Tak",
+    "no": "Nie",
+    "no-progress": "Brak danych postępu"
+  },
+  "date": {
+    "daily": "Codziennie",
+    "workdays": "Pracujące",
+    "weekend": "Weekend",
+    "mon": "Poniedziałek",
+    "tue": "Wtorek",
+    "wed": "Środa",
+    "thu": "Czwartek",
+    "fri": "Piątek",
+    "sat": "Sobota",
+    "sun": "Niedziela"
+  },
+  "unit": {
+    "minutes": "minuty"
+  },
+  "step": {
+    "1": "Co chcesz robić regularnie",
+    "2": "Jaki jest pierwszy krok, aby to zrobić",
+    "3": "Co osiągniesz dzięki temu nawykowi",
+    "4": "Dlaczego warto to osiągnąć",
+    "5": "W jakie dni chcesz to robić",
+    "6": "O której godzinie chcesz to zrobić",
+    "7": "Za pomocą czego chcesz mierzyć postęp",
+    "8": "Jaki pomiar będzie dla Ciebie satysfakcjonujący"
+  },
+  "input": {
+    "habit-name": "Nazwa nawyku",
+    "first-step": "Czynność rozpoczynająca nawyk",
+    "goal-desc": "Cel wyrabianego nawyku",
+    "motivation": "Główna motywacja",
+    "progress-type": {
+      "time": "Czas (minuty)",
+      "amount": "Ilość (np. strony, szklanki)",
+      "value": "Wartość (np. kilogramy)",
+      "done": "Zrobione (liczy tylko dni)"
+    },
+    "progress-unit": "Jednostka pomiaru",
+    "target-score": "Docelowy pomiar"
+  },
+  "option": {
+    "habit-name": {
+      "water": "Picie wody",
+      "book": "Czytanie książki",
+      "workout": "Ćwiczenia"
+    },
+    "first-step": {
+      "water": "Nalej szklankę wody",
+      "book": "Otwórz książkę",
+      "workout": "Rozłóż matę"
+    },
+    "goal-desc": {
+      "water": "Nawodnienie organizmu",
+      "book": "Poznanie ciekawych historii",
+      "workout": "Poprawienie figury"
+    },
+    "motivation": {
+      "water": "Chcę czuć się lepiej",
+      "book": "Chcę wiedzieć więcej",
+      "workout": "Chcę być zdrowszy"
+    }
   }
 }

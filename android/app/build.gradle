@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 import groovy.json.JsonSlurper
 
 def loadSecrets() {
@@ -90,8 +91,8 @@ android {
         applicationId "com.dooit.bryksa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.4.1"
+        versionCode 6
+        versionName "2.0.0"
     }
     signingConfigs {
         debug {
