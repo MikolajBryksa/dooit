@@ -2,9 +2,11 @@ import React from 'react';
 import {Dialog, Portal, Button, Text} from 'react-native-paper';
 import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const ContactAuthorDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
+  const styles = useStyles();
 
   const handleContact = () => {
     Linking.openURL('https://www.linkedin.com/in/mikolajbryksa');

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {PaperProvider} from 'react-native-paper';
+import {PaperProvider, BottomNavigation} from 'react-native-paper';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './redux/store';
 import LoadingView from './views/loading.view';
@@ -17,8 +17,9 @@ import {setSelectedDay, setSettings} from './redux/actions';
 import {formatDateToYYMMDD} from './utils';
 import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {BottomNavigation} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import {getTheme} from './theme/theme';
+import {useColorScheme} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -136,15 +137,34 @@ function AppContent() {
 }
 
 function App(): React.JSX.Element {
+  const reduxTheme = useSelector((state: any) => state.settings.currentTheme);
+  const systemTheme = useColorScheme();
+  let currentTheme = reduxTheme;
+
+  if (!currentTheme) {
+    const settings = getSettings();
+    if (settings && settings.currentTheme) {
+      currentTheme = settings.currentTheme;
+    } else {
+      currentTheme = systemTheme;
+    }
+  }
+
+  const theme = getTheme(currentTheme);
+
   return (
-    <Provider store={store}>
-      <PaperProvider>
-        <NavigationContainer>
-          <AppContent />
-        </NavigationContainer>
-      </PaperProvider>
-    </Provider>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <AppContent />
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
-export default App;
+const Root = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+export default Root;

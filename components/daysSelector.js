@@ -2,9 +2,11 @@ import React from 'react';
 import {View} from 'react-native';
 import {Button, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const {t} = useTranslation();
+  const styles = useStyles();
 
   const dayNames = {
     mon: t('date.mon'),

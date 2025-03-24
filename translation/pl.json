@@ -19,7 +19,10 @@
   "settings": {
     "language": "Język",
     "clock-format": "Format zegara",
-    "first-day": "Pierwszy dzień tygodnia"
+    "first-day": "Pierwszy dzień tygodnia",
+    "theme": "Motyw",
+    "dark": "Ciemny",
+    "light": "Jasny"
   },
   "message": {
     "delete-habit": "Czy na pewno chcesz pozbyć się nawyku",

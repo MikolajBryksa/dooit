@@ -19,7 +19,10 @@
   "settings": {
     "language": "Language",
     "clock-format": "Clock format",
-    "first-day": "First day of the week"
+    "first-day": "First day of the week",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light"
   },
   "message": {
     "delete-habit": "Are you sure to remove the habit",

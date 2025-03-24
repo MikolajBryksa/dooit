@@ -3,6 +3,7 @@ import {Dialog, Portal, Button, Text} from 'react-native-paper';
 import {deleteHabit} from '../services/habits.service';
 import {deleteProgressByHabitId} from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const DeleteHabitDialog = ({
   visible,
@@ -12,6 +13,7 @@ const DeleteHabitDialog = ({
   habitName,
 }) => {
   const {t} = useTranslation();
+  const styles = useStyles();
 
   const handleDelete = () => {
     deleteProgressByHabitId(habitId);

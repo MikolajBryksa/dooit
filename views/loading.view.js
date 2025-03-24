@@ -1,11 +1,15 @@
 import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
-import {COLORS, styles} from '../styles';
+import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const LoadingView = () => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+
   return (
     <View style={styles.loading}>
-      <ActivityIndicator size="large" color={COLORS.secondary} />
+      <ActivityIndicator size="large" />
     </View>
   );
 };

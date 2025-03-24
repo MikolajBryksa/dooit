@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {styles} from '../styles';
 import {
   Card,
   Button,
@@ -22,6 +21,7 @@ import {formatSecondsToHHMMSS} from '../utils';
 import {formatSecondsToMMSS} from '../utils';
 import {updateOrCreateProgress} from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 import {getRepeatDaysString} from '../utils';
 
 const HabitCard = ({
@@ -39,8 +39,9 @@ const HabitCard = ({
   progress,
   fetchHabitsWithProgress,
 }) => {
-  const selectedDay = useSelector(state => state.selectedDay);
   const {t} = useTranslation();
+  const styles = useStyles();
+  const selectedDay = useSelector(state => state.selectedDay);
   const [currentProgress, setCurrentProgress] = useState(0);
   const [progressBarValue, setProgressBarValue] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState('100%');
@@ -316,7 +317,9 @@ const HabitCard = ({
                         styles.progressBar,
                         {
                           backgroundColor:
-                            progressBarWidth !== '100%' ? 'red' : '',
+                            progressBarWidth !== '100%'
+                              ? styles.progressExcess.color
+                              : '',
                         },
                       ]}>
                       <ProgressBar

@@ -10,6 +10,7 @@ export const getSettings = () => {
     clockFormat: settings.clockFormat,
     firstDay: settings.firstDay,
     firstLaunch: settings.firstLaunch,
+    currentTheme: settings.currentTheme,
   };
 };
 

@@ -53,7 +53,7 @@ export function renderIcon(name, color, size) {
   return <FontAwesomeIcon icon={icon} color={color} size={size} />;
 }
 
-export const getRepeatDaysString = (repeatDays, t) => {
+export function getRepeatDaysString(repeatDays, t) {
   const dayNames = {
     mon: t('date.mon'),
     tue: t('date.tue'),
@@ -93,4 +93,17 @@ export const getRepeatDaysString = (repeatDays, t) => {
   }
 
   return selectedDays.join(', ');
-};
+}
+
+export function hexToRgba(hex, opacity) {
+  const bigint = parseInt(hex.replace('#', ''), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+// export function capitalizeFirstLetter(string) {
+//   return string.charAt(0).toUpperCase() + string.slice(1);
+// }

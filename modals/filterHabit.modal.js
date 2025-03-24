@@ -11,10 +11,12 @@ import {
 } from 'react-native-paper';
 import {styles} from '../styles';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 import DaysSelector from '../components/daysSelector';
 
 const FilterHabitModal = ({visible, onDismiss, filterHabitsByDays}) => {
   const {t} = useTranslation();
+  const styles = useStyles();
   const [repeatDays, setRepeatDays] = useState([]);
 
   const handleFilter = () => {

@@ -10,9 +10,9 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {View} from 'react-native';
-import {styles} from '../styles';
-import ProgressTypeEnum from '../enum/progressType.enum';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
+import ProgressTypeEnum from '../enum/progressType.enum';
 
 const SetHabitModal = ({
   visible,
@@ -25,6 +25,7 @@ const SetHabitModal = ({
   handleSet,
 }) => {
   const {t} = useTranslation();
+  const styles = useStyles();
   return (
     <Portal>
       <Modal

@@ -43,6 +43,7 @@ Settings.schema = {
     clockFormat: 'string',
     firstDay: 'string',
     firstLaunch: 'bool',
+    currentTheme: 'string?',
   },
 };
 
@@ -76,9 +77,9 @@ realm.write(() => {
   if (!existingSettings) {
     realm.create('Settings', {
       id: 1,
-      language: 'English',
+      language: 'en',
       clockFormat: '24h',
-      firstDay: 'Monday',
+      firstDay: 'mon',
       firstLaunch: true,
     });
   }

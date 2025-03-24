@@ -13,10 +13,12 @@ import {setHabits} from '../redux/actions';
 import {setSelectedDay} from '../redux/actions';
 import CalendarModal from '../modals/calendar.modal';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const HabitsView = () => {
-  const dispatch = useDispatch();
   const {t} = useTranslation();
+  const styles = useStyles();
+  const dispatch = useDispatch();
   const selectedDay = useSelector(state => state.selectedDay);
   const habits = useSelector(state => state.habits);
   const [filteredHabits, setFilteredHabits] = useState([]);

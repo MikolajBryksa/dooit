@@ -11,12 +11,13 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {Calendar} from 'react-native-paper-dates';
-import {styles} from '../styles';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 
 const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
-  const settings = useSelector(state => state.settings);
   const {t} = useTranslation();
+  const styles = useStyles();
+  const settings = useSelector(state => state.settings);
   const [date, setDate] = useState(new Date());
 
   const handleChange = ({date: selectedDate}) => {

@@ -18,6 +18,7 @@ import ProgressTypeEnum from '../enum/progressType.enum';
 import {TimePicker} from 'react-native-paper-dates';
 import {addHabit, updateHabit} from '../services/habits.service';
 import {useTranslation} from 'react-i18next';
+import {useStyles} from '../styles';
 import DaysSelector from '../components/daysSelector';
 
 const AddHabitModal = ({
@@ -32,6 +33,7 @@ const AddHabitModal = ({
   const [progressBarValue, setProgressBarValue] = useState(0);
   const [id, setId] = useState(null);
   const {t} = useTranslation();
+  const styles = useStyles();
 
   const [habitName, setHabitName] = useState('');
   const habitNameOptions = [
