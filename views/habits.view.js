@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {styles} from '../styles';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Button, Card, Divider} from 'react-native-paper';
 import HabitCard from '../components/habit.card';
@@ -14,6 +13,7 @@ import {setSelectedDay} from '../redux/actions';
 import CalendarModal from '../modals/calendar.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
+import {useFocusEffect} from '@react-navigation/native';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -61,6 +61,12 @@ const HabitsView = () => {
       dispatch(fetchHabitsWithProgress());
     }
   }, [view]);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchHabitsWithProgress());
+    }, [dispatch]),
+  );
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);

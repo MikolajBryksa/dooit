@@ -10,11 +10,12 @@
     "add-habit": "Add habit",
     "edit-habit": "Edit habit",
     "delete-habit": "Delete habit",
-    "contact-author": "Contact author",
-    "support-author": "Support author",
     "filter-habits": "Filter habits",
     "no-habits": "No habits",
-    "choose-date": "Choose date"
+    "no-current-habit": "No current habit",
+    "choose-date": "Choose date",
+    "contact-author": "Contact author",
+    "support-author": "Support author"
   },
   "settings": {
     "language": "Language",

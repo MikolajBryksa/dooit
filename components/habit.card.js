@@ -83,7 +83,8 @@ const HabitCard = ({
   }, [itemsPerPage]);
 
   useEffect(() => {
-    const progressForSelectedDay = progress.find(
+    const progressArray = Array.isArray(progress) ? progress : [];
+    const progressForSelectedDay = progressArray.find(
       item => new Date(item.date).toISOString().split('T')[0] === selectedDay,
     );
 

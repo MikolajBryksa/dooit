@@ -31,7 +31,44 @@ export const getProgressByHabitId = habitId => {
     .objects('Progress')
     .filtered('habitId == $0', habitId)
     .sorted('date', true);
-  return results;
+
+  return Array.from(results);
+};
+
+export const getProgressByHabitIdAndDate = (habitId, selectedDate) => {
+  const dateObject =
+    typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
+
+  if (isNaN(dateObject.getTime())) {
+    console.error(
+      'Invalid date provided to getProgressByHabitIdAndDate:',
+      selectedDate,
+    );
+    return null;
+  }
+
+  const result = realm
+    .objects('Progress')
+    .filtered('habitId == $0 AND date == $1', habitId, dateObject)[0];
+
+  return result ? {...result} : null;
+};
+
+export const getTodayProgress = selectedDay => {
+  const dateObject =
+    typeof selectedDay === 'string' ? new Date(selectedDay) : selectedDay;
+
+  if (isNaN(dateObject.getTime())) {
+    console.error('Invalid date provided to getTodayProgress:', selectedDay);
+    return [];
+  }
+
+  const results = realm
+    .objects('Progress')
+    .filtered('date == $0', dateObject)
+    .sorted('habitId');
+
+  return Array.from(results);
 };
 
 export const getProgressById = id => {
@@ -95,14 +132,6 @@ export const deleteProgressByHabitId = habitId => {
       realm.delete(progressToDelete);
     }
   });
-};
-
-export const getTodayProgress = selectedDay => {
-  const results = realm
-    .objects('Progress')
-    .filtered('date == $0', selectedDay)
-    .sorted('habitId');
-  return results;
 };
 
 export const updateOrCreateProgress = (

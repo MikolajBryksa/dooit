@@ -23,11 +23,6 @@ export function formatSecondsToMMSS(seconds) {
   ).padStart(2, '0')}`;
 }
 
-export function getNextId(itemName) {
-  const lastItem = realm.objects(itemName).sorted('id', true)[0];
-  return lastItem ? lastItem.id + 1 : 1;
-}
-
 export function formatDateToYYMMDD(when) {
   const today = when ? new Date(when) : new Date();
   const year = today.getFullYear();
@@ -35,6 +30,20 @@ export function formatDateToYYMMDD(when) {
   const day = String(today.getDate()).padStart(2, '0');
   const localToday = `${year}-${month}-${day}`;
   return localToday;
+}
+
+export function getFormattedTime() {
+  const now = new Date();
+  return now.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
+
+export function getNextId(itemName) {
+  const lastItem = realm.objects(itemName).sorted('id', true)[0];
+  return lastItem ? lastItem.id + 1 : 1;
 }
 
 export function renderIcon(name, color, size) {
@@ -104,6 +113,8 @@ export function hexToRgba(hex, opacity) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-// export function capitalizeFirstLetter(string) {
-//   return string.charAt(0).toUpperCase() + string.slice(1);
-// }
+export function getDayOfWeek(date) {
+  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const days = [daysOfWeek[new Date(date).getDay()]];
+  return days;
+}

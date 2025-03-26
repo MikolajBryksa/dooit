@@ -1,5 +1,6 @@
 import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import {getNextId, getDayOfWeek} from '../utils';
+import {getProgressByHabitIdAndDate} from './progress.service';
 
 export const addHabit = (
   habitName,
@@ -86,4 +87,42 @@ export const getEveryHabit = () => {
 
 export const getHabitById = id => {
   return realm.objectForPrimaryKey('Habit', id);
+};
+
+export const getCurrentHabit = (currentTime, selectedDay) => {
+  const habits = realm.objects('Habit').sorted('habitStart');
+
+  if (!habits || habits.length === 0) {
+    return null;
+  }
+
+  const days = getDayOfWeek(selectedDay);
+
+  const filteredHabits = habits.filter(habit => {
+    const repeatDaysArray = habit.repeatDays ? habit.repeatDays : [];
+    return days.some(day => repeatDaysArray.includes(day));
+  });
+
+  if (filteredHabits.length === 0) {
+    return null;
+  }
+
+  for (let i = 0; i < filteredHabits.length; i++) {
+    const habit = filteredHabits[i];
+    const nextHabit = filteredHabits[i + 1];
+
+    if (
+      currentTime >= habit.habitStart &&
+      (!nextHabit || currentTime < nextHabit.habitStart)
+    ) {
+      const progress = getProgressByHabitIdAndDate(habit.id, selectedDay);
+
+      return {
+        ...habit.toJSON(),
+        progress: progress ? [progress] : [],
+      };
+    }
+  }
+
+  return null;
 };

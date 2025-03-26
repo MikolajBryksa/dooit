@@ -17,6 +17,9 @@ export const useStyles = () => {
       height: theme.dimensions.height / 2,
       marginBottom: theme.dimensions.margin,
     },
+    date: {
+      marginRight: theme.dimensions.padding,
+    },
     card: {
       width: '100%',
       marginBottom: theme.dimensions.padding,

@@ -77,7 +77,7 @@ realm.write(() => {
   if (!existingSettings) {
     realm.create('Settings', {
       id: 1,
-      language: 'en',
+      language: 'pl',
       clockFormat: '24h',
       firstDay: 'mon',
       firstLaunch: true,
