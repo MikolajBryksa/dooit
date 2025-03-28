@@ -1,6 +1,11 @@
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faClock, faCog, faHome} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCog,
+  faHome,
+  faChartPie,
+  faList,
+} from '@fortawesome/free-solid-svg-icons';
 import realm from './storage/schemas';
 
 export function formatSecondsToHHMMSS(seconds) {
@@ -52,7 +57,10 @@ export function renderIcon(name, color, size) {
       icon = faHome;
       break;
     case 'habits':
-      icon = faClock;
+      icon = faList;
+      break;
+    case 'stats':
+      icon = faChartPie;
       break;
     case 'settings':
       icon = faCog;

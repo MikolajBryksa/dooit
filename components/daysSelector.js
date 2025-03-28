@@ -34,13 +34,7 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
 
   return (
     <>
-      <View
-        style={{
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          flexDirection: 'row',
-          width: '100%',
-        }}>
+      <View style={styles.daysSelector}>
         <Button
           mode="outlined"
           onPress={() => setRepeatDays(daily)}

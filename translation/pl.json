@@ -1,8 +1,7 @@
 {
-  "views": {
+  "view": {
     "home": "Główna",
     "habits": "Nawyki",
-    "edit-habit": "Edytuj nawyk",
     "stats": "Statystyki",
     "settings": "Ustawienia"
   },

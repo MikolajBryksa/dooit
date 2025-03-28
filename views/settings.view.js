@@ -84,7 +84,7 @@ const SettingsView = () => {
   return (
     <>
       <Appbar.Header>
-        <Appbar.Content title={t('views.settings')} />
+        <Appbar.Content title={t('view.settings')} />
         <Appbar.Action
           icon="chat"
           onPress={() => {

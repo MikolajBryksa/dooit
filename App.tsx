@@ -5,6 +5,7 @@ import store from './redux/store';
 import LoadingView from './views/loading.view';
 import HomeView from './views/home.view';
 import HabitsView from './views/habits.view';
+import StatsView from './views/stats.view';
 import SettingsView from './views/settings.view';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
@@ -105,7 +106,7 @@ function AppContent() {
           name="Home"
           component={HomeView}
           options={{
-            tabBarLabel: t('views.home'),
+            tabBarLabel: t('view.home'),
             tabBarIcon: ({color, size}) => {
               return renderIcon('home', color, size);
             },
@@ -115,9 +116,19 @@ function AppContent() {
           name="Habits"
           component={HabitsView}
           options={{
-            tabBarLabel: t('views.habits'),
+            tabBarLabel: t('view.habits'),
             tabBarIcon: ({color, size}) => {
               return renderIcon('habits', color, size);
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Stats"
+          component={StatsView}
+          options={{
+            tabBarLabel: t('view.stats'),
+            tabBarIcon: ({color, size}) => {
+              return renderIcon('stats', color, size);
             },
           }}
         />
@@ -125,7 +136,7 @@ function AppContent() {
           name="Settings"
           component={SettingsView}
           options={{
-            tabBarLabel: t('views.settings'),
+            tabBarLabel: t('view.settings'),
             tabBarIcon: ({color, size}) => {
               return renderIcon('settings', color, size);
             },

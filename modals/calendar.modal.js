@@ -14,6 +14,7 @@ import {Calendar} from 'react-native-paper-dates';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
 import {formatDateToYYMMDD} from '../utils';
+import {updateTempValue} from '../services/temp.service';
 
 const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
   const {t} = useTranslation();
@@ -30,6 +31,7 @@ const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
   const handleToday = () => {
     const currentDay = formatDateToYYMMDD();
     setSelectedDay(currentDay);
+    updateTempValue('selectedDay', currentDay);
     setTimeout(() => setDate(new Date()), 500);
     onDismiss();
   };
@@ -42,6 +44,7 @@ const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
       );
       const currentDay = new Date(localDate).toISOString().split('T')[0];
       setSelectedDay(currentDay);
+      updateTempValue('selectedDay', currentDay);
     }
     onDismiss();
   };

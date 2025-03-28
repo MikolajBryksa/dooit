@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Button, Card, Divider} from 'react-native-paper';
@@ -6,17 +6,17 @@ import HabitCard from '../components/habit.card';
 import ViewEnum from '../enum/view.enum';
 import AddHabitModal from '../modals/addHabit.modal';
 import FilterHabitModal from '../modals/filterHabit.modal';
-import {getEveryHabit} from '../services/habits.service';
-import {getProgressByHabitId} from '../services/progress.service';
-import {setHabits} from '../redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
+import {setHabits} from '../redux/actions';
+import {getEveryHabit} from '../services/habits.service';
+import {getProgressByHabitId} from '../services/progress.service';
+import {useFocusEffect} from '@react-navigation/native';
 
-const HabitsView = () => {
+const StatsView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
-  const selectedDay = useSelector(state => state.selectedDay);
   const habits = useSelector(state => state.habits);
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
@@ -72,9 +72,12 @@ const HabitsView = () => {
     setFilteredHabits(filtered);
   };
 
-  useEffect(() => {
-    filterHabitsByDays();
-  }, [habits, selectedDay]);
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchHabitsWithProgress());
+      filterHabitsByDays();
+    }, [dispatch]),
+  );
 
   return (
     <>
@@ -91,14 +94,7 @@ const HabitsView = () => {
       />
 
       <Appbar.Header>
-        <Appbar.Content title={t('view.habits')} />
-
-        <Appbar.Action
-          icon="plus"
-          onPress={() => {
-            handleAddModal();
-          }}
-        />
+        <Appbar.Content title={t('view.stats')} />
         <Appbar.Action
           icon="filter"
           onPress={() => {
@@ -113,7 +109,7 @@ const HabitsView = () => {
             <HabitCard
               key={habit.id}
               id={habit.id}
-              view={ViewEnum.EDIT}
+              view={ViewEnum.STATS}
               habitName={habit.habitName}
               firstStep={habit.firstStep}
               goalDesc={habit.goalDesc}
@@ -154,4 +150,4 @@ const HabitsView = () => {
   );
 };
 
-export default HabitsView;
+export default StatsView;

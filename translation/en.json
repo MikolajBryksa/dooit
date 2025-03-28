@@ -1,8 +1,7 @@
 {
-  "views": {
+  "view": {
     "home": "Home",
     "habits": "Habits",
-    "edit-habit": "Edit habit",
     "stats": "Stats",
     "settings": "Settings"
   },

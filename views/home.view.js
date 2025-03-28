@@ -1,6 +1,6 @@
-import React, {useMemo, useState, useEffect, useCallback} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Appbar, Text, Card, Divider, Chip} from 'react-native-paper';
+import {Appbar, Text, Card, Divider, Chip, Button} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
@@ -10,9 +10,10 @@ import {setHabits} from '../redux/actions';
 import {getEveryHabit} from '../services/habits.service';
 import {getProgressByHabitId} from '../services/progress.service';
 import ViewEnum from '../enum/view.enum';
-import {useFocusEffect} from '@react-navigation/native';
 import {setSelectedDay} from '../redux/actions';
 import {formatDateToYYMMDD, getDayOfWeek} from '../utils';
+import CalendarModal from '../modals/calendar.modal';
+import AddHabitModal from '../modals/addHabit.modal';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -20,8 +21,69 @@ const HomeView = () => {
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const selectedDay = useSelector(state => state.selectedDay);
+  const [filteredHabits, setFilteredHabits] = useState([]);
+  const [visibleAddModal, setVisibleAddModal] = useState(false);
+  const [visibleCalendarModal, setVisibleCalendarModal] = useState(false);
   const [currentTime, setCurrentTime] = useState(() => getFormattedTime());
   const [currentDay, setCurrentDay] = useState(() => formatDateToYYMMDD());
+
+  const handleAddModal = () => {
+    setVisibleAddModal(!visibleAddModal);
+  };
+
+  const fetchHabitsWithProgress = () => dispatch => {
+    const habits = getEveryHabit() || [];
+
+    const habitsWithProgress = habits.map(habit => {
+      const progressData = getProgressByHabitId(habit.id);
+      const progress = progressData
+        ? progressData.map(p => ({
+            ...p,
+            date: p.date ? p.date.toISOString() : null,
+          }))
+        : undefined;
+
+      const serializableRepeatDays = habit.repeatDays
+        ? JSON.stringify(habit.repeatDays)
+        : '[]';
+
+      return {
+        ...habit,
+        ...(progress !== undefined && {progress}),
+        repeatDays: serializableRepeatDays,
+      };
+    });
+    dispatch(setHabits(habitsWithProgress));
+  };
+
+  useEffect(() => {
+    dispatch(fetchHabitsWithProgress());
+  }, [dispatch, selectedDay]);
+
+  const filterHabitsByDays = () => {
+    if (!habits || habits.length === 0) {
+      setFilteredHabits([]);
+      return;
+    }
+    const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    const day = [daysOfWeek[new Date(selectedDay).getDay()]];
+
+    const filtered = habits.filter(habit => {
+      const repeatDaysArray = habit.repeatDays
+        ? JSON.parse(habit.repeatDays)
+        : [];
+      return day.some(day => repeatDaysArray.includes(day));
+    });
+    setFilteredHabits(filtered);
+  };
+
+  useEffect(() => {
+    filterHabitsByDays();
+  }, [habits, selectedDay]);
+
+  const handleCalendarModal = () => {
+    setVisibleCalendarModal(!visibleCalendarModal);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -59,14 +121,74 @@ const HomeView = () => {
 
   return (
     <>
+      <AddHabitModal
+        visible={visibleAddModal}
+        onDismiss={handleAddModal}
+        fetchHabitsWithProgress={() => dispatch(fetchHabitsWithProgress())}
+      />
+
+      <CalendarModal
+        visible={visibleCalendarModal}
+        onDismiss={handleCalendarModal}
+        setSelectedDay={day => dispatch(setSelectedDay(day))}
+      />
+
       <Appbar.Header>
-        <Appbar.Content title={t('views.home')} />
-        <Chip icon="calendar" style={styles.date}>
-          {t(`date.${getDayOfWeek(currentDay)}`)}
-        </Chip>
+        <Appbar.Content title={t('view.home')} />
+        <Chip>{t(`date.${getDayOfWeek(selectedDay)}`)}</Chip>
+        <Appbar.Action
+          icon="calendar"
+          onPress={() => {
+            handleCalendarModal();
+          }}
+        />
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
+        {filteredHabits && filteredHabits.length > 0 ? (
+          filteredHabits.map(habit => (
+            <HabitCard
+              key={habit.id}
+              id={habit.id}
+              view={ViewEnum.PREVIEW}
+              habitName={habit.habitName}
+              firstStep={habit.firstStep}
+              goalDesc={habit.goalDesc}
+              motivation={habit.motivation}
+              repeatDays={habit.repeatDays}
+              habitStart={habit.habitStart}
+              progressType={habit.progressType}
+              progressUnit={habit.progressUnit}
+              targetScore={habit.targetScore}
+              progress={habit.progress}
+              fetchHabitsWithProgress={() =>
+                dispatch(fetchHabitsWithProgress())
+              }
+            />
+          ))
+        ) : (
+          <Card style={styles.card}>
+            <Card.Content>
+              <View style={styles.title}>
+                <Text variant="titleLarge">{t('title.no-habits')}</Text>
+              </View>
+              <Divider style={styles.divider} />
+            </Card.Content>
+            <Card.Actions>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  handleAddModal();
+                }}>
+                {t('button.add')}
+              </Button>
+            </Card.Actions>
+          </Card>
+        )}
+        <View style={styles.gap} />
+      </ScrollView>
+
+      {/* <ScrollView style={styles.container}>
         {currentHabit && selectedDay === currentDay ? (
           <HabitCard
             key={currentHabit.id}
@@ -94,7 +216,7 @@ const HomeView = () => {
             </Card.Content>
           </Card>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </>
   );
 };
