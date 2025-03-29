@@ -31,6 +31,10 @@ const HomeView = () => {
     setVisibleAddModal(!visibleAddModal);
   };
 
+  const handleCalendarModal = () => {
+    setVisibleCalendarModal(!visibleCalendarModal);
+  };
+
   const fetchHabitsWithProgress = () => dispatch => {
     const habits = getEveryHabit() || [];
 
@@ -58,7 +62,7 @@ const HomeView = () => {
 
   useEffect(() => {
     dispatch(fetchHabitsWithProgress());
-  }, [dispatch, selectedDay]);
+  }, [selectedDay]);
 
   const filterHabitsByDays = () => {
     if (!habits || habits.length === 0) {
@@ -81,43 +85,39 @@ const HomeView = () => {
     filterHabitsByDays();
   }, [habits, selectedDay]);
 
-  const handleCalendarModal = () => {
-    setVisibleCalendarModal(!visibleCalendarModal);
-  };
+  //   useEffect(() => {
+  //     const interval = setInterval(() => {
+  //       setCurrentTime(getFormattedTime());
+  //       if (currentDay !== formatDateToYYMMDD()) {
+  //         setCurrentDay(formatDateToYYMMDD());
+  //       }
+  //     }, 60000);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(getFormattedTime());
-      if (currentDay !== formatDateToYYMMDD()) {
-        setCurrentDay(formatDateToYYMMDD());
-      }
-    }, 60000);
+  //     return () => clearInterval(interval);
+  //   }, []);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   const isCurrentHabit = (currentTime, habitStart, nextHabitStart) => {
+  //     return (
+  //       currentTime >= habitStart &&
+  //       (!nextHabitStart || currentTime < nextHabitStart)
+  //     );
+  //   };
 
-  const isCurrentHabit = (currentTime, habitStart, nextHabitStart) => {
-    return (
-      currentTime >= habitStart &&
-      (!nextHabitStart || currentTime < nextHabitStart)
-    );
-  };
+  //   const currentHabit = useMemo(() => {
+  //     if (!habits || habits.length === 0) return null;
 
-  const currentHabit = useMemo(() => {
-    if (!habits || habits.length === 0) return null;
+  //     for (let i = 0; i < habits.length; i++) {
+  //       const habit = habits[i];
+  //       const nextHabit = habits[i + 1];
+  //       if (
+  //         isCurrentHabit(currentTime, habit.habitStart, nextHabit?.habitStart)
+  //       ) {
+  //         return habit;
+  //       }
+  //     }
 
-    for (let i = 0; i < habits.length; i++) {
-      const habit = habits[i];
-      const nextHabit = habits[i + 1];
-      if (
-        isCurrentHabit(currentTime, habit.habitStart, nextHabit?.habitStart)
-      ) {
-        return habit;
-      }
-    }
-
-    return null;
-  }, [habits, currentTime]);
+  //     return null;
+  //   }, [habits, currentTime]);
 
   return (
     <>

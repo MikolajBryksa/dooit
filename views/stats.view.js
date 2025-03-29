@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Button, Card, Divider} from 'react-native-paper';
@@ -75,9 +75,12 @@ const StatsView = () => {
   useFocusEffect(
     useCallback(() => {
       dispatch(fetchHabitsWithProgress());
-      filterHabitsByDays();
     }, [dispatch]),
   );
+
+  useEffect(() => {
+    filterHabitsByDays();
+  }, [habits]);
 
   return (
     <>
