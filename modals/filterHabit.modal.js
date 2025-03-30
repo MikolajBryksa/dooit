@@ -9,7 +9,6 @@ import {
   Portal,
   IconButton,
 } from 'react-native-paper';
-import {styles} from '../styles';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
 import DaysSelector from '../components/daysSelector';

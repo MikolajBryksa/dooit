@@ -189,7 +189,7 @@ const HabitCard = ({
       progressType === ProgressTypeEnum.AMOUNT ? progress : null,
       progressType === ProgressTypeEnum.VALUE ? progress : null,
       progressType === ProgressTypeEnum.TIME ? progress : null,
-      checked,
+      checked ?? false,
     );
   };
 

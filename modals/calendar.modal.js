@@ -72,7 +72,7 @@ const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
               startYear={2000}
               endYear={2100}
               disableWeekDays={false}
-              startWeekOnMonday={settings.firstDay === 'Monday' ? true : false}
+              startWeekOnMonday={settings.firstDay === 'mon' ? true : false}
             />
           </View>
 

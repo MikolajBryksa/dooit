@@ -8,7 +8,7 @@ import HabitCard from '../components/habit.card';
 import {getFormattedTime} from '../utils';
 import {setHabits} from '../redux/actions';
 import {getEveryHabit} from '../services/habits.service';
-import {getProgressByHabitId} from '../services/progress.service';
+import {addProgressToHabits, getHabitsByDay} from '../utils';
 import ViewEnum from '../enum/view.enum';
 import {setSelectedDay} from '../redux/actions';
 import {formatDateToYYMMDD, getDayOfWeek} from '../utils';
@@ -37,26 +37,7 @@ const HomeView = () => {
 
   const fetchHabitsWithProgress = () => dispatch => {
     const habits = getEveryHabit() || [];
-
-    const habitsWithProgress = habits.map(habit => {
-      const progressData = getProgressByHabitId(habit.id);
-      const progress = progressData
-        ? progressData.map(p => ({
-            ...p,
-            date: p.date ? p.date.toISOString() : null,
-          }))
-        : undefined;
-
-      const serializableRepeatDays = habit.repeatDays
-        ? JSON.stringify(habit.repeatDays)
-        : '[]';
-
-      return {
-        ...habit,
-        ...(progress !== undefined && {progress}),
-        repeatDays: serializableRepeatDays,
-      };
-    });
+    const habitsWithProgress = addProgressToHabits(habits);
     dispatch(setHabits(habitsWithProgress));
   };
 
@@ -65,24 +46,14 @@ const HomeView = () => {
   }, [selectedDay]);
 
   const filterHabitsByDays = () => {
-    if (!habits || habits.length === 0) {
-      setFilteredHabits([]);
-      return;
+    if (habits || habits.length > 0) {
+      const filteredHabits = getHabitsByDay(habits, selectedDay);
+      setFilteredHabits(filteredHabits);
     }
-    const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-    const day = [daysOfWeek[new Date(selectedDay).getDay()]];
-
-    const filtered = habits.filter(habit => {
-      const repeatDaysArray = habit.repeatDays
-        ? JSON.parse(habit.repeatDays)
-        : [];
-      return day.some(day => repeatDaysArray.includes(day));
-    });
-    setFilteredHabits(filtered);
   };
 
   useEffect(() => {
-    filterHabitsByDays();
+    filterHabitsByDays(selectedDay);
   }, [habits, selectedDay]);
 
   //   useEffect(() => {

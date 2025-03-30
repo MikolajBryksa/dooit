@@ -72,7 +72,7 @@ export const useStyles = () => {
       marginTop: theme.dimensions.margin,
     },
     calendar: {
-      height: theme.dimensions.height * 7,
+      height: theme.dimensions.height * 7.5,
     },
   });
 };

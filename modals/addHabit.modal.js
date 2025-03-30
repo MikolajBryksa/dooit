@@ -13,7 +13,6 @@ import {
   ProgressBar,
   IconButton,
 } from 'react-native-paper';
-import {styles} from '../styles';
 import ProgressTypeEnum from '../enum/progressType.enum';
 import {TimePicker} from 'react-native-paper-dates';
 import {addHabit, updateHabit} from '../services/habits.service';

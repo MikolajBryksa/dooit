@@ -7,7 +7,7 @@ import ViewEnum from '../enum/view.enum';
 import AddHabitModal from '../modals/addHabit.modal';
 import FilterHabitModal from '../modals/filterHabit.modal';
 import {getEveryHabit} from '../services/habits.service';
-import {getProgressByHabitId} from '../services/progress.service';
+import {addProgressToHabits, getHabitsByDays} from '../utils';
 import {setHabits} from '../redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
@@ -32,44 +32,15 @@ const HabitsView = () => {
 
   const fetchHabitsWithProgress = () => dispatch => {
     const habits = getEveryHabit() || [];
-
-    const habitsWithProgress = habits.map(habit => {
-      const progressData = getProgressByHabitId(habit.id);
-      const progress = progressData
-        ? progressData.map(p => ({
-            ...p,
-            date: p.date ? p.date.toISOString() : null,
-          }))
-        : undefined;
-
-      const serializableRepeatDays = habit.repeatDays
-        ? JSON.stringify(habit.repeatDays)
-        : '[]';
-
-      return {
-        ...habit,
-        ...(progress !== undefined && {progress}),
-        repeatDays: serializableRepeatDays,
-      };
-    });
+    const habitsWithProgress = addProgressToHabits(habits);
     dispatch(setHabits(habitsWithProgress));
   };
 
   const filterHabitsByDays = days => {
-    if (!habits || habits.length === 0) {
-      setFilteredHabits([]);
-      return;
+    if (habits || habits.length > 0) {
+      const filteredHabits = getHabitsByDays(habits, days);
+      setFilteredHabits(filteredHabits);
     }
-    const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-    if (!days) days = daysOfWeek;
-
-    const filtered = habits.filter(habit => {
-      const repeatDaysArray = habit.repeatDays
-        ? JSON.parse(habit.repeatDays)
-        : [];
-      return days.some(day => repeatDaysArray.includes(day));
-    });
-    setFilteredHabits(filtered);
   };
 
   useEffect(() => {

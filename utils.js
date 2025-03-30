@@ -7,6 +7,7 @@ import {
   faList,
 } from '@fortawesome/free-solid-svg-icons';
 import realm from './storage/schemas';
+import {getProgressByHabitId} from './services/progress.service';
 
 export function formatSecondsToHHMMSS(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -125,4 +126,56 @@ export function getDayOfWeek(date) {
   const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const days = [daysOfWeek[new Date(date).getDay()]];
   return days;
+}
+
+export function addProgressToHabits(habits) {
+  if (!habits || habits.length === 0) {
+    return [];
+  }
+
+  return habits.map(habit => {
+    const progressData = getProgressByHabitId(habit.id);
+    const progress = progressData
+      ? progressData.map(p => ({
+          ...p,
+          date: p.date ? p.date.toISOString() : null,
+        }))
+      : undefined;
+
+    const serializableRepeatDays = habit.repeatDays
+      ? JSON.stringify(habit.repeatDays)
+      : '[]';
+
+    return {
+      ...habit,
+      ...(progress !== undefined && {progress}),
+      repeatDays: serializableRepeatDays,
+    };
+  });
+}
+
+export function getHabitsByDays(habits, days) {
+  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  if (!days) days = daysOfWeek;
+
+  const filtered = habits.filter(habit => {
+    const repeatDaysArray = habit.repeatDays
+      ? JSON.parse(habit.repeatDays)
+      : [];
+    return days.some(day => repeatDaysArray.includes(day));
+  });
+  return filtered;
+}
+
+export function getHabitsByDay(habits, selectedDay) {
+  const date = new Date(selectedDay);
+  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const day = daysOfWeek[date.getDay()];
+
+  return habits.filter(habit => {
+    const repeatDaysArray = habit.repeatDays
+      ? JSON.parse(habit.repeatDays)
+      : [];
+    return repeatDaysArray.includes(day);
+  });
 }
