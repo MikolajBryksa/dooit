@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Card, Divider, Chip, Button} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
@@ -14,6 +14,7 @@ import {setSelectedDay} from '../redux/actions';
 import {formatDateToYYMMDD, getDayOfWeek} from '../utils';
 import CalendarModal from '../modals/calendar.modal';
 import AddHabitModal from '../modals/addHabit.modal';
+import {updateTempValue} from '../services/temp.service';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -25,7 +26,6 @@ const HomeView = () => {
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [visibleCalendarModal, setVisibleCalendarModal] = useState(false);
   const [currentTime, setCurrentTime] = useState(() => getFormattedTime());
-  const [currentDay, setCurrentDay] = useState(() => formatDateToYYMMDD());
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -56,39 +56,33 @@ const HomeView = () => {
     filterHabitsByDays(selectedDay);
   }, [habits, selectedDay]);
 
-  //   useEffect(() => {
-  //     const interval = setInterval(() => {
-  //       setCurrentTime(getFormattedTime());
-  //       if (currentDay !== formatDateToYYMMDD()) {
-  //         setCurrentDay(formatDateToYYMMDD());
-  //       }
-  //     }, 60000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = getFormattedTime();
+      const currentDay = formatDateToYYMMDD();
+      setCurrentTime(currentTime);
+      if (currentTime >= '03:00' && currentDay !== selectedDay) {
+        dispatch(setSelectedDay(currentDay));
+        updateTempValue('selectedDay', currentDay);
+      }
+    }, 30000);
 
-  //     return () => clearInterval(interval);
-  //   }, []);
+    return () => clearInterval(interval);
+  }, [selectedDay]);
 
-  //   const isCurrentHabit = (currentTime, habitStart, nextHabitStart) => {
-  //     return (
-  //       currentTime >= habitStart &&
-  //       (!nextHabitStart || currentTime < nextHabitStart)
-  //     );
-  //   };
+  const markHabitsByTime = (habits, currentTime) => {
+    return habits.map(habit => ({
+      ...habit,
+      inactive: habit.habitStart >= currentTime,
+    }));
+  };
 
-  //   const currentHabit = useMemo(() => {
-  //     if (!habits || habits.length === 0) return null;
-
-  //     for (let i = 0; i < habits.length; i++) {
-  //       const habit = habits[i];
-  //       const nextHabit = habits[i + 1];
-  //       if (
-  //         isCurrentHabit(currentTime, habit.habitStart, nextHabit?.habitStart)
-  //       ) {
-  //         return habit;
-  //       }
-  //     }
-
-  //     return null;
-  //   }, [habits, currentTime]);
+  useEffect(() => {
+    if (selectedDay === formatDateToYYMMDD()) {
+      const markedHabits = markHabitsByTime(habits, currentTime);
+      setFilteredHabits(markedHabits);
+    }
+  }, [habits, currentTime]);
 
   return (
     <>
@@ -132,6 +126,7 @@ const HomeView = () => {
               progressUnit={habit.progressUnit}
               targetScore={habit.targetScore}
               progress={habit.progress}
+              inactive={habit.inactive}
               fetchHabitsWithProgress={() =>
                 dispatch(fetchHabitsWithProgress())
               }

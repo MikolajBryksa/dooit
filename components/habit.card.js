@@ -37,6 +37,7 @@ const HabitCard = ({
   progressUnit,
   targetScore,
   progress,
+  inactive,
   fetchHabitsWithProgress,
 }) => {
   const {t} = useTranslation();
@@ -247,7 +248,7 @@ const HabitCard = ({
           habitName={habitName}
         />
 
-        <Card style={styles.card}>
+        <Card style={[styles.card, {opacity: inactive ? 0.5 : 1}]}>
           {view === ViewEnum.PREVIEW ? (
             <Chip icon="clock" style={styles.chip}>
               {habitStart}
