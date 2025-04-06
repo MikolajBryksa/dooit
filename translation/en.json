@@ -105,8 +105,9 @@
       "value": "Value (like kilograms, pounds)",
       "done": "Done (only counts days)"
     },
-    "progress-unit": "Progress unit",
-    "target-score": "Target measure"
+    "target-score": "Measure",
+    "progress-unit": "Unit",
+    "minutes": "min"
   },
   "option": {
     "habit-name": {
@@ -128,6 +129,11 @@
       "water": "I want to feel better",
       "book": "I want to know more",
       "workout": "I want to be healthier"
+    },
+    "progress-unit": {
+      "water": "glasses",
+      "book": "pages",
+      "workout": "kg"
     }
   }
 }

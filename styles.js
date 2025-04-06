@@ -20,6 +20,16 @@ export const useStyles = () => {
     loadingText: {
       marginTop: theme.dimensions.padding,
     },
+    disabled: {
+      opacity: 0.5,
+    },
+    targetScore: {
+      flexDirection: 'row',
+      gap: theme.dimensions.margin,
+    },
+    input: {
+      flex: 1,
+    },
     title: {
       flexDirection: 'row',
       justifyContent: 'space-between',

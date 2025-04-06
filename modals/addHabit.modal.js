@@ -64,20 +64,25 @@ const AddHabitModal = ({
 
   const [repeatDays, setRepeatDays] = useState([]);
   const [habitStart, setHabitStart] = useState('');
-
   const [progressType, setProgressType] = useState('');
-  const [progressUnit, setProgressUnit] = useState('');
-
   const [targetScore, setTargetScore] = useState(0);
 
-  const handleInput = value => {
+  const [progressUnit, setProgressUnit] = useState('');
+  const progressUnitOptions = [
+    t('option.progress-unit.water'),
+    t('option.progress-unit.book'),
+    t('option.progress-unit.workout'),
+  ];
+
+  const handleInput = (value, field) => {
     setValue(value);
     if (step === 1) setHabitName(value);
     if (step === 2) setFirstStep(value);
     if (step === 3) setGoalDesc(value);
     if (step === 4) setMotivation(value);
     if (step === 7) setProgressType(value);
-    if (step === 8) setTargetScore(value);
+    if (step === 8 && field === 'targetScore') setTargetScore(value);
+    if (step === 8 && field === 'progressUnit') setProgressUnit(value);
   };
 
   const parseTime = timeString => {
@@ -441,41 +446,34 @@ const AddHabitModal = ({
             <>
               <Text variant="bodyMedium">{t('step.7')}?</Text>
               <Divider style={styles.divider} />
-              <RadioButton.Group
-                onValueChange={value => {
-                  handleInput(value);
-                }}
-                value={progressType}>
-                <RadioButton.Item
-                  label={t('input.progress-type.time')}
-                  value={ProgressTypeEnum.TIME}
-                  disabled={!!currentHabit}
-                />
-                <RadioButton.Item
-                  label={t('input.progress-type.amount')}
-                  value={ProgressTypeEnum.AMOUNT}
-                  disabled={!!currentHabit}
-                />
-                <RadioButton.Item
-                  label={t('input.progress-type.value')}
-                  value={ProgressTypeEnum.VALUE}
-                  disabled={!!currentHabit}
-                />
-                <RadioButton.Item
-                  label={t('input.progress-type.done')}
-                  value={ProgressTypeEnum.DONE}
-                  disabled={!!currentHabit}
-                />
-              </RadioButton.Group>
-              {(progressType === ProgressTypeEnum.AMOUNT ||
-                progressType === ProgressTypeEnum.VALUE) && (
-                <TextInput
-                  mode="outlined"
-                  label={t('input.progress-unit')}
-                  value={progressUnit}
-                  onChangeText={value => setProgressUnit(value)}
-                />
-              )}
+              <View style={!!currentHabit && styles.disabled}>
+                <RadioButton.Group
+                  onValueChange={value => {
+                    handleInput(value);
+                  }}
+                  value={progressType}>
+                  <RadioButton.Item
+                    label={t('input.progress-type.time')}
+                    value={ProgressTypeEnum.TIME}
+                    disabled={!!currentHabit}
+                  />
+                  <RadioButton.Item
+                    label={t('input.progress-type.amount')}
+                    value={ProgressTypeEnum.AMOUNT}
+                    disabled={!!currentHabit}
+                  />
+                  <RadioButton.Item
+                    label={t('input.progress-type.value')}
+                    value={ProgressTypeEnum.VALUE}
+                    disabled={!!currentHabit}
+                  />
+                  <RadioButton.Item
+                    label={t('input.progress-type.done')}
+                    value={ProgressTypeEnum.DONE}
+                    disabled={!!currentHabit}
+                  />
+                </RadioButton.Group>
+              </View>
             </>
           )}
 
@@ -483,16 +481,55 @@ const AddHabitModal = ({
             <>
               <Text variant="bodyMedium">{t('step.8')}?</Text>
               <Divider style={styles.divider} />
-              <TextInput
-                mode="outlined"
-                label={t('input.target-score')}
-                value={targetScore.toString()}
-                keyboardType="numeric"
-                onChangeText={text => {
-                  const numericValue = text.replace(/[^0-9.]/g, '');
-                  handleInput(numericValue);
-                }}
-              />
+              <View style={styles.targetScore}>
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  label={t('input.target-score')}
+                  value={targetScore.toString()}
+                  keyboardType="numeric"
+                  onChangeText={text => {
+                    const sanitizedText = text.replace(',', '.');
+                    const numericValue = sanitizedText.replace(/[^0-9.]/g, '');
+                    handleInput(numericValue, 'targetScore');
+                  }}
+                />
+                {progressType === ProgressTypeEnum.AMOUNT ||
+                progressType === ProgressTypeEnum.VALUE ? (
+                  <>
+                    <TextInput
+                      style={styles.input}
+                      mode="outlined"
+                      label={t('input.progress-unit')}
+                      value={progressUnit}
+                      onChangeText={value => setProgressUnit(value)}
+                    />
+                  </>
+                ) : (
+                  <TextInput
+                    style={[styles.input, styles.disabled]}
+                    mode="outlined"
+                    label={t('input.progress-unit')}
+                    value={t('input.minutes')}
+                    disabled
+                  />
+                )}
+              </View>
+              {!currentHabit && (
+                <RadioButton.Group
+                  onValueChange={value => {
+                    handleInput(value, 'progressUnit');
+                  }}
+                  value={value}>
+                  {progressUnitOptions.map(option => (
+                    <RadioButton.Item
+                      key={option}
+                      label={option}
+                      value={option}
+                    />
+                  ))}
+                </RadioButton.Group>
+              )}
             </>
           )}
         </Card.Content>
@@ -503,7 +540,7 @@ const AddHabitModal = ({
             </Button>
           )}
           {currentHabit && <Button onPress={handleUpdate}>Zapisz</Button>}
-          {step < 7 && (
+          {step < 8 && (
             <Button
               onPress={handleNextStep}
               disabled={
@@ -518,19 +555,6 @@ const AddHabitModal = ({
               {t('button.next')}
             </Button>
           )}
-          {step === 7 &&
-            progressType !== ProgressTypeEnum.DONE &&
-            progressType !== ProgressTypeEnum.TIME && (
-              <Button onPress={handleNextStep} disabled={!progressUnit}>
-                {t('button.next')}
-              </Button>
-            )}
-
-          {step === 7 &&
-            progressType === ProgressTypeEnum.TIME &&
-            !currentHabit && (
-              <Button onPress={handleNextStep}>{t('button.next')}</Button>
-            )}
 
           {step === 7 &&
             progressType === ProgressTypeEnum.DONE &&
@@ -539,7 +563,14 @@ const AddHabitModal = ({
             )}
 
           {step === 8 && !currentHabit && (
-            <Button onPress={handleSave} disabled={!targetScore}>
+            <Button
+              onPress={handleSave}
+              disabled={
+                progressType !== ProgressTypeEnum.DONE &&
+                progressType !== ProgressTypeEnum.TIME
+                  ? !progressUnit || !targetScore
+                  : !targetScore
+              }>
               {t('button.save')}
             </Button>
           )}

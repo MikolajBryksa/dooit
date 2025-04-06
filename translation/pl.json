@@ -105,8 +105,9 @@
       "value": "Wartość (np. kilogramy)",
       "done": "Zrobione (liczy tylko dni)"
     },
-    "progress-unit": "Jednostka pomiaru",
-    "target-score": "Docelowy pomiar"
+    "target-score": "Pomiar",
+    "progress-unit": "Jednostka",
+    "minutes": "min"
   },
   "option": {
     "habit-name": {
@@ -128,6 +129,11 @@
       "water": "Chcę czuć się lepiej",
       "book": "Chcę wiedzieć więcej",
       "workout": "Chcę być zdrowszy"
+    },
+    "progress-unit": {
+      "water": "szklanek",
+      "book": "stron",
+      "workout": "kg"
     }
   }
 }

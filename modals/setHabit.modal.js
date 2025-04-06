@@ -49,7 +49,8 @@ const SetHabitModal = ({
             value={textInput}
             keyboardType="numeric"
             onChangeText={text => {
-              const numericValue = text.replace(/[^0-9.]/g, '');
+              const sanitizedText = text.replace(',', '.');
+              const numericValue = sanitizedText.replace(/[^0-9.]/g, '');
               setTextInput(numericValue);
             }}
           />
