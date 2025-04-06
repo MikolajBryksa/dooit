@@ -94,12 +94,14 @@ Before you begin, ensure you have met the following requirements:
 
   ```
       https://icon.kitchen/
+      Paste folders to:
+      /android/app/src/main/res
   ```
 
 - **Prepare to publish**:
 
   ```
-      Paste to android/app 2 files:
+      Paste 2 files to android/app:
       - dooit-release-key.keystore
       - secrets.json
   ```
