@@ -1,17 +1,18 @@
 import {hexToRgba} from '../utils';
+import {colors} from './colors';
 
-const backgroundColor = '#635147';
-const mediumColor = '#3C342E';
-const mainColor = '#FAEBD7';
-const textColor = '#FFFAFA';
-const extraColor = '#E5AA70';
+const backgroundColor = colors.shade4;
+const mediumColor = colors.shade3;
+const mainColor = colors.shade2;
+const textColor = colors.shade1;
+const extraColor = colors.extra;
 
 export const darkScheme = {
   primary: mainColor, // buttons
   onPrimary: backgroundColor, // text on buttons
-  primaryContainer: mainColor, // clock background
+  primaryContainer: backgroundColor, // clock selected background
   onPrimaryContainer: textColor, // clock outline
-  surfaceVariant: backgroundColor, // clock backround
+  surfaceVariant: backgroundColor, // clock and progress backround
   background: backgroundColor, // app background
   surface: mediumColor, // card backround
   onSurface: textColor, // card text, selected icon text, clock text
