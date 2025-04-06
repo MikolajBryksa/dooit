@@ -19,6 +19,8 @@
   },
   "settings": {
     "language": "Language",
+    "en": "English",
+    "pl": "Polish",
     "clock-format": "Clock format",
     "first-day": "First day of the week",
     "theme": "Theme",

@@ -39,8 +39,8 @@ const SettingsView = () => {
   };
 
   function handleLanguage() {
-    const newLanguage = language === 'English' ? 'Polski' : 'English';
-    const newLocale = newLanguage === 'English' ? 'en' : 'pl';
+    const newLanguage = language === 'en' ? 'pl' : 'en';
+    const newLocale = newLanguage === 'en' ? 'en' : 'pl';
 
     i18next.changeLanguage(newLocale);
     LocaleConfig.defaultLocale = newLocale;
@@ -119,7 +119,7 @@ const SettingsView = () => {
         <Card style={styles.card}>
           <Card.Content>
             <View style={styles.title}>
-              <Text variant="titleLarge">{language}</Text>
+              <Text variant="titleLarge">{t(`settings.${language}`)}</Text>
             </View>
             <Divider style={styles.divider} />
             <Text variant="bodyMedium">{t('settings.language')}</Text>
