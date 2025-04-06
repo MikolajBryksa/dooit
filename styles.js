@@ -10,6 +10,16 @@ export const useStyles = () => {
       padding: theme.dimensions.padding,
       backgroundColor: theme.colors.background,
     },
+    loading: {
+      flex: 1,
+      padding: theme.dimensions.padding,
+      backgroundColor: theme.colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loadingText: {
+      marginTop: theme.dimensions.padding,
+    },
     title: {
       flexDirection: 'row',
       justifyContent: 'space-between',

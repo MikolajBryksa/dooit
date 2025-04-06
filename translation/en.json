@@ -1,5 +1,6 @@
 {
   "view": {
+    "loading": "Loading",
     "home": "Home",
     "habits": "Habits",
     "stats": "Stats",

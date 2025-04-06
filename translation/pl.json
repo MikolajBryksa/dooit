@@ -1,5 +1,6 @@
 {
   "view": {
+    "loading": "Ładowanie",
     "home": "Główna",
     "habits": "Nawyki",
     "stats": "Statystyki",
