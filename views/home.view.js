@@ -58,31 +58,42 @@ const HomeView = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const currentTime = getFormattedTime();
       const currentDay = formatDateToYYMMDD();
-      setCurrentTime(currentTime);
-      if (currentTime >= '03:00' && currentDay !== selectedDay) {
+      if (currentDay !== selectedDay) {
         dispatch(setSelectedDay(currentDay));
         updateTempValue('selectedDay', currentDay);
       }
-    }, 30000);
-
+    }, 120000);
     return () => clearInterval(interval);
   }, [selectedDay]);
 
-  const markHabitsByTime = (habits, currentTime) => {
-    return habits.map(habit => ({
-      ...habit,
-      inactive: habit.habitStart >= currentTime,
-    }));
-  };
+  useEffect(() => {
+    const currentDay = formatDateToYYMMDD();
+    dispatch(setSelectedDay(currentDay));
+    updateTempValue('selectedDay', currentDay);
+  }, [dispatch]);
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = getFormattedTime();
+      setCurrentTime(currentTime);
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const markHabitByTime = (habit, currentTime) => {
     if (selectedDay === formatDateToYYMMDD()) {
-      const markedHabits = markHabitsByTime(habits, currentTime);
-      setFilteredHabits(markedHabits);
+      return {
+        ...habit,
+        inactive: habit.habitStart >= currentTime,
+      };
+    } else {
+      return {
+        ...habit,
+        inactive: false,
+      };
     }
-  }, [habits, currentTime]);
+  };
 
   return (
     <>
@@ -100,7 +111,12 @@ const HomeView = () => {
 
       <Appbar.Header>
         <Appbar.Content title={t('view.home')} />
-        <Chip>{t(`date.${getDayOfWeek(selectedDay)}`)}</Chip>
+        <Chip
+          onPress={() => {
+            handleCalendarModal();
+          }}>
+          {t(`date.${getDayOfWeek(selectedDay)}`)}
+        </Chip>
         <Appbar.Action
           icon="calendar"
           onPress={() => {
@@ -111,27 +127,30 @@ const HomeView = () => {
 
       <ScrollView style={styles.container}>
         {filteredHabits && filteredHabits.length > 0 ? (
-          filteredHabits.map(habit => (
-            <HabitCard
-              key={habit.id}
-              id={habit.id}
-              view={ViewEnum.PREVIEW}
-              habitName={habit.habitName}
-              firstStep={habit.firstStep}
-              goalDesc={habit.goalDesc}
-              motivation={habit.motivation}
-              repeatDays={habit.repeatDays}
-              habitStart={habit.habitStart}
-              progressType={habit.progressType}
-              progressUnit={habit.progressUnit}
-              targetScore={habit.targetScore}
-              progress={habit.progress}
-              inactive={habit.inactive}
-              fetchHabitsWithProgress={() =>
-                dispatch(fetchHabitsWithProgress())
-              }
-            />
-          ))
+          filteredHabits.map(habit => {
+            const markedHabit = markHabitByTime(habit, currentTime);
+            return (
+              <HabitCard
+                key={markedHabit.id}
+                id={markedHabit.id}
+                view={ViewEnum.PREVIEW}
+                habitName={markedHabit.habitName}
+                firstStep={markedHabit.firstStep}
+                goalDesc={markedHabit.goalDesc}
+                motivation={markedHabit.motivation}
+                repeatDays={markedHabit.repeatDays}
+                habitStart={markedHabit.habitStart}
+                progressType={markedHabit.progressType}
+                progressUnit={markedHabit.progressUnit}
+                targetScore={markedHabit.targetScore}
+                progress={markedHabit.progress}
+                inactive={markedHabit.inactive}
+                fetchHabitsWithProgress={() =>
+                  dispatch(fetchHabitsWithProgress())
+                }
+              />
+            );
+          })
         ) : (
           <Card style={styles.card}>
             <Card.Content>
@@ -153,36 +172,6 @@ const HomeView = () => {
         )}
         <View style={styles.gap} />
       </ScrollView>
-
-      {/* <ScrollView style={styles.container}>
-        {currentHabit && selectedDay === currentDay ? (
-          <HabitCard
-            key={currentHabit.id}
-            id={currentHabit.id}
-            view={ViewEnum.PREVIEW}
-            habitName={currentHabit.habitName}
-            firstStep={currentHabit.firstStep}
-            goalDesc={currentHabit.goalDesc}
-            motivation={currentHabit.motivation}
-            repeatDays={currentHabit.repeatDays}
-            habitStart={currentHabit.habitStart}
-            progressType={currentHabit.progressType}
-            progressUnit={currentHabit.progressUnit}
-            targetScore={currentHabit.targetScore}
-            progress={currentHabit.progress}
-            fetchHabitsWithProgress={() => dispatch(fetchHabitsWithProgress())}
-          />
-        ) : (
-          <Card style={styles.card}>
-            <Card.Content>
-              <View style={styles.title}>
-                <Text variant="titleLarge">{t('title.no-current-habit')}</Text>
-              </View>
-              <Divider style={styles.divider} />
-            </Card.Content>
-          </Card>
-        )}
-      </ScrollView> */}
     </>
   );
 };

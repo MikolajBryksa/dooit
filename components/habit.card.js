@@ -428,7 +428,6 @@ const HabitCard = ({
 
               {progressType !== ProgressTypeEnum.DONE && (
                 <Button
-                  mode="outlined"
                   onPress={() => {
                     handleModal();
                   }}>
