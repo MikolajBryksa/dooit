@@ -27,13 +27,19 @@ export const useStyles = () => {
       height: theme.dimensions.height / 2,
       marginBottom: theme.dimensions.margin,
     },
+    rowActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     card: {
       width: '100%',
       marginBottom: theme.dimensions.padding,
+      minHeight: theme.dimensions.height * 1.7,
     },
     cardChecked: {
       width: '100%',
       marginBottom: theme.dimensions.padding,
+      minHeight: theme.dimensions.height * 1.7,
       opacity: 0.5,
     },
     chip: {

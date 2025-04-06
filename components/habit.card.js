@@ -52,6 +52,7 @@ const HabitCard = ({
   const [textInput, setTextInput] = useState('');
   const [checked, setChecked] = useState(false);
   const [startTime, setStartTime] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const currentHabit = {
     id,
     habitName,
@@ -66,7 +67,6 @@ const HabitCard = ({
     progress,
   };
 
-  const [showTable, setShowTable] = useState(false);
   const [page, setPage] = useState(0);
   const [numberOfItemsPerPageList] = useState([7, 14, 30, 90]);
   const [itemsPerPage, onItemsPerPageChange] = useState(
@@ -194,281 +194,283 @@ const HabitCard = ({
     );
   };
 
-  if (checked && view === ViewEnum.PREVIEW) {
-    return (
-      <>
-        <Card style={styles.cardChecked}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{habitName}</Text>
+  return (
+    <>
+      {view === ViewEnum.PREVIEW ? (
+        <SetHabitModal
+          visible={visibleModal}
+          onDismiss={handleModal}
+          habitName={habitName}
+          progressType={progressType}
+          progressUnit={progressUnit}
+          textInput={textInput}
+          setTextInput={setTextInput}
+          handleSet={handleSet}
+        />
+      ) : (
+        <AddHabitModal
+          visible={visibleModal}
+          onDismiss={handleModal}
+          fetchHabitsWithProgress={() => fetchHabitsWithProgress()}
+          currentHabit={currentHabit}
+        />
+      )}
 
-              <Checkbox
-                status={checked ? 'checked' : 'unchecked'}
-                onPress={() => {
-                  setChecked(!checked);
-                  saveData(currentProgress, !checked);
-                }}
-              />
-            </View>
-          </Card.Content>
-        </Card>
-      </>
-    );
-  } else {
-    return (
-      <>
+      <DeleteHabitDialog
+        visible={visibleDialog}
+        onDismiss={handleDialog}
+        onDone={() => {
+          handleDialog();
+          fetchHabitsWithProgress();
+        }}
+        habitId={id}
+        habitName={habitName}
+      />
+
+      <Card
+        style={[
+          view === ViewEnum.PREVIEW && (checked || inactive)
+            ? styles.cardChecked
+            : styles.card,
+        ]}>
         {view === ViewEnum.PREVIEW ? (
-          <SetHabitModal
-            visible={visibleModal}
-            onDismiss={handleModal}
-            habitName={habitName}
-            progressType={progressType}
-            progressUnit={progressUnit}
-            textInput={textInput}
-            setTextInput={setTextInput}
-            handleSet={handleSet}
-          />
+          <Chip icon="clock" style={styles.chip}>
+            {habitStart} {inactive}
+          </Chip>
         ) : (
-          <AddHabitModal
-            visible={visibleModal}
-            onDismiss={handleModal}
-            fetchHabitsWithProgress={() => fetchHabitsWithProgress()}
-            currentHabit={currentHabit}
-          />
+          <Chip icon="calendar" style={styles.chip}>
+            {habitStart} {getRepeatDaysString(repeatDays, t)}
+          </Chip>
         )}
 
-        <DeleteHabitDialog
-          visible={visibleDialog}
-          onDismiss={handleDialog}
-          onDone={() => {
-            handleDialog();
-            fetchHabitsWithProgress();
-          }}
-          habitId={id}
-          habitName={habitName}
-        />
-
-        <Card style={[styles.card, {opacity: inactive ? 0.5 : 1}]}>
-          {view === ViewEnum.PREVIEW ? (
-            <Chip icon="clock" style={styles.chip}>
-              {habitStart}
-            </Chip>
-          ) : (
-            <Chip icon="calendar" style={styles.chip}>
-              {habitStart} {getRepeatDaysString(repeatDays, t)}
-            </Chip>
-          )}
-
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{habitName}</Text>
+        <Card.Content>
+          <View style={styles.title}>
+            <Text
+              variant="titleLarge"
+              onPress={() => {
+                setIsOpen(!isOpen);
+              }}>
+              {habitName}
+            </Text>
+            <View style={styles.rowActions}>
+              {isOpen ? (
+                <IconButton
+                  icon="chevron-up"
+                  onPress={() => {
+                    setIsOpen(false);
+                  }}
+                />
+              ) : (
+                <IconButton
+                  icon="chevron-down"
+                  onPress={() => {
+                    setIsOpen(true);
+                  }}
+                />
+              )}
               {view === ViewEnum.PREVIEW && (
                 <Checkbox
                   status={checked ? 'checked' : 'unchecked'}
                   onPress={() => {
+                    {
+                      !checked && setIsOpen(false);
+                    }
                     setChecked(!checked);
                     saveData(currentProgress, !checked);
                   }}
                 />
               )}
-              {view === ViewEnum.STATS && showTable && (
-                <IconButton
-                  icon="close"
-                  size={20}
-                  onPress={() => {
-                    setShowTable(false);
-                  }}
-                />
-              )}
             </View>
-            <Divider style={styles.divider} />
+          </View>
 
-            {view !== ViewEnum.STATS && (
-              <>
-                <Text variant="bodyMedium">
-                  {t('card.first-step')}: {firstStep}
-                </Text>
-                <Text variant="bodyMedium">
-                  {t('card.goal-desc')}: {goalDesc}
-                </Text>
-                <Text variant="bodyMedium">
-                  {t('card.motivation')}: {motivation}
-                </Text>
-              </>
-            )}
+          {isOpen && (
+            <>
+              <Divider style={styles.divider} />
 
-            {view === ViewEnum.PREVIEW && (
-              <>
-                {progressType !== ProgressTypeEnum.DONE && (
-                  <>
-                    <View style={styles.gap} />
-                    {isProgressing ? (
-                      <Text variant="bodyMedium">{t('card.in-progress')}</Text>
-                    ) : (
-                      <Text variant="bodyMedium">
-                        {progressType === ProgressTypeEnum.TIME
-                          ? `${formatSecondsToHHMMSS(
-                              currentProgress,
-                            )} / ${formatSecondsToHHMMSS(targetScore)}`
-                          : `${currentProgress} / ${targetScore} ${progressUnit}`}
-                      </Text>
-                    )}
-
-                    <View
-                      style={[
-                        styles.progressBar,
-                        {
-                          backgroundColor:
-                            progressBarWidth !== '100%'
-                              ? styles.progressExcess.color
-                              : '',
-                        },
-                      ]}>
-                      <ProgressBar
-                        progress={progressBarValue}
-                        indeterminate={isProgressing ? true : false}
-                        style={{
-                          width: progressBarWidth,
-                        }}
-                      />
-                    </View>
-                  </>
-                )}
-              </>
-            )}
-
-            {view !== ViewEnum.STATS &&
-              progressType !== ProgressTypeEnum.DONE && (
-                <Text variant="bodyMedium">
-                  {t('card.target-measure')}:{' '}
-                  {progressType === ProgressTypeEnum.TIME
-                    ? formatSecondsToHHMMSS(targetScore)
-                    : `${targetScore} ${progressUnit}`}
-                </Text>
+              {view !== ViewEnum.STATS && (
+                <>
+                  <Text variant="bodyMedium">
+                    {t('card.first-step')}: {firstStep}
+                  </Text>
+                  <Text variant="bodyMedium">
+                    {t('card.goal-desc')}: {goalDesc}
+                  </Text>
+                  <Text variant="bodyMedium">
+                    {t('card.motivation')}: {motivation}
+                  </Text>
+                </>
               )}
 
-            {view === ViewEnum.STATS && showTable && (
-              <>
-                {progress && progress.length > 0 ? (
-                  <DataTable>
-                    <DataTable.Header>
-                      <DataTable.Title>{t('table.date')}</DataTable.Title>
-                      {progressType !== ProgressTypeEnum.DONE ? (
-                        <DataTable.Title numeric>
-                          {t('table.measure')}
-                        </DataTable.Title>
+              {view === ViewEnum.PREVIEW && (
+                <>
+                  {progressType !== ProgressTypeEnum.DONE && (
+                    <>
+                      <View style={styles.gap} />
+                      {isProgressing ? (
+                        <Text variant="bodyMedium">
+                          {t('card.in-progress')}
+                        </Text>
                       ) : (
-                        <DataTable.Title numeric>
-                          {t('table.day')}
-                        </DataTable.Title>
+                        <Text variant="bodyMedium">
+                          {progressType === ProgressTypeEnum.TIME
+                            ? `${formatSecondsToHHMMSS(
+                                currentProgress,
+                              )} / ${formatSecondsToHHMMSS(targetScore)}`
+                            : `${currentProgress} / ${targetScore} ${progressUnit}`}
+                        </Text>
                       )}
-                      <DataTable.Title numeric>
-                        {t('table.done')}
-                      </DataTable.Title>
-                    </DataTable.Header>
 
-                    {progress.slice(from, to).map((item, index) => (
-                      <DataTable.Row key={index}>
-                        <DataTable.Cell>
-                          {new Date(item.date).toLocaleDateString('pl-PL')}
-                        </DataTable.Cell>
+                      <View
+                        style={[
+                          styles.progressBar,
+                          {
+                            backgroundColor:
+                              progressBarWidth !== '100%'
+                                ? styles.progressExcess.color
+                                : '',
+                          },
+                        ]}>
+                        <ProgressBar
+                          progress={progressBarValue}
+                          indeterminate={isProgressing ? true : false}
+                          style={{
+                            width: progressBarWidth,
+                          }}
+                        />
+                      </View>
+                    </>
+                  )}
+                </>
+              )}
 
-                        {progressType !== ProgressTypeEnum.DONE ? (
-                          <DataTable.Cell numeric>
-                            {item.progressAmount ??
-                              item.progressValue ??
-                              formatSecondsToMMSS(item.progressTime)}
-                          </DataTable.Cell>
-                        ) : (
-                          <DataTable.Cell numeric>
-                            {progress.length - from - index}
-                          </DataTable.Cell>
-                        )}
-
-                        <DataTable.Cell numeric>
-                          {item.checked ? t('table.yes') : t('table.no')}
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    ))}
-
-                    <DataTable.Pagination
-                      page={page}
-                      numberOfPages={Math.ceil(progress.length / itemsPerPage)}
-                      onPageChange={page => setPage(page)}
-                      label={`${from + 1}-${to} of ${progress.length}`}
-                      numberOfItemsPerPageList={numberOfItemsPerPageList}
-                      numberOfItemsPerPage={itemsPerPage}
-                      onItemsPerPageChange={onItemsPerPageChange}
-                    />
-                  </DataTable>
-                ) : (
-                  <Text variant="bodyMedium" style={[styles.noProgress]}>
-                    {t('table.no-progress')}
+              {view !== ViewEnum.STATS &&
+                progressType !== ProgressTypeEnum.DONE && (
+                  <Text variant="bodyMedium">
+                    {t('card.target-measure')}:{' '}
+                    {progressType === ProgressTypeEnum.TIME
+                      ? formatSecondsToHHMMSS(targetScore)
+                      : `${targetScore} ${progressUnit}`}
                   </Text>
                 )}
-              </>
-            )}
-          </Card.Content>
 
-          {view === ViewEnum.PREVIEW && (
-            <Card.Actions>
-              {progressType !== ProgressTypeEnum.DONE && (
+              {view === ViewEnum.STATS && (
+                <>
+                  {progress && progress.length > 0 ? (
+                    <DataTable>
+                      <DataTable.Header>
+                        <DataTable.Title>{t('table.date')}</DataTable.Title>
+                        {progressType !== ProgressTypeEnum.DONE ? (
+                          <DataTable.Title numeric>
+                            {t('table.measure')}
+                          </DataTable.Title>
+                        ) : (
+                          <DataTable.Title numeric>
+                            {t('table.day')}
+                          </DataTable.Title>
+                        )}
+                        <DataTable.Title numeric>
+                          {t('table.done')}
+                        </DataTable.Title>
+                      </DataTable.Header>
+
+                      {progress.slice(from, to).map((item, index) => (
+                        <DataTable.Row key={index}>
+                          <DataTable.Cell>
+                            {new Date(item.date).toLocaleDateString('pl-PL')}
+                          </DataTable.Cell>
+
+                          {progressType !== ProgressTypeEnum.DONE ? (
+                            <DataTable.Cell numeric>
+                              {item.progressAmount ??
+                                item.progressValue ??
+                                formatSecondsToMMSS(item.progressTime)}
+                            </DataTable.Cell>
+                          ) : (
+                            <DataTable.Cell numeric>
+                              {progress.length - from - index}
+                            </DataTable.Cell>
+                          )}
+
+                          <DataTable.Cell numeric>
+                            {item.checked ? t('table.yes') : t('table.no')}
+                          </DataTable.Cell>
+                        </DataTable.Row>
+                      ))}
+
+                      <DataTable.Pagination
+                        page={page}
+                        numberOfPages={Math.ceil(
+                          progress.length / itemsPerPage,
+                        )}
+                        onPageChange={page => setPage(page)}
+                        label={`${from + 1}-${to} of ${progress.length}`}
+                        numberOfItemsPerPageList={numberOfItemsPerPageList}
+                        numberOfItemsPerPage={itemsPerPage}
+                        onItemsPerPageChange={onItemsPerPageChange}
+                      />
+                    </DataTable>
+                  ) : (
+                    <Text variant="bodyMedium" style={[styles.noProgress]}>
+                      {t('table.no-progress')}
+                    </Text>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </Card.Content>
+
+        {isOpen && (
+          <>
+            {view === ViewEnum.PREVIEW && (
+              <Card.Actions>
+                {progressType !== ProgressTypeEnum.DONE && (
+                  <Button
+                    mode="outlined"
+                    onPress={() => {
+                      handleAdd();
+                    }}>
+                    {progressType === ProgressTypeEnum.TIME
+                      ? startTime
+                        ? t('button.stop')
+                        : t('button.start')
+                      : t('button.add')}
+                  </Button>
+                )}
+
+                {progressType !== ProgressTypeEnum.DONE && (
+                  <Button
+                    onPress={() => {
+                      handleModal();
+                    }}>
+                    {t('button.set')}
+                  </Button>
+                )}
+              </Card.Actions>
+            )}
+            {view === ViewEnum.EDIT && (
+              <Card.Actions>
                 <Button
                   mode="outlined"
                   onPress={() => {
-                    handleAdd();
+                    handleDialog();
                   }}>
-                  {progressType === ProgressTypeEnum.TIME
-                    ? startTime
-                      ? t('button.stop')
-                      : t('button.start')
-                    : t('button.add')}
+                  {t('button.delete')}
                 </Button>
-              )}
 
-              {progressType !== ProgressTypeEnum.DONE && (
                 <Button
                   onPress={() => {
                     handleModal();
                   }}>
-                  {t('button.set')}
+                  {t('button.edit')}
                 </Button>
-              )}
-            </Card.Actions>
-          )}
-          {view === ViewEnum.EDIT && (
-            <Card.Actions>
-              <Button
-                mode="outlined"
-                onPress={() => {
-                  handleDialog();
-                }}>
-                {t('button.delete')}
-              </Button>
-
-              <Button
-                onPress={() => {
-                  handleModal();
-                }}>
-                {t('button.edit')}
-              </Button>
-            </Card.Actions>
-          )}
-          {view === ViewEnum.STATS && !showTable && (
-            <Card.Actions>
-              <Button
-                mode="outlined"
-                onPress={() => {
-                  setShowTable(true);
-                }}>
-                {t('button.table')}
-              </Button>
-            </Card.Actions>
-          )}
-        </Card>
-      </>
-    );
-  }
+              </Card.Actions>
+            )}
+          </>
+        )}
+      </Card>
+    </>
+  );
 };
 
 export default HabitCard;
