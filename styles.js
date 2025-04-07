@@ -102,12 +102,16 @@ export const useStyles = () => {
       paddingBottom: theme.dimensions.margin,
       borderRadius: 12,
     },
-    daysSelector: {
+    daysSelector__container: {
       justifyContent: 'flex-end',
       alignItems: 'center',
       flexDirection: 'row',
       width: '100%',
       marginTop: theme.dimensions.margin,
+    },
+    daysSelector__chip: {
+      marginLeft: theme.dimensions.margin,
+      borderRadius: 25,
     },
     calendar: {
       height: theme.dimensions.height * 7.5,

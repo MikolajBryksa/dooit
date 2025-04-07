@@ -34,23 +34,23 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
 
   return (
     <>
-      <View style={styles.daysSelector}>
+      <View style={styles.daysSelector__container}>
         <Chip
           mode="outlined"
           onPress={() => setRepeatDays(daily)}
-          style={{marginHorizontal: 3}}>
+          style={styles.daysSelector__chip}>
           {t('date.daily')}
         </Chip>
         <Chip
           mode="outlined"
           onPress={() => setRepeatDays(workdays)}
-          style={{marginHorizontal: 3}}>
+          style={styles.daysSelector__chip}>
           {t('date.workdays')}
         </Chip>
         <Chip
           mode="outlined"
           onPress={() => setRepeatDays(weekend)}
-          style={{marginHorizontal: 3}}>
+          style={styles.daysSelector__chip}>
           {t('date.weekend')}
         </Chip>
       </View>
