@@ -56,18 +56,18 @@ export const useStyles = () => {
       alignItems: 'center',
     },
     card: {
+      minHeight: theme.dimensions.height,
       width: '100%',
       marginBottom: theme.dimensions.padding,
     },
     cardChecked: {
+      minHeight: theme.dimensions.height,
       width: '100%',
       marginBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
     chip: {
       marginBottom: theme.dimensions.padding,
-      borderColor: theme.colors.surface,
-      borderWidth: 2,
       borderRadius: 12,
     },
     time: {

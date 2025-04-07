@@ -232,16 +232,6 @@ const HabitCard = ({
             ? styles.cardChecked
             : styles.card,
         ]}>
-        {view === ViewEnum.PREVIEW ? (
-          <Chip icon="clock" style={styles.chip}>
-            {habitStart} {inactive}
-          </Chip>
-        ) : (
-          <Chip icon="calendar" style={styles.chip}>
-            {habitStart} {getRepeatDaysString(repeatDays, t)}
-          </Chip>
-        )}
-
         <Card.Content>
           <View style={styles.title}>
             <Text
@@ -288,6 +278,15 @@ const HabitCard = ({
 
               {view !== ViewEnum.STATS && (
                 <>
+                  {view === ViewEnum.PREVIEW ? (
+                    <Chip icon="clock" style={styles.chip}>
+                      {habitStart} {inactive}
+                    </Chip>
+                  ) : (
+                    <Chip icon="calendar" style={styles.chip}>
+                      {habitStart} {getRepeatDaysString(repeatDays, t)}
+                    </Chip>
+                  )}
                   <Text variant="bodyMedium">
                     {t('card.first-step')}: {firstStep}
                   </Text>

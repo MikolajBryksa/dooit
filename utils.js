@@ -2,9 +2,9 @@ import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCog,
-  faHome,
   faChartPie,
   faList,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import realm from './storage/schemas';
 import {getProgressByHabitId} from './services/progress.service';
@@ -47,7 +47,7 @@ export function getNextId(itemName) {
 export function renderIcon(name, color, size) {
   switch (name) {
     case 'home':
-      icon = faHome;
+      icon = faClock;
       break;
     case 'habits':
       icon = faList;
