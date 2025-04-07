@@ -21,6 +21,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
 import {getTheme} from './theme/theme';
 import {useColorScheme} from 'react-native';
+import OnboardingView from './views/onboarding.view';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,6 +54,10 @@ function AppContent() {
 
   if (loading) {
     return <LoadingView />;
+  }
+
+  if (showOnboarding) {
+    return <OnboardingView setShowOnboarding={setShowOnboarding} />;
   }
 
   return (

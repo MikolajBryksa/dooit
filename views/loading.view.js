@@ -9,9 +9,9 @@ const LoadingView = () => {
   const styles = useStyles();
 
   return (
-    <View style={styles.loading}>
+    <View style={styles.loading__container}>
       <ActivityIndicator animating={true} size={'large'} />
-      <Text style={styles.loadingText} variant="bodyMedium">
+      <Text style={styles.loading__text} variant="bodyMedium">
         {t('view.loading')}
       </Text>
     </View>

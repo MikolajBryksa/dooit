@@ -135,5 +135,24 @@
       "book": "stron",
       "workout": "kg"
     }
+  },
+  "onboarding": {
+    "welcome": "Witam",
+    "to-app": "w aplikacji Dooit",
+    "start": "Rozpocznij",
+    "option": {
+      "1": {
+        "title": "Wyrabiaj nawyki",
+        "subtitle": "Zbuduj rutynę, która sprawi, że rozwój osobisty stanie się łatwy i przyjemny."
+      },
+      "2": {
+        "title": "Monitoruj postępy",
+        "subtitle": "Obserwuj swoją podróż i zobacz, jak wiele możesz osiągnąć każdego dnia."
+      },
+      "3": {
+        "title": "Ciesz się życiem",
+        "subtitle": "Poczuj jak małe kroki prowadzą do wielkiej poprawy jakości życia."
+      }
+    }
   }
 }

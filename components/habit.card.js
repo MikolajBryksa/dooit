@@ -18,7 +18,6 @@ import SetHabitModal from '../modals/setHabit.modal';
 import AddHabitModal from '../modals/addHabit.modal';
 import DeleteHabitDialog from '../dialogs/deleteHabit.dialog';
 import {formatSecondsToHHMMSS} from '../utils';
-import {formatSecondsToMMSS} from '../utils';
 import {updateOrCreateProgress} from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
@@ -383,7 +382,7 @@ const HabitCard = ({
                             <DataTable.Cell numeric>
                               {item.progressAmount ??
                                 item.progressValue ??
-                                formatSecondsToMMSS(item.progressTime)}
+                                formatSecondsToHHMMSS(item.progressTime)}
                             </DataTable.Cell>
                           ) : (
                             <DataTable.Cell numeric>

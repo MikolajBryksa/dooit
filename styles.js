@@ -10,15 +10,29 @@ export const useStyles = () => {
       padding: theme.dimensions.padding,
       backgroundColor: theme.colors.background,
     },
-    loading: {
+    loading__container: {
       flex: 1,
       padding: theme.dimensions.padding,
       backgroundColor: theme.colors.background,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    loadingText: {
+    loading__text: {
       marginTop: theme.dimensions.padding,
+    },
+    onboarding__card: {
+      height: theme.dimensions.height * 2,
+      justifyContent: 'center',
+      width: '100%',
+      marginBottom: theme.dimensions.padding,
+    },
+    onboarding__title: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: theme.dimensions.padding * 3,
+    },
+    onboarding__button: {
+      marginTop: theme.dimensions.padding * 3,
     },
     disabled: {
       opacity: 0.5,
@@ -44,12 +58,10 @@ export const useStyles = () => {
     card: {
       width: '100%',
       marginBottom: theme.dimensions.padding,
-      minHeight: theme.dimensions.height * 1.7,
     },
     cardChecked: {
       width: '100%',
       marginBottom: theme.dimensions.padding,
-      minHeight: theme.dimensions.height * 1.7,
       opacity: 0.5,
     },
     chip: {

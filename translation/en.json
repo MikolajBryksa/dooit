@@ -135,5 +135,24 @@
       "book": "pages",
       "workout": "kg"
     }
+  },
+  "onboarding": {
+    "welcome": "Welcome",
+    "to-app": "to the Dooit app",
+    "start": "Get started",
+    "option": {
+      "1": {
+        "title": "Create habits",
+        "subtitle": "Build routines that stick and make personal growth effortless."
+      },
+      "2": {
+        "title": "Monitor progress",
+        "subtitle": "Track your journey and see how far you’ve come, day by day."
+      },
+      "3": {
+        "title": "Enjoy life",
+        "subtitle": "Feel the impact of small steps adding up to a more fulfilling life."
+      }
+    }
   }
 }

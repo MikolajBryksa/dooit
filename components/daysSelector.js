@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Button, Checkbox} from 'react-native-paper';
+import {Chip, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
 
@@ -35,24 +35,24 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
   return (
     <>
       <View style={styles.daysSelector}>
-        <Button
+        <Chip
           mode="outlined"
           onPress={() => setRepeatDays(daily)}
           style={{marginHorizontal: 3}}>
           {t('date.daily')}
-        </Button>
-        <Button
+        </Chip>
+        <Chip
           mode="outlined"
           onPress={() => setRepeatDays(workdays)}
           style={{marginHorizontal: 3}}>
           {t('date.workdays')}
-        </Button>
-        <Button
+        </Chip>
+        <Chip
           mode="outlined"
           onPress={() => setRepeatDays(weekend)}
           style={{marginHorizontal: 3}}>
           {t('date.weekend')}
-        </Button>
+        </Chip>
       </View>
 
       {Object.keys(dayNames).map(day => (
