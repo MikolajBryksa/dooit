@@ -21,7 +21,7 @@ import {formatSecondsToHHMMSS} from '../utils';
 import {updateOrCreateProgress} from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
-import {getRepeatDaysString} from '../utils';
+import {getRepeatDaysString, timeStringToSeconds} from '../utils';
 
 const HabitCard = ({
   view,
@@ -193,6 +193,45 @@ const HabitCard = ({
     );
   };
 
+  const calculateAverageProgress = progress => {
+    if (!progress || progress.length === 0) {
+      return 0;
+    }
+    const total = progress.reduce((sum, item) => {
+      const value =
+        item.progressAmount ?? item.progressValue ?? item.progressTime ?? 0;
+      return sum + value;
+    }, 0);
+
+    let result;
+    if (progressType === ProgressTypeEnum.TIME) {
+      result = total / progress.length;
+      result = formatSecondsToHHMMSS(result);
+    } else {
+      result = total / progress.length;
+      result = result.toFixed(2);
+    }
+    return result;
+  };
+
+  const getChipIcon = (averageProgress, targetScore) => {
+    if (progressType === ProgressTypeEnum.TIME) {
+      targetScore = formatSecondsToHHMMSS(targetScore);
+      targetScore = timeStringToSeconds(targetScore);
+      averageProgress = timeStringToSeconds(averageProgress);
+    } else {
+      targetScore = parseFloat(targetScore);
+      averageProgress = parseFloat(averageProgress);
+    }
+    if (averageProgress > targetScore) {
+      return 'speedometer';
+    } else if (averageProgress === targetScore) {
+      return 'speedometer-medium';
+    } else {
+      return 'speedometer-slow';
+    }
+  };
+
   return (
     <>
       {view === ViewEnum.PREVIEW ? (
@@ -354,59 +393,73 @@ const HabitCard = ({
               {view === ViewEnum.STATS && (
                 <>
                   {progress && progress.length > 0 ? (
-                    <DataTable>
-                      <DataTable.Header>
-                        <DataTable.Title>{t('table.date')}</DataTable.Title>
-                        {progressType !== ProgressTypeEnum.DONE ? (
-                          <DataTable.Title numeric>
-                            {t('table.measure')}
-                          </DataTable.Title>
-                        ) : (
-                          <DataTable.Title numeric>
-                            {t('table.day')}
-                          </DataTable.Title>
-                        )}
-                        <DataTable.Title numeric>
-                          {t('table.done')}
-                        </DataTable.Title>
-                      </DataTable.Header>
-
-                      {progress.slice(from, to).map((item, index) => (
-                        <DataTable.Row key={index}>
-                          <DataTable.Cell>
-                            {new Date(item.date).toLocaleDateString('pl-PL')}
-                          </DataTable.Cell>
-
-                          {progressType !== ProgressTypeEnum.DONE ? (
-                            <DataTable.Cell numeric>
-                              {item.progressAmount ??
-                                item.progressValue ??
-                                formatSecondsToHHMMSS(item.progressTime)}
-                            </DataTable.Cell>
-                          ) : (
-                            <DataTable.Cell numeric>
-                              {progress.length - from - index}
-                            </DataTable.Cell>
+                    <>
+                      {progressType !== ProgressTypeEnum.DONE && (
+                        <Chip
+                          icon={getChipIcon(
+                            calculateAverageProgress(progress),
+                            targetScore,
                           )}
+                          style={styles.chip}>
+                          {t('table.average')}:{' '}
+                          {calculateAverageProgress(progress)} {progressUnit}{' '}
+                        </Chip>
+                      )}
 
-                          <DataTable.Cell numeric>
-                            {item.checked ? t('table.yes') : t('table.no')}
-                          </DataTable.Cell>
-                        </DataTable.Row>
-                      ))}
+                      <DataTable>
+                        <DataTable.Header>
+                          <DataTable.Title>{t('table.date')}</DataTable.Title>
+                          {progressType !== ProgressTypeEnum.DONE ? (
+                            <DataTable.Title numeric>
+                              {t('table.measure')}
+                            </DataTable.Title>
+                          ) : (
+                            <DataTable.Title numeric>
+                              {t('table.day')}
+                            </DataTable.Title>
+                          )}
+                          <DataTable.Title numeric>
+                            {t('table.done')}
+                          </DataTable.Title>
+                        </DataTable.Header>
 
-                      <DataTable.Pagination
-                        page={page}
-                        numberOfPages={Math.ceil(
-                          progress.length / itemsPerPage,
-                        )}
-                        onPageChange={page => setPage(page)}
-                        label={`${from + 1}-${to} of ${progress.length}`}
-                        numberOfItemsPerPageList={numberOfItemsPerPageList}
-                        numberOfItemsPerPage={itemsPerPage}
-                        onItemsPerPageChange={onItemsPerPageChange}
-                      />
-                    </DataTable>
+                        {progress.slice(from, to).map((item, index) => (
+                          <DataTable.Row key={index}>
+                            <DataTable.Cell>
+                              {new Date(item.date).toLocaleDateString('pl-PL')}
+                            </DataTable.Cell>
+
+                            {progressType !== ProgressTypeEnum.DONE ? (
+                              <DataTable.Cell numeric>
+                                {item.progressAmount ??
+                                  item.progressValue ??
+                                  formatSecondsToHHMMSS(item.progressTime)}
+                              </DataTable.Cell>
+                            ) : (
+                              <DataTable.Cell numeric>
+                                {progress.length - from - index}
+                              </DataTable.Cell>
+                            )}
+
+                            <DataTable.Cell numeric>
+                              {item.checked ? t('table.yes') : t('table.no')}
+                            </DataTable.Cell>
+                          </DataTable.Row>
+                        ))}
+
+                        <DataTable.Pagination
+                          page={page}
+                          numberOfPages={Math.ceil(
+                            progress.length / itemsPerPage,
+                          )}
+                          onPageChange={page => setPage(page)}
+                          label={`${from + 1}-${to} of ${progress.length}`}
+                          numberOfItemsPerPageList={numberOfItemsPerPageList}
+                          numberOfItemsPerPage={itemsPerPage}
+                          onItemsPerPageChange={onItemsPerPageChange}
+                        />
+                      </DataTable>
+                    </>
                   ) : (
                     <Text variant="bodyMedium" style={[styles.noProgress]}>
                       {t('table.no-progress')}

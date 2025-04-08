@@ -61,6 +61,7 @@
     "target-measure": "Docelowy pomiar"
   },
   "table": {
+    "average": "Średnia",
     "date": "Data",
     "measure": "Pomiar",
     "day": "Dzień",

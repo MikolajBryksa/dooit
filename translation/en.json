@@ -61,6 +61,7 @@
     "target-measure": "Target measure"
   },
   "table": {
+    "average": "Average",
     "date": "Date",
     "measure": "Measure",
     "day": "Day",

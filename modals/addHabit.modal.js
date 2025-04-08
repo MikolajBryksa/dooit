@@ -515,7 +515,7 @@ const AddHabitModal = ({
                   />
                 )}
               </View>
-              {!currentHabit && (
+              {!currentHabit && progressType !== ProgressTypeEnum.TIME && (
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value, 'progressUnit');

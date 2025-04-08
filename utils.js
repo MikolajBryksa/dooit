@@ -21,6 +21,21 @@ export function formatSecondsToHHMMSS(seconds) {
   return `${formattedHrs}${formattedMins}${formattedSecs}`;
 }
 
+export function timeStringToSeconds(timeString) {
+  const parts = timeString.split(':').map(Number);
+
+  if (parts.length === 3) {
+    const [hours, minutes, seconds] = parts;
+    return hours * 3600 + minutes * 60 + seconds;
+  } else if (parts.length === 2) {
+    const [minutes, seconds] = parts;
+    return minutes * 60 + seconds;
+  } else if (parts.length === 1) {
+    const [seconds] = parts;
+    return seconds;
+  }
+}
+
 export function formatDateToYYMMDD(when) {
   const today = when ? new Date(when) : new Date();
   const year = today.getFullYear();
