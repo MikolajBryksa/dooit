@@ -46,14 +46,13 @@ function AppContent() {
 
       const selectedDay = formatDateToYYMMDD(getTempValue('selectedDay'));
       dispatch(setSelectedDay(selectedDay));
-      setLoading(false);
     }
 
     loadData();
   }, []);
 
   if (loading) {
-    return <LoadingView />;
+    return <LoadingView setLoading={setLoading} />;
   }
 
   if (showOnboarding) {

@@ -137,8 +137,8 @@
     }
   },
   "onboarding": {
-    "welcome": "Witam",
-    "to-app": "w aplikacji Dooit",
+    "welcome": "Zapraszam",
+    "to-app": "dp aplikacji Dooit",
     "start": "Rozpocznij",
     "option": {
       "1": {
