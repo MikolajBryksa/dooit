@@ -267,34 +267,19 @@ const HabitCard = ({
 
       <Card
         style={[
-          view === ViewEnum.PREVIEW && (checked || inactive)
+          view === ViewEnum.PREVIEW && (checked || inactive) && !isOpen
             ? styles.cardChecked
             : styles.card,
-        ]}>
+        ]}
+        onPress={() => setIsOpen(!isOpen)}>
         <Card.Content>
           <View style={styles.title}>
-            <Text
-              variant="titleLarge"
-              onPress={() => {
-                setIsOpen(!isOpen);
-              }}>
-              {habitName}
-            </Text>
+            <Text variant="titleLarge">{habitName}</Text>
             <View style={styles.rowActions}>
               {isOpen ? (
-                <IconButton
-                  icon="chevron-up"
-                  onPress={() => {
-                    setIsOpen(false);
-                  }}
-                />
+                <IconButton icon="chevron-up" />
               ) : (
-                <IconButton
-                  icon="chevron-down"
-                  onPress={() => {
-                    setIsOpen(true);
-                  }}
-                />
+                <IconButton icon="chevron-down" />
               )}
               {view === ViewEnum.PREVIEW && (
                 <Checkbox
@@ -335,6 +320,26 @@ const HabitCard = ({
                   <Text variant="bodyMedium">
                     {t('card.motivation')}: {motivation}
                   </Text>
+                </>
+              )}
+
+              {view === ViewEnum.STATS && (
+                <>
+                  {progress && progress.length > 0 && (
+                    <>
+                      {progressType !== ProgressTypeEnum.DONE && (
+                        <Chip
+                          icon={getChipIcon(
+                            calculateAverageProgress(progress),
+                            targetScore,
+                          )}
+                          style={styles.chip}>
+                          {t('table.average')}:{' '}
+                          {calculateAverageProgress(progress)} {progressUnit}{' '}
+                        </Chip>
+                      )}
+                    </>
+                  )}
                 </>
               )}
 
@@ -380,32 +385,19 @@ const HabitCard = ({
                 </>
               )}
 
-              {view !== ViewEnum.STATS &&
-                progressType !== ProgressTypeEnum.DONE && (
-                  <Text variant="bodyMedium">
-                    {t('card.target-measure')}:{' '}
-                    {progressType === ProgressTypeEnum.TIME
-                      ? formatSecondsToHHMMSS(targetScore)
-                      : `${targetScore} ${progressUnit}`}
-                  </Text>
-                )}
+              {progressType !== ProgressTypeEnum.DONE && (
+                <Text variant="bodyMedium">
+                  {t('card.target-measure')}:{' '}
+                  {progressType === ProgressTypeEnum.TIME
+                    ? formatSecondsToHHMMSS(targetScore)
+                    : `${targetScore} ${progressUnit}`}
+                </Text>
+              )}
 
               {view === ViewEnum.STATS && (
                 <>
                   {progress && progress.length > 0 ? (
                     <>
-                      {progressType !== ProgressTypeEnum.DONE && (
-                        <Chip
-                          icon={getChipIcon(
-                            calculateAverageProgress(progress),
-                            targetScore,
-                          )}
-                          style={styles.chip}>
-                          {t('table.average')}:{' '}
-                          {calculateAverageProgress(progress)} {progressUnit}{' '}
-                        </Chip>
-                      )}
-
                       <DataTable>
                         <DataTable.Header>
                           <DataTable.Title>{t('table.date')}</DataTable.Title>
