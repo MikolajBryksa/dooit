@@ -1,43 +1,54 @@
 import React, {useEffect} from 'react';
-import Svg, {Path} from 'react-native-svg';
+import {Image} from 'react-native';
+import appIconDarkTheme from '../assets/appIconDarkTheme.png';
+import appIconLightTheme from '../assets/appIconLightTheme.png';
 import Animated, {
   useSharedValue,
-  useAnimatedProps,
-  withTiming,
+  useAnimatedStyle,
   withSequence,
+  withTiming,
 } from 'react-native-reanimated';
 import {useTheme} from 'react-native-paper';
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 const AnimatedLogo = () => {
   const theme = useTheme();
+  const scale = useSharedValue(1);
   const opacity = useSharedValue(0);
 
-  useEffect(() => {
-    opacity.value = withSequence(
-      withTiming(1, {duration: 1000}),
-      withTiming(1, {duration: 500}),
-      withTiming(0, {duration: 500}),
-    );
-  }, [opacity]);
+  const logoSource = theme.dark ? appIconDarkTheme : appIconLightTheme;
 
-  const animatedProps = useAnimatedProps(() => ({
+  useEffect(() => {
+    scale.value = withSequence(
+      withTiming(1.2, {duration: 500}),
+      withTiming(1, {duration: 500})
+    );
+
+    opacity.value = withSequence(
+      withTiming(1, {duration: 750}),
+
+    );
+  }, [scale, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{scale: scale.value}],
     opacity: opacity.value,
   }));
+
   return (
-    <Svg
-      viewBox="125 0 930 1200"
-      width="80%"
-      height="50%"
-      xmlns="http://www.w3.org/2000/svg">
-      <AnimatedPath
-        id="Logo"
-        d="M1040.38,662.461C1029.93,667.505 1020.93,670.388 1013,670.388C1000.4,670.388 992.834,664.262 992.834,645.886L992.834,547.886L1047.94,547.886L1047.94,513.715L992.834,513.715L992.834,457.53L946.418,457.53L946.418,654.174C946.418,693.773 971.605,711.762 1002.92,711.762C1019.85,711.762 1036.41,706.725 1051.18,697.731L1040.38,662.461ZM606.328,562.899C587.584,533.362 551.261,515.516 505.009,515.516C435.626,515.516 388.881,554.73 388.881,613.099C388.881,671.828 435.626,711.402 505.009,711.402C551.261,711.402 587.584,693.392 606.328,663.638C625.13,693.392 661.634,711.402 708.44,711.402C777.001,711.402 823.747,671.828 823.747,613.099C823.747,554.73 777.001,515.516 708.44,515.516C661.634,515.516 625.13,533.362 606.328,562.899ZM858.897,513.715L858.897,709.601L905.674,709.601L905.674,513.715L858.897,513.715ZM234.703,457.53L129.921,457.53L129.921,709.601L232.901,709.601C310.722,709.601 366.145,657.059 366.145,583.565C366.145,509.71 311.082,457.53 234.703,457.53ZM505.009,555.45C541.142,555.45 566.6,579.23 566.6,613.819C566.6,648.409 541.142,672.189 505.009,672.189C468.054,672.189 442.597,648.409 442.597,613.819C442.597,579.23 468.054,555.45 505.009,555.45ZM708.44,555.45C744.573,555.45 770.031,579.23 770.031,613.819C770.031,648.409 744.573,672.189 708.44,672.189C671.485,672.189 646.027,648.409 646.027,613.819C646.027,579.23 671.485,555.45 708.44,555.45ZM235.784,667.146L178.138,667.146L178.138,499.984L233.982,499.984C281.179,499.984 316.847,534.569 316.847,583.925C316.847,632.921 282.26,667.146 235.784,667.146Z"
-        fill={theme.colors.primary}
-        animatedProps={animatedProps}
-      />
-    </Svg>
+    <AnimatedImage
+      source={logoSource}
+      style={[
+        {
+          width: 200,
+          height: 200,
+          tintColor: theme.colors.primary,
+        },
+        animatedStyle,
+      ]}
+      resizeMode="contain"
+    />
   );
 };
 
