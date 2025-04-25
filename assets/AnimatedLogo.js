@@ -21,14 +21,11 @@ const AnimatedLogo = () => {
 
   useEffect(() => {
     scale.value = withSequence(
-      withTiming(1.2, {duration: 500}),
-      withTiming(1, {duration: 500})
+      withTiming(1.2, {duration: 400}),
+      withTiming(1, {duration: 400}),
     );
 
-    opacity.value = withSequence(
-      withTiming(1, {duration: 750}),
-
-    );
+    opacity.value = withSequence(withTiming(1, {duration: 600}));
   }, [scale, opacity]);
 
   const animatedStyle = useAnimatedStyle(() => ({

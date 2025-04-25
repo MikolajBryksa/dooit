@@ -9,7 +9,7 @@ const LoadingView = ({setLoading}) => {
   const styles = useStyles();
 
   useEffect(() => {
-    const animationDuration = 1100;
+    const animationDuration = 800;
     const timer = setTimeout(() => {
       setLoading(false);
     }, animationDuration);

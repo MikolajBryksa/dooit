@@ -39,7 +39,7 @@ function AppContent() {
         dispatch(setSettings(settings));
         settings.firstLaunch && setShowOnboarding(true);
 
-        const newLocale = settings.language === 'English' ? 'en' : 'pl';
+        const newLocale = settings.language as string;
         i18next.changeLanguage(newLocale);
         LocaleConfig.defaultLocale = newLocale;
       }

@@ -1,4 +1,5 @@
 import Realm from 'realm';
+import * as RNLocalize from 'react-native-localize';
 
 class Habit extends Realm.Object {}
 Habit.schema = {
@@ -75,9 +76,15 @@ realm.write(() => {
 
   const existingSettings = realm.objects('Settings')[0];
   if (!existingSettings) {
+    const deviceLocales = RNLocalize.getLocales();
+    const deviceLanguage =
+      deviceLocales && deviceLocales.length > 0
+        ? deviceLocales[0].languageCode
+        : 'en';
+
     realm.create('Settings', {
       id: 1,
-      language: 'pl',
+      language: deviceLanguage,
       clockFormat: '24h',
       firstDay: 'mon',
       firstLaunch: true,
