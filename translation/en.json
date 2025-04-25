@@ -65,9 +65,6 @@
     "date": "Date",
     "measure": "Measure",
     "day": "Day",
-    "done": "Done",
-    "yes": "Yes",
-    "no": "No",
     "no-progress": "No progress data available"
   },
   "date": {

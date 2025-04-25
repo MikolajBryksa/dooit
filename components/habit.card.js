@@ -18,7 +18,10 @@ import SetHabitModal from '../modals/setHabit.modal';
 import AddHabitModal from '../modals/addHabit.modal';
 import DeleteHabitDialog from '../dialogs/deleteHabit.dialog';
 import {formatSecondsToHHMMSS} from '../utils';
-import {updateOrCreateProgress} from '../services/progress.service';
+import {
+  updateOrCreateProgress,
+  deleteProgress,
+} from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
 import {getRepeatDaysString, timeStringToSeconds} from '../utils';
@@ -43,6 +46,7 @@ const HabitCard = ({
   const styles = useStyles();
   const selectedDay = useSelector(state => state.selectedDay);
   const [currentProgress, setCurrentProgress] = useState(0);
+  const [selectedProgress, setSelectedProgress] = useState(null);
   const [progressBarValue, setProgressBarValue] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState('100%');
   const [isProgressing, setIsProgressing] = useState(false);
@@ -137,14 +141,6 @@ const HabitCard = ({
     }
   };
 
-  const handleModal = () => {
-    setVisibleModal(!visibleModal);
-  };
-
-  const handleDialog = () => {
-    setVisibleDialog(!visibleDialog);
-  };
-
   const handleSet = () => {
     const newProgress = parseFloat(textInput);
     if (!isNaN(newProgress)) {
@@ -156,7 +152,46 @@ const HabitCard = ({
         saveData(newProgress);
       }
     }
+    fetchHabitsWithProgress();
     setVisibleModal(false);
+  };
+
+  const handleRowPress = item => {
+    setSelectedProgress(item);
+
+    setTextInput(
+      (
+        item.progressAmount ??
+        item.progressValue ??
+        (item.progressTime ? item.progressTime / 60 : '') ??
+        ''
+      ).toString(),
+    );
+    setVisibleModal(!visibleModal);
+  };
+
+  const handleDeleteProgress = () => {
+    if (selectedProgress?.id) {
+      deleteProgress(selectedProgress.id);
+      fetchHabitsWithProgress();
+      setVisibleModal(false);
+    }
+  };
+
+  const handleModal = () => {
+    if (view === ViewEnum.PREVIEW) {
+      const progressForSelectedDay = progress?.find(
+        item => new Date(item.date).toISOString().split('T')[0] === selectedDay,
+      );
+      if (progressForSelectedDay) {
+        setSelectedProgress(progressForSelectedDay);
+      }
+    }
+    setVisibleModal(!visibleModal);
+  };
+
+  const handleDialog = () => {
+    setVisibleDialog(!visibleDialog);
   };
 
   const updateProgressBar = () => {
@@ -234,7 +269,7 @@ const HabitCard = ({
 
   return (
     <>
-      {view === ViewEnum.PREVIEW ? (
+      {(view === ViewEnum.PREVIEW || view === ViewEnum.STATS) && (
         <SetHabitModal
           visible={visibleModal}
           onDismiss={handleModal}
@@ -244,8 +279,10 @@ const HabitCard = ({
           textInput={textInput}
           setTextInput={setTextInput}
           handleSet={handleSet}
+          handleDelete={handleDeleteProgress}
         />
-      ) : (
+      )}
+      {view === ViewEnum.EDIT && (
         <AddHabitModal
           visible={visibleModal}
           onDismiss={handleModal}
@@ -401,40 +438,33 @@ const HabitCard = ({
                       <DataTable>
                         <DataTable.Header>
                           <DataTable.Title>{t('table.date')}</DataTable.Title>
-                          {progressType !== ProgressTypeEnum.DONE ? (
+                          {progressType !== ProgressTypeEnum.DONE && (
                             <DataTable.Title numeric>
                               {t('table.measure')}
                             </DataTable.Title>
-                          ) : (
-                            <DataTable.Title numeric>
-                              {t('table.day')}
-                            </DataTable.Title>
                           )}
                           <DataTable.Title numeric>
-                            {t('table.done')}
+                            {t('table.day')}
                           </DataTable.Title>
                         </DataTable.Header>
 
                         {progress.slice(from, to).map((item, index) => (
-                          <DataTable.Row key={index}>
+                          <DataTable.Row
+                            key={index}
+                            onPress={() => handleRowPress(item)}>
                             <DataTable.Cell>
                               {new Date(item.date).toLocaleDateString('pl-PL')}
                             </DataTable.Cell>
 
-                            {progressType !== ProgressTypeEnum.DONE ? (
+                            {progressType !== ProgressTypeEnum.DONE && (
                               <DataTable.Cell numeric>
                                 {item.progressAmount ??
                                   item.progressValue ??
                                   formatSecondsToHHMMSS(item.progressTime)}
                               </DataTable.Cell>
-                            ) : (
-                              <DataTable.Cell numeric>
-                                {progress.length - from - index}
-                              </DataTable.Cell>
                             )}
-
                             <DataTable.Cell numeric>
-                              {item.checked ? t('table.yes') : t('table.no')}
+                              {progress.length - from - index}
                             </DataTable.Cell>
                           </DataTable.Row>
                         ))}

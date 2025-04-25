@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Card,
   Button,
@@ -23,6 +23,7 @@ const SetHabitModal = ({
   textInput,
   setTextInput,
   handleSet,
+  handleDelete,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -56,6 +57,13 @@ const SetHabitModal = ({
           />
         </Card.Content>
         <Card.Actions>
+          <Button
+            onPress={() => {
+              handleDelete();
+            }}
+            mode="outlined">
+            {t('button.delete')}
+          </Button>
           <Button
             onPress={() => {
               handleSet(parseFloat(textInput));
