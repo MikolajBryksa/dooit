@@ -1,19 +1,22 @@
 # Dooit
 
-Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily tasks, weight changes, current expenses, plans and things to buy.
+Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.
 
 ## Tech Stack
 
-- **React Native** for building the mobile application.
-- **Realm** for local database management.
-- **Java** for Android-specific development.
+- **React Native** for building the mobile application
+- **Realm** for local database management
+- **Java** for Android-specific development
 
 ## Features
 
-- Create and manage tasks and plans.
-- Track your progress and maintain good habits.
-- Offline support with Realm database.
-- Easy-to-use interface built with React Native.
+- Full functionality without network access
+- Creating and managing a habit system
+- Tracking progress toward daily goals
+- English and Polish languages
+- Customizable clock and calendar
+- Light and dark theme
+- Layout based on Material Design
 
 ## Setup
 
