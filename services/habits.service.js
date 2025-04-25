@@ -1,70 +1,67 @@
 import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import {getNextId, getDayOfWeek} from '../utils';
+import {getProgressByHabitIdAndDate} from './progress.service';
 
-export const addHabit = (when, what, time, days) => {
+export const addHabit = (
+  habitName,
+  firstStep,
+  goalDesc,
+  motivation,
+  repeatDays,
+  habitStart,
+  progressType,
+  progressUnit,
+  targetScore,
+) => {
   const id = getNextId('Habit');
-  when = id;
 
   let newHabit;
   realm.write(() => {
     newHabit = realm.create('Habit', {
       id,
-      when,
-      what,
-      time,
-      check: false,
-      monday: days.monday,
-      tuesday: days.tuesday,
-      wednesday: days.wednesday,
-      thursday: days.thursday,
-      friday: days.friday,
-      saturday: days.saturday,
-      sunday: days.sunday,
+      habitName,
+      firstStep,
+      goalDesc,
+      motivation,
+      repeatDays,
+      habitStart,
+      progressType,
+      progressUnit,
+      targetScore,
     });
   });
   return newHabit;
 };
 
-export const getEveryHabit = () => {
-  const sortFields = [['when', false]];
-  const results = realm.objects('Habit').sorted(sortFields);
-  return results;
-};
-
-export const getHabit = id => {
-  const habit = realm.objectForPrimaryKey('Habit', id);
-  if (!habit) return null;
-
-  return {
-    ...habit,
-    when: habit.when.toString(),
-  };
-};
-
-export const updateHabit = (id, when, what, time, days, check) => {
-  when = parseInt(when, 10);
-
+export const updateHabit = (
+  id,
+  habitName,
+  firstStep,
+  goalDesc,
+  motivation,
+  repeatDays,
+  habitStart,
+  progressType,
+  progressUnit,
+  targetScore,
+) => {
   let updatedHabit;
   realm.write(() => {
     const habit = realm.objectForPrimaryKey('Habit', id);
-    check = check !== null ? check : habit.check;
 
     updatedHabit = realm.create(
       'Habit',
       {
         id,
-        when,
-        what,
-        time,
-        check,
-        monday: days.monday !== undefined ? days.monday : habit.monday,
-        tuesday: days.tuesday !== undefined ? days.tuesday : habit.tuesday,
-        wednesday:
-          days.wednesday !== undefined ? days.wednesday : habit.wednesday,
-        thursday: days.thursday !== undefined ? days.thursday : habit.thursday,
-        friday: days.friday !== undefined ? days.friday : habit.friday,
-        saturday: days.saturday !== undefined ? days.saturday : habit.saturday,
-        sunday: days.sunday !== undefined ? days.sunday : habit.sunday,
+        habitName,
+        firstStep,
+        goalDesc,
+        motivation,
+        repeatDays: repeatDays !== undefined ? repeatDays : habit.repeatDays,
+        habitStart,
+        progressType,
+        progressUnit,
+        targetScore,
       },
       'modified',
     );
@@ -84,22 +81,48 @@ export const deleteHabit = id => {
   return deletedHabit;
 };
 
-export const getTodayHabits = selectedDay => {
-  const dayOfWeek = new Date(selectedDay)
-    .toLocaleString('en-US', {weekday: 'long'})
-    .toLowerCase();
-  const results = realm
-    .objects('Habit')
-    .filtered(`${dayOfWeek} == true`)
-    .sorted('when');
-  return results;
+export const getEveryHabit = () => {
+  return realm.objects('Habit').sorted('habitStart');
 };
 
-export const resetHabitsCheck = () => {
-  realm.write(() => {
-    const habits = realm.objects('Habit').filtered('check == true');
-    habits.forEach(habit => {
-      habit.check = false;
-    });
+export const getHabitById = id => {
+  return realm.objectForPrimaryKey('Habit', id);
+};
+
+export const getCurrentHabit = (currentTime, selectedDay) => {
+  const habits = realm.objects('Habit').sorted('habitStart');
+
+  if (!habits || habits.length === 0) {
+    return null;
+  }
+
+  const days = getDayOfWeek(selectedDay);
+
+  const filteredHabits = habits.filter(habit => {
+    const repeatDaysArray = habit.repeatDays ? habit.repeatDays : [];
+    return days.some(day => repeatDaysArray.includes(day));
   });
+
+  if (filteredHabits.length === 0) {
+    return null;
+  }
+
+  for (let i = 0; i < filteredHabits.length; i++) {
+    const habit = filteredHabits[i];
+    const nextHabit = filteredHabits[i + 1];
+
+    if (
+      currentTime >= habit.habitStart &&
+      (!nextHabit || currentTime < nextHabit.habitStart)
+    ) {
+      const progress = getProgressByHabitIdAndDate(habit.id, selectedDay);
+
+      return {
+        ...habit.toJSON(),
+        progress: progress ? [progress] : [],
+      };
+    }
+  }
+
+  return null;
 };

@@ -1,93 +1,156 @@
 {
-  "welcome": "Welcome to Dooit, choose your settings",
-  "no-today": "Here you will see today's plans",
-  "no-weights": "Add your weight",
-  "no-menu": "Add meal plan",
-  "no-costs": "Add cost not included in budget",
-  "no-budgets": "Add income or regular expense",
-  "no-plans": "Add plan for selected day",
-  "no-habits": "Add activity performed regularly",
-  "no-tasks-done": "Add task to do",
-  "no-items-bought": "Add item to shopping list",
-  "contact": "Would you write to me on Linkedin?",
-  "coffee": "Would you support me with coffee?",
-
-  "finish-day": "Do you end the day?",
-  "enter-habit": "Enter habit",
-  "enter-weight": "Enter weight",
-  "enter-cost": "Enter cost",
-  "entry-type": "Entry type",
-  "expense": "Expense",
-  "income": "Income",
-  "entry-period": "Repeatability",
-  "monthly": "Monthly",
-  "yearly": "Yearly",
-  "single": "Single",
-  "enter-name": "Enter name",
-  "enter-amount": "Enter amount",
-  "enter-plan": "Enter plan",
-  "set-time": "Set time",
-  "set-days": "Daily",
-  "enter-task": "Enter task",
-  "enter-item": "Enter item",
-
-  "initial-weight": "Initial weight",
-  "days": "days",
-  "day": "day",
-  "done": "done",
-  "bought": "bought",
-
-  "version": "Version",
-  "language": "Language",
-  "rows-number": "Data limitation",
-  "habits": "Habits",
-  "weights": "Weights",
-  "weight-unit": "Weight unit",
-  "weight-gain": "Weight gain",
-  "costs": "Costs",
-  "currency": "Currency",
-  "cost-gain": "Cost gain",
-  "plans": "Plans",
-  "clock-format": "Clock format",
-  "first-day": "First day",
-  "first-day-monday": "Monday",
-  "first-day-sunday": "Sunday",
-  "tasks": "Tasks",
-
-  "daily": "Daily",
-  "mondays": "Mondays",
-  "tuesdays": "Tuesdays",
-  "wednesdays": "Wednesdays",
-  "thursdays": "Thursdays",
-  "fridays": "Fridays",
-  "saturdays": "Saturdays",
-  "sundays": "Sundays",
-  "mon": "Mon",
-  "tue": "Tue",
-  "wed": "Wed",
-  "thu": "Thu",
-  "fri": "Fri",
-  "sat": "Sat",
-  "sun": "Sun",
-
-  "show-menu": "Show menu",
-  "hide-menu": "Hide menu",
-  "meal1": "Breakfast",
-  "meal2": "Second breakfast",
-  "meal3": "Lunch",
-  "meal4": "Afternoon snack",
-  "meal5": "Dinner",
-
-  "header": {
-    "weights": "Weight",
-    "menu": "Menu",
-    "costs": "Costs",
-    "budget": "Budget",
-    "plans": "Plans",
+  "view": {
+    "loading": "Loading",
+    "home": "Dzień",
     "habits": "Habits",
-    "tasks": "Tasks",
-    "shop": "Shop",
-    "settings": "Settings",
-    "profile": "Profile"
+    "stats": "Stats",
+    "settings": "Settings"
+  },
+  "title": {
+    "add-habit": "Add habit",
+    "edit-habit": "Edit habit",
+    "delete-habit": "Delete habit",
+    "filter-habits": "Filter habits",
+    "no-habits": "No habits",
+    "no-current-habit": "No current habit",
+    "choose-date": "Choose date",
+    "contact-author": "Contact author",
+    "support-author": "Support author"
+  },
+  "settings": {
+    "language": "Language",
+    "en": "English",
+    "pl": "Polish",
+    "clock-format": "Clock format",
+    "first-day": "First day of the week",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "message": {
+    "delete-habit": "Are you sure to remove the habit",
+    "contact-author": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin",
+    "support-author": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee",
+    "filter-habits": "From which days habits do you want to see"
+  },
+  "button": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "change": "Change",
+    "contact": "Contact",
+    "support": "Support",
+    "reset": "Reset",
+    "filter": "Filter",
+    "save": "Save",
+    "edit": "Edit",
+    "add": "Add",
+    "set": "Set",
+    "today": "Today",
+    "accept": "Accept",
+    "start": "Start",
+    "stop": "Stop",
+    "table": "Table",
+    "back": "Back",
+    "next": "Next"
+  },
+  "card": {
+    "first-step": "First step",
+    "goal-desc": "Goal",
+    "motivation": "Motivation",
+    "in-progress": "In progress",
+    "target-measure": "Target measure"
+  },
+  "table": {
+    "average": "Average",
+    "date": "Date",
+    "measure": "Measure",
+    "day": "Day",
+    "no-progress": "No progress data available"
+  },
+  "date": {
+    "daily": "Daily",
+    "workdays": "Workdays",
+    "weekend": "Weekend",
+    "mon": "Monday",
+    "tue": "Tuesday",
+    "wed": "Wednesday",
+    "thu": "Thursday",
+    "fri": "Friday",
+    "sat": "Saturday",
+    "sun": "Sunday"
+  },
+  "unit": {
+    "minutes": "minutes"
+  },
+  "step": {
+    "1": "What do you want to do regularly",
+    "2": "What is the first step to make it",
+    "3": "What you will achieve with this habit",
+    "4": "Why it's worth achieving",
+    "5": "On what days you want to do it",
+    "6": "What time do you want to do it",
+    "7": "What do you want to measure progress with",
+    "8": "What measurement will be satisfactory to you"
+  },
+  "input": {
+    "habit-name": "Habit name",
+    "first-step": "Activity that starts a habit",
+    "goal-desc": "Purpose of making a habit",
+    "motivation": "Your main motivation",
+    "progress-type": {
+      "time": "Time (minutes)",
+      "amount": "Amount (like pages, glasses)",
+      "value": "Value (like kilograms, pounds)",
+      "done": "Done (only counts days)"
+    },
+    "target-score": "Measure",
+    "progress-unit": "Unit",
+    "minutes": "min"
+  },
+  "option": {
+    "habit-name": {
+      "water": "Drink water",
+      "book": "Read a book",
+      "workout": "Workout"
+    },
+    "first-step": {
+      "water": "Fill a glass of water",
+      "book": "Open a book",
+      "workout": "Unfold the mat"
+    },
+    "goal-desc": {
+      "water": "Hydrating the body",
+      "book": "Learning interesting stories",
+      "workout": "Improving the figure"
+    },
+    "motivation": {
+      "water": "I want to feel better",
+      "book": "I want to know more",
+      "workout": "I want to be healthier"
+    },
+    "progress-unit": {
+      "water": "glasses",
+      "book": "pages",
+      "workout": "kg"
+    }
+  },
+  "onboarding": {
+    "welcome": "Welcome",
+    "to-app": "to the Dooit app",
+    "start": "Get started",
+    "option": {
+      "1": {
+        "title": "Create habits",
+        "subtitle": "Build routines that stick and make personal growth effortless."
+      },
+      "2": {
+        "title": "Monitor progress",
+        "subtitle": "Track your journey and see how far you’ve come, day by day."
+      },
+      "3": {
+        "title": "Enjoy life",
+        "subtitle": "Feel the impact of small steps adding up to a more fulfilling life."
+      }
+    }
   }
 }

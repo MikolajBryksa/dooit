@@ -1,46 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {styles} from './styles';
+import {PaperProvider, BottomNavigation} from 'react-native-paper';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './redux/store';
 import LoadingView from './views/loading.view';
 import HomeView from './views/home.view';
-import WeightsView from './views/weights.view';
-import CostsView from './views/costs.view';
-import PlansView from './views/plans.view';
-import TasksView from './views/tasks.view';
+import HabitsView from './views/habits.view';
+import StatsView from './views/stats.view';
 import SettingsView from './views/settings.view';
-import toastConfig from './components/toast';
-import Toast from 'react-native-toast-message';
 import 'react-native-gesture-handler';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {renderViewIcon} from './utils';
+import {renderIcon} from './utils';
 import i18next from './i18next';
 import {LocaleConfig} from 'react-native-calendars';
-import {plLocaleConfig, enLocaleConfig} from './translation/calendar';
-import {getEveryWeight} from './services/weights.service';
-import {getEveryMenu} from './services/menu.service';
-import {getEveryCost} from './services/costs.service';
-import {getEveryBudget} from './services/budgets.service';
-import {getEveryPlan} from './services/plans.service';
-import {getEveryHabit} from './services/habits.service';
-import {getEveryTask} from './services/tasks.service';
 import {getSettings} from './services/settings.service';
 import {getTempValue} from './services/temp.service';
-import {
-  setSelectedDay,
-  setWeights,
-  setMenu,
-  setCosts,
-  setBudgets,
-  setPlans,
-  setHabits,
-  setTasks,
-  setSettings,
-} from './redux/actions';
-import {convertRealmObjects} from './utils';
-import {formatDate} from './utils';
-import OnboardingModal from './modals/onboarding.modal';
+import {setSelectedDay, setSettings} from './redux/actions';
+import {formatDateToYYMMDD} from './utils';
+import {CommonActions} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useTranslation} from 'react-i18next';
+import {getTheme} from './theme/theme';
+import {useColorScheme} from 'react-native';
+import OnboardingView from './views/onboarding.view';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,97 +29,157 @@ function AppContent() {
   const settings = useSelector((state: any) => state.settings);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-
-  LocaleConfig.locales['pl'] = plLocaleConfig;
-  LocaleConfig.locales['en'] = enLocaleConfig;
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     async function loadData() {
       const settings = getSettings();
       if (settings) {
         dispatch(setSettings(settings));
-        settings.firstLaunch && setShowModal(true);
-        i18next.changeLanguage(settings.language === 'English' ? 'en' : 'pl');
-        LocaleConfig.defaultLocale =
-          settings.language === 'English' ? 'en' : 'pl';
+        settings.firstLaunch && setShowOnboarding(true);
+
+        const newLocale = settings.language as string;
+        i18next.changeLanguage(newLocale);
+        LocaleConfig.defaultLocale = newLocale;
       }
 
-      const selectedDay = formatDate(getTempValue('selectedDay'));
+      const selectedDay = formatDateToYYMMDD(getTempValue('selectedDay'));
       dispatch(setSelectedDay(selectedDay));
-
-      const weights = getEveryWeight();
-      dispatch(setWeights(convertRealmObjects(weights)));
-
-      const menu = getEveryMenu();
-      dispatch(setMenu(convertRealmObjects(menu)));
-
-      const costs = getEveryCost();
-      dispatch(setCosts(convertRealmObjects(costs)));
-
-      const budgets = getEveryBudget();
-      dispatch(setBudgets(convertRealmObjects(budgets)));
-
-      const plans = getEveryPlan();
-      dispatch(setPlans(convertRealmObjects(plans)));
-
-      const habits = getEveryHabit();
-      dispatch(setHabits(convertRealmObjects(habits)));
-
-      const tasks = getEveryTask();
-      dispatch(setTasks(convertRealmObjects(tasks)));
-
-      setLoading(false);
     }
 
     loadData();
   }, []);
 
   if (loading) {
-    return <LoadingView />;
+    return <LoadingView setLoading={setLoading} />;
+  }
+
+  if (showOnboarding) {
+    return <OnboardingView setShowOnboarding={setShowOnboarding} />;
   }
 
   return (
     <>
-      {showModal && <OnboardingModal setShowModal={setShowModal} />}
       <Tab.Navigator
-        screenOptions={({route}) => ({
+        screenOptions={{
           headerShown: false,
-          tabBarStyle: {
-            ...styles.footer,
-          },
-          tabBarIcon: ({focused}) => renderViewIcon(route.name, focused),
-          tabBarLabelStyle: {
-            display: 'none',
-          },
-          animation: 'shift',
-        })}>
-        <Tab.Screen name="home" component={HomeView} />
-        {settings.weightsTab && (
-          <Tab.Screen name="weights" component={WeightsView} />
-        )}
-        {settings.costsTab && <Tab.Screen name="costs" component={CostsView} />}
-        {settings.plansTab && <Tab.Screen name="plans" component={PlansView} />}
-        {settings.tasksTab && <Tab.Screen name="tasks" component={TasksView} />}
-        {settings && <Tab.Screen name="settings" component={SettingsView} />}
-      </Tab.Navigator>
+        }}
+        tabBar={({navigation, state, descriptors, insets}) => (
+          <BottomNavigation.Bar
+            navigationState={state}
+            safeAreaInsets={insets}
+            onTabPress={({route, preventDefault}) => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-      <React.Fragment>
-        {/* @ts-ignore */}
-        <Toast config={toastConfig} swipeable />
-      </React.Fragment>
+              if (event.defaultPrevented) {
+                preventDefault();
+              } else {
+                navigation.dispatch({
+                  ...CommonActions.navigate(route.name, route.params),
+                  target: state.key,
+                });
+              }
+            }}
+            renderIcon={({route, focused, color}) => {
+              const {options} = descriptors[route.key];
+              if (options.tabBarIcon) {
+                return options.tabBarIcon({focused, color, size: 24});
+              }
+
+              return null;
+            }}
+            getLabelText={({route}) => {
+              const {options} = descriptors[route.key];
+              const label =
+                options.tabBarLabel !== undefined
+                  ? options.tabBarLabel
+                  : options.title !== undefined
+                  ? options.title
+                  : route.name;
+
+              return typeof label === 'string' ? label : undefined;
+            }}
+          />
+        )}>
+        <Tab.Screen
+          name="Home"
+          component={HomeView}
+          options={{
+            tabBarLabel: t('view.home'),
+            tabBarIcon: ({color, size}) => {
+              return renderIcon('home', color, size);
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Habits"
+          component={HabitsView}
+          options={{
+            tabBarLabel: t('view.habits'),
+            tabBarIcon: ({color, size}) => {
+              return renderIcon('habits', color, size);
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Stats"
+          component={StatsView}
+          options={{
+            tabBarLabel: t('view.stats'),
+            tabBarIcon: ({color, size}) => {
+              return renderIcon('stats', color, size);
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsView}
+          options={{
+            tabBarLabel: t('view.settings'),
+            tabBarIcon: ({color, size}) => {
+              return renderIcon('settings', color, size);
+            },
+          }}
+        />
+      </Tab.Navigator>
     </>
   );
 }
 
 function App(): React.JSX.Element {
+  const reduxTheme = useSelector((state: any) => state.settings.currentTheme);
+  const systemTheme = useColorScheme();
+  let currentTheme = reduxTheme;
+
+  if (!currentTheme) {
+    const settings = getSettings();
+    if (settings && settings.currentTheme) {
+      currentTheme = settings.currentTheme;
+    } else {
+      currentTheme = systemTheme;
+    }
+  }
+
+  const theme = getTheme(currentTheme);
+
   return (
-    <Provider store={store}>
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <AppContent />
       </NavigationContainer>
-    </Provider>
+    </PaperProvider>
   );
 }
 
-export default App;
+const Root = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
+export default Root;

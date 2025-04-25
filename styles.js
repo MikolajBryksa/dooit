@@ -1,257 +1,120 @@
 import {StyleSheet} from 'react-native';
+import {useTheme} from 'react-native-paper';
 
-export const COLORS = {
-  primary: '#836FFF',
-  primary50: '#836FFF50',
-  primary25: '#836FFF25',
-  secondary: '#15F5BA',
-  text: '#F0F3FF',
-  background: '#211951',
+export const useStyles = () => {
+  const theme = useTheme();
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: theme.dimensions.padding,
+      backgroundColor: theme.colors.background,
+    },
+    loading__container: {
+      flex: 1,
+      padding: theme.dimensions.padding,
+      backgroundColor: theme.colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loading__text: {
+      marginTop: theme.dimensions.padding,
+    },
+    onboarding__card: {
+      height: theme.dimensions.height * 2,
+      justifyContent: 'center',
+      width: '100%',
+      marginBottom: theme.dimensions.padding,
+    },
+    onboarding__title: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: theme.dimensions.padding * 3,
+    },
+    onboarding__button: {
+      marginTop: theme.dimensions.padding * 3,
+    },
+    disabled: {
+      opacity: 0.5,
+    },
+    targetScore: {
+      flexDirection: 'row',
+      gap: theme.dimensions.margin,
+    },
+    input: {
+      flex: 1,
+    },
+    title: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      height: theme.dimensions.height / 2,
+      marginBottom: theme.dimensions.margin,
+    },
+    rowActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    card: {
+      minHeight: theme.dimensions.height,
+      width: '100%',
+      marginBottom: theme.dimensions.padding,
+    },
+    cardChecked: {
+      minHeight: theme.dimensions.height,
+      width: '100%',
+      marginBottom: theme.dimensions.padding,
+      opacity: 0.5,
+    },
+    chip: {
+      marginBottom: theme.dimensions.padding,
+      borderRadius: 12,
+    },
+    time: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    progressBar: {
+      marginVertical: theme.dimensions.margin,
+    },
+    progressExcess: {
+      color: theme.colors.secondary,
+    },
+    button: {
+      marginVertical: theme.dimensions.padding,
+      backgroundColor: theme.colors.primary,
+    },
+    divider: {
+      marginVertical: theme.dimensions.margin,
+      backgroundColor: theme.colors.outline,
+    },
+    gap: {
+      height: theme.dimensions.margin * 3,
+    },
+    noProgress: {
+      marginBottom: theme.dimensions.padding,
+      color: theme.colors.onSurface,
+    },
+    modal: {
+      backgroundColor: theme.colors.surface,
+      margin: theme.dimensions.padding,
+      paddingTop: theme.dimensions.padding,
+      paddingBottom: theme.dimensions.margin,
+      borderRadius: 12,
+    },
+    daysSelector__container: {
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      flexDirection: 'row',
+      width: '100%',
+      marginTop: theme.dimensions.margin,
+    },
+    daysSelector__chip: {
+      marginLeft: theme.dimensions.margin,
+      borderRadius: 25,
+    },
+    calendar: {
+      height: theme.dimensions.height * 7.5,
+    },
+  });
 };
-
-export const DIMENSIONS = {
-  height: 60,
-  padding: 10,
-  margin: 5,
-};
-
-export const styles = StyleSheet.create({
-  container: {
-    padding: DIMENSIONS.padding,
-    backgroundColor: COLORS.background,
-    flex: 1,
-  },
-  loading: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.background,
-    flex: 1,
-  },
-  scrollView: {
-    marginBottom: DIMENSIONS.margin,
-    flex: 1,
-  },
-  gap: {
-    width: '100%',
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    borderRadius: DIMENSIONS.margin,
-  },
-  toast: {
-    height: DIMENSIONS.height,
-    width: '95%',
-    borderColor: COLORS.secondary,
-    borderWidth: 1,
-    backgroundColor: COLORS.background,
-    marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: DIMENSIONS.margin,
-    borderRadius: DIMENSIONS.margin,
-  },
-  tableItem: {
-    height: DIMENSIONS.height,
-    width: '100%',
-    padding: DIMENSIONS.padding,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    borderRadius: DIMENSIONS.margin,
-  },
-  when: {
-    color: COLORS.primary,
-  },
-  what: {
-    color: COLORS.text,
-    textAlign: 'right',
-  },
-  inputContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: DIMENSIONS.height,
-    width: '100%',
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    alignItems: 'center',
-    borderRadius: DIMENSIONS.margin,
-  },
-  input: {
-    flex: 1,
-    height: '100%',
-    color: COLORS.text,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  incrementator: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 25,
-  },
-  setter: {
-    height: '100%',
-    color: COLORS.primary,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  daysContainer: {
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
-    borderRadius: DIMENSIONS.margin,
-  },
-  center: {
-    color: COLORS.secondary,
-  },
-  centerIcon: {
-    fontSize: DIMENSIONS.height / 2,
-    color: COLORS.secondary,
-  },
-  listItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: DIMENSIONS.height,
-    width: '100%',
-    paddingLeft: DIMENSIONS.padding,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    alignItems: 'center',
-    borderRadius: DIMENSIONS.margin,
-  },
-  listItemDay: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: DIMENSIONS.height * 0.8,
-    width: '100%',
-    padding: DIMENSIONS.padding,
-    alignItems: 'center',
-  },
-  menuContainer: {
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
-    borderRadius: DIMENSIONS.margin,
-    padding: DIMENSIONS.padding,
-  },
-  listItemWhat: {
-    color: COLORS.text,
-    flex: 1,
-  },
-  listItemDesc: {
-    color: COLORS.primary,
-    flex: 1,
-  },
-  listItemCheck: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingLeft: DIMENSIONS.padding * 2,
-    color: COLORS.text,
-    paddingRight: DIMENSIONS.padding,
-  },
-  listItemChange: {
-    color: COLORS.text,
-    paddingRight: DIMENSIONS.padding,
-  },
-  switch: {},
-  listItemActive: {
-    borderColor: COLORS.secondary,
-  },
-  calendar: {
-    width: '100%',
-    height: 368,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    marginBottom: DIMENSIONS.margin,
-    paddingTop: 3,
-    borderRadius: DIMENSIONS.margin,
-  },
-  calendarTheme: {
-    backgroundColor: COLORS.background,
-    calendarBackground: COLORS.background,
-    textSectionTitleColor: COLORS.primary,
-    selectedDayTextColor: COLORS.text,
-    todayTextColor: COLORS.primary,
-    dayTextColor: COLORS.primary,
-    textDisabledColor: COLORS.background,
-    monthTextColor: COLORS.text,
-  },
-  header: {
-    height: DIMENSIONS.height,
-    width: '100%',
-    marginBottom: DIMENSIONS.margin,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: DIMENSIONS.margin,
-  },
-  headerButton: {
-    height: DIMENSIONS.height,
-    borderColor: COLORS.primary,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    borderRadius: DIMENSIONS.margin,
-  },
-  headerButtonActive: {
-    height: DIMENSIONS.height,
-    borderColor: COLORS.secondary,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    borderRadius: DIMENSIONS.margin,
-  },
-  controllers: {
-    flexDirection: 'row',
-    gap: DIMENSIONS.margin,
-  },
-  controlButton: {
-    height: DIMENSIONS.height,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    borderRadius: DIMENSIONS.margin,
-  },
-  empty: {
-    height: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: DIMENSIONS.margin,
-  },
-  circleButton: {
-    marginTop: DIMENSIONS.padding,
-    width: DIMENSIONS.height * 1.5,
-    height: DIMENSIONS.height * 1.5,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: DIMENSIONS.height * 0.75,
-  },
-  shadowButton: {
-    marginTop: DIMENSIONS.padding,
-    width: DIMENSIONS.height,
-    height: DIMENSIONS.height,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
-    fontSize: DIMENSIONS.height,
-    color: COLORS.background,
-  },
-  footer: {
-    paddingTop: 0,
-    borderTopWidth: DIMENSIONS.margin,
-    borderTopColor: COLORS.primary,
-    height: DIMENSIONS.height,
-    backgroundColor: COLORS.background,
-  },
-});
