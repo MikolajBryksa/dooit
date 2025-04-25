@@ -228,11 +228,15 @@ const HabitCard = ({
     );
   };
 
-  const calculateAverageProgress = progress => {
+  const calculateAverageProgress = (progress, from, to) => {
     if (!progress || progress.length === 0) {
       return 0;
     }
-    const total = progress.reduce((sum, item) => {
+
+    // Ograniczenie do elementów wyświetlanych w tabeli
+    const visibleProgress = progress.slice(from, to);
+
+    const total = visibleProgress.reduce((sum, item) => {
       const value =
         item.progressAmount ?? item.progressValue ?? item.progressTime ?? 0;
       return sum + value;
@@ -240,11 +244,11 @@ const HabitCard = ({
 
     let result;
     if (progressType === ProgressTypeEnum.TIME) {
-      result = total / progress.length;
-      result = formatSecondsToHHMMSS(result);
+      result = total / visibleProgress.length;
+      result = formatSecondsToHHMMSS(result); // Formatowanie na HH:MM:SS
     } else {
-      result = total / progress.length;
-      result = result.toFixed(2);
+      result = total / visibleProgress.length;
+      result = result.toFixed(2); // Zaokrąglenie do 2 miejsc po przecinku
     }
     return result;
   };
@@ -367,12 +371,13 @@ const HabitCard = ({
                       {progressType !== ProgressTypeEnum.DONE && (
                         <Chip
                           icon={getChipIcon(
-                            calculateAverageProgress(progress),
+                            calculateAverageProgress(progress, from, to),
                             targetScore,
                           )}
                           style={styles.chip}>
                           {t('table.average')}:{' '}
-                          {calculateAverageProgress(progress)} {progressUnit}{' '}
+                          {calculateAverageProgress(progress, from, to)}{' '}
+                          {progressUnit}{' '}
                         </Chip>
                       )}
                     </>
