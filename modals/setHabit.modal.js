@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Card,
   Button,
@@ -27,6 +27,7 @@ const SetHabitModal = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const [addedValue, setAddedValue] = useState(0);
   return (
     <Portal>
       <Modal
@@ -40,21 +41,41 @@ const SetHabitModal = ({
           </View>
 
           <Divider style={styles.divider} />
-          <TextInput
-            mode="outlined"
-            label={
-              progressType === ProgressTypeEnum.TIME
-                ? t('unit.minutes')
-                : progressUnit
-            }
-            value={textInput}
-            keyboardType="numeric"
-            onChangeText={text => {
-              const sanitizedText = text.replace(',', '.');
-              const numericValue = sanitizedText.replace(/[^0-9.]/g, '');
-              setTextInput(numericValue);
-            }}
-          />
+          <View style={styles.targetScore}>
+            <TextInput
+              style={styles.input}
+              mode="outlined"
+              label={
+                progressType === ProgressTypeEnum.TIME
+                  ? t('unit.minutes')
+                  : progressUnit
+              }
+              value={textInput}
+              keyboardType="numeric"
+              onChangeText={text => {
+                const sanitizedText = text.replace(',', '.');
+                const numericValue = sanitizedText.replace(/[^0-9.]/g, '');
+                setTextInput(numericValue);
+              }}
+            />
+            <Text style={{alignSelf: 'center'}}>+</Text>
+            <TextInput
+              style={styles.input}
+              mode="outlined"
+              label={
+                progressType === ProgressTypeEnum.TIME
+                  ? t('unit.minutes')
+                  : progressUnit
+              }
+              value={addedValue}
+              keyboardType="numeric"
+              onChangeText={text => {
+                const sanitizedText = text.replace(',', '.');
+                const numericValue = sanitizedText.replace(/[^0-9.]/g, '');
+                setAddedValue(numericValue);
+              }}
+            />
+          </View>
         </Card.Content>
         <Card.Actions>
           <Button
@@ -66,7 +87,9 @@ const SetHabitModal = ({
           </Button>
           <Button
             onPress={() => {
-              handleSet(parseFloat(textInput));
+              const baseValue = parseFloat(textInput) || 0;
+              const additionalValue = parseFloat(addedValue) || 0;
+              handleSet(baseValue + additionalValue);
             }}
             mode="contained">
             {t('button.save')}

@@ -141,8 +141,8 @@ const HabitCard = ({
     }
   };
 
-  const handleSet = () => {
-    const newProgress = parseFloat(textInput);
+  const handleSet = sum => {
+    const newProgress = parseFloat(sum || textInput);
     if (!isNaN(newProgress)) {
       if (progressType === ProgressTypeEnum.TIME) {
         setCurrentProgress(newProgress * 60);
@@ -158,12 +158,13 @@ const HabitCard = ({
 
   const handleRowPress = item => {
     setSelectedProgress(item);
-
     setTextInput(
       (
         item.progressAmount ??
         item.progressValue ??
-        (item.progressTime ? item.progressTime / 60 : '') ??
+        (item.progressTime && item.progressTime > 60
+          ? item.progressTime / 60
+          : 0) ??
         ''
       ).toString(),
     );
