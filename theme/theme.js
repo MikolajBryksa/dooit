@@ -2,6 +2,7 @@ import {useColorScheme} from 'react-native';
 import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
 import {darkScheme} from './darkScheme';
 import {lightScheme} from './lightScheme';
+import {fontConfig} from './fontConfig';
 
 export const getTheme = currentTheme => {
   const systemTheme = useColorScheme();
@@ -18,6 +19,7 @@ export const getTheme = currentTheme => {
       padding: 10,
       margin: 5,
     },
+    fonts: fontConfig,
   };
 
   const DarkScheme = {
@@ -31,6 +33,7 @@ export const getTheme = currentTheme => {
       padding: 10,
       margin: 5,
     },
+    fonts: fontConfig,
   };
 
   return themeToUse === 'dark' ? DarkScheme : LightScheme;

@@ -102,6 +102,14 @@ Before you begin, ensure you have met the following requirements:
       /android/app/src/main/res
   ```
 
+- **Change the app font**:
+
+  ```
+      Paste fonts to:
+      /assets/fonts
+      Update fontConfig.js
+  ```
+
 - **Prepare to publish**:
 
   ```
