@@ -1,6 +1,7 @@
 # Dooit
 
-Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.
+Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
+https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
 ## Tech Stack
 
@@ -128,6 +129,12 @@ Before you begin, ensure you have met the following requirements:
       android/app/build/outputs/bundle/release/app-release.aab
   ```
 
+### Publishing
+
+- **Update the app info**:
+
+  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/main-store-listing
+
 - **Submit new version to Google Play**:
 
   https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/bundle-explorer-selector
@@ -135,3 +142,7 @@ Before you begin, ensure you have met the following requirements:
 - **Create new version for testers**:
 
   https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/tracks/4698028729410342214?tab=releases
+
+- **Link for testers**:
+
+  https://play.google.com/apps/testing/com.dooit.bryksa
