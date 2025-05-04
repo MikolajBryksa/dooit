@@ -30,6 +30,8 @@ const SetHabitModal = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const [addedValue, setAddedValue] = useState(0);
+  const settings = useSelector(state => state.settings);
+
   return (
     <Portal>
       <Modal
@@ -46,7 +48,9 @@ const SetHabitModal = ({
           {selectedProgress && (
             <>
               <Text variant="bodyMedium">
-                {new Date(selectedProgress.date).toLocaleDateString('pl-PL')}
+                {new Date(selectedProgress.date).toLocaleDateString(
+                  settings.language,
+                )}
               </Text>
               <View style={styles.gap} />
             </>

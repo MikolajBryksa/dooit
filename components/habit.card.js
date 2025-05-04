@@ -50,6 +50,7 @@ const HabitCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const selectedDay = useSelector(state => state.selectedDay);
+  const settings = useSelector(state => state.settings);
   const [currentProgress, setCurrentProgress] = useState(0);
   const [selectedProgress, setSelectedProgress] = useState(null);
   const [progressBarValue, setProgressBarValue] = useState(0);
@@ -473,7 +474,9 @@ const HabitCard = ({
                             key={index}
                             onPress={() => handleRowPress(item)}>
                             <DataTable.Cell>
-                              {new Date(item.date).toLocaleDateString('pl-PL')}
+                              {new Date(item.date).toLocaleDateString(
+                                settings.language,
+                              )}
                             </DataTable.Cell>
 
                             {progressType !== ProgressTypeEnum.DONE && (
