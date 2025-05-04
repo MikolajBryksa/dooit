@@ -17,7 +17,7 @@ import {View} from 'react-native';
 import SetHabitModal from '../modals/setHabit.modal';
 import AddHabitModal from '../modals/addHabit.modal';
 import DeleteHabitDialog from '../dialogs/deleteHabit.dialog';
-import {formatSecondsToHHMMSS} from '../utils';
+import {formatSecondsToHHMMSS, formatSecondsToMM} from '../utils';
 import {
   updateOrCreateProgress,
   deleteProgress,
@@ -163,7 +163,7 @@ const HabitCard = ({
         item.progressAmount ??
         item.progressValue ??
         (item.progressTime && item.progressTime > 60
-          ? item.progressTime / 60
+          ? formatSecondsToMM(item.progressTime)
           : 0) ??
         ''
       ).toString(),

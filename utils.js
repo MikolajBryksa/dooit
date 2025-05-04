@@ -21,6 +21,11 @@ export function formatSecondsToHHMMSS(seconds) {
   return `${formattedHrs}${formattedMins}${formattedSecs}`;
 }
 
+export function formatSecondsToMM(seconds) {
+  const mins = Math.floor(seconds / 60);
+  return mins;
+}
+
 export function timeStringToSeconds(timeString) {
   const parts = timeString.split(':').map(Number);
 
