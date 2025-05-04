@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Divider, Card, Button} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -99,7 +99,7 @@ const SettingsView = () => {
         />
       </Appbar.Header>
 
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <ContactAuthorDialog
           visible={visibleContactDialog}
           onDismiss={handleContactDialog}
@@ -191,7 +191,7 @@ const SettingsView = () => {
             </Button>
           </Card.Actions>
         </Card>
-      </View>
+      </ScrollView>
     </>
   );
 };
