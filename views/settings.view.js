@@ -12,6 +12,7 @@ import {setSettings} from '../redux/actions';
 import ContactAuthorDialog from '../dialogs/contactAuthor.dialog';
 import SupportAuthorDialog from '../dialogs/supportAuthor.dialog';
 import {useColorScheme} from 'react-native';
+import packageJson from '../package.json';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -116,6 +117,15 @@ const SettingsView = () => {
           }}
         />
 
+        <Card style={styles.card}>
+          <Card.Content>
+            <View style={styles.title}>
+              <Text variant="titleLarge">{packageJson.version}</Text>
+            </View>
+            <Divider style={styles.divider} />
+            <Text variant="bodyMedium">{t('settings.version')}</Text>
+          </Card.Content>
+        </Card>
         <Card style={styles.card}>
           <Card.Content>
             <View style={styles.title}>

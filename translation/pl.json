@@ -18,6 +18,7 @@
     "support-author": "Wesprzyj autora"
   },
   "settings": {
+    "version": "Wersja",
     "language": "Język",
     "en": "Angielski",
     "pl": "Polski",

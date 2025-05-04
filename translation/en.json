@@ -18,6 +18,7 @@
     "support-author": "Support author"
   },
   "settings": {
+    "version": "Version",
     "language": "Language",
     "en": "English",
     "pl": "Polish",
