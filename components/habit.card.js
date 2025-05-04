@@ -17,14 +17,19 @@ import {View} from 'react-native';
 import SetHabitModal from '../modals/setHabit.modal';
 import AddHabitModal from '../modals/addHabit.modal';
 import DeleteHabitDialog from '../dialogs/deleteHabit.dialog';
-import {formatSecondsToHHMMSS, formatSecondsToMM} from '../utils';
 import {
   updateOrCreateProgress,
   deleteProgress,
 } from '../services/progress.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
-import {getRepeatDaysString, timeStringToSeconds} from '../utils';
+import {
+  formatSecondsToHHMMSS,
+  formatSecondsToMM,
+  getRepeatDaysString,
+  timeStringToSeconds,
+  formatDateToYYMMDD,
+} from '../utils';
 
 const HabitCard = ({
   view,
@@ -85,6 +90,10 @@ const HabitCard = ({
   useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
+
+  useEffect(() => {
+    setSelectedProgress(null);
+  }, [selectedDay]);
 
   useEffect(() => {
     const progressArray = Array.isArray(progress) ? progress : [];
@@ -219,14 +228,19 @@ const HabitCard = ({
   }, [currentProgress, targetScore]);
 
   const saveData = (progress, checked) => {
+    const day = selectedProgress
+      ? formatDateToYYMMDD(selectedProgress.date)
+      : selectedDay;
+
     updateOrCreateProgress(
       id,
-      selectedDay,
+      day,
       progressType === ProgressTypeEnum.AMOUNT ? progress : null,
       progressType === ProgressTypeEnum.VALUE ? progress : null,
       progressType === ProgressTypeEnum.TIME ? progress : null,
       checked ?? false,
     );
+    setSelectedProgress(null);
   };
 
   const calculateAverageProgress = (progress, from, to) => {
@@ -234,7 +248,6 @@ const HabitCard = ({
       return 0;
     }
 
-    // Ograniczenie do elementów wyświetlanych w tabeli
     const visibleProgress = progress.slice(from, to);
 
     const total = visibleProgress.reduce((sum, item) => {
@@ -246,10 +259,10 @@ const HabitCard = ({
     let result;
     if (progressType === ProgressTypeEnum.TIME) {
       result = total / visibleProgress.length;
-      result = formatSecondsToHHMMSS(result); // Formatowanie na HH:MM:SS
+      result = formatSecondsToHHMMSS(result);
     } else {
       result = total / visibleProgress.length;
-      result = result.toFixed(2); // Zaokrąglenie do 2 miejsc po przecinku
+      result = result.toFixed(2);
     }
     return result;
   };
@@ -285,6 +298,7 @@ const HabitCard = ({
           setTextInput={setTextInput}
           handleSet={handleSet}
           handleDelete={handleDeleteProgress}
+          selectedProgress={view === ViewEnum.STATS && selectedProgress}
         />
       )}
       {view === ViewEnum.EDIT && (
