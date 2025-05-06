@@ -105,8 +105,8 @@ const SetHabitModal = ({
           </Button>
           <Button
             onPress={() => {
-              const baseValue = parseFloat(textInput) || 0;
-              const additionalValue = parseFloat(addedValue) || 0;
+              const baseValue = parseFloat(textInput);
+              const additionalValue = parseFloat(addedValue);
               handleSet(baseValue + additionalValue);
             }}
             mode="contained">

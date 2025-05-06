@@ -66,7 +66,7 @@ const AddHabitModal = ({
   const [repeatDays, setRepeatDays] = useState([]);
   const [habitStart, setHabitStart] = useState('');
   const [progressType, setProgressType] = useState('');
-  const [targetScore, setTargetScore] = useState(0);
+  const [targetScore, setTargetScore] = useState('');
 
   const [progressUnit, setProgressUnit] = useState('');
   const progressUnitOptions = [
@@ -147,7 +147,7 @@ const AddHabitModal = ({
     setHabitStart('');
     setProgressType('');
     setProgressUnit('');
-    setTargetScore(0);
+    setTargetScore('');
     setValue('');
     setShowExamples(false);
     setTimeout(() => {
@@ -555,12 +555,34 @@ const AddHabitModal = ({
               {t('button.back')}
             </Button>
           )}
+
           {step !== 5 && step !== 6 && step !== 7 && !currentHabit && (
             <Button mode="outlined" onPress={handleExamples}>
               {t('button.examples')}
             </Button>
           )}
-          {currentHabit && <Button onPress={handleUpdate}>Zapisz</Button>}
+
+          {currentHabit && (
+            <Button
+              onPress={handleUpdate}
+              disabled={
+                (step === 1 && !habitName) ||
+                (step === 2 && !firstStep) ||
+                (step === 3 && !goalDesc) ||
+                (step === 4 && !motivation) ||
+                (step === 5 && repeatDays.length === 0) ||
+                (step === 6 && !habitStart) ||
+                (step === 7 && !progressType) ||
+                (step === 8 &&
+                  (progressType !== ProgressTypeEnum.DONE &&
+                  progressType !== ProgressTypeEnum.TIME
+                    ? !progressUnit || !targetScore
+                    : !targetScore))
+              }>
+              {t('button.save')}
+            </Button>
+          )}
+
           {step < 8 && (
             <Button
               onPress={handleNextStep}
