@@ -37,19 +37,37 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
       <View style={styles.daysSelector__container}>
         <Chip
           mode="outlined"
-          onPress={() => setRepeatDays(daily)}
+          onPress={() =>
+            setRepeatDays(prevState =>
+              daily.every(day => prevState.includes(day))
+                ? prevState.filter(day => !daily.includes(day))
+                : [...new Set([...prevState, ...daily])],
+            )
+          }
           style={styles.daysSelector__chip}>
           {t('date.daily')}
         </Chip>
         <Chip
           mode="outlined"
-          onPress={() => setRepeatDays(workdays)}
+          onPress={() =>
+            setRepeatDays(prevState =>
+              workdays.every(day => prevState.includes(day))
+                ? prevState.filter(day => !workdays.includes(day))
+                : [...new Set([...prevState, ...workdays])],
+            )
+          }
           style={styles.daysSelector__chip}>
           {t('date.workdays')}
         </Chip>
         <Chip
           mode="outlined"
-          onPress={() => setRepeatDays(weekend)}
+          onPress={() =>
+            setRepeatDays(prevState =>
+              weekend.every(day => prevState.includes(day))
+                ? prevState.filter(day => !weekend.includes(day))
+                : [...new Set([...prevState, ...weekend])],
+            )
+          }
           style={styles.daysSelector__chip}>
           {t('date.weekend')}
         </Chip>

@@ -555,7 +555,7 @@ const AddHabitModal = ({
               {t('button.back')}
             </Button>
           )}
-          {step !== 5 && step !== 6 && step !== 7 && (
+          {step !== 5 && step !== 6 && step !== 7 && !currentHabit && (
             <Button mode="outlined" onPress={handleExamples}>
               {t('button.examples')}
             </Button>
