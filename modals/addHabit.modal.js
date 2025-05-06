@@ -30,6 +30,7 @@ const AddHabitModal = ({
   const [step, setStep] = useState(1);
   const [value, setValue] = useState('');
   const [progressBarValue, setProgressBarValue] = useState(0);
+  const [showExamples, setShowExamples] = useState(false);
   const [id, setId] = useState(null);
   const {t} = useTranslation();
   const styles = useStyles();
@@ -147,6 +148,8 @@ const AddHabitModal = ({
     setProgressType('');
     setProgressUnit('');
     setTargetScore(0);
+    setValue('');
+    setShowExamples(false);
     setTimeout(() => {
       setStep(1);
     }, 500);
@@ -159,6 +162,14 @@ const AddHabitModal = ({
   const handlePrevStep = () => {
     setStep(step - 1);
   };
+
+  const handleExamples = () => {
+    setShowExamples(!showExamples);
+  };
+
+  useEffect(() => {
+    setShowExamples(false);
+  }, [step]);
 
   const handleSave = async () => {
     try {
@@ -313,7 +324,7 @@ const AddHabitModal = ({
                 value={habitName}
                 onChangeText={value => handleInput(value)}
               />
-              {!currentHabit && (
+              {!currentHabit && showExamples && (
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value);
@@ -341,7 +352,7 @@ const AddHabitModal = ({
                 value={firstStep}
                 onChangeText={value => handleInput(value)}
               />
-              {!currentHabit && (
+              {!currentHabit && showExamples && (
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value);
@@ -369,7 +380,7 @@ const AddHabitModal = ({
                 value={goalDesc}
                 onChangeText={value => handleInput(value)}
               />
-              {!currentHabit && (
+              {!currentHabit && showExamples && (
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value);
@@ -397,7 +408,7 @@ const AddHabitModal = ({
                 value={motivation}
                 onChangeText={value => handleInput(value)}
               />
-              {!currentHabit && (
+              {!currentHabit && showExamples && (
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value);
@@ -515,28 +526,38 @@ const AddHabitModal = ({
                   />
                 )}
               </View>
-              {!currentHabit && progressType !== ProgressTypeEnum.TIME && (
-                <RadioButton.Group
-                  onValueChange={value => {
-                    handleInput(value, 'progressUnit');
-                  }}
-                  value={value}>
-                  {progressUnitOptions.map(option => (
-                    <RadioButton.Item
-                      key={option}
-                      label={option}
-                      value={option}
-                    />
-                  ))}
-                </RadioButton.Group>
-              )}
+              {!currentHabit &&
+                showExamples &&
+                progressType !== ProgressTypeEnum.TIME && (
+                  <RadioButton.Group
+                    onValueChange={value => {
+                      handleInput(value, 'progressUnit');
+                    }}
+                    value={value}>
+                    {progressUnitOptions.map(option => (
+                      <RadioButton.Item
+                        key={option}
+                        label={option}
+                        value={option}
+                      />
+                    ))}
+                  </RadioButton.Group>
+                )}
             </>
           )}
         </Card.Content>
+
+        <View style={styles.gap} />
+
         <Card.Actions>
           {step > 1 && (
             <Button mode="outlined" onPress={handlePrevStep}>
               {t('button.back')}
+            </Button>
+          )}
+          {step !== 5 && step !== 6 && step !== 7 && (
+            <Button mode="outlined" onPress={handleExamples}>
+              {t('button.examples')}
             </Button>
           )}
           {currentHabit && <Button onPress={handleUpdate}>Zapisz</Button>}

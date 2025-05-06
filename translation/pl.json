@@ -52,7 +52,8 @@
     "stop": "Stop",
     "table": "Tabela",
     "back": "Wstecz",
-    "next": "Dalej"
+    "next": "Dalej",
+    "examples": "Przykłady"
   },
   "card": {
     "first-step": "Pierwszy krok",
