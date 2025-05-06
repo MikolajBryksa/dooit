@@ -135,7 +135,15 @@ export function hexToRgba(hex, opacity) {
 }
 
 export function getDayOfWeek(date) {
-  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const daysOfWeek = [
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+  ];
   const days = [daysOfWeek[new Date(date).getDay()]];
   return days;
 }

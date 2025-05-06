@@ -73,13 +73,20 @@
     "daily": "Codziennie",
     "workdays": "Pracujące",
     "weekend": "Weekend",
-    "mon": "Poniedziałek",
-    "tue": "Wtorek",
-    "wed": "Środa",
-    "thu": "Czwartek",
-    "fri": "Piątek",
-    "sat": "Sobota",
-    "sun": "Niedziela"
+    "mon": "Pon",
+    "tue": "Wto",
+    "wed": "Śro",
+    "thu": "Czw",
+    "fri": "Pią",
+    "sat": "Sob",
+    "sun": "Nie",
+    "monday": "Poniedziałek",
+    "tuesday": "Wtorek",
+    "wednesday": "Środa",
+    "thursday": "Czwartek",
+    "friday": "Piątek",
+    "saturday": "Sobota",
+    "sunday": "Niedziela"
   },
   "unit": {
     "minutes": "minuty"
