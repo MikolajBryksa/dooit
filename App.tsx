@@ -22,11 +22,13 @@ import {useTranslation} from 'react-i18next';
 import {getTheme} from './theme/theme';
 import {useColorScheme} from 'react-native';
 import OnboardingView from './views/onboarding.view';
+import {useStyles} from './styles';
 
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
   const settings = useSelector((state: any) => state.settings);
+  const styles = useStyles();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -69,6 +71,7 @@ function AppContent() {
           <BottomNavigation.Bar
             navigationState={state}
             safeAreaInsets={insets}
+            style={styles.bottomBar__shadow}
             onTabPress={({route, preventDefault}) => {
               const event = navigation.emit({
                 type: 'tabPress',

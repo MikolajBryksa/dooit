@@ -109,7 +109,7 @@ const HomeView = () => {
         setSelectedDay={day => dispatch(setSelectedDay(day))}
       />
 
-      <Appbar.Header>
+      <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
         <Chip
           onPress={() => {

@@ -10,6 +10,14 @@ export const useStyles = () => {
       padding: theme.dimensions.padding,
       backgroundColor: theme.colors.background,
     },
+    topBar__shadow: {
+      borderBottomWidth: 3,
+      borderBottomColor: theme.colors.background,
+    },
+    bottomBar__shadow: {
+      borderTopWidth: 3,
+      borderTopColor: theme.colors.background,
+    },
     loading__container: {
       flex: 1,
       padding: theme.dimensions.padding,

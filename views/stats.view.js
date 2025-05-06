@@ -67,7 +67,7 @@ const StatsView = () => {
         filterHabitsByDays={filterHabitsByDays}
       />
 
-      <Appbar.Header>
+      <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.stats')} />
         <Appbar.Action
           icon="filter"

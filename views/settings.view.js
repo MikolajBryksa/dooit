@@ -84,7 +84,7 @@ const SettingsView = () => {
 
   return (
     <>
-      <Appbar.Header>
+      <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.settings')} />
         <Appbar.Action
           icon="chat"
@@ -201,6 +201,7 @@ const SettingsView = () => {
             </Button>
           </Card.Actions>
         </Card>
+        <View style={styles.gap} />
       </ScrollView>
     </>
   );
