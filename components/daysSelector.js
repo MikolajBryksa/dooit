@@ -9,13 +9,13 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const styles = useStyles();
 
   const dayNames = {
-    mon: t('date.mon'),
-    tue: t('date.tue'),
-    wed: t('date.wed'),
-    thu: t('date.thu'),
-    fri: t('date.fri'),
-    sat: t('date.sat'),
-    sun: t('date.sun'),
+    mon: t('date.monday'),
+    tue: t('date.tuesday'),
+    wed: t('date.wednesday'),
+    thu: t('date.thursday'),
+    fri: t('date.friday'),
+    sat: t('date.saturday'),
+    sun: t('date.sunday'),
   };
 
   const daily = Object.keys(dayNames);

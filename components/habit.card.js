@@ -44,7 +44,7 @@ const HabitCard = ({
   progressUnit,
   targetScore,
   progress,
-  inactive,
+  active,
   fetchHabitsWithProgress,
 }) => {
   const {t} = useTranslation();
@@ -77,20 +77,20 @@ const HabitCard = ({
   };
 
   const [page, setPage] = useState(0);
-  const [numberOfItemsPerPageList] = useState([7, 14, 30, 90]);
-  const [itemsPerPage, onItemsPerPageChange] = useState(
+  const numberOfItemsPerPageList = [7, 14, 30, 90];
+  const [numberOfItemsPerPage, onItemsPerPageChange] = useState(
     numberOfItemsPerPageList[0],
   );
 
-  const from = page * itemsPerPage;
+  const from = page * numberOfItemsPerPage;
   let to;
   if (progress?.length > 0) {
-    to = Math.min((page + 1) * itemsPerPage, progress.length);
+    to = Math.min((page + 1) * numberOfItemsPerPage, progress.length);
   }
 
   useEffect(() => {
     setPage(0);
-  }, [itemsPerPage]);
+  }, [numberOfItemsPerPage]);
 
   useEffect(() => {
     setSelectedProgress(null);
@@ -286,6 +286,16 @@ const HabitCard = ({
     }
   };
 
+  const getCardStyle = () => {
+    if (view === ViewEnum.PREVIEW) {
+      if (checked && !isOpen) return styles.card__checked;
+      if (!checked && active && !isOpen) return styles.card__active;
+      if (isOpen) return styles.card;
+      return styles.card;
+    }
+    return styles.card;
+  };
+
   return (
     <>
       {(view === ViewEnum.PREVIEW || view === ViewEnum.STATS) && (
@@ -322,13 +332,7 @@ const HabitCard = ({
         habitName={habitName}
       />
 
-      <Card
-        style={[
-          view === ViewEnum.PREVIEW && (checked || inactive) && !isOpen
-            ? styles.cardChecked
-            : styles.card,
-        ]}
-        onPress={() => setIsOpen(!isOpen)}>
+      <Card style={[getCardStyle()]} onPress={() => setIsOpen(!isOpen)}>
         <Card.Content>
           <View style={styles.title}>
             <Text variant="titleLarge">{habitName}</Text>
@@ -361,7 +365,7 @@ const HabitCard = ({
                 <>
                   {view === ViewEnum.PREVIEW ? (
                     <Chip icon="clock" style={styles.chip}>
-                      {habitStart} {inactive}
+                      {habitStart}
                     </Chip>
                   ) : (
                     <Chip icon="calendar" style={styles.chip}>
@@ -415,7 +419,7 @@ const HabitCard = ({
                           {progressType === ProgressTypeEnum.TIME
                             ? `${formatSecondsToHHMMSS(
                                 currentProgress,
-                              )} / ${formatSecondsToHHMMSS(targetScore)}`
+                              )} / ${formatSecondsToHHMMSS(targetScore)} min`
                             : `${currentProgress} / ${targetScore} ${progressUnit}`}
                         </Text>
                       )}
@@ -443,14 +447,15 @@ const HabitCard = ({
                 </>
               )}
 
-              {progressType !== ProgressTypeEnum.DONE && (
-                <Text variant="bodyMedium">
-                  {t('card.target-measure')}:{' '}
-                  {progressType === ProgressTypeEnum.TIME
-                    ? formatSecondsToHHMMSS(targetScore)
-                    : `${targetScore} ${progressUnit}`}
-                </Text>
-              )}
+              {progressType !== ProgressTypeEnum.DONE &&
+                view !== ViewEnum.PREVIEW && (
+                  <Text variant="bodyMedium">
+                    {t('card.target-measure')}:{' '}
+                    {progressType === ProgressTypeEnum.TIME
+                      ? formatSecondsToHHMMSS(targetScore)
+                      : `${targetScore} ${progressUnit}`}
+                  </Text>
+                )}
 
               {view === ViewEnum.STATS && (
                 <>
@@ -495,12 +500,12 @@ const HabitCard = ({
                         <DataTable.Pagination
                           page={page}
                           numberOfPages={Math.ceil(
-                            progress.length / itemsPerPage,
+                            progress.length / numberOfItemsPerPage,
                           )}
                           onPageChange={page => setPage(page)}
                           label={`${from + 1}-${to} of ${progress.length}`}
                           numberOfItemsPerPageList={numberOfItemsPerPageList}
-                          numberOfItemsPerPage={itemsPerPage}
+                          numberOfItemsPerPage={numberOfItemsPerPage}
                           onItemsPerPageChange={onItemsPerPageChange}
                         />
                       </DataTable>

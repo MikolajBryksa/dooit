@@ -167,7 +167,9 @@ const SettingsView = () => {
         <Card style={styles.card}>
           <Card.Content>
             <View style={styles.title}>
-              <Text variant="titleLarge">{t(`date.${firstDay}`)}</Text>
+              <Text variant="titleLarge">
+                {t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
+              </Text>
             </View>
             <Divider style={styles.divider} />
             <Text variant="bodyMedium">{t('settings.first-day')}</Text>

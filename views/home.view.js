@@ -85,12 +85,12 @@ const HomeView = () => {
     if (selectedDay === formatDateToYYMMDD()) {
       return {
         ...habit,
-        inactive: habit.habitStart >= currentTime,
+        active: habit.habitStart <= currentTime,
       };
     } else {
       return {
         ...habit,
-        inactive: false,
+        active: false,
       };
     }
   };
@@ -144,7 +144,7 @@ const HomeView = () => {
                 progressUnit={markedHabit.progressUnit}
                 targetScore={markedHabit.targetScore}
                 progress={markedHabit.progress}
-                inactive={markedHabit.inactive}
+                active={markedHabit.active}
                 fetchHabitsWithProgress={() =>
                   dispatch(fetchHabitsWithProgress())
                 }
