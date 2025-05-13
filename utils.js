@@ -50,12 +50,12 @@ export function formatDateToYYMMDD(when) {
   return localToday;
 }
 
-export function getFormattedTime() {
+export function getFormattedTime(hour12 = false) {
   const now = new Date();
   return now.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false,
+    hour12: hour12,
   });
 }
 

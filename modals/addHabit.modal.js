@@ -19,6 +19,7 @@ import {addHabit, updateHabit} from '../services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '../styles';
 import DaysSelector from '../components/daysSelector';
+import {getFormattedTime} from '../utils';
 
 const AddHabitModal = ({
   visible,
@@ -65,6 +66,14 @@ const AddHabitModal = ({
 
   const [repeatDays, setRepeatDays] = useState([]);
   const [habitStart, setHabitStart] = useState('');
+
+  useEffect(() => {
+    if (visible) {
+      const currentTime = getFormattedTime(settings.clockFormat === '12h');
+      setHabitStart(currentTime);
+    }
+  }, [visible, settings.clockFormat]);
+
   const [progressType, setProgressType] = useState('');
   const [targetScore, setTargetScore] = useState('');
 
@@ -457,7 +466,7 @@ const AddHabitModal = ({
             <>
               <Text variant="bodyMedium">{t('step.7')}?</Text>
               <Divider style={styles.divider} />
-              <View style={!!currentHabit && styles.disabled}>
+              <View>
                 <RadioButton.Group
                   onValueChange={value => {
                     handleInput(value);
@@ -466,22 +475,18 @@ const AddHabitModal = ({
                   <RadioButton.Item
                     label={t('input.progress-type.time')}
                     value={ProgressTypeEnum.TIME}
-                    disabled={!!currentHabit}
                   />
                   <RadioButton.Item
                     label={t('input.progress-type.amount')}
                     value={ProgressTypeEnum.AMOUNT}
-                    disabled={!!currentHabit}
                   />
                   <RadioButton.Item
                     label={t('input.progress-type.value')}
                     value={ProgressTypeEnum.VALUE}
-                    disabled={!!currentHabit}
                   />
                   <RadioButton.Item
                     label={t('input.progress-type.done')}
                     value={ProgressTypeEnum.DONE}
-                    disabled={!!currentHabit}
                   />
                 </RadioButton.Group>
               </View>
