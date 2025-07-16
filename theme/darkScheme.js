@@ -1,35 +1,32 @@
 import {hexToRgba} from '../utils';
-import {colors} from './colors';
 
-const backgroundColor = colors.shade4;
-const mediumColor = colors.shade3;
-const mainColor = colors.shade2;
-const textColor = colors.shade1;
-const extraColor = colors.extra;
+const backgroundColor = '#1a1d23';
+const boardColor = '#2a2f36';
+const buttonColor = '#4a90c2';
+const textColor = '#e4e6ea';
 
 export const darkScheme = {
-  primary: mainColor, // buttons
+  primary: buttonColor, // buttons
   onPrimary: backgroundColor, // text on buttons
   primaryContainer: backgroundColor, // clock selected background
   onPrimaryContainer: textColor, // clock outline
   surfaceVariant: backgroundColor, // clock and progress backround
   background: backgroundColor, // app background
-  surface: mediumColor, // card backround
+  surface: boardColor, // card backround
   onSurface: textColor, // card text, selected icon text, clock text
   secondaryContainer: backgroundColor, // selected icon background
   onSecondaryContainer: textColor, // selected icon
-  secondary: extraColor, // progress bar
-  outline: mainColor, // lines
-  onSurfaceVariant: mainColor, // icons
+  outline: buttonColor, // lines
+  onSurfaceVariant: buttonColor, // icons
   surfaceDisabled: backgroundColor, // disabled button
-  onSurfaceDisabled: mainColor, // text on disabled button
+  onSurfaceDisabled: buttonColor, // text on disabled button
   backdrop: hexToRgba(textColor, 0.5), // background under modal
   elevation: {
     level0: 'transparent',
-    level1: mediumColor,
-    level2: mediumColor, // bottom nav background
-    level3: mediumColor,
-    level4: mediumColor,
-    level5: mediumColor,
+    level1: boardColor,
+    level2: boardColor, // bottom nav background
+    level3: boardColor,
+    level4: boardColor,
+    level5: boardColor,
   },
 };
