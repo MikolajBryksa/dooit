@@ -1,8 +1,8 @@
 import {hexToRgba} from '@/utils';
 
 const backgroundColor = '#1a1d23';
-const boardColor = '#2f353cff';
-const buttonColor = '#53b7ffff';
+const boardColor = '#2f353c';
+const buttonColor = '#53b7ff';
 const textColor = '#e4e6ea';
 
 export const darkScheme = {

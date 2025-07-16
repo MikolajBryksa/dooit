@@ -1,9 +1,9 @@
 import {hexToRgba} from '@/utils';
 
 const backgroundColor = '#f8f9fb';
-const boardColor = '#c1d2e8ff';
-const buttonColor = '#135d9aff';
-const textColor = '#172a38ff';
+const boardColor = '#c1d2e8';
+const buttonColor = '#135d9a';
+const textColor = '#172a38';
 
 export const lightScheme = {
   primary: buttonColor, // buttons
