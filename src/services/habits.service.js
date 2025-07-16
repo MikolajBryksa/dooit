@@ -1,5 +1,5 @@
-import realm from '../storage/schemas';
-import {getNextId, getDayOfWeek} from '../utils';
+import realm from '@/storage/schemas';
+import {getNextId, getDayOfWeek} from '@/utils';
 import {getProgressByHabitIdAndDate} from './progress.service';
 
 export const addHabit = (

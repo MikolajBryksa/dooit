@@ -1,5 +1,5 @@
-import realm from '../storage/schemas';
-import {getNextId} from '../utils';
+import realm from '@/storage/schemas';
+import {getNextId} from '@/utils';
 
 export const addProgress = (
   habitId,

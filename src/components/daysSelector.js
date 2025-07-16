@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Chip, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
+import {useStyles} from '@/styles';
 
 const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const {t} = useTranslation();

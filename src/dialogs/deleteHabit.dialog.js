@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dialog, Portal, Button, Text} from 'react-native-paper';
-import {deleteHabit} from '../services/habits.service';
-import {deleteProgressByHabitId} from '../services/progress.service';
+import {deleteHabit} from '@/services/habits.service';
+import {deleteProgressByHabitId} from '@/services/progress.service';
 import {useTranslation} from 'react-i18next';
 
 const DeleteHabitDialog = ({

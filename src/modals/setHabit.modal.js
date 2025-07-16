@@ -12,8 +12,8 @@ import {
 } from 'react-native-paper';
 import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
-import ProgressTypeEnum from '../enum/progressType.enum';
+import {useStyles} from '@/styles';
+import ProgressTypeEnum from '@/enum/progressType.enum';
 
 const SetHabitModal = ({
   visible,

@@ -3,9 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {View} from 'react-native';
 import {Text, Button, Card, Avatar} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
-import {updateSettingValue} from '../services/settings.service';
-import {setSettings} from '../redux/actions';
+import {useStyles} from '@/styles';
+import {updateSettingValue} from '@/services/settings.service';
+import {setSettings} from '@/redux/actions';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();

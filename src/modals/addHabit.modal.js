@@ -13,13 +13,13 @@ import {
   ProgressBar,
   IconButton,
 } from 'react-native-paper';
-import ProgressTypeEnum from '../enum/progressType.enum';
+import ProgressTypeEnum from '@/enum/progressType.enum';
 import {TimePicker} from 'react-native-paper-dates';
-import {addHabit, updateHabit} from '../services/habits.service';
+import {addHabit, updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
-import DaysSelector from '../components/daysSelector';
-import {getFormattedTime} from '../utils';
+import {useStyles} from '@/styles';
+import DaysSelector from '@/components/daysSelector';
+import {getFormattedTime} from '@/utils';
 
 const AddHabitModal = ({
   visible,

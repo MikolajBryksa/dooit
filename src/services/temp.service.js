@@ -1,4 +1,4 @@
-import realm from '../storage/schemas';
+import realm from '@/storage/schemas';
 
 export const getTemp = () => {
   const temp = realm.objects('Temp')[0];

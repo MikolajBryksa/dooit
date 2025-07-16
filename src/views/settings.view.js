@@ -3,16 +3,16 @@ import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Divider, Card, Button} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
+import {useStyles} from '@/styles';
 import i18next from 'i18next';
 import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
-import {updateSettingValue} from '../services/settings.service';
-import {setSettings} from '../redux/actions';
-import ContactAuthorDialog from '../dialogs/contactAuthor.dialog';
-import SupportAuthorDialog from '../dialogs/supportAuthor.dialog';
+import {updateSettingValue} from '@/services/settings.service';
+import {setSettings} from '@/redux/actions';
+import ContactAuthorDialog from '@/dialogs/contactAuthor.dialog';
+import SupportAuthorDialog from '@/dialogs/supportAuthor.dialog';
 import {useColorScheme} from 'react-native';
-import packageJson from '../package.json';
+import packageJson from '../../package.json';
 
 const SettingsView = () => {
   const {t} = useTranslation();

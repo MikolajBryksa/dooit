@@ -11,25 +11,25 @@ import {
   DataTable,
   IconButton,
 } from 'react-native-paper';
-import ProgressTypeEnum from '../enum/progressType.enum';
-import ViewEnum from '../enum/view.enum';
+import ProgressTypeEnum from '@/enum/progressType.enum';
+import ViewEnum from '@/enum/view.enum';
 import {View} from 'react-native';
-import SetHabitModal from '../modals/setHabit.modal';
-import AddHabitModal from '../modals/addHabit.modal';
-import DeleteHabitDialog from '../dialogs/deleteHabit.dialog';
+import SetHabitModal from '@/modals/setHabit.modal';
+import AddHabitModal from '@/modals/addHabit.modal';
+import DeleteHabitDialog from '@/dialogs/deleteHabit.dialog';
 import {
   updateOrCreateProgress,
   deleteProgress,
-} from '../services/progress.service';
+} from '@/services/progress.service';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
+import {useStyles} from '@/styles';
 import {
   formatSecondsToHHMMSS,
   formatSecondsToMM,
   getRepeatDaysString,
   timeStringToSeconds,
   formatDateToYYMMDD,
-} from '../utils';
+} from '@/utils';
 
 const HabitCard = ({
   view,

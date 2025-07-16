@@ -12,9 +12,9 @@ import {
 } from 'react-native-paper';
 import {Calendar} from 'react-native-paper-dates';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
-import {formatDateToYYMMDD} from '../utils';
-import {updateTempValue} from '../services/temp.service';
+import {useStyles} from '@/styles';
+import {formatDateToYYMMDD} from '@/utils';
+import {updateTempValue} from '@/services/temp.service';
 
 const CalendarModal = ({visible, onDismiss, setSelectedDay}) => {
   const {t} = useTranslation();

@@ -6,8 +6,8 @@ import {
   faList,
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
-import realm from './storage/schemas';
-import {getProgressByHabitId} from './services/progress.service';
+import realm from '@/storage/schemas';
+import {getProgressByHabitId} from '@/services/progress.service';
 
 export function formatSecondsToHHMMSS(seconds) {
   const hrs = Math.floor(seconds / 3600);

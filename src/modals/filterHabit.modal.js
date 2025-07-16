@@ -10,8 +10,8 @@ import {
   IconButton,
 } from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '../styles';
-import DaysSelector from '../components/daysSelector';
+import {useStyles} from '@/styles';
+import DaysSelector from '@/components/daysSelector';
 
 const FilterHabitModal = ({visible, onDismiss, filterHabitsByDays}) => {
   const {t} = useTranslation();
