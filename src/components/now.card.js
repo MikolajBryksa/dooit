@@ -21,6 +21,7 @@ const NowCard = ({
   available,
   fetchHabits,
   onChoice,
+  active,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -85,7 +86,7 @@ const NowCard = ({
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={active ? styles.card : styles.card__deactivated}>
       <Card.Content style={styles.card__title}>
         <Text variant="titleMedium">{habitName}</Text>
       </Card.Content>

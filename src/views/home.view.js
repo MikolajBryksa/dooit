@@ -8,6 +8,7 @@ import NowCard from '@/components/now.card';
 import AddModal from '@/modals/add.modal';
 import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
+import {getFormattedTime, timeStringToSeconds} from '@/utils';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -16,6 +17,21 @@ const HomeView = () => {
   const habits = useSelector(state => state.habits);
   const currentHabitIndex = useSelector(state => state.currentItem || 0);
   const [filteredHabits, setFilteredHabits] = useState([]);
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    const updateDateTime = () => {
+      setCurrentTime(getFormattedTime(false));
+      const jsDay = new Date().getDay();
+      const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      setTodayKey(dayMap[jsDay]);
+    };
+    updateDateTime();
+    const interval = setInterval(updateDateTime, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const [todayKey, setTodayKey] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
 
@@ -47,7 +63,12 @@ const HomeView = () => {
 
   const filterHabits = () => {
     if (habits && habits.length > 0) {
-      const availableHabits = habits.filter(habit => habit.available);
+      const availableHabits = habits.filter(
+        habit =>
+          habit.available &&
+          habit.repeatDays &&
+          habit.repeatDays.includes(todayKey),
+      );
 
       const expandedHabits = [];
 
@@ -107,6 +128,9 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
+        <Text style={{marginRight: 16, alignSelf: 'center'}}>
+          {t(`date.${todayKey}`)} {currentTime}
+        </Text>
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
@@ -124,6 +148,19 @@ const HomeView = () => {
                 }}
                 style={styles.chip}>
                 {t('card.done')}
+              </Chip>
+            </Card.Content>
+          </Card>
+        ) : filteredHabits.length === 0 ? (
+          <Card style={styles.card}>
+            <Card.Content style={styles.card__title}>
+              <Text variant="titleMedium">{t('title.no-habits')}</Text>
+              <Chip
+                icon="plus"
+                mode="outlined"
+                onPress={handleAddModal}
+                style={styles.chip}>
+                {t(`title.add`)}
               </Chip>
             </Card.Content>
           </Card>
@@ -145,21 +182,13 @@ const HomeView = () => {
             available={currentHabit.available}
             fetchHabits={fetchHabits}
             onChoice={moveToNextHabit}
+            active={
+              !currentHabit.currentHour ||
+              timeStringToSeconds(currentHabit.currentHour) <=
+                timeStringToSeconds(currentTime)
+            }
           />
-        ) : (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('title.no-habits')}</Text>
-              <Chip
-                icon="plus"
-                mode="outlined"
-                onPress={handleAddModal}
-                style={styles.chip}>
-                {t(`title.add`)}
-              </Chip>
-            </Card.Content>
-          </Card>
-        )}
+        ) : null}
         <View style={styles.gap} />
       </ScrollView>
 

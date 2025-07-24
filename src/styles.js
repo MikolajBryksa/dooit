@@ -75,7 +75,6 @@ export const useStyles = () => {
       minHeight: theme.dimensions.height,
       width: '100%',
       marginBottom: theme.dimensions.padding,
-      paddingBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
     card__active: {

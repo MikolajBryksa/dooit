@@ -53,7 +53,9 @@
     "repeatDays": "Dni powtarzania",
     "repeat-hours": "Godziny powtarzania",
     "repeatHours": "Godziny powtarzania",
-    "available": "Dostępne"
+    "available": "Dostępne",
+    "congrats": "Gratulacje",
+    "done": "Zrobione"
   },
   "date": {
     "daily": "Codziennie",
