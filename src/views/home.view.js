@@ -17,6 +17,7 @@ const HomeView = () => {
   const currentHabitIndex = useSelector(state => state.currentItem || 0);
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -33,8 +34,11 @@ const HomeView = () => {
       dispatch(setCurrentItem(0));
       return;
     }
-    const nextIndex = (currentHabitIndex + 1) % totalHabits;
-    dispatch(setCurrentItem(nextIndex));
+    if (currentHabitIndex + 1 >= totalHabits) {
+      setShowCongrats(true);
+    } else {
+      dispatch(setCurrentItem(currentHabitIndex + 1));
+    }
   }, [filteredHabits.length, currentHabitIndex, dispatch]);
 
   useEffect(() => {
@@ -91,15 +95,12 @@ const HomeView = () => {
       filteredHabits.length > 0 &&
       currentHabitIndex >= filteredHabits.length
     ) {
-      dispatch(setCurrentItem(0));
     }
   }, [filteredHabits, currentHabitIndex, dispatch]);
 
   const currentHabit =
     filteredHabits.length > 0 && currentHabitIndex < filteredHabits.length
       ? filteredHabits[currentHabitIndex]
-      : filteredHabits.length > 0
-      ? filteredHabits[0]
       : null;
 
   return (
@@ -109,7 +110,24 @@ const HomeView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {currentHabit ? (
+        {showCongrats ? (
+          <Card style={styles.card}>
+            <Card.Content style={styles.card__title}>
+              <Text variant="titleMedium">{t('card.congrats')}</Text>
+              <Chip
+                icon="trophy"
+                mode="outlined"
+                onPress={() => {
+                  setShowCongrats(false);
+                  dispatch(setCurrentItem(0));
+                  fetchHabits();
+                }}
+                style={styles.chip}>
+                {t('card.done')}
+              </Chip>
+            </Card.Content>
+          </Card>
+        ) : currentHabit ? (
           <NowCard
             key={currentHabit.id}
             id={currentHabit.originalId || currentHabit.id}
