@@ -123,11 +123,15 @@ const HabitCard = ({
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />
-                <Text variant="bodyMedium">
-                  {repeatHours && repeatHours.length > 0
-                    ? repeatHours.join(', ')
-                    : ''}
-                </Text>
+                <View style={{flex: 1}}>
+                  <Text
+                    variant="bodyMedium"
+                    style={{maxWidth: '100%', flexShrink: 1}}>
+                    {repeatHours && repeatHours.length > 0
+                      ? repeatHours.join(', ')
+                      : ''}
+                  </Text>
+                </View>
               </View>
             </TouchableRipple>
 
@@ -226,7 +230,13 @@ const HabitCard = ({
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />
-                <Text variant="bodyMedium">{goodChoice}</Text>
+                <View style={{flex: 1}}>
+                  <Text
+                    variant="bodyMedium"
+                    style={{maxWidth: '100%', flexShrink: 1}}>
+                    {goodChoice}
+                  </Text>
+                </View>
               </View>
             </TouchableRipple>
 
@@ -238,7 +248,13 @@ const HabitCard = ({
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />
-                <Text variant="bodyMedium">{badChoice}</Text>
+                <View style={{flex: 1}}>
+                  <Text
+                    variant="bodyMedium"
+                    style={{maxWidth: '100%', flexShrink: 1}}>
+                    {badChoice}
+                  </Text>
+                </View>
               </View>
             </TouchableRipple>
 

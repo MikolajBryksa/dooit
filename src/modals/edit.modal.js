@@ -91,6 +91,9 @@ const EditModal = ({
               keyboardType={keyboardType}
               autoFocus
               style={{marginBottom: 16}}
+              maxLength={
+                ['score', 'level', 'currentStreak'].includes(field) ? 17 : 255
+              }
             />
           )}
           <Card.Actions>

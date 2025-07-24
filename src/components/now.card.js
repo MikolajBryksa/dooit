@@ -26,7 +26,7 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const [selectedChoice, setSelectedChoice] = useState(null);
-  const LEVEL_THRESHOLDS = [3, 7, 14, 30, 60, 90, 120, 180, 270, 400];
+  const LEVEL_THRESHOLDS = [3, 7, 14, 30, 60, 90, 120, 180, 270, 400, 600, 900];
 
   const handleGoodChoice = () => {
     let newScore = score + 1;
