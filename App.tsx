@@ -36,6 +36,10 @@ function AppContent() {
       const settings = getSettings();
       if (settings) {
         dispatch(setSettings(settings));
+
+        if (typeof settings.currentItem === 'number') {
+          dispatch({type: 'SET_CURRENT_ITEM', payload: settings.currentItem});
+        }
         settings.firstLaunch && setShowOnboarding(true);
 
         const newLocale = settings.language as string;

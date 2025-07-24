@@ -8,6 +8,7 @@ import NowCard from '@/components/now.card';
 import AddModal from '@/modals/add.modal';
 import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
+import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
 
 const HomeView = () => {
@@ -48,12 +49,15 @@ const HomeView = () => {
     const totalHabits = filteredHabits.length;
     if (totalHabits === 0) {
       dispatch(setCurrentItem(0));
+      updateSettingValue('currentItem', 0);
       return;
     }
     if (currentHabitIndex + 1 >= totalHabits) {
       setShowCongrats(true);
     } else {
-      dispatch(setCurrentItem(currentHabitIndex + 1));
+      const nextIndex = currentHabitIndex + 1;
+      dispatch(setCurrentItem(nextIndex));
+      updateSettingValue('currentItem', nextIndex);
     }
   }, [filteredHabits.length, currentHabitIndex, dispatch]);
 

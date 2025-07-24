@@ -32,12 +32,13 @@ Settings.schema = {
     firstDay: 'string',
     firstLaunch: 'bool',
     currentTheme: 'string?',
+    currentItem: 'int?',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 4,
+  schemaVersion: 5,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -58,6 +59,7 @@ realm.write(() => {
       clockFormat: '24h',
       firstDay: 'mon',
       firstLaunch: true,
+      currentItem: 0,
     });
   }
 });

@@ -11,6 +11,7 @@ export const getSettings = () => {
     firstDay: settings.firstDay,
     firstLaunch: settings.firstLaunch,
     currentTheme: settings.currentTheme,
+    currentItem: settings.currentItem,
   };
 };
 
@@ -27,6 +28,7 @@ export const updateSettings = updates => {
     firstDay: updatedSettings.firstDay,
     firstLaunch: updatedSettings.firstLaunch,
     currentTheme: updatedSettings.currentTheme,
+    currentItem: updatedSettings.currentItem,
   };
 };
 
