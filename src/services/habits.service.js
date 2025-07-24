@@ -1,17 +1,13 @@
 import realm from '@/storage/schemas';
-import {getNextId, getDayOfWeek} from '@/utils';
-import {getProgressByHabitIdAndDate} from './progress.service';
+import {getNextId} from '@/utils';
+import i18next from 'i18next';
 
 export const addHabit = (
   habitName,
-  firstStep,
-  goalDesc,
-  motivation,
+  goodChoice,
+  badChoice,
   repeatDays,
-  habitStart,
-  progressType,
-  progressUnit,
-  targetScore,
+  repeatHours,
 ) => {
   const id = getNextId('Habit');
 
@@ -20,14 +16,16 @@ export const addHabit = (
     newHabit = realm.create('Habit', {
       id,
       habitName,
-      firstStep,
-      goalDesc,
-      motivation,
+      goodChoice,
+      badChoice,
+      score: 0,
+      level: 1,
+      currentStreak: 0,
+      desc: '',
+      message: '',
       repeatDays,
-      habitStart,
-      progressType,
-      progressUnit,
-      targetScore,
+      repeatHours,
+      available: true,
     });
   });
   return newHabit;
@@ -36,14 +34,16 @@ export const addHabit = (
 export const updateHabit = (
   id,
   habitName,
-  firstStep,
-  goalDesc,
-  motivation,
+  goodChoice,
+  badChoice,
+  score,
+  level,
+  currentStreak,
+  desc,
+  message,
   repeatDays,
-  habitStart,
-  progressType,
-  progressUnit,
-  targetScore,
+  repeatHours,
+  available,
 ) => {
   let updatedHabit;
   realm.write(() => {
@@ -54,14 +54,16 @@ export const updateHabit = (
       {
         id,
         habitName,
-        firstStep,
-        goalDesc,
-        motivation,
+        goodChoice,
+        badChoice,
+        score,
+        level,
+        currentStreak,
+        desc,
+        message,
         repeatDays: repeatDays !== undefined ? repeatDays : habit.repeatDays,
-        habitStart,
-        progressType,
-        progressUnit,
-        targetScore,
+        repeatHours,
+        available,
       },
       'modified',
     );
@@ -81,48 +83,109 @@ export const deleteHabit = id => {
   return deletedHabit;
 };
 
-export const getEveryHabit = () => {
-  return realm.objects('Habit').sorted('habitStart');
+export const getHabits = () => {
+  const realmHabits = realm.objects('Habit').sorted('habitName');
+  return Array.from(realmHabits).map(habit => ({
+    id: habit.id,
+    habitName: habit.habitName,
+    goodChoice: habit.goodChoice,
+    badChoice: habit.badChoice,
+    score: habit.score,
+    level: habit.level,
+    currentStreak: habit.currentStreak,
+    desc: habit.desc,
+    message: habit.message,
+    repeatDays: Array.from(habit.repeatDays),
+    repeatHours: Array.from(habit.repeatHours),
+    available: habit.available,
+  }));
 };
 
 export const getHabitById = id => {
-  return realm.objectForPrimaryKey('Habit', id);
+  const habit = realm.objectForPrimaryKey('Habit', id);
+  if (!habit) return null;
+
+  return {
+    id: habit.id,
+    habitName: habit.habitName,
+    goodChoice: habit.goodChoice,
+    badChoice: habit.badChoice,
+    score: habit.score,
+    level: habit.level,
+    currentStreak: habit.currentStreak,
+    desc: habit.desc,
+    message: habit.message,
+    repeatDays: Array.from(habit.repeatDays),
+    repeatHours: Array.from(habit.repeatHours),
+    available: habit.available,
+  };
 };
 
-export const getCurrentHabit = (currentTime, selectedDay) => {
-  const habits = realm.objects('Habit').sorted('habitStart');
+export const createDefaultHabits = () => {
+  const t = i18next.t;
+  const defaultHabitsData = [
+    {
+      habitName: t('default-habits.1.habitName'),
+      goodChoice: t('default-habits.1.goodChoice'),
+      badChoice: t('default-habits.1.badChoice'),
+      repeatHours: ['06:30'],
+    },
+    {
+      habitName: t('default-habits.2.habitName'),
+      goodChoice: t('default-habits.2.goodChoice'),
+      badChoice: t('default-habits.2.badChoice'),
+      repeatHours: ['08:00', '12:00', '14:00', '18:00'],
+    },
+    {
+      habitName: t('default-habits.3.habitName'),
+      goodChoice: t('default-habits.3.goodChoice'),
+      badChoice: t('default-habits.3.badChoice'),
+      repeatHours: ['07:00', '17:30'],
+    },
+    {
+      habitName: t('default-habits.4.habitName'),
+      goodChoice: t('default-habits.4.goodChoice'),
+      badChoice: t('default-habits.4.badChoice'),
+      repeatHours: ['07:30', '13:00', '17:00'],
+    },
+    {
+      habitName: t('default-habits.5.habitName'),
+      goodChoice: t('default-habits.5.goodChoice'),
+      badChoice: t('default-habits.5.badChoice'),
+      repeatHours: ['20:00'],
+    },
+    {
+      habitName: t('default-habits.6.habitName'),
+      goodChoice: t('default-habits.6.goodChoice'),
+      badChoice: t('default-habits.6.badChoice'),
+      repeatHours: ['11:00'],
+    },
+    {
+      habitName: t('default-habits.7.habitName'),
+      goodChoice: t('default-habits.7.goodChoice'),
+      badChoice: t('default-habits.7.badChoice'),
+      repeatHours: ['20:30'],
+    },
+    {
+      habitName: t('default-habits.8.habitName'),
+      goodChoice: t('default-habits.8.goodChoice'),
+      badChoice: t('default-habits.8.badChoice'),
+      repeatHours: ['21:00'],
+    },
+  ];
 
-  if (!habits || habits.length === 0) {
-    return null;
-  }
+  const createdHabits = [];
 
-  const days = getDayOfWeek(selectedDay);
-
-  const filteredHabits = habits.filter(habit => {
-    const repeatDaysArray = habit.repeatDays ? habit.repeatDays : [];
-    return days.some(day => repeatDaysArray.includes(day));
+  defaultHabitsData.forEach(habitData => {
+    const newHabit = addHabit(
+      habitData.habitName,
+      habitData.goodChoice,
+      habitData.badChoice,
+      ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+      habitData.repeatHours,
+    );
+    createdHabits.push(newHabit);
   });
 
-  if (filteredHabits.length === 0) {
-    return null;
-  }
-
-  for (let i = 0; i < filteredHabits.length; i++) {
-    const habit = filteredHabits[i];
-    const nextHabit = filteredHabits[i + 1];
-
-    if (
-      currentTime >= habit.habitStart &&
-      (!nextHabit || currentTime < nextHabit.habitStart)
-    ) {
-      const progress = getProgressByHabitIdAndDate(habit.id, selectedDay);
-
-      return {
-        ...habit.toJSON(),
-        progress: progress ? [progress] : [],
-      };
-    }
-  }
-
-  return null;
+  return createdHabits;
 };

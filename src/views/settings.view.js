@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {Appbar, Text, Divider, Card, Button} from 'react-native-paper';
+import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -9,8 +9,8 @@ import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
-import ContactAuthorDialog from '@/dialogs/contactAuthor.dialog';
-import SupportAuthorDialog from '@/dialogs/supportAuthor.dialog';
+import ContactDialog from '@/dialogs/contact.dialog';
+import SupportDialog from '@/dialogs/support.dialog';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 
@@ -86,6 +86,7 @@ const SettingsView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.settings')} />
+
         <Appbar.Action
           icon="chat"
           onPress={() => {
@@ -101,110 +102,89 @@ const SettingsView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        <ContactAuthorDialog
-          visible={visibleContactDialog}
-          onDismiss={handleContactDialog}
-          onDone={() => {
-            handleContactDialog();
-          }}
-        />
-
-        <SupportAuthorDialog
-          visible={visibleSupportDialog}
-          onDismiss={handleSupportDialog}
-          onDone={() => {
-            handleSupportDialog();
-          }}
-        />
-
         <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{packageJson.version}</Text>
-            </View>
-            <Divider style={styles.divider} />
-            <Text variant="bodyMedium">{t('settings.version')}</Text>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.version')}</Text>
+            <Chip
+              icon="information-outline"
+              mode="outlined"
+              disabled={true}
+              style={styles.chip}>
+              {packageJson.version}
+            </Chip>
           </Card.Content>
-        </Card>
-        <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{t(`settings.${language}`)}</Text>
-            </View>
-            <Divider style={styles.divider} />
-            <Text variant="bodyMedium">{t('settings.language')}</Text>
-          </Card.Content>
-          <Card.Actions>
-            <Button
-              mode="contained"
-              onPress={() => {
-                handleLanguage();
-              }}>
-              {t('button.change')}
-            </Button>
-          </Card.Actions>
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{clockFormat}</Text>
-            </View>
-            <Divider style={styles.divider} />
-            <Text variant="bodyMedium">{t('settings.clock-format')}</Text>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.language')}</Text>
+            <Chip
+              icon="translate"
+              mode="outlined"
+              onPress={handleLanguage}
+              style={styles.chip}>
+              {t(`settings.${language}`)}
+            </Chip>
           </Card.Content>
-          <Card.Actions>
-            <Button
-              mode="contained"
-              onPress={() => {
-                handleClockFormat();
-              }}>
-              {t('button.change')}
-            </Button>
-          </Card.Actions>
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">
-                {t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
-              </Text>
-            </View>
-            <Divider style={styles.divider} />
-            <Text variant="bodyMedium">{t('settings.first-day')}</Text>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.clock-format')}</Text>
+            <Chip
+              icon="clock-outline"
+              mode="outlined"
+              onPress={handleClockFormat}
+              style={styles.chip}>
+              {clockFormat}
+            </Chip>
           </Card.Content>
-          <Card.Actions>
-            <Button
-              mode="contained"
-              onPress={() => {
-                handleFirstDay();
-              }}>
-              {t('button.change')}
-            </Button>
-          </Card.Actions>
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.title}>
-              <Text variant="titleLarge">{t(`settings.${currentTheme}`)}</Text>
-            </View>
-            <Divider style={styles.divider} />
-            <Text variant="bodyMedium">{t('settings.theme')}</Text>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.first-day')}</Text>
+            <Chip
+              icon="calendar"
+              mode="outlined"
+              onPress={handleFirstDay}
+              style={styles.chip}>
+              {t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
+            </Chip>
           </Card.Content>
-          <Card.Actions>
-            <Button
-              mode="contained"
-              onPress={() => {
-                handleCurrentTheme();
-              }}>
-              {t('button.change')}
-            </Button>
-          </Card.Actions>
         </Card>
+
+        <Card style={styles.card}>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.theme')}</Text>
+            <Chip
+              icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
+              mode="outlined"
+              onPress={handleCurrentTheme}
+              style={styles.chip}>
+              {t(`settings.${currentTheme}`)}
+            </Chip>
+          </Card.Content>
+        </Card>
+
         <View style={styles.gap} />
       </ScrollView>
+
+      <ContactDialog
+        visible={visibleContactDialog}
+        onDismiss={handleContactDialog}
+        onDone={() => {
+          handleContactDialog();
+        }}
+      />
+
+      <SupportDialog
+        visible={visibleSupportDialog}
+        onDismiss={handleSupportDialog}
+        onDone={() => {
+          handleSupportDialog();
+        }}
+      />
     </>
   );
 };

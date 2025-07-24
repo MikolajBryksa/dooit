@@ -68,10 +68,14 @@ export const useStyles = () => {
       width: '100%',
       marginBottom: theme.dimensions.padding,
     },
-    card__checked: {
+    card__container: {
+      flex: 1,
+    },
+    card__deactivated: {
       minHeight: theme.dimensions.height,
       width: '100%',
       marginBottom: theme.dimensions.padding,
+      paddingBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
     card__active: {
@@ -83,8 +87,27 @@ export const useStyles = () => {
       borderColor: theme.colors.primary,
       shadowColor: theme.colors.primary,
     },
+    card__title: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      minHeight: theme.dimensions.height * 0.8,
+    },
+    card__options: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      maxHeight: theme.dimensions.height / 3,
+    },
+    card__row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    card__buttons: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: theme.dimensions.margin,
+      marginLeft: 'auto',
+    },
     chip: {
-      marginBottom: theme.dimensions.padding,
       borderRadius: 12,
     },
     time: {
@@ -101,10 +124,6 @@ export const useStyles = () => {
       marginVertical: theme.dimensions.padding,
       backgroundColor: theme.colors.primary,
     },
-    divider: {
-      marginVertical: theme.dimensions.margin,
-      backgroundColor: theme.colors.outline,
-    },
     gap: {
       height: theme.dimensions.margin * 3,
     },
@@ -116,7 +135,7 @@ export const useStyles = () => {
       backgroundColor: theme.colors.surface,
       margin: theme.dimensions.padding,
       paddingTop: theme.dimensions.padding,
-      paddingBottom: theme.dimensions.margin,
+      paddingBottom: theme.dimensions.padding,
       borderRadius: 12,
     },
     daysSelector__container: {

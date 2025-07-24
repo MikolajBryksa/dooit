@@ -4,7 +4,7 @@ import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 
-const SupportAuthorDialog = ({visible, onDismiss, onDone}) => {
+const SupportDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -16,9 +16,9 @@ const SupportAuthorDialog = ({visible, onDismiss, onDone}) => {
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{t('title.support-author')}</Dialog.Title>
+        <Dialog.Title>{t('title.support')}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium">{t('message.support-author')}?</Text>
+          <Text variant="bodyMedium">{t('message.support')}?</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onDismiss}>{t('button.cancel')}</Button>
@@ -29,4 +29,4 @@ const SupportAuthorDialog = ({visible, onDismiss, onDone}) => {
   );
 };
 
-export default SupportAuthorDialog;
+export default SupportDialog;

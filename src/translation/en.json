@@ -1,21 +1,15 @@
 {
   "view": {
-    "loading": "Loading",
-    "home": "Day",
+    "home": "Now",
     "habits": "Habits",
-    "stats": "Stats",
     "settings": "Settings"
   },
   "title": {
-    "add-habit": "Add habit",
-    "edit-habit": "Edit habit",
-    "delete-habit": "Delete habit",
-    "filter-habits": "Filter habits",
+    "add": "Add habit",
+    "delete": "Delete habit",
     "no-habits": "No habits",
-    "no-current-habit": "No current habit",
-    "choose-date": "Choose date",
-    "contact-author": "Contact author",
-    "support-author": "Support author"
+    "contact": "Contact author",
+    "support": "Support author"
   },
   "settings": {
     "version": "Version",
@@ -29,45 +23,37 @@
     "light": "Light"
   },
   "message": {
-    "delete-habit": "Are you sure to remove the habit",
-    "contact-author": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin",
-    "support-author": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee",
-    "filter-habits": "From which days habits do you want to see"
+    "delete": "Are you sure to remove the habit",
+    "contact": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin",
+    "support": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee"
   },
   "button": {
     "delete": "Delete",
     "cancel": "Cancel",
-    "change": "Change",
     "contact": "Contact",
     "support": "Support",
-    "reset": "Reset",
-    "filter": "Filter",
     "save": "Save",
-    "edit": "Edit",
-    "add": "Add",
-    "set": "Set",
-    "today": "Today",
-    "accept": "Accept",
-    "start": "Start",
-    "stop": "Stop",
-    "table": "Table",
     "back": "Back",
-    "next": "Next",
-    "examples": "Examples"
+    "next": "Next"
   },
   "card": {
-    "first-step": "First step",
-    "goal-desc": "Goal",
-    "motivation": "Motivation",
-    "in-progress": "In progress",
-    "target-measure": "Target measure"
-  },
-  "table": {
-    "average": "Average",
-    "date": "Date",
-    "measure": "Measure",
-    "day": "Day",
-    "no-progress": "No progress data available"
+    "habit-name": "Habit name",
+    "habitName": "Habit name",
+    "good-choice": "Good choice",
+    "goodChoice": "Good choice",
+    "bad-choice": "Bad choice",
+    "badChoice": "Bad choice",
+    "score": "Score",
+    "level": "Level",
+    "current-streak": "Streak",
+    "currentStreak": "Streak",
+    "desc": "Description",
+    "message": "Message",
+    "repeat-days": "Repeat days",
+    "repeatDays": "Repeat days",
+    "repeat-hours": "Repeat hours",
+    "repeatHours": "Repeat Hours",
+    "available": "Available"
   },
   "date": {
     "daily": "Daily",
@@ -88,65 +74,25 @@
     "saturday": "Saturday",
     "sunday": "Sunday"
   },
-  "unit": {
-    "minutes": "minutes"
+  "common": {
+    "yes": "Yes",
+    "no": "No"
   },
   "step": {
-    "1": "What do you want to do regularly",
-    "2": "What is the first step to make it",
-    "3": "What you will achieve with this habit",
-    "4": "Why it's worth achieving",
-    "5": "On what days you want to do it",
-    "6": "What time do you want to do it",
-    "7": "What do you want to measure progress with",
-    "8": "What measurement will be satisfactory to you"
+    "habit-name": "What do you want to do regularly",
+    "good-choice": "What is the good choice",
+    "bad-choice": "What is the bad choice",
+    "repeat-days": "On what days you want to do it",
+    "repeat-hours": "What time do you want to do it"
   },
   "input": {
     "habit-name": "Habit name",
-    "first-step": "Activity that starts a habit",
-    "goal-desc": "Purpose of making a habit",
-    "motivation": "Your main motivation",
-    "progress-type": {
-      "time": "Time (minutes)",
-      "amount": "Amount (like pages, glasses)",
-      "value": "Value (like kilograms, pounds)",
-      "done": "Done (only counts days)"
-    },
-    "target-score": "Measure",
-    "progress-unit": "Unit",
-    "minutes": "min"
-  },
-  "option": {
-    "habit-name": {
-      "water": "Drink water",
-      "book": "Read a book",
-      "workout": "Workout"
-    },
-    "first-step": {
-      "water": "Fill a glass of water",
-      "book": "Open a book",
-      "workout": "Unfold the mat"
-    },
-    "goal-desc": {
-      "water": "Hydrating the body",
-      "book": "Learning interesting stories",
-      "workout": "Improving the figure"
-    },
-    "motivation": {
-      "water": "I want to feel better",
-      "book": "I want to know more",
-      "workout": "I want to be healthier"
-    },
-    "progress-unit": {
-      "water": "glasses",
-      "book": "pages",
-      "workout": "kg"
-    }
+    "good-choice": "Good choice",
+    "bad-choice": "Bad choice"
   },
   "onboarding": {
     "welcome": "Welcome",
     "to-app": "to the Dooit app",
-    "start": "Get started",
     "option": {
       "1": {
         "title": "Create habits",
@@ -160,6 +106,52 @@
         "title": "Enjoy life",
         "subtitle": "Feel the impact of small steps adding up to a more fulfilling life."
       }
+    },
+    "choose-habits": "Choose habits",
+    "choose": "Choose",
+    "which-habits": "which habits do you want to create",
+    "start": "Get started"
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "Early wake up",
+      "goodChoice": "Wake up with alarm",
+      "badChoice": "Snooze after alarm"
+    },
+    "2": {
+      "habitName": "Drinking water",
+      "goodChoice": "Drink water",
+      "badChoice": "Drink soda"
+    },
+    "3": {
+      "habitName": "Physical exercise",
+      "goodChoice": "Some exercise",
+      "badChoice": "Just sitting"
+    },
+    "4": {
+      "habitName": "Healthy eating",
+      "goodChoice": "Protein and fiber",
+      "badChoice": "Sugar and fat"
+    },
+    "5": {
+      "habitName": "Reading books",
+      "goodChoice": "Book",
+      "badChoice": "Social media"
+    },
+    "6": {
+      "habitName": "Development",
+      "goodChoice": "Learning something",
+      "badChoice": "Routine work"
+    },
+    "7": {
+      "habitName": "Stress relief",
+      "goodChoice": "Mindfulness",
+      "badChoice": "Videos"
+    },
+    "8": {
+      "habitName": "Cleaning",
+      "goodChoice": "Organizing things",
+      "badChoice": "Leaving mess"
     }
   }
 }

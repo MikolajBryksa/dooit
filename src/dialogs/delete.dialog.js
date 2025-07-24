@@ -1,20 +1,12 @@
 import React from 'react';
 import {Dialog, Portal, Button, Text} from 'react-native-paper';
 import {deleteHabit} from '@/services/habits.service';
-import {deleteProgressByHabitId} from '@/services/progress.service';
 import {useTranslation} from 'react-i18next';
 
-const DeleteHabitDialog = ({
-  visible,
-  onDismiss,
-  onDone,
-  habitId,
-  habitName,
-}) => {
+const DeleteDialog = ({visible, onDismiss, onDone, habitId, habitName}) => {
   const {t} = useTranslation();
 
   const handleDelete = () => {
-    deleteProgressByHabitId(habitId);
     deleteHabit(habitId);
     onDone();
   };
@@ -22,10 +14,10 @@ const DeleteHabitDialog = ({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{t('title.delete-habit')}</Dialog.Title>
+        <Dialog.Title>{t('title.delete')}</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">
-            {t('message.delete-habit')} "{habitName}"?
+            {t('message.delete')} "{habitName}"?
           </Text>
         </Dialog.Content>
         <Dialog.Actions>
@@ -37,4 +29,4 @@ const DeleteHabitDialog = ({
   );
 };
 
-export default DeleteHabitDialog;
+export default DeleteDialog;

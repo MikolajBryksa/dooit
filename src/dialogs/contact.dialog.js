@@ -4,7 +4,7 @@ import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 
-const ContactAuthorDialog = ({visible, onDismiss, onDone}) => {
+const ContactDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -16,9 +16,9 @@ const ContactAuthorDialog = ({visible, onDismiss, onDone}) => {
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{t('title.contact-author')}</Dialog.Title>
+        <Dialog.Title>{t('title.contact')}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium">{t('message.contact-author')}?</Text>
+          <Text variant="bodyMedium">{t('message.contact')}?</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onDismiss}>{t('button.cancel')}</Button>
@@ -29,4 +29,4 @@ const ContactAuthorDialog = ({visible, onDismiss, onDone}) => {
   );
 };
 
-export default ContactAuthorDialog;
+export default ContactDialog;

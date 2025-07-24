@@ -1,21 +1,15 @@
 {
   "view": {
-    "loading": "Ładowanie",
-    "home": "Dzień",
+    "home": "Teraz",
     "habits": "Nawyki",
-    "stats": "Statystyki",
     "settings": "Ustawienia"
   },
   "title": {
-    "add-habit": "Dodaj nawyk",
-    "edit-habit": "Edytuj nawyk",
-    "delete-habit": "Usuń nawyk",
-    "filter-habits": "Filtruj nawyki",
+    "add": "Dodaj nawyk",
+    "delete": "Usuń nawyk",
     "no-habits": "Brak nawyków",
-    "no-current-habit": "Brak aktualnego nawyku",
-    "choose-date": "Wybierz datę",
-    "contact-author": "Kontakt z autorem",
-    "support-author": "Wesprzyj autora"
+    "contact": "Kontakt z autorem",
+    "support": "Wsparcie autora"
   },
   "settings": {
     "version": "Wersja",
@@ -29,57 +23,49 @@
     "light": "Jasny"
   },
   "message": {
-    "delete-habit": "Czy na pewno chcesz pozbyć się nawyku",
-    "contact-author": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin",
-    "support-author": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) stawiając mu kawę",
-    "filter-habits": "Z jakich dni nawyki chcesz zobaczyć"
+    "delete": "Czy na pewno chcesz usunąć nawyk?",
+    "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
+    "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?"
   },
   "button": {
     "delete": "Usuń",
     "cancel": "Anuluj",
-    "change": "Zmień",
     "contact": "Kontakt",
-    "support": "Wesprzyj",
-    "reset": "Reset",
-    "filter": "Filtruj",
+    "support": "Wsparcie",
     "save": "Zapisz",
-    "edit": "Edytuj",
-    "add": "Dodaj",
-    "set": "Ustaw",
-    "today": "Dzisiaj",
-    "accept": "Akceptuj",
-    "start": "Start",
-    "stop": "Stop",
-    "table": "Tabela",
     "back": "Wstecz",
-    "next": "Dalej",
-    "examples": "Przykłady"
+    "next": "Dalej"
   },
   "card": {
-    "first-step": "Pierwszy krok",
-    "goal-desc": "Cel",
-    "motivation": "Motywacja",
-    "in-progress": "W trakcie",
-    "target-measure": "Docelowy pomiar"
-  },
-  "table": {
-    "average": "Średnia",
-    "date": "Data",
-    "measure": "Pomiar",
-    "day": "Dzień",
-    "no-progress": "Brak danych postępu"
+    "habit-name": "Nazwa nawyku",
+    "habitName": "Nazwa nawyku",
+    "good-choice": "Dobry wybór",
+    "goodChoice": "Dobry wybór",
+    "bad-choice": "Zły wybór",
+    "badChoice": "Zły wybór",
+    "score": "Wynik",
+    "level": "Poziom",
+    "current-streak": "Seria",
+    "currentStreak": "Seria",
+    "desc": "Opis",
+    "message": "Wiadomość",
+    "repeat-days": "Dni powtarzania",
+    "repeatDays": "Dni powtarzania",
+    "repeat-hours": "Godziny powtarzania",
+    "repeatHours": "Godziny powtarzania",
+    "available": "Dostępne"
   },
   "date": {
     "daily": "Codziennie",
-    "workdays": "Pracujące",
+    "workdays": "Dni robocze",
     "weekend": "Weekend",
     "mon": "Pon",
-    "tue": "Wto",
-    "wed": "Śro",
+    "tue": "Wt",
+    "wed": "Śr",
     "thu": "Czw",
-    "fri": "Pią",
+    "fri": "Pt",
     "sat": "Sob",
-    "sun": "Nie",
+    "sun": "Nd",
     "monday": "Poniedziałek",
     "tuesday": "Wtorek",
     "wednesday": "Środa",
@@ -88,78 +74,84 @@
     "saturday": "Sobota",
     "sunday": "Niedziela"
   },
-  "unit": {
-    "minutes": "minuty"
+  "common": {
+    "yes": "Tak",
+    "no": "Nie"
   },
   "step": {
-    "1": "Co chcesz robić regularnie",
-    "2": "Jaki jest pierwszy krok, aby to zrobić",
-    "3": "Co osiągniesz dzięki temu nawykowi",
-    "4": "Dlaczego warto to osiągnąć",
-    "5": "W jakie dni chcesz to robić",
-    "6": "O której godzinie chcesz to zrobić",
-    "7": "Za pomocą czego chcesz mierzyć postęp",
-    "8": "Jaki pomiar będzie dla Ciebie satysfakcjonujący"
+    "habit-name": "Co chcesz robić regularnie?",
+    "good-choice": "Jaki jest dobry wybór?",
+    "bad-choice": "Jaki jest zły wybór?",
+    "repeat-days": "W jakie dni chcesz to robić?",
+    "repeat-hours": "O jakiej godzinie chcesz to robić?"
   },
   "input": {
     "habit-name": "Nazwa nawyku",
-    "first-step": "Czynność rozpoczynająca nawyk",
-    "goal-desc": "Cel wyrabianego nawyku",
-    "motivation": "Główna motywacja",
-    "progress-type": {
-      "time": "Czas (minuty)",
-      "amount": "Ilość (np. strony, szklanki)",
-      "value": "Wartość (np. kilogramy)",
-      "done": "Zrobione (liczy tylko dni)"
-    },
-    "target-score": "Pomiar",
-    "progress-unit": "Jednostka",
-    "minutes": "min"
-  },
-  "option": {
-    "habit-name": {
-      "water": "Picie wody",
-      "book": "Czytanie książki",
-      "workout": "Ćwiczenia"
-    },
-    "first-step": {
-      "water": "Nalej szklankę wody",
-      "book": "Otwórz książkę",
-      "workout": "Rozłóż matę"
-    },
-    "goal-desc": {
-      "water": "Nawodnienie organizmu",
-      "book": "Poznanie ciekawych historii",
-      "workout": "Poprawienie figury"
-    },
-    "motivation": {
-      "water": "Chcę czuć się lepiej",
-      "book": "Chcę wiedzieć więcej",
-      "workout": "Chcę być zdrowszy"
-    },
-    "progress-unit": {
-      "water": "szklanek",
-      "book": "str",
-      "workout": "kg"
-    }
+    "good-choice": "Dobry wybór",
+    "bad-choice": "Zły wybór"
   },
   "onboarding": {
-    "welcome": "Zapraszam",
-    "to-app": "do aplikacji Dooit",
-    "start": "Rozpocznij",
+    "welcome": "Witaj",
+    "to-app": "w aplikacji Dooit",
     "option": {
       "1": {
-        "title": "Wyrabiaj nawyki",
-        "subtitle": "Zbuduj rutynę, która sprawi, że rozwój osobisty stanie się łatwy i przyjemny."
+        "title": "Twórz nawyki",
+        "subtitle": "Buduj rutyny, które pozostaną z Tobą i sprawią, że rozwój osobisty stanie się łatwiejszy."
       },
       "2": {
         "title": "Monitoruj postępy",
-        "subtitle": "Obserwuj swoją podróż i zobacz, jak wiele możesz osiągnąć każdego dnia."
+        "subtitle": "Śledź swoją podróż i zobacz, jak daleko zaszedłeś, dzień po dniu."
       },
       "3": {
         "title": "Ciesz się życiem",
-        "subtitle": "Poczuj jak małe kroki prowadzą do wielkiej poprawy jakości życia."
+        "subtitle": "Poczuj wpływ małych kroków, które prowadzą do pełniejszego życia."
       }
+    },
+    "choose-habits": "Wybierz nawyki",
+    "choose": "Wybierz",
+    "which-habits": "Jakie nawyki chcesz stworzyć?",
+    "start": "Zacznij"
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "Wczesne wstawanie",
+      "goodChoice": "Wstawanie z budzikiem",
+      "badChoice": "Drzemka po budziku"
+    },
+    "2": {
+      "habitName": "Picie wody",
+      "goodChoice": "Picie wody",
+      "badChoice": "Picie napojów gazowanych"
+    },
+    "3": {
+      "habitName": "Ćwiczenia fizyczne",
+      "goodChoice": "Ćwiczenia fizyczne",
+      "badChoice": "Siedzenie"
+    },
+    "4": {
+      "habitName": "Zdrowe jedzenie",
+      "goodChoice": "Białko i błonnik",
+      "badChoice": "Cukier i tłuszcze"
+    },
+    "5": {
+      "habitName": "Czytanie książek",
+      "goodChoice": "Książka",
+      "badChoice": "Media społecznościowe"
+    },
+    "6": {
+      "habitName": "Rozwój",
+      "goodChoice": "Nauka czegoś",
+      "badChoice": "Rutynowa praca"
+    },
+    "7": {
+      "habitName": "Relaksacja",
+      "goodChoice": "Świadoma obecność",
+      "badChoice": "Filmy"
+    },
+    "8": {
+      "habitName": "Sprzątanie",
+      "goodChoice": "Organizowanie rzeczy",
+      "badChoice": "Zostawianie bałaganu"
     }
   }
 }

@@ -1,13 +1,6 @@
-export const SET_SELECTED_DAY = 'SET_SELECTED_DAY';
 export const SET_CURRENT_ITEM = 'SET_CURRENT_ITEM';
 export const SET_HABITS = 'SET_HABITS';
-export const SET_PROGRESS = 'SET_PROGRESS';
 export const SET_SETTINGS = 'SET_SETTINGS';
-
-export const setSelectedDay = item => ({
-  type: SET_SELECTED_DAY,
-  payload: item,
-});
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,
@@ -17,11 +10,6 @@ export const setCurrentItem = item => ({
 export const setHabits = habits => ({
   type: SET_HABITS,
   payload: habits,
-});
-
-export const setProgress = progress => ({
-  type: SET_PROGRESS,
-  payload: progress,
 });
 
 export const setSettings = settings => ({

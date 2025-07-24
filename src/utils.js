@@ -1,13 +1,7 @@
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faCog,
-  faChartPie,
-  faList,
-  faClock,
-} from '@fortawesome/free-solid-svg-icons';
+import {faCog, faList, faClock} from '@fortawesome/free-solid-svg-icons';
 import realm from '@/storage/schemas';
-import {getProgressByHabitId} from '@/services/progress.service';
 
 export function formatSecondsToHHMMSS(seconds) {
   const hrs = Math.floor(seconds / 3600);
@@ -72,9 +66,6 @@ export function renderIcon(name, color, size) {
     case 'habits':
       icon = faList;
       break;
-    case 'stats':
-      icon = faChartPie;
-      break;
     case 'settings':
       icon = faCog;
       break;
@@ -96,6 +87,8 @@ export function getRepeatDaysString(repeatDays, t) {
 
   if (typeof repeatDays === 'string') {
     repeatDays = JSON.parse(repeatDays);
+  } else {
+    repeatDays = [];
   }
 
   const selectedDays = repeatDays
@@ -146,56 +139,4 @@ export function getDayOfWeek(date) {
   ];
   const days = [daysOfWeek[new Date(date).getDay()]];
   return days;
-}
-
-export function addProgressToHabits(habits) {
-  if (!habits || habits.length === 0) {
-    return [];
-  }
-
-  return habits.map(habit => {
-    const progressData = getProgressByHabitId(habit.id);
-    const progress = progressData
-      ? progressData.map(p => ({
-          ...p,
-          date: p.date ? p.date.toISOString() : null,
-        }))
-      : undefined;
-
-    const serializableRepeatDays = habit.repeatDays
-      ? JSON.stringify(habit.repeatDays)
-      : '[]';
-
-    return {
-      ...habit,
-      ...(progress !== undefined && {progress}),
-      repeatDays: serializableRepeatDays,
-    };
-  });
-}
-
-export function getHabitsByDays(habits, days) {
-  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  if (!days) days = daysOfWeek;
-
-  const filtered = habits.filter(habit => {
-    const repeatDaysArray = habit.repeatDays
-      ? JSON.parse(habit.repeatDays)
-      : [];
-    return days.some(day => repeatDaysArray.includes(day));
-  });
-  return filtered;
-}
-
-export function getHabitsByDay(habits, selectedDay) {
-  const date = new Date(selectedDay);
-  const daysOfWeek = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const day = daysOfWeek[date.getDay()];
-
-  return habits.filter(habit => {
-    const repeatDaysArray = habit.repeatDays
-      ? JSON.parse(habit.repeatDays)
-      : [];
-    return repeatDaysArray.includes(day);
-  });
 }

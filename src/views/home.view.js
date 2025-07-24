@@ -1,177 +1,154 @@
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View} from 'react-native';
-import {Appbar, Text, Card, Divider, Chip, Button} from 'react-native-paper';
+import React, {useState, useEffect, useCallback} from 'react';
+import {ScrollView} from 'react-native';
+import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import HabitCard from '@/components/habit.card';
-import {getFormattedTime} from '@/utils';
-import {setHabits} from '@/redux/actions';
-import {getEveryHabit} from '@/services/habits.service';
-import {addProgressToHabits, getHabitsByDay} from '@/utils';
-import ViewEnum from '@/enum/view.enum';
-import {setSelectedDay} from '@/redux/actions';
-import {formatDateToYYMMDD, getDayOfWeek} from '@/utils';
-import CalendarModal from '@/modals/calendar.modal';
-import AddHabitModal from '@/modals/addHabit.modal';
-import {updateTempValue} from '@/services/temp.service';
+import NowCard from '@/components/now.card';
+import AddModal from '@/modals/add.modal';
+import {setHabits, setCurrentItem} from '@/redux/actions';
+import {getHabits} from '@/services/habits.service';
 
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
-  const selectedDay = useSelector(state => state.selectedDay);
+  const currentHabitIndex = useSelector(state => state.currentItem || 0);
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [visibleCalendarModal, setVisibleCalendarModal] = useState(false);
-  const [currentTime, setCurrentTime] = useState(() => getFormattedTime());
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
   };
 
-  const handleCalendarModal = () => {
-    setVisibleCalendarModal(!visibleCalendarModal);
+  const fetchHabits = () => {
+    const habits = getHabits() || [];
+    dispatch(setHabits(habits));
   };
 
-  const fetchHabitsWithProgress = () => dispatch => {
-    const habits = getEveryHabit() || [];
-    const habitsWithProgress = addProgressToHabits(habits);
-    dispatch(setHabits(habitsWithProgress));
-  };
-
-  useEffect(() => {
-    dispatch(fetchHabitsWithProgress());
-  }, [selectedDay]);
-
-  const filterHabitsByDays = () => {
-    if (habits || habits.length > 0) {
-      const filteredHabits = getHabitsByDay(habits, selectedDay);
-      setFilteredHabits(filteredHabits);
+  const moveToNextHabit = useCallback(() => {
+    const totalHabits = filteredHabits.length;
+    if (totalHabits === 0) {
+      dispatch(setCurrentItem(0));
+      return;
     }
-  };
+    const nextIndex = (currentHabitIndex + 1) % totalHabits;
+    dispatch(setCurrentItem(nextIndex));
+  }, [filteredHabits.length, currentHabitIndex, dispatch]);
 
   useEffect(() => {
-    filterHabitsByDays(selectedDay);
-  }, [habits, selectedDay]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentDay = formatDateToYYMMDD();
-      if (currentDay !== selectedDay) {
-        dispatch(setSelectedDay(currentDay));
-        updateTempValue('selectedDay', currentDay);
-      }
-    }, 120000);
-    return () => clearInterval(interval);
-  }, [selectedDay]);
-
-  useEffect(() => {
-    const currentDay = formatDateToYYMMDD();
-    dispatch(setSelectedDay(currentDay));
-    updateTempValue('selectedDay', currentDay);
-  }, [dispatch]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentTime = getFormattedTime();
-      setCurrentTime(currentTime);
-    }, 30000);
-    return () => clearInterval(interval);
+    fetchHabits();
   }, []);
 
-  const markHabitByTime = (habit, currentTime) => {
-    if (selectedDay === formatDateToYYMMDD()) {
-      return {
-        ...habit,
-        active: habit.habitStart <= currentTime,
-      };
+  const filterHabits = () => {
+    if (habits && habits.length > 0) {
+      const availableHabits = habits.filter(habit => habit.available);
+
+      const expandedHabits = [];
+
+      availableHabits.forEach(habit => {
+        if (habit.repeatHours && habit.repeatHours.length > 0) {
+          habit.repeatHours.forEach((hour, index) => {
+            expandedHabits.push({
+              ...habit,
+              id: `${habit.id}_${index}`,
+              originalId: habit.id,
+              originalRepeatHours: habit.repeatHours,
+              currentHour: hour,
+              repeatHours: [hour],
+            });
+          });
+        } else {
+          expandedHabits.push({
+            ...habit,
+            originalId: habit.id,
+            originalRepeatHours: habit.repeatHours,
+            currentHour: null,
+          });
+        }
+      });
+
+      const sortedHabits = expandedHabits.sort((a, b) => {
+        if (!a.currentHour && !b.currentHour) return 0;
+        if (!a.currentHour) return 1;
+        if (!b.currentHour) return -1;
+        return a.currentHour.localeCompare(b.currentHour);
+      });
+
+      setFilteredHabits(sortedHabits);
     } else {
-      return {
-        ...habit,
-        active: false,
-      };
+      setFilteredHabits([]);
     }
   };
+
+  useEffect(() => {
+    filterHabits();
+  }, [habits]);
+
+  useEffect(() => {
+    if (
+      filteredHabits.length > 0 &&
+      currentHabitIndex >= filteredHabits.length
+    ) {
+      dispatch(setCurrentItem(0));
+    }
+  }, [filteredHabits, currentHabitIndex, dispatch]);
+
+  const currentHabit =
+    filteredHabits.length > 0 && currentHabitIndex < filteredHabits.length
+      ? filteredHabits[currentHabitIndex]
+      : filteredHabits.length > 0
+      ? filteredHabits[0]
+      : null;
 
   return (
     <>
-      <AddHabitModal
-        visible={visibleAddModal}
-        onDismiss={handleAddModal}
-        fetchHabitsWithProgress={() => dispatch(fetchHabitsWithProgress())}
-      />
-
-      <CalendarModal
-        visible={visibleCalendarModal}
-        onDismiss={handleCalendarModal}
-        setSelectedDay={day => dispatch(setSelectedDay(day))}
-      />
-
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
-        <Chip
-          onPress={() => {
-            handleCalendarModal();
-          }}>
-          {t(`date.${getDayOfWeek(selectedDay)}`)}
-        </Chip>
-        <Appbar.Action
-          icon="calendar"
-          onPress={() => {
-            handleCalendarModal();
-          }}
-        />
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {filteredHabits && filteredHabits.length > 0 ? (
-          filteredHabits.map(habit => {
-            const markedHabit = markHabitByTime(habit, currentTime);
-            return (
-              <HabitCard
-                key={markedHabit.id}
-                id={markedHabit.id}
-                view={ViewEnum.PREVIEW}
-                habitName={markedHabit.habitName}
-                firstStep={markedHabit.firstStep}
-                goalDesc={markedHabit.goalDesc}
-                motivation={markedHabit.motivation}
-                repeatDays={markedHabit.repeatDays}
-                habitStart={markedHabit.habitStart}
-                progressType={markedHabit.progressType}
-                progressUnit={markedHabit.progressUnit}
-                targetScore={markedHabit.targetScore}
-                progress={markedHabit.progress}
-                active={markedHabit.active}
-                fetchHabitsWithProgress={() =>
-                  dispatch(fetchHabitsWithProgress())
-                }
-              />
-            );
-          })
+        {currentHabit ? (
+          <NowCard
+            key={currentHabit.id}
+            id={currentHabit.originalId || currentHabit.id}
+            habitName={currentHabit.habitName}
+            goodChoice={currentHabit.goodChoice}
+            badChoice={currentHabit.badChoice}
+            score={currentHabit.score}
+            currentStreak={currentHabit.currentStreak}
+            level={currentHabit.level}
+            desc={currentHabit.desc}
+            message={currentHabit.message}
+            repeatDays={currentHabit.repeatDays}
+            repeatHours={currentHabit.repeatHours}
+            originalRepeatHours={currentHabit.originalRepeatHours}
+            available={currentHabit.available}
+            fetchHabits={fetchHabits}
+            onChoice={moveToNextHabit}
+          />
         ) : (
           <Card style={styles.card}>
-            <Card.Content>
-              <View style={styles.title}>
-                <Text variant="titleLarge">{t('title.no-habits')}</Text>
-              </View>
-              <Divider style={styles.divider} />
+            <Card.Content style={styles.card__title}>
+              <Text variant="titleMedium">{t('title.no-habits')}</Text>
+              <Chip
+                icon="plus"
+                mode="outlined"
+                onPress={handleAddModal}
+                style={styles.chip}>
+                {t(`title.add`)}
+              </Chip>
             </Card.Content>
-            <Card.Actions>
-              <Button
-                mode="contained"
-                onPress={() => {
-                  handleAddModal();
-                }}>
-                {t('button.add')}
-              </Button>
-            </Card.Actions>
           </Card>
         )}
-        <View style={styles.gap} />
       </ScrollView>
+
+      <AddModal
+        visible={visibleAddModal}
+        onDismiss={handleAddModal}
+        fetchHabits={fetchHabits}
+      />
     </>
   );
 };

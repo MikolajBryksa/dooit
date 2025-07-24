@@ -5,7 +5,6 @@ import store from './src/redux/store';
 import LoadingView from './src/views/loading.view';
 import HomeView from './src/views/home.view';
 import HabitsView from './src/views/habits.view';
-import StatsView from './src/views/stats.view';
 import SettingsView from './src/views/settings.view';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,9 +12,7 @@ import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {getSettings} from './src/services/settings.service';
-import {getTempValue} from './src/services/temp.service';
-import {setSelectedDay, setSettings} from './src/redux/actions';
-import {formatDateToYYMMDD} from './src/utils';
+import {setSettings} from './src/redux/actions';
 import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
@@ -45,9 +42,6 @@ function AppContent() {
         i18next.changeLanguage(newLocale);
         LocaleConfig.defaultLocale = newLocale;
       }
-
-      const selectedDay = formatDateToYYMMDD(getTempValue('selectedDay'));
-      dispatch(setSelectedDay(selectedDay));
     }
 
     loadData();
@@ -126,16 +120,6 @@ function AppContent() {
             tabBarLabel: t('view.habits'),
             tabBarIcon: ({color, size}) => {
               return renderIcon('habits', color, size);
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Stats"
-          component={StatsView}
-          options={{
-            tabBarLabel: t('view.stats'),
-            tabBarIcon: ({color, size}) => {
-              return renderIcon('stats', color, size);
             },
           }}
         />

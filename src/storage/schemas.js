@@ -8,29 +8,16 @@ Habit.schema = {
   properties: {
     id: 'int',
     habitName: 'string',
-    firstStep: 'string',
-    goalDesc: 'string',
-    motivation: 'string',
+    goodChoice: 'string',
+    badChoice: 'string',
+    score: 'int',
+    level: 'int',
+    currentStreak: 'int',
+    desc: 'string?',
+    message: 'string?',
     repeatDays: 'string[]',
-    habitStart: 'string',
-    progressType: 'string',
-    progressUnit: 'string',
-    targetScore: 'double',
-  },
-};
-
-class Progress extends Realm.Object {}
-Progress.schema = {
-  name: 'Progress',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    habitId: 'int',
-    date: 'date',
-    progressAmount: 'int?',
-    progressValue: 'double?',
-    progressTime: 'int?',
-    checked: 'bool',
+    repeatHours: 'string[]',
+    available: 'bool',
   },
 };
 
@@ -48,32 +35,15 @@ Settings.schema = {
   },
 };
 
-class Temp extends Realm.Object {}
-Temp.schema = {
-  name: 'Temp',
-  primaryKey: 'id',
-  properties: {
-    id: 'int',
-    selectedDay: 'date',
-  },
-};
-
 const realmConfig = {
-  schema: [Habit, Progress, Settings, Temp],
-  schemaVersion: 1,
+  schema: [Habit, Settings],
+  schemaVersion: 4,
+  deleteRealmIfMigrationNeeded: true,
 };
 
 const realm = new Realm(realmConfig);
 
 realm.write(() => {
-  const existingTemp = realm.objects('Temp')[0];
-  if (!existingTemp) {
-    realm.create('Temp', {
-      id: 1,
-      selectedDay: new Date(),
-    });
-  }
-
   const existingSettings = realm.objects('Settings')[0];
   if (!existingSettings) {
     const deviceLocales = RNLocalize.getLocales();

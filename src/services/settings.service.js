@@ -19,7 +19,15 @@ export const updateSettings = updates => {
   realm.write(() => {
     updatedSettings = realm.create('Settings', {id: 1, ...updates}, 'modified');
   });
-  return updatedSettings;
+
+  return {
+    id: updatedSettings.id,
+    language: updatedSettings.language,
+    clockFormat: updatedSettings.clockFormat,
+    firstDay: updatedSettings.firstDay,
+    firstLaunch: updatedSettings.firstLaunch,
+    currentTheme: updatedSettings.currentTheme,
+  };
 };
 
 export const getSettingValue = key => {
