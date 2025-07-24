@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {ScrollView} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
 import AddModal from '@/modals/add.modal';
@@ -101,6 +101,7 @@ const HabitsView = () => {
             </Card.Content>
           </Card>
         )}
+        <View style={styles.gap} />
       </ScrollView>
 
       <AddModal

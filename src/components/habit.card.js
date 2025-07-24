@@ -140,9 +140,40 @@ const HabitCard = ({
                   style={{margin: 0, marginRight: 4}}
                 />
                 <Text variant="bodyMedium">
-                  {repeatDays && repeatDays.length > 0
-                    ? repeatDays.join(', ')
-                    : ''}
+                  {(() => {
+                    if (!repeatDays || repeatDays.length === 0) return '';
+                    const daily = [
+                      'mon',
+                      'tue',
+                      'wed',
+                      'thu',
+                      'fri',
+                      'sat',
+                      'sun',
+                    ];
+                    const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+                    const weekend = ['sat', 'sun'];
+                    const sortedDays = [...repeatDays].sort();
+                    if (
+                      sortedDays.length === 7 &&
+                      daily.every(day => sortedDays.includes(day))
+                    ) {
+                      return t('date.daily');
+                    }
+                    if (
+                      sortedDays.length === 5 &&
+                      workdays.every(day => sortedDays.includes(day))
+                    ) {
+                      return t('date.workdays');
+                    }
+                    if (
+                      sortedDays.length === 2 &&
+                      weekend.every(day => sortedDays.includes(day))
+                    ) {
+                      return t('date.weekend');
+                    }
+                    return repeatDays.map(day => t(`date.${day}`)).join(', ');
+                  })()}
                 </Text>
               </View>
             </TouchableRipple>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -142,6 +142,7 @@ const HomeView = () => {
             </Card.Content>
           </Card>
         )}
+        <View style={styles.gap} />
       </ScrollView>
 
       <AddModal
