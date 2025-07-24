@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {Text, Button, Card, Avatar, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -130,53 +130,58 @@ const OnboardingView = ({setShowOnboarding}) => {
     ];
 
     return (
-      <View style={styles.loading__container}>
+      <View style={styles.container}>
         <View style={styles.onboarding__title}>
           <Text variant="headlineMedium">{t('onboarding.choose')}</Text>
           <Text variant="bodyLarge">{t('onboarding.which-habits')}</Text>
         </View>
 
-        {[1, 2, 3, 4, 5, 6, 7, 8].map(habitId => (
-          <Card
-            key={habitId}
-            style={[
-              styles.card,
-              {
-                opacity: selectedHabits[habitId] ? 1 : 0.6,
-              },
-            ]}
-            onPress={() => handleHabitToggle(habitId)}>
-            <Card.Content style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Avatar.Icon
-                icon={habitIcons[habitId - 1]}
-                size={40}
-                style={{marginRight: 16}}
-              />
-              <View style={{flex: 1}}>
-                <Text variant="titleMedium">
-                  {t(`default-habits.${habitId}.habitName`)}
-                </Text>
-                <Text variant="bodySmall" numberOfLines={2}>
-                  {t(`default-habits.${habitId}.goodChoice`)} vs{' '}
-                  {t(`default-habits.${habitId}.badChoice`)}
-                </Text>
-              </View>
-              <Checkbox
-                status={selectedHabits[habitId] ? 'checked' : 'unchecked'}
-                onPress={() => handleHabitToggle(habitId)}
-              />
-            </Card.Content>
-          </Card>
-        ))}
-
-        <Button
-          style={styles.onboarding__button}
-          mode="contained"
-          onPress={() => {
-            handleGetStarted();
-          }}>
-          {t('onboarding.start')}
-        </Button>
+        <ScrollView style={styles.container}>
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(habitId => (
+            <Card
+              key={habitId}
+              style={[
+                styles.card,
+                {
+                  opacity: selectedHabits[habitId] ? 1 : 0.6,
+                },
+              ]}
+              onPress={() => handleHabitToggle(habitId)}>
+              <Card.Content
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Avatar.Icon
+                  icon={habitIcons[habitId - 1]}
+                  size={40}
+                  style={{marginRight: 16}}
+                />
+                <View style={{flex: 1}}>
+                  <Text variant="titleMedium">
+                    {t(`default-habits.${habitId}.habitName`)}
+                  </Text>
+                  <Text variant="bodySmall" numberOfLines={2}>
+                    {t(`default-habits.${habitId}.goodChoice`)} vs{' '}
+                    {t(`default-habits.${habitId}.badChoice`)}
+                  </Text>
+                </View>
+                <Checkbox
+                  status={selectedHabits[habitId] ? 'checked' : 'unchecked'}
+                  onPress={() => handleHabitToggle(habitId)}
+                />
+              </Card.Content>
+            </Card>
+          ))}
+          <View style={styles.gap} />
+        </ScrollView>
+        <View style={styles.onboarding__bottom}>
+          <Button
+            style={styles.onboarding__button}
+            mode="contained"
+            onPress={() => {
+              handleGetStarted();
+            }}>
+            {t('onboarding.start')}
+          </Button>
+        </View>
       </View>
     );
   }

@@ -38,9 +38,17 @@ export const useStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: theme.dimensions.padding * 3,
+      marginTop: theme.dimensions.padding * 3,
+    },
+    onboarding__bottom: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     onboarding__button: {
       marginTop: theme.dimensions.padding * 3,
+      marginBottom: theme.dimensions.padding * 3,
+      width: '50%',
     },
     disabled: {
       opacity: 0.5,

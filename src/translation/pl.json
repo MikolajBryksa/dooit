@@ -118,12 +118,12 @@
     "1": {
       "habitName": "Wczesne wstawanie",
       "goodChoice": "Wstawanie z budzikiem",
-      "badChoice": "Drzemka po budziku"
+      "badChoice": "Drzemka"
     },
     "2": {
       "habitName": "Picie wody",
       "goodChoice": "Picie wody",
-      "badChoice": "Picie napojów gazowanych"
+      "badChoice": "Picie napojów"
     },
     "3": {
       "habitName": "Ćwiczenia fizyczne",
@@ -152,7 +152,7 @@
     },
     "8": {
       "habitName": "Sprzątanie",
-      "goodChoice": "Organizowanie rzeczy",
+      "goodChoice": "Układanie rzeczy",
       "badChoice": "Zostawianie bałaganu"
     }
   }

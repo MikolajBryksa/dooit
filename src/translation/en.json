@@ -117,8 +117,8 @@
   "default-habits": {
     "1": {
       "habitName": "Early wake up",
-      "goodChoice": "Wake up with alarm",
-      "badChoice": "Snooze after alarm"
+      "goodChoice": "Woken by alarm",
+      "badChoice": "Snooze"
     },
     "2": {
       "habitName": "Drinking water",
@@ -142,7 +142,7 @@
     },
     "6": {
       "habitName": "Development",
-      "goodChoice": "Learning something",
+      "goodChoice": "Learning",
       "badChoice": "Routine work"
     },
     "7": {
