@@ -54,8 +54,8 @@
     "repeat-hours": "Repeat hours",
     "repeatHours": "Repeat Hours",
     "available": "Available",
-    "congrats": "Congratulations",
-    "done": "Done"
+    "done": "All done for today!",
+    "start": "Start new day"
   },
   "date": {
     "daily": "Daily",

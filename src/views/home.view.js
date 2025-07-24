@@ -16,7 +16,9 @@ const HomeView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
-  const currentHabitIndex = useSelector(state => state.currentItem || 0);
+  const currentHabitIndex = useSelector(state =>
+    typeof state.currentItem === 'number' ? state.currentItem : 0,
+  );
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
 
@@ -32,9 +34,18 @@ const HomeView = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const [prevDay, setPrevDay] = useState('');
+  useEffect(() => {
+    if (todayKey !== prevDay) {
+      setDisabledFinal(false);
+    }
+    setPrevDay(todayKey);
+  }, [todayKey]);
+
   const [todayKey, setTodayKey] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
+  const [disabledFinal, setDisabledFinal] = useState(true);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -48,11 +59,14 @@ const HomeView = () => {
   const moveToNextHabit = useCallback(() => {
     const totalHabits = filteredHabits.length;
     if (totalHabits === 0) {
-      dispatch(setCurrentItem(0));
-      updateSettingValue('currentItem', 0);
+      dispatch(setCurrentItem(-1));
+      updateSettingValue('currentItem', -1);
+      setShowCongrats(true);
       return;
     }
     if (currentHabitIndex + 1 >= totalHabits) {
+      dispatch(setCurrentItem(-1));
+      updateSettingValue('currentItem', -1);
       setShowCongrats(true);
     } else {
       const nextIndex = currentHabitIndex + 1;
@@ -124,7 +138,10 @@ const HomeView = () => {
   }, [filteredHabits, currentHabitIndex, dispatch]);
 
   const currentHabit =
-    filteredHabits.length > 0 && currentHabitIndex < filteredHabits.length
+    filteredHabits.length > 0 &&
+    typeof currentHabitIndex === 'number' &&
+    currentHabitIndex >= 0 &&
+    currentHabitIndex < filteredHabits.length
       ? filteredHabits[currentHabitIndex]
       : null;
 
@@ -138,20 +155,23 @@ const HomeView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {showCongrats ? (
+        {showCongrats || currentHabitIndex === -1 ? (
           <Card style={styles.card}>
             <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('card.congrats')}</Text>
+              <Text variant="titleMedium">{t('card.done')}</Text>
               <Chip
-                icon="trophy"
+                icon="refresh"
                 mode="outlined"
+                disabled={disabledFinal}
                 onPress={() => {
                   setShowCongrats(false);
                   dispatch(setCurrentItem(0));
+                  updateSettingValue('currentItem', 0);
                   fetchHabits();
+                  setDisabledFinal(true);
                 }}
                 style={styles.chip}>
-                {t('card.done')}
+                {t('card.start')}
               </Chip>
             </Card.Content>
           </Card>
