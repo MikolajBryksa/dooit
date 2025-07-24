@@ -10,6 +10,13 @@ export const useStyles = () => {
       padding: theme.dimensions.padding,
       backgroundColor: theme.colors.background,
     },
+    container__center: {
+      flex: 1,
+      padding: theme.dimensions.padding,
+      backgroundColor: theme.colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     topBar__shadow: {
       borderBottomWidth: 3,
       borderBottomColor: theme.colors.background,
@@ -18,47 +25,20 @@ export const useStyles = () => {
       borderTopWidth: 3,
       borderTopColor: theme.colors.background,
     },
-    loading__container: {
-      flex: 1,
-      padding: theme.dimensions.padding,
-      backgroundColor: theme.colors.background,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    loading__text: {
-      marginTop: theme.dimensions.padding,
-    },
     onboarding__card: {
       height: theme.dimensions.height * 2,
       justifyContent: 'center',
       width: '100%',
       marginBottom: theme.dimensions.padding,
     },
-    onboarding__title: {
+    onboarding__bar: {
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: theme.dimensions.padding * 3,
       marginTop: theme.dimensions.padding * 3,
     },
-    onboarding__bottom: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    onboarding__button: {
-      marginTop: theme.dimensions.padding * 3,
-      marginBottom: theme.dimensions.padding * 3,
+    button: {
       width: '50%',
-    },
-    disabled: {
-      opacity: 0.5,
-    },
-    targetScore: {
-      flexDirection: 'row',
-      gap: theme.dimensions.margin,
-    },
-    input: {
-      flex: 1,
     },
     title: {
       flexDirection: 'row',
@@ -66,10 +46,6 @@ export const useStyles = () => {
       alignItems: 'center',
       height: theme.dimensions.height / 2,
       marginBottom: theme.dimensions.margin,
-    },
-    rowActions: {
-      flexDirection: 'row',
-      alignItems: 'center',
     },
     card: {
       minHeight: theme.dimensions.height,
@@ -85,15 +61,15 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
-    card__active: {
-      minHeight: theme.dimensions.height,
-      width: '100%',
-      marginBottom: theme.dimensions.padding,
-      backgroundColor: theme.colors.background,
-      borderWidth: 1,
-      borderColor: theme.colors.primary,
-      shadowColor: theme.colors.primary,
-    },
+    // card__active: {
+    //   minHeight: theme.dimensions.height,
+    //   width: '100%',
+    //   marginBottom: theme.dimensions.padding,
+    //   backgroundColor: theme.colors.background,
+    //   borderWidth: 1,
+    //   borderColor: theme.colors.primary,
+    //   shadowColor: theme.colors.primary,
+    // },
     card__title: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -117,26 +93,11 @@ export const useStyles = () => {
     chip: {
       borderRadius: 12,
     },
-    time: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     progressBar: {
       marginVertical: theme.dimensions.margin,
     },
-    progressExcess: {
-      color: theme.colors.secondary,
-    },
-    button: {
-      marginVertical: theme.dimensions.padding,
-      backgroundColor: theme.colors.primary,
-    },
     gap: {
       height: theme.dimensions.margin * 3,
-    },
-    noProgress: {
-      marginBottom: theme.dimensions.padding,
-      color: theme.colors.onSurface,
     },
     modal: {
       backgroundColor: theme.colors.surface,
@@ -155,9 +116,6 @@ export const useStyles = () => {
     daysSelector__chip: {
       marginLeft: theme.dimensions.margin,
       borderRadius: 25,
-    },
-    calendar: {
-      height: theme.dimensions.height * 7.5,
     },
   });
 };

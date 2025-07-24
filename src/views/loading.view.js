@@ -16,7 +16,7 @@ const LoadingView = ({setLoading}) => {
   }, [setLoading]);
 
   return (
-    <View style={styles.loading__container}>
+    <View style={styles.container__center}>
       <AnimatedLogo />
     </View>
   );

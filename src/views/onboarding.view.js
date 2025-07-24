@@ -74,8 +74,8 @@ const OnboardingView = ({setShowOnboarding}) => {
 
   if (!chooseHabitsView) {
     return (
-      <View style={styles.loading__container}>
-        <View style={styles.onboarding__title}>
+      <View style={styles.container__center}>
+        <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.welcome')}</Text>
           <Text variant="bodyLarge">{t('onboarding.to-app')}</Text>
         </View>
@@ -107,14 +107,16 @@ const OnboardingView = ({setShowOnboarding}) => {
           />
         </Card>
 
-        <Button
-          style={styles.onboarding__button}
-          mode="contained"
-          onPress={() => {
-            handleChooseHabits();
-          }}>
-          {t('onboarding.choose-habits')}
-        </Button>
+        <View style={styles.onboarding__bar}>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              handleChooseHabits();
+            }}>
+            {t('onboarding.choose-habits')}
+          </Button>
+        </View>
       </View>
     );
   } else {
@@ -131,7 +133,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
     return (
       <View style={styles.container}>
-        <View style={styles.onboarding__title}>
+        <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.choose')}</Text>
           <Text variant="bodyLarge">{t('onboarding.which-habits')}</Text>
         </View>
@@ -172,9 +174,10 @@ const OnboardingView = ({setShowOnboarding}) => {
           ))}
           <View style={styles.gap} />
         </ScrollView>
-        <View style={styles.onboarding__bottom}>
+
+        <View style={styles.onboarding__bar}>
           <Button
-            style={styles.onboarding__button}
+            style={styles.button}
             mode="contained"
             onPress={() => {
               handleGetStarted();
