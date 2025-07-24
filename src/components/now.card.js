@@ -26,10 +26,19 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const [selectedChoice, setSelectedChoice] = useState(null);
+  const LEVEL_THRESHOLDS = [3, 7, 14, 30, 60, 90, 120, 180, 270, 400];
 
   const handleGoodChoice = () => {
-    const newScore = score + 1;
+    let newScore = score + 1;
+    let newLevel = level;
     const newCurrentStreak = currentStreak + 1;
+
+    const nextLevelThreshold =
+      LEVEL_THRESHOLDS[level - 1] ||
+      LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1];
+    if (newScore >= nextLevelThreshold) {
+      newLevel = level + 1;
+    }
 
     setSelectedChoice('good');
 
@@ -39,7 +48,7 @@ const NowCard = ({
       goodChoice,
       badChoice,
       newScore,
-      level,
+      newLevel,
       newCurrentStreak,
       desc,
       message,
@@ -111,7 +120,9 @@ const NowCard = ({
             style={{margin: 0, marginRight: 4}}
           />
           <Text variant="bodyMedium">
-            {t('card.score')}: {score}
+            {t('card.score')}: {score} /{' '}
+            {LEVEL_THRESHOLDS[level - 1] ||
+              LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]}
           </Text>
         </View>
 

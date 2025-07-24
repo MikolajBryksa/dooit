@@ -84,7 +84,7 @@ export const deleteHabit = id => {
 };
 
 export const getHabits = () => {
-  const realmHabits = realm.objects('Habit').sorted('habitName');
+  const realmHabits = realm.objects('Habit');
   return Array.from(realmHabits).map(habit => ({
     id: habit.id,
     habitName: habit.habitName,

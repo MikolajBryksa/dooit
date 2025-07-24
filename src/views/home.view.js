@@ -22,6 +22,14 @@ const HomeView = () => {
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
 
+  const setCurrentItemAll = useCallback(
+    value => {
+      dispatch(setCurrentItem(value));
+      updateSettingValue('currentItem', value);
+    },
+    [dispatch],
+  );
+
   useEffect(() => {
     const updateDateTime = () => {
       setCurrentTime(getFormattedTime(false));
@@ -44,7 +52,6 @@ const HomeView = () => {
 
   const [todayKey, setTodayKey] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [showCongrats, setShowCongrats] = useState(false);
   const [disabledFinal, setDisabledFinal] = useState(true);
 
   const handleAddModal = () => {
@@ -59,19 +66,14 @@ const HomeView = () => {
   const moveToNextHabit = useCallback(() => {
     const totalHabits = filteredHabits.length;
     if (totalHabits === 0) {
-      dispatch(setCurrentItem(-1));
-      updateSettingValue('currentItem', -1);
-      setShowCongrats(true);
+      setCurrentItemAll(-1);
       return;
     }
     if (currentHabitIndex + 1 >= totalHabits) {
-      dispatch(setCurrentItem(-1));
-      updateSettingValue('currentItem', -1);
-      setShowCongrats(true);
+      setCurrentItemAll(-1);
     } else {
       const nextIndex = currentHabitIndex + 1;
-      dispatch(setCurrentItem(nextIndex));
-      updateSettingValue('currentItem', nextIndex);
+      setCurrentItemAll(nextIndex);
     }
   }, [filteredHabits.length, currentHabitIndex, dispatch]);
 
@@ -149,13 +151,13 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
-        <Text style={{marginRight: 16, alignSelf: 'center'}}>
+        {/* <Text style={{marginRight: 16, alignSelf: 'center'}}>
           {t(`date.${todayKey}`)} {currentTime}
-        </Text>
+        </Text> */}
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {showCongrats || currentHabitIndex === -1 ? (
+        {currentHabitIndex === -1 ? (
           <Card style={styles.card}>
             <Card.Content style={styles.card__title}>
               <Text variant="titleMedium">{t('card.done')}</Text>
@@ -164,9 +166,7 @@ const HomeView = () => {
                 mode="outlined"
                 disabled={disabledFinal}
                 onPress={() => {
-                  setShowCongrats(false);
-                  dispatch(setCurrentItem(0));
-                  updateSettingValue('currentItem', 0);
+                  setCurrentItemAll(0);
                   fetchHabits();
                   setDisabledFinal(true);
                 }}
