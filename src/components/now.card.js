@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {LEVEL_THRESHOLDS} from '@/constants';
 import {Card, Text, Chip, IconButton} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
@@ -28,7 +29,6 @@ const NowCard = ({
   const styles = useStyles();
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
-  const LEVEL_THRESHOLDS = [3, 7, 14, 31, 60, 90, 120, 180, 270, 365];
 
   const handleGoodChoice = () => {
     let newScore = score + 1;

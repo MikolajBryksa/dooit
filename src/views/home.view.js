@@ -10,17 +10,22 @@ import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
+import {dayMap} from '@/constants';
 
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
+  const currentDay = useSelector(state => state.settings.currentDay);
   const currentHabitIndex = useSelector(state =>
     typeof state.currentItem === 'number' ? state.currentItem : 0,
   );
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
+  const [todayKey, setTodayKey] = useState('');
+  const [visibleAddModal, setVisibleAddModal] = useState(false);
+  const [disabledFinal, setDisabledFinal] = useState(true);
 
   const setCurrentItemAll = useCallback(
     value => {
@@ -34,25 +39,20 @@ const HomeView = () => {
     const updateDateTime = () => {
       setCurrentTime(getFormattedTime(false));
       const jsDay = new Date().getDay();
-      const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
       setTodayKey(dayMap[jsDay]);
     };
     updateDateTime();
-    const interval = setInterval(updateDateTime, 5000);
+    const interval = setInterval(updateDateTime, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  const [prevDay, setPrevDay] = useState('');
   useEffect(() => {
-    if (todayKey !== prevDay) {
+    if (todayKey && currentDay && todayKey !== currentDay) {
       setDisabledFinal(false);
+      dispatch({type: 'SET_SETTINGS', payload: {currentDay: todayKey}});
+      updateSettingValue('currentDay', todayKey);
     }
-    setPrevDay(todayKey);
-  }, [todayKey]);
-
-  const [todayKey, setTodayKey] = useState('');
-  const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [disabledFinal, setDisabledFinal] = useState(true);
+  }, [todayKey, currentDay, dispatch]);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -164,8 +164,7 @@ const HomeView = () => {
               <Chip
                 icon="refresh"
                 mode="outlined"
-                // disabled={disabledFinal}
-                disabled={false}
+                disabled={disabledFinal}
                 onPress={() => {
                   setCurrentItemAll(0);
                   fetchHabits();

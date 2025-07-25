@@ -1,8 +1,4 @@
-import {
-  SET_CURRENT_ITEM,
-  SET_HABITS,
-  SET_SETTINGS,
-} from './actions';
+import {SET_CURRENT_ITEM, SET_HABITS, SET_SETTINGS} from './actions';
 
 const initialState = {
   currentItem: null,

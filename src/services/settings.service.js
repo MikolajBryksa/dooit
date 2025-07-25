@@ -12,6 +12,7 @@ export const getSettings = () => {
     firstLaunch: settings.firstLaunch,
     currentTheme: settings.currentTheme,
     currentItem: settings.currentItem,
+    currentDay: settings.currentDay,
   };
 };
 
@@ -29,6 +30,7 @@ export const updateSettings = updates => {
     firstLaunch: updatedSettings.firstLaunch,
     currentTheme: updatedSettings.currentTheme,
     currentItem: updatedSettings.currentItem,
+    currentDay: updatedSettings.currentDay,
   };
 };
 

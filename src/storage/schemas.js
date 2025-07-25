@@ -1,5 +1,6 @@
 import Realm from 'realm';
 import * as RNLocalize from 'react-native-localize';
+import {dayMap} from '@/constants';
 
 class Habit extends Realm.Object {}
 Habit.schema = {
@@ -33,12 +34,13 @@ Settings.schema = {
     firstLaunch: 'bool',
     currentTheme: 'string?',
     currentItem: 'int?',
+    currentDay: 'string?',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 5,
+  schemaVersion: 6,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -60,6 +62,7 @@ realm.write(() => {
       firstDay: 'mon',
       firstLaunch: true,
       currentItem: 0,
+      currentDay: dayMap[new Date().getDay()],
     });
   }
 });
