@@ -7,6 +7,7 @@
   "title": {
     "add": "Dodaj nawyk",
     "delete": "Usuń nawyk",
+    "skip": "Pomiń nawyk",
     "no-habits": "Brak nawyków",
     "contact": "Kontakt z autorem",
     "support": "Wsparcie autora"
@@ -23,7 +24,8 @@
     "light": "Jasny"
   },
   "message": {
-    "delete": "Czy na pewno chcesz usunąć nawyk?",
+    "delete": "Czy na pewno chcesz usunąć nawyk",
+    "skip": "Czy na pewno chcesz pominąć nawyk",
     "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
     "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?"
   },
@@ -34,7 +36,8 @@
     "support": "Wsparcie",
     "save": "Zapisz",
     "back": "Wstecz",
-    "next": "Dalej"
+    "next": "Dalej",
+    "skip": "Pomiń"
   },
   "card": {
     "habit-name": "Nazwa nawyku",

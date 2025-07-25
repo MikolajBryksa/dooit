@@ -7,6 +7,7 @@
   "title": {
     "add": "Add habit",
     "delete": "Delete habit",
+    "skip": "Skip habit",
     "no-habits": "No habits",
     "contact": "Contact author",
     "support": "Support author"
@@ -24,6 +25,7 @@
   },
   "message": {
     "delete": "Are you sure to remove the habit",
+    "skip": "Are you sure to skip the habit",
     "contact": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin",
     "support": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee"
   },
@@ -34,7 +36,8 @@
     "support": "Support",
     "save": "Save",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "skip": "Skip"
   },
   "card": {
     "habit-name": "Habit name",

@@ -110,6 +110,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
                 label={t('input.habit-name')}
                 value={habitName}
                 onChangeText={setHabitName}
+                maxLength={255}
               />
             </>
           )}
@@ -122,6 +123,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
                 label={t('input.good-choice')}
                 value={goodChoice}
                 onChangeText={setGoodChoice}
+                maxLength={255}
               />
             </>
           )}
@@ -134,6 +136,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
                 label={t('input.bad-choice')}
                 value={badChoice}
                 onChangeText={setBadChoice}
+                maxLength={255}
               />
             </>
           )}

@@ -164,7 +164,8 @@ const HomeView = () => {
               <Chip
                 icon="refresh"
                 mode="outlined"
-                disabled={disabledFinal}
+                // disabled={disabledFinal}
+                disabled={false}
                 onPress={() => {
                   setCurrentItemAll(0);
                   fetchHabits();
