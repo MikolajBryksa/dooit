@@ -64,6 +64,16 @@ const HabitCard = ({
   };
 
   const handleSaveField = newValue => {
+    let sortedValue = newValue;
+    if (modalField === 'repeatHours' && Array.isArray(newValue)) {
+      sortedValue = [...newValue].sort((a, b) => {
+        const toSeconds = str => {
+          const [h, m] = str.split(':').map(Number);
+          return h * 3600 + (m || 0) * 60;
+        };
+        return toSeconds(a) - toSeconds(b);
+      });
+    }
     let updated = {
       id,
       habitName,
@@ -78,7 +88,7 @@ const HabitCard = ({
       repeatHours,
       available: isAvailable,
     };
-    updated[modalField] = newValue;
+    updated[modalField] = sortedValue;
     updateHabit(
       updated.id,
       updated.habitName,
