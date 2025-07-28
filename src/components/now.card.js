@@ -6,6 +6,8 @@ import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
+import {useSelector} from 'react-redux';
+import {formatHourString} from '@/utils';
 
 const NowCard = ({
   id,
@@ -27,6 +29,7 @@ const NowCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const clockFormat = useSelector(state => state.settings.clockFormat);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
 
@@ -124,7 +127,9 @@ const NowCard = ({
             />
             <Text variant="bodyMedium">
               {repeatHours && repeatHours.length > 0
-                ? repeatHours.join(', ')
+                ? repeatHours
+                    .map(h => formatHourString(h, clockFormat))
+                    .join(', ')
                 : ''}
             </Text>
           </View>

@@ -12,6 +12,8 @@ import EditModal from '@/modals/edit.modal';
 import DeleteDialog from '@/dialogs/delete.dialog';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
+import {useSelector} from 'react-redux';
+import {formatHourString} from '@/utils';
 
 const HabitCard = ({
   id,
@@ -30,6 +32,8 @@ const HabitCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const clockFormat = useSelector(state => state.settings.clockFormat);
+  const firstDay = useSelector(state => state.settings.firstDay);
 
   const [isAvailable, setIsAvailable] = useState(available);
   const [modalVisible, setModalVisible] = useState(false);
@@ -138,7 +142,9 @@ const HabitCard = ({
                     variant="bodyMedium"
                     style={{maxWidth: '100%', flexShrink: 1}}>
                     {repeatHours && repeatHours.length > 0
-                      ? repeatHours.join(', ')
+                      ? repeatHours
+                          .map(h => formatHourString(h, clockFormat))
+                          .join(', ')
                       : ''}
                   </Text>
                 </View>
@@ -156,18 +162,15 @@ const HabitCard = ({
                 <Text variant="bodyMedium">
                   {(() => {
                     if (!repeatDays || repeatDays.length === 0) return '';
-                    const daily = [
-                      'mon',
-                      'tue',
-                      'wed',
-                      'thu',
-                      'fri',
-                      'sat',
-                      'sun',
-                    ];
+                    const daily =
+                      firstDay === 'sun'
+                        ? ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+                        : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
                     const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
                     const weekend = ['sat', 'sun'];
-                    const sortedDays = [...repeatDays].sort();
+                    const sortedDays = daily.filter(day =>
+                      repeatDays.includes(day),
+                    );
                     if (
                       sortedDays.length === 7 &&
                       daily.every(day => sortedDays.includes(day))
@@ -186,7 +189,7 @@ const HabitCard = ({
                     ) {
                       return t('date.weekend');
                     }
-                    return repeatDays.map(day => t(`date.${day}`)).join(', ');
+                    return sortedDays.map(day => t(`date.${day}`)).join(', ');
                   })()}
                 </Text>
               </View>

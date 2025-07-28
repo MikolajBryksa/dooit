@@ -53,6 +53,17 @@ export function getFormattedTime(hour12 = false) {
   });
 }
 
+export function formatHourString(hour, clockFormat = '24h') {
+  if (clockFormat === '12h') {
+    const [h, m] = hour.split(':');
+    let hNum = parseInt(h, 10);
+    let period = hNum < 12 ? 'AM' : 'PM';
+    let h12 = hNum % 12 === 0 ? 12 : hNum % 12;
+    return `${h12}:${m || '00'} ${period}`;
+  }
+  return hour;
+}
+
 export function getNextId(itemName) {
   const lastItem = realm.objects(itemName).sorted('id', true)[0];
   return lastItem ? lastItem.id + 1 : 1;

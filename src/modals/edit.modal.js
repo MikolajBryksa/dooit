@@ -97,7 +97,15 @@ const EditModal = ({
             />
           )}
           <Card.Actions>
-            <Button mode="contained" onPress={handleSave}>
+            <Button
+              mode="contained"
+              onPress={handleSave}
+              disabled={
+                (field === 'repeatHours' &&
+                  (!inputValue || inputValue.length === 0)) ||
+                (field === 'repeatDays' &&
+                  (!inputValue || inputValue.length === 0))
+              }>
               {t('button.save')}
             </Button>
           </Card.Actions>
