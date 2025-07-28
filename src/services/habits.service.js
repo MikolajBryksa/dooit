@@ -134,7 +134,7 @@ export const createDefaultHabits = () => {
       habitName: t('default-habits.2.habitName'),
       goodChoice: t('default-habits.2.goodChoice'),
       badChoice: t('default-habits.2.badChoice'),
-      repeatHours: ['08:00', '12:00', '14:00', '18:00'],
+      repeatHours: ['08:00', '10:00', '12:00', '14:00', '18:00', '20:30'],
     },
     {
       habitName: t('default-habits.3.habitName'),
@@ -146,25 +146,25 @@ export const createDefaultHabits = () => {
       habitName: t('default-habits.4.habitName'),
       goodChoice: t('default-habits.4.goodChoice'),
       badChoice: t('default-habits.4.badChoice'),
-      repeatHours: ['07:30', '13:00', '17:00'],
+      repeatHours: ['07:30', '13:00', '18:30'],
     },
     {
       habitName: t('default-habits.5.habitName'),
       goodChoice: t('default-habits.5.goodChoice'),
       badChoice: t('default-habits.5.badChoice'),
-      repeatHours: ['20:00'],
+      repeatHours: ['22:00'],
     },
     {
       habitName: t('default-habits.6.habitName'),
       goodChoice: t('default-habits.6.goodChoice'),
       badChoice: t('default-habits.6.badChoice'),
-      repeatHours: ['11:00'],
+      repeatHours: ['10:30'],
     },
     {
       habitName: t('default-habits.7.habitName'),
       goodChoice: t('default-habits.7.goodChoice'),
       badChoice: t('default-habits.7.badChoice'),
-      repeatHours: ['20:30'],
+      repeatHours: ['21:30'],
     },
     {
       habitName: t('default-habits.8.habitName'),

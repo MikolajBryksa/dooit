@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, View, AppState} from 'react-native';
+import {ScrollView, View, AppState, Linking} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -26,12 +26,37 @@ const SettingsView = () => {
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
+  const [notifications, setNotifications] = useState(settings.notifications);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [currentTheme, setCurrentTheme] = useState(
     settings.currentTheme || systemTheme,
   );
-  const [notifications, setNotifications] = useState(settings.notifications);
+
+  function handleVersion() {
+    Linking.openURL(
+      'https://play.google.com/store/apps/details?id=com.dooit.bryksa',
+    );
+  }
+
+  function handleLanguage() {
+    const newLanguage = language === 'en' ? 'pl' : 'en';
+    const newLocale = newLanguage === 'en' ? 'en' : 'pl';
+
+    i18next.changeLanguage(newLocale);
+    LocaleConfig.defaultLocale = newLocale;
+
+    if (newLocale === 'en') {
+      registerTranslation('en', en);
+    } else if (newLocale === 'pl') {
+      registerTranslation('pl', pl);
+    }
+
+    setLanguage(newLanguage);
+    updateSettingValue('language', newLanguage);
+    const updatedSettings = {...settings, language: newLanguage};
+    dispatch(setSettings(updatedSettings));
+  }
 
   const syncNotificationStatus = async () => {
     const settingsStatus = await notifee.getNotificationSettings();
@@ -79,25 +104,6 @@ const SettingsView = () => {
   const handleSupportDialog = () => {
     setVisibleSupportDialog(!visibleSupportDialog);
   };
-
-  function handleLanguage() {
-    const newLanguage = language === 'en' ? 'pl' : 'en';
-    const newLocale = newLanguage === 'en' ? 'en' : 'pl';
-
-    i18next.changeLanguage(newLocale);
-    LocaleConfig.defaultLocale = newLocale;
-
-    if (newLocale === 'en') {
-      registerTranslation('en', en);
-    } else if (newLocale === 'pl') {
-      registerTranslation('pl', pl);
-    }
-
-    setLanguage(newLanguage);
-    updateSettingValue('language', newLanguage);
-    const updatedSettings = {...settings, language: newLanguage};
-    dispatch(setSettings(updatedSettings));
-  }
 
   function handleClockFormat() {
     const newClockFormat = clockFormat === '24h' ? '12h' : '24h';
@@ -149,7 +155,7 @@ const SettingsView = () => {
             <Chip
               icon="information-outline"
               mode="outlined"
-              disabled={true}
+              onPress={handleVersion}
               style={styles.chip}>
               {packageJson.version}
             </Chip>
