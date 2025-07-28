@@ -35,12 +35,13 @@ Settings.schema = {
     currentTheme: 'string?',
     currentItem: 'int?',
     currentDay: 'string?',
+    notifications: 'bool',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 6,
+  schemaVersion: 7,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -63,6 +64,7 @@ realm.write(() => {
       firstLaunch: true,
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
+      notifications: false,
     });
   }
 });

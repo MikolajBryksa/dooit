@@ -21,7 +21,10 @@
     "first-day": "Pierwszy dzień tygodnia",
     "theme": "Motyw",
     "dark": "Ciemny",
-    "light": "Jasny"
+    "light": "Jasny",
+    "notifications": "Powiadomienia",
+    "enabled": "Włączone",
+    "disabled": "Wyłączone"
   },
   "message": {
     "delete": "Czy na pewno chcesz usunąć nawyk",

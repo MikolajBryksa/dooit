@@ -21,7 +21,10 @@
     "first-day": "First day of the week",
     "theme": "Theme",
     "dark": "Dark",
-    "light": "Light"
+    "light": "Light",
+    "notifications": "Notifications",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
   },
   "message": {
     "delete": "Are you sure to remove the habit",

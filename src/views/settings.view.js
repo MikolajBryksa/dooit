@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, AppState} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -13,6 +13,7 @@ import ContactDialog from '@/dialogs/contact.dialog';
 import SupportDialog from '@/dialogs/support.dialog';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
+import notifee from '@notifee/react-native';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -30,6 +31,46 @@ const SettingsView = () => {
   const [currentTheme, setCurrentTheme] = useState(
     settings.currentTheme || systemTheme,
   );
+  const [notifications, setNotifications] = useState(settings.notifications);
+
+  const syncNotificationStatus = async () => {
+    const settingsStatus = await notifee.getNotificationSettings();
+    const granted =
+      settingsStatus.authorizationStatus === 1 ||
+      settingsStatus.authorizationStatus === 2;
+    setNotifications(granted);
+    updateSettingValue('notifications', granted);
+    const updatedSettings = {...settings, notifications: granted};
+    dispatch(setSettings(updatedSettings));
+  };
+
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (nextAppState === 'active') {
+        syncNotificationStatus();
+      }
+    };
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+    syncNotificationStatus();
+    return () => {
+      subscription.remove();
+    };
+  }, [settings, dispatch]);
+
+  async function handleNotifications() {
+    await notifee.openNotificationSettings();
+    const settingsStatus = await notifee.getNotificationSettings();
+    const granted =
+      settingsStatus.authorizationStatus === 1 ||
+      settingsStatus.authorizationStatus === 2;
+    setNotifications(granted);
+    updateSettingValue('notifications', granted);
+    const updatedSettings = {...settings, notifications: granted};
+    dispatch(setSettings(updatedSettings));
+  }
 
   const handleContactDialog = () => {
     setVisibleContactDialog(!visibleContactDialog);
@@ -124,6 +165,19 @@ const SettingsView = () => {
               onPress={handleLanguage}
               style={styles.chip}>
               {t(`settings.${language}`)}
+            </Chip>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.card}>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.notifications')}</Text>
+            <Chip
+              icon={notifications ? 'bell-outline' : 'bell-off-outline'}
+              mode="outlined"
+              onPress={handleNotifications}
+              style={styles.chip}>
+              {notifications ? t('settings.enabled') : t('settings.disabled')}
             </Chip>
           </Card.Content>
         </Card>

@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {TriggerType} from '@notifee/react-native';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
@@ -11,6 +12,7 @@ import {getHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
 import {dayMap, dayFullMap} from '@/constants';
+import notifee from '@notifee/react-native';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -18,6 +20,7 @@ const HomeView = () => {
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const currentDay = useSelector(state => state.settings.currentDay);
+  const notifications = useSelector(state => state.settings.notifications);
   const currentHabitIndex = useSelector(state =>
     typeof state.currentItem === 'number' ? state.currentItem : 0,
   );
@@ -130,6 +133,51 @@ const HomeView = () => {
   useEffect(() => {
     filterHabits();
   }, [habits]);
+
+  useEffect(() => {
+    (async () => {
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Dooit Channel',
+      });
+
+      await notifee.cancelAllNotifications();
+      if (!notifications) {
+        return;
+      }
+
+      const now = new Date();
+      filteredHabits.forEach(habit => {
+        if (habit.currentHour) {
+          const [hour, minute] = habit.currentHour.split(':').map(Number);
+          const triggerDate = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            hour,
+            minute,
+            0,
+            0,
+          );
+          if (triggerDate > now) {
+            notifee.createTriggerNotification(
+              {
+                title: `${habit.currentHour} ${habit.habitName}`,
+                android: {
+                  channelId: 'default',
+                  smallIcon: 'ic_launcher',
+                },
+              },
+              {
+                type: TriggerType.TIMESTAMP,
+                timestamp: triggerDate.getTime(),
+              },
+            );
+          }
+        }
+      });
+    })();
+  }, [filteredHabits]);
 
   useEffect(() => {
     if (
