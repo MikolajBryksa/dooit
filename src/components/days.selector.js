@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {View} from 'react-native';
 import {Chip, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -7,6 +8,7 @@ import {useStyles} from '@/styles';
 const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const firstDay = useSelector(state => state.settings.firstDay);
 
   const dayNames = {
     mon: t('date.monday'),
@@ -18,7 +20,9 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
     sun: t('date.sunday'),
   };
 
-  const daily = Object.keys(dayNames);
+  const daily = firstDay === 'sun'
+    ? ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
   const weekend = ['sat', 'sun'];
 
@@ -73,7 +77,7 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         </Chip>
       </View>
 
-      {Object.keys(dayNames).map(day => (
+      {daily.map(day => (
         <Checkbox.Item
           key={day}
           label={dayNames[day]}
