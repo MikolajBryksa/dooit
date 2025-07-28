@@ -10,7 +10,7 @@ import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
-import {dayMap} from '@/constants';
+import {dayMap, dayFullMap} from '@/constants';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -151,9 +151,6 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
-        {/* <Text style={{marginRight: 16, alignSelf: 'center'}}>
-          {t(`date.${todayKey}`)} {currentTime}
-        </Text> */}
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
@@ -161,6 +158,7 @@ const HomeView = () => {
           <Card style={styles.card}>
             <Card.Content style={styles.card__title}>
               <Text variant="titleMedium">{t('card.done')}</Text>
+
               <Chip
                 icon="refresh"
                 mode="outlined"
@@ -171,7 +169,13 @@ const HomeView = () => {
                   setDisabledFinal(true);
                 }}
                 style={styles.chip}>
-                {t('card.start')}
+                {(() => {
+                  const tomorrowKey =
+                    dayMap[(dayMap.indexOf(todayKey) + 1) % dayMap.length];
+                  return `${t('card.start')} ${t(
+                    `date.${dayFullMap[tomorrowKey]}`,
+                  )}`;
+                })()}
               </Chip>
             </Card.Content>
           </Card>
