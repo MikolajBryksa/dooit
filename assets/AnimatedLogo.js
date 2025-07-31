@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Image} from 'react-native';
-import appIconDarkTheme from '../assets/appIconDarkTheme.png';
-import appIconLightTheme from '../assets/appIconLightTheme.png';
+import logo from '../assets/logo.png';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -16,8 +15,6 @@ const AnimatedLogo = () => {
   const theme = useTheme();
   const scale = useSharedValue(1);
   const opacity = useSharedValue(0);
-
-  const logoSource = theme.dark ? appIconDarkTheme : appIconLightTheme;
 
   useEffect(() => {
     scale.value = withSequence(
@@ -35,7 +32,7 @@ const AnimatedLogo = () => {
 
   return (
     <AnimatedImage
-      source={logoSource}
+      source={logo}
       style={[
         {
           width: 200,

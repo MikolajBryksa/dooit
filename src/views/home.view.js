@@ -20,7 +20,6 @@ const HomeView = () => {
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const currentDay = useSelector(state => state.settings.currentDay);
-  const notifications = useSelector(state => state.settings.notifications);
   const currentHabitIndex = useSelector(state =>
     typeof state.currentItem === 'number' ? state.currentItem : 0,
   );
@@ -142,9 +141,6 @@ const HomeView = () => {
       });
 
       await notifee.cancelAllNotifications();
-      if (!notifications) {
-        return;
-      }
 
       const now = new Date();
       filteredHabits.forEach(habit => {
@@ -165,7 +161,7 @@ const HomeView = () => {
                 title: `${habit.currentHour} ${habit.habitName}`,
                 android: {
                   channelId: 'default',
-                  smallIcon: 'ic_launcher',
+                  smallIcon: 'ic_notification',
                 },
               },
               {
