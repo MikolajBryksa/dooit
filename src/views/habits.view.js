@@ -77,10 +77,8 @@ const HabitsView = () => {
               goodChoice={habit.goodChoice}
               badChoice={habit.badChoice}
               score={habit.score}
-              currentStreak={habit.currentStreak}
               level={habit.level}
-              desc={habit.desc}
-              message={habit.message}
+              duration={habit.duration}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}

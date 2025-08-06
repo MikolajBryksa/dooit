@@ -51,10 +51,8 @@
     "badChoice": "Bad choice",
     "score": "Score",
     "level": "Level",
-    "current-streak": "Streak",
-    "currentStreak": "Streak",
-    "desc": "Description",
-    "message": "Message",
+    "duration": "Duration",
+    "minutes": "(in minutes)",
     "repeat-days": "Repeat days",
     "repeatDays": "Repeat days",
     "repeat-hours": "Repeat hours",
@@ -87,16 +85,12 @@
     "no": "No"
   },
   "step": {
-    "habit-name": "What do you want to do regularly",
-    "good-choice": "What is the good choice",
-    "bad-choice": "What is the bad choice",
-    "repeat-days": "On what days you want to do it",
-    "repeat-hours": "What time do you want to do it"
-  },
-  "input": {
-    "habit-name": "Habit name",
-    "good-choice": "Good choice",
-    "bad-choice": "Bad choice"
+    "habit-name": "What do you want to do regularly?",
+    "good-choice": "What is the good choice?",
+    "bad-choice": "What is the bad choice?",
+    "repeat-days": "On what days you want to do it?",
+    "repeat-hours": "What time do you want to do it?",
+    "duration": "How long do you want to do it?"
   },
   "onboarding": {
     "welcome": "Welcome",

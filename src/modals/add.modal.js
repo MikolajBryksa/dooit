@@ -28,8 +28,9 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
   const [badChoice, setBadChoice] = useState('');
   const [repeatDays, setRepeatDays] = useState([]);
   const [repeatHours, setRepeatHours] = useState([]);
+  const [duration, setDuration] = useState(0);
 
-  const maxSteps = 5;
+  const maxSteps = 6;
 
   const resetInputs = () => {
     setHabitName('');
@@ -37,6 +38,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
     setBadChoice('');
     setRepeatDays([]);
     setRepeatHours([]);
+    setDuration(0);
     setStep(1);
   };
 
@@ -50,7 +52,14 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
 
   const handleSave = async () => {
     try {
-      addHabit(habitName, goodChoice, badChoice, repeatDays, repeatHours);
+      addHabit(
+        habitName,
+        goodChoice,
+        badChoice,
+        repeatDays,
+        repeatHours,
+        duration,
+      );
       fetchHabits();
       onDismiss();
       setTimeout(() => {
@@ -77,6 +86,8 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
         return repeatDays.length > 0;
       case 5:
         return repeatHours.length > 0;
+      case 6:
+        return duration > 0;
       default:
         return false;
     }
@@ -107,7 +118,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
               <Text variant="bodyMedium">{t('step.habit-name')}</Text>
               <TextInput
                 mode="outlined"
-                label={t('input.habit-name')}
+                label={t('card.habit-name')}
                 value={habitName}
                 onChangeText={setHabitName}
                 maxLength={255}
@@ -120,7 +131,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
               <Text variant="bodyMedium">{t('step.good-choice')}</Text>
               <TextInput
                 mode="outlined"
-                label={t('input.good-choice')}
+                label={t('card.good-choice')}
                 value={goodChoice}
                 onChangeText={setGoodChoice}
                 maxLength={255}
@@ -133,7 +144,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
               <Text variant="bodyMedium">{t('step.bad-choice')}</Text>
               <TextInput
                 mode="outlined"
-                label={t('input.bad-choice')}
+                label={t('card.bad-choice')}
                 value={badChoice}
                 onChangeText={setBadChoice}
                 maxLength={255}
@@ -157,6 +168,20 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
               <HoursSelector
                 repeatHours={repeatHours}
                 setRepeatHours={setRepeatHours}
+              />
+            </>
+          )}
+
+          {step === 6 && (
+            <>
+              <Text variant="bodyMedium">{t('step.duration')}</Text>
+              <TextInput
+                mode="outlined"
+                label={`${t('card.duration')} ${t('card.minutes')}`}
+                value={duration.toString()}
+                onChangeText={text => setDuration(Number(text))}
+                keyboardType="numeric"
+                maxLength={3}
               />
             </>
           )}

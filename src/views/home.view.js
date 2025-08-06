@@ -244,10 +244,8 @@ const HomeView = () => {
             goodChoice={currentHabit.goodChoice}
             badChoice={currentHabit.badChoice}
             score={currentHabit.score}
-            currentStreak={currentHabit.currentStreak}
             level={currentHabit.level}
-            desc={currentHabit.desc}
-            message={currentHabit.message}
+            duration={currentHabit.duration}
             repeatDays={currentHabit.repeatDays}
             repeatHours={currentHabit.repeatHours}
             originalRepeatHours={currentHabit.originalRepeatHours}

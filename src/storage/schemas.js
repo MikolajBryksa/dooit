@@ -13,11 +13,9 @@ Habit.schema = {
     badChoice: 'string',
     score: 'int',
     level: 'int',
-    currentStreak: 'int',
-    desc: 'string?',
-    message: 'string?',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
+    duration: 'int',
     available: 'bool',
   },
 };
@@ -41,7 +39,7 @@ Settings.schema = {
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 7,
+  schemaVersion: 8,
   deleteRealmIfMigrationNeeded: true,
 };
 

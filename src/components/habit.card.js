@@ -22,9 +22,7 @@ const HabitCard = ({
   badChoice,
   score,
   level,
-  currentStreak,
-  desc,
-  message,
+  duration,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -51,9 +49,7 @@ const HabitCard = ({
       badChoice,
       score,
       level,
-      currentStreak,
-      desc,
-      message,
+      duration,
       repeatDays,
       repeatHours,
       newAvailable,
@@ -85,9 +81,7 @@ const HabitCard = ({
       badChoice,
       score,
       level,
-      currentStreak,
-      desc,
-      message,
+      duration,
       repeatDays,
       repeatHours,
       available: isAvailable,
@@ -100,9 +94,7 @@ const HabitCard = ({
       updated.badChoice,
       updated.score,
       updated.level,
-      updated.currentStreak,
-      updated.desc,
-      updated.message,
+      updated.duration,
       updated.repeatDays,
       updated.repeatHours,
       updated.available,
@@ -222,15 +214,15 @@ const HabitCard = ({
             </TouchableRipple>
 
             <TouchableRipple
-              onPress={() => openEditModal('currentStreak', currentStreak)}>
+              onPress={() => openEditModal('duration', duration)}>
               <View style={styles.card__row}>
                 <IconButton
-                  icon="fire"
+                  icon="timer"
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />
                 <Text variant="bodyMedium">
-                  {t('card.current-streak')}: {currentStreak}
+                  {t('card.duration')}: {duration}
                 </Text>
               </View>
             </TouchableRipple>
@@ -270,37 +262,6 @@ const HabitCard = ({
                 </View>
               </View>
             </TouchableRipple>
-
-            {desc && (
-              <TouchableRipple onPress={() => openEditModal('desc', desc)}>
-                <View style={styles.card__row}>
-                  <IconButton
-                    icon="information-outline"
-                    size={18}
-                    style={{margin: 0, marginRight: 4}}
-                  />
-                  <Text variant="bodyMedium">
-                    {t('card.desc')}: {desc}
-                  </Text>
-                </View>
-              </TouchableRipple>
-            )}
-
-            {message && (
-              <TouchableRipple
-                onPress={() => openEditModal('message', message)}>
-                <View style={styles.card__row}>
-                  <IconButton
-                    icon="message-outline"
-                    size={18}
-                    style={{margin: 0, marginRight: 4}}
-                  />
-                  <Text variant="bodyMedium">
-                    {t('card.message')}: {message}
-                  </Text>
-                </View>
-              </TouchableRipple>
-            )}
           </Card.Content>
         )}
       </Card>
@@ -318,7 +279,7 @@ const HabitCard = ({
             : undefined
         }
         keyboardType={
-          ['score', 'level', 'currentStreak'].includes(modalField)
+          ['score', 'level', 'duration'].includes(modalField)
             ? 'numeric'
             : 'default'
         }

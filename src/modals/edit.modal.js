@@ -48,7 +48,7 @@ const EditModal = ({
 
   const handleSave = () => {
     let valueToSave = inputValue;
-    const numericFields = ['score', 'level', 'currentStreak'];
+    const numericFields = ['score', 'level', 'duration'];
     if (numericFields.includes(field)) {
       const parsed = parseInt(inputValue, 10);
       valueToSave = isNaN(parsed) ? 0 : parsed;
@@ -92,7 +92,7 @@ const EditModal = ({
               autoFocus
               style={{marginBottom: 16}}
               maxLength={
-                ['score', 'level', 'currentStreak'].includes(field) ? 17 : 255
+                ['score', 'level', 'duration'].includes(field) ? 17 : 255
               }
             />
           )}

@@ -51,10 +51,8 @@
     "badChoice": "Zły wybór",
     "score": "Wynik",
     "level": "Poziom",
-    "current-streak": "Seria",
-    "currentStreak": "Seria",
-    "desc": "Opis",
-    "message": "Wiadomość",
+    "duration": "Czas trwania",
+    "minutes": "(w minutach)",
     "repeat-days": "Dni powtarzania",
     "repeatDays": "Dni powtarzania",
     "repeat-hours": "Godziny powtarzania",
@@ -91,12 +89,8 @@
     "good-choice": "Jaki jest dobry wybór?",
     "bad-choice": "Jaki jest zły wybór?",
     "repeat-days": "W jakie dni chcesz to robić?",
-    "repeat-hours": "O jakiej godzinie chcesz to robić?"
-  },
-  "input": {
-    "habit-name": "Nazwa nawyku",
-    "good-choice": "Dobry wybór",
-    "bad-choice": "Zły wybór"
+    "repeat-hours": "O jakiej godzinie chcesz to robić?",
+    "duration": "Jak długo chcesz to robić?"
   },
   "onboarding": {
     "welcome": "Witaj",

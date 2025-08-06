@@ -16,9 +16,7 @@ const NowCard = ({
   badChoice,
   score,
   level,
-  currentStreak,
-  desc,
-  message,
+  duration,
   repeatDays = [],
   repeatHours = [],
   originalRepeatHours = [],
@@ -36,7 +34,6 @@ const NowCard = ({
   const handleGoodChoice = () => {
     let newScore = score + 1;
     let newLevel = level;
-    const newCurrentStreak = currentStreak + 1;
 
     const nextLevelThreshold =
       LEVEL_THRESHOLDS[level - 1] ||
@@ -54,9 +51,7 @@ const NowCard = ({
       badChoice,
       newScore,
       newLevel,
-      newCurrentStreak,
-      desc,
-      message,
+      duration,
       repeatDays,
       originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
       available,
@@ -72,7 +67,6 @@ const NowCard = ({
 
   const handleBadChoice = () => {
     const newScore = Math.max(0, score - 1);
-    const newCurrentStreak = 0;
 
     setSelectedChoice('bad');
 
@@ -83,9 +77,7 @@ const NowCard = ({
       badChoice,
       newScore,
       level,
-      newCurrentStreak,
-      desc,
-      message,
+      duration,
       repeatDays,
       originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
       available,
@@ -160,40 +152,14 @@ const NowCard = ({
 
           <View style={styles.card__row}>
             <IconButton
-              icon="fire"
+              icon="timer"
               size={18}
               style={{margin: 0, marginRight: 4}}
             />
             <Text variant="bodyMedium">
-              {t('card.current-streak')}: {currentStreak}
+              {t('card.duration')}: {duration}
             </Text>
           </View>
-
-          {desc && (
-            <View style={styles.card__row}>
-              <IconButton
-                icon="information-outline"
-                size={18}
-                style={{margin: 0, marginRight: 4}}
-              />
-              <Text variant="bodyMedium">
-                {t('card.desc')}: {desc}
-              </Text>
-            </View>
-          )}
-
-          {message && (
-            <View style={styles.card__row}>
-              <IconButton
-                icon="message-outline"
-                size={18}
-                style={{margin: 0, marginRight: 4}}
-              />
-              <Text variant="bodyMedium">
-                {t('card.message')}: {message}
-              </Text>
-            </View>
-          )}
         </Card.Content>
         <View style={styles.gap} />
         <Card.Content style={styles.card__buttons}>
