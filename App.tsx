@@ -24,7 +24,6 @@ import {useStyles} from './src/styles';
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
-  const settings = useSelector((state: any) => state.settings);
   const styles = useStyles();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -32,6 +31,7 @@ function AppContent() {
   const {t} = useTranslation();
 
   useEffect(() => {
+    const start = Date.now();
     async function loadData() {
       const settings = getSettings();
       if (settings) {
@@ -46,13 +46,16 @@ function AppContent() {
         i18next.changeLanguage(newLocale);
         LocaleConfig.defaultLocale = newLocale;
       }
+      setTimeout(
+        () => setLoading(false),
+        Math.max(0, 800 - (Date.now() - start)),
+      );
     }
-
     loadData();
   }, []);
 
   if (loading) {
-    return <LoadingView setLoading={setLoading} />;
+    return <LoadingView />;
   }
 
   if (showOnboarding) {
