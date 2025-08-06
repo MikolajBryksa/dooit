@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import {View} from 'react-native';
 import {Chip, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -20,9 +20,10 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
     sun: t('date.sunday'),
   };
 
-  const daily = firstDay === 'sun'
-    ? ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  const daily =
+    firstDay === 'sun'
+      ? ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+      : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
   const weekend = ['sat', 'sun'];
 
@@ -54,11 +55,10 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         <Chip
           mode="outlined"
           onPress={() =>
-            setRepeatDays(prevState =>
-              workdays.every(day => prevState.includes(day))
-                ? prevState.filter(day => !workdays.includes(day))
-                : [...new Set([...prevState, ...workdays])],
-            )
+            setRepeatDays(prevState => {
+              const newDays = workdays;
+              return newDays;
+            })
           }
           style={styles.daysSelector__chip}>
           {t('date.workdays')}
@@ -66,11 +66,9 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         <Chip
           mode="outlined"
           onPress={() =>
-            setRepeatDays(prevState =>
-              weekend.every(day => prevState.includes(day))
-                ? prevState.filter(day => !weekend.includes(day))
-                : [...new Set([...prevState, ...weekend])],
-            )
+            setRepeatDays(prevState => {
+              return weekend;
+            })
           }
           style={styles.daysSelector__chip}>
           {t('date.weekend')}

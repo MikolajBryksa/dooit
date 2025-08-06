@@ -222,7 +222,7 @@ const HabitCard = ({
                   style={{margin: 0, marginRight: 4}}
                 />
                 <Text variant="bodyMedium">
-                  {t('card.duration')}: {duration}
+                  {t('card.duration')}: {duration} min
                 </Text>
               </View>
             </TouchableRipple>

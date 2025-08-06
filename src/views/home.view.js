@@ -206,7 +206,7 @@ const HomeView = () => {
               <Chip
                 icon="refresh"
                 mode="outlined"
-                disabled={disabledFinal}
+                disabled={false}
                 onPress={() => {
                   setCurrentItemAll(0);
                   fetchHabits();
@@ -257,6 +257,7 @@ const HomeView = () => {
               timeStringToSeconds(currentHabit.currentHour) <=
                 timeStringToSeconds(currentTime)
             }
+            currentTime={currentTime}
           />
         ) : null}
         <View style={styles.gap} />

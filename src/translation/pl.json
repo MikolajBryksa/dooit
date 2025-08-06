@@ -59,7 +59,8 @@
     "repeatHours": "Godziny powtarzania",
     "available": "Dostępne",
     "done": "Wszystko zrobione!",
-    "start": "Zacznij"
+    "start": "Zacznij",
+    "finish": "Dalej"
   },
   "date": {
     "daily": "Codziennie",

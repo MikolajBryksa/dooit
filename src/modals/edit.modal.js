@@ -83,7 +83,31 @@ const EditModal = ({
             />
           )}
 
-          {field !== 'repeatDays' && field !== 'repeatHours' && (
+          {field === 'duration' && (
+            <TextInput
+              mode="outlined"
+              value={inputValue?.toString()}
+              onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
+              keyboardType="numeric"
+              autoFocus
+              style={{marginBottom: 16}}
+              maxLength={3}
+            />
+          )}
+
+          {['score', 'level'].includes(field) && (
+            <TextInput
+              mode="outlined"
+              value={inputValue?.toString()}
+              onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
+              keyboardType="numeric"
+              autoFocus
+              style={{marginBottom: 16}}
+              maxLength={17}
+            />
+          )}
+
+          {['habitName', 'goodChoice', 'badChoice'].includes(field) && (
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}
@@ -91,9 +115,7 @@ const EditModal = ({
               keyboardType={keyboardType}
               autoFocus
               style={{marginBottom: 16}}
-              maxLength={
-                ['score', 'level', 'duration'].includes(field) ? 17 : 255
-              }
+              maxLength={255}
             />
           )}
           <Card.Actions>

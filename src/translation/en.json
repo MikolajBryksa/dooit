@@ -59,7 +59,8 @@
     "repeatHours": "Repeat Hours",
     "available": "Available",
     "done": "All done for today!",
-    "start": "Start"
+    "start": "Start",
+    "finish": "Next"
   },
   "date": {
     "daily": "Daily",

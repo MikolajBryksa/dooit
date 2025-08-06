@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {LEVEL_THRESHOLDS} from '@/constants';
+import React, {useEffect, useState} from 'react';
 import {Card, Text, Chip, IconButton} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
@@ -7,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
 import {useSelector} from 'react-redux';
-import {formatHourString} from '@/utils';
+import {formatHourString, getFormattedTime} from '@/utils';
 
 const NowCard = ({
   id,
@@ -30,19 +29,76 @@ const NowCard = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [currentTime, setCurrentTime] = useState(getFormattedTime(false));
+  const [endTime, setEndTime] = useState(getFormattedTime(false));
+
+  useEffect(() => {
+    if (repeatHours && repeatHours.length > 0 && duration) {
+      const [hour, minute] = repeatHours[0].split(':').map(Number);
+      const totalMinutes = hour * 60 + minute + Number(duration);
+      const endHour = Math.floor(totalMinutes / 60);
+      const endMinute = totalMinutes % 60;
+      setEndTime(
+        `${endHour.toString().padStart(2, '0')}:${endMinute
+          .toString()
+          .padStart(2, '0')}`,
+      );
+    }
+  }, [repeatHours, duration]);
+
+  useEffect(() => {
+    const updateTime = () => {
+      setCurrentTime(getFormattedTime(false));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentTime >= endTime) {
+      onChoice();
+    }
+  }, [currentTime, endTime]);
+
+  const handleSkipHabit = () => {
+    if (onChoice) {
+      onChoice();
+    }
+  };
 
   const handleGoodChoice = () => {
-    let newScore = score + 1;
-    let newLevel = level;
+    setSelectedChoice('good');
+  };
 
-    const nextLevelThreshold =
-      LEVEL_THRESHOLDS[level - 1] ||
-      LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1];
-    if (newScore >= nextLevelThreshold) {
-      newLevel = level + 1;
+  const handleBadChoice = () => {
+    setSelectedChoice('bad');
+  };
+
+  const saveChoice = () => {
+    let newScore;
+    if (selectedChoice === 'good') {
+      newScore = score + 1;
+    } else {
+      newScore = Math.max(0, score - 1);
     }
 
-    setSelectedChoice('good');
+    const isLastRepetition =
+      originalRepeatHours.length > 0 &&
+      repeatHours[0] === originalRepeatHours[originalRepeatHours.length - 1];
+
+    let newLevel = level;
+    if (isLastRepetition) {
+      if (newScore == originalRepeatHours.length) {
+        newLevel = level + 1;
+      } else if (newScore == 0) {
+        newLevel = level - 1;
+      } else {
+        newLevel = level;
+      }
+      newScore = 0;
+    }
 
     updateHabit(
       id,
@@ -57,45 +113,17 @@ const NowCard = ({
       available,
     );
     fetchHabits();
+  };
 
-    if (onChoice) {
+  useEffect(() => {
+    if (selectedChoice) {
       setTimeout(() => {
-        onChoice();
-      }, 500);
+        saveChoice();
+        setSelectedChoice(null);
+        setIsProcessing(false);
+      }, 1500);
     }
-  };
-
-  const handleBadChoice = () => {
-    const newScore = Math.max(0, score - 1);
-
-    setSelectedChoice('bad');
-
-    updateHabit(
-      id,
-      habitName,
-      goodChoice,
-      badChoice,
-      newScore,
-      level,
-      duration,
-      repeatDays,
-      originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
-      available,
-    );
-    fetchHabits();
-
-    if (onChoice) {
-      setTimeout(() => {
-        onChoice();
-      }, 500);
-    }
-  };
-
-  const handleSkipHabit = () => {
-    if (onChoice) {
-      onChoice();
-    }
-  };
+  }, [selectedChoice]);
 
   return (
     <>
@@ -133,9 +161,7 @@ const NowCard = ({
               style={{margin: 0, marginRight: 4}}
             />
             <Text variant="bodyMedium">
-              {t('card.score')}: {score} /{' '}
-              {LEVEL_THRESHOLDS[level - 1] ||
-                LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]}
+              {t('card.score')}: {score} / {originalRepeatHours.length}
             </Text>
           </View>
 
@@ -163,20 +189,28 @@ const NowCard = ({
         </Card.Content>
         <View style={styles.gap} />
         <Card.Content style={styles.card__buttons}>
-          <Chip
-            mode="outlined"
-            selected={selectedChoice === 'bad'}
-            onPress={handleBadChoice}
-            style={styles.chip}>
-            {badChoice}
-          </Chip>
-          <Chip
-            mode="outlined"
-            selected={selectedChoice === 'good'}
-            onPress={handleGoodChoice}
-            style={styles.chip}>
-            {goodChoice}
-          </Chip>
+          {isProcessing ? (
+            <>
+              <Chip
+                mode="outlined"
+                selected={selectedChoice === 'bad'}
+                onPress={handleBadChoice}
+                style={styles.chip}>
+                {badChoice}
+              </Chip>
+              <Chip
+                mode="outlined"
+                selected={selectedChoice === 'good'}
+                onPress={handleGoodChoice}
+                style={styles.chip}>
+                {goodChoice}
+              </Chip>
+            </>
+          ) : (
+            <Chip mode="outlined" onPress={handleSkipHabit} style={styles.chip}>
+              {t('card.finish')}
+            </Chip>
+          )}
         </Card.Content>
       </Card>
 

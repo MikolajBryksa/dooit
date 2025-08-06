@@ -8,4 +8,3 @@ export const dayFullMap = {
   sat: 'saturday',
   sun: 'sunday',
 };
-export const LEVEL_THRESHOLDS = [3, 7, 14, 31, 60, 90, 120, 180, 270, 365];
