@@ -60,7 +60,8 @@
     "available": "Dostępne",
     "done": "Wszystko zrobione!",
     "start": "Zacznij",
-    "finish": "Dalej"
+    "finish": "Dalej",
+    "remaining": "Pozostało"
   },
   "date": {
     "daily": "Codziennie",

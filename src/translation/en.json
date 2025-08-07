@@ -60,7 +60,8 @@
     "available": "Available",
     "done": "All done for today!",
     "start": "Start",
-    "finish": "Next"
+    "finish": "Next",
+    "remaining": "Remaining"
   },
   "date": {
     "daily": "Daily",

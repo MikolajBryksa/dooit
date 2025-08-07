@@ -64,9 +64,11 @@ const SettingsView = () => {
       settingsStatus.authorizationStatus === 1 ||
       settingsStatus.authorizationStatus === 2;
     setNotifications(granted);
-    updateSettingValue('notifications', granted);
-    const updatedSettings = {...settings, notifications: granted};
-    dispatch(setSettings(updatedSettings));
+    if (settings.notifications !== granted) {
+      updateSettingValue('notifications', granted);
+      const updatedSettings = {...settings, notifications: granted};
+      dispatch(setSettings(updatedSettings));
+    }
   };
 
   useEffect(() => {

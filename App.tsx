@@ -33,26 +33,36 @@ function AppContent() {
   useEffect(() => {
     const start = Date.now();
     async function loadData() {
-      const settings = getSettings();
-      if (settings) {
+      try {
+        const settings = getSettings();
+
+        if (!settings) {
+          console.error('Settings not found in database');
+          return;
+        }
+
         dispatch(setSettings(settings));
 
         if (typeof settings.currentItem === 'number') {
           dispatch({type: 'SET_CURRENT_ITEM', payload: settings.currentItem});
         }
+
         settings.firstLaunch && setShowOnboarding(true);
 
         const newLocale = settings.language as string;
         i18next.changeLanguage(newLocale);
         LocaleConfig.defaultLocale = newLocale;
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      } finally {
+        const elapsed = Date.now() - start;
+        const remainingTime = Math.max(0, 800 - elapsed);
+        setTimeout(() => setLoading(false), remainingTime);
       }
-      setTimeout(
-        () => setLoading(false),
-        Math.max(0, 800 - (Date.now() - start)),
-      );
     }
+
     loadData();
-  }, []);
+  }, [dispatch]);
 
   if (loading) {
     return <LoadingView />;
@@ -146,20 +156,10 @@ function AppContent() {
 }
 
 function App(): React.JSX.Element {
-  const reduxTheme = useSelector((state: any) => state.settings.currentTheme);
+  const settings = useSelector((state: any) => state.settings);
   const systemTheme = useColorScheme();
-  let currentTheme = reduxTheme;
-
-  if (!currentTheme) {
-    const settings = getSettings();
-    if (settings && settings.currentTheme) {
-      currentTheme = settings.currentTheme;
-    } else {
-      currentTheme = systemTheme;
-    }
-  }
-
-  const theme = getTheme(currentTheme);
+  let currentTheme = settings?.currentTheme || systemTheme;
+  const theme: any = getTheme(currentTheme);
 
   return (
     <PaperProvider theme={theme}>

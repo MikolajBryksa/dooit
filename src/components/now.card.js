@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Text, Chip, IconButton} from 'react-native-paper';
+import {Card, Text, Chip, IconButton, ProgressBar} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
 import {useSelector} from 'react-redux';
-import {formatHourString, getFormattedTime} from '@/utils';
+import {formatHourString, getFormattedTime, timeStringToSeconds} from '@/utils';
 
 const NowCard = ({
   id,
@@ -29,43 +29,82 @@ const NowCard = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(true);
+  const [processed, setProcessed] = useState(false);
   const [currentTime, setCurrentTime] = useState(getFormattedTime(false));
-  const [endTime, setEndTime] = useState(getFormattedTime(false));
+  const [endTime, setEndTime] = useState();
+  const [progressValue, setProgressValue] = useState(0);
+  const [remainingTime, setRemainingTime] = useState('');
 
   useEffect(() => {
     if (repeatHours && repeatHours.length > 0 && duration) {
       const [hour, minute] = repeatHours[0].split(':').map(Number);
-      const totalMinutes = hour * 60 + minute + Number(duration);
-      const endHour = Math.floor(totalMinutes / 60);
-      const endMinute = totalMinutes % 60;
-      setEndTime(
-        `${endHour.toString().padStart(2, '0')}:${endMinute
-          .toString()
-          .padStart(2, '0')}`,
-      );
+      const durationInSeconds = Number(duration) * 60;
+      const totalSeconds = hour * 3600 + minute * 60 + durationInSeconds;
+
+      const endHour = Math.floor(totalSeconds / 3600);
+      const endMinute = Math.floor((totalSeconds % 3600) / 60);
+      const endSecond = totalSeconds % 60;
+
+      const calculatedEndTime = `${endHour
+        .toString()
+        .padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}:${endSecond
+        .toString()
+        .padStart(2, '0')}`;
+
+      setEndTime(calculatedEndTime);
     }
   }, [repeatHours, duration]);
 
   useEffect(() => {
     const updateTime = () => {
-      setCurrentTime(getFormattedTime(false));
+      setCurrentTime(getFormattedTime(false, true));
     };
     updateTime();
-    const interval = setInterval(updateTime, 5000);
+    const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (currentTime >= endTime) {
+    if (!endTime || !currentTime) return;
+
+    const currentTimeInSeconds = timeStringToSeconds(currentTime);
+    const endTimeInSeconds = timeStringToSeconds(endTime);
+
+    const durationInSeconds = Number(duration) * 60;
+    const startTimeInSeconds = endTimeInSeconds - durationInSeconds;
+
+    const elapsedTime = currentTimeInSeconds - startTimeInSeconds;
+    const progress = Math.min(Math.max(elapsedTime / durationInSeconds, 0), 1);
+    setProgressValue(progress);
+
+    const timeLeftSeconds = Math.max(
+      0,
+      endTimeInSeconds - currentTimeInSeconds,
+    );
+
+    const minutes = Math.floor(timeLeftSeconds / 60);
+    const seconds = Math.floor(timeLeftSeconds % 60);
+    const formattedTimeLeft = `${minutes}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+
+    setRemainingTime(formattedTimeLeft);
+
+    if (currentTimeInSeconds >= endTimeInSeconds) {
       onChoice();
     }
-  }, [currentTime, endTime]);
+  }, [currentTime, endTime, duration, onChoice]);
 
   const handleSkipHabit = () => {
     if (onChoice) {
       onChoice();
     }
+  };
+
+  const handleNextHabit = () => {
+    saveChoice();
+    setSelectedChoice(null);
+    onChoice();
   };
 
   const handleGoodChoice = () => {
@@ -117,11 +156,7 @@ const NowCard = ({
 
   useEffect(() => {
     if (selectedChoice) {
-      setTimeout(() => {
-        saveChoice();
-        setSelectedChoice(null);
-        setIsProcessing(false);
-      }, 1500);
+      setProcessed(true);
     }
   }, [selectedChoice]);
 
@@ -183,31 +218,33 @@ const NowCard = ({
               style={{margin: 0, marginRight: 4}}
             />
             <Text variant="bodyMedium">
-              {t('card.duration')}: {duration}
+              {t('card.remaining')}: {remainingTime}
             </Text>
           </View>
+
+          <ProgressBar
+            progress={progressValue}
+            style={{width: '100%', height: 6}}
+          />
         </Card.Content>
         <View style={styles.gap} />
         <Card.Content style={styles.card__buttons}>
-          {isProcessing ? (
-            <>
-              <Chip
-                mode="outlined"
-                selected={selectedChoice === 'bad'}
-                onPress={handleBadChoice}
-                style={styles.chip}>
-                {badChoice}
-              </Chip>
-              <Chip
-                mode="outlined"
-                selected={selectedChoice === 'good'}
-                onPress={handleGoodChoice}
-                style={styles.chip}>
-                {goodChoice}
-              </Chip>
-            </>
-          ) : (
-            <Chip mode="outlined" onPress={handleSkipHabit} style={styles.chip}>
+          <Chip
+            mode="outlined"
+            selected={selectedChoice === 'bad'}
+            onPress={handleBadChoice}
+            style={styles.chip}>
+            {badChoice}
+          </Chip>
+          <Chip
+            mode="outlined"
+            selected={selectedChoice === 'good'}
+            onPress={handleGoodChoice}
+            style={styles.chip}>
+            {goodChoice}
+          </Chip>
+          {processed && (
+            <Chip mode="outlined" onPress={handleNextHabit} style={styles.chip}>
               {t('card.finish')}
             </Chip>
           )}

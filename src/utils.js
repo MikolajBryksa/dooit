@@ -44,11 +44,12 @@ export function formatDateToYYMMDD(when) {
   return localToday;
 }
 
-export function getFormattedTime(hour12 = false) {
+export function getFormattedTime(hour12 = false, withSeconds = false) {
   const now = new Date();
   return now.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
+    second: withSeconds ? '2-digit' : undefined,
     hour12: hour12,
   });
 }
