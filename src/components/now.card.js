@@ -6,7 +6,13 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
 import {useSelector} from 'react-redux';
-import {formatHourString, getFormattedTime, timeStringToSeconds} from '@/utils';
+import {
+  formatHourString,
+  getFormattedTime,
+  calculateEndTime,
+  calculateProgress,
+  calculateTimeLeft,
+} from '@/utils';
 
 const NowCard = ({
   id,
@@ -37,20 +43,7 @@ const NowCard = ({
 
   useEffect(() => {
     if (repeatHours && repeatHours.length > 0 && duration) {
-      const [hour, minute] = repeatHours[0].split(':').map(Number);
-      const durationInSeconds = Number(duration) * 60;
-      const totalSeconds = hour * 3600 + minute * 60 + durationInSeconds;
-
-      const endHour = Math.floor(totalSeconds / 3600);
-      const endMinute = Math.floor((totalSeconds % 3600) / 60);
-      const endSecond = totalSeconds % 60;
-
-      const calculatedEndTime = `${endHour
-        .toString()
-        .padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}:${endSecond
-        .toString()
-        .padStart(2, '0')}`;
-
+      const calculatedEndTime = calculateEndTime(repeatHours[0], duration);
       setEndTime(calculatedEndTime);
     }
   }, [repeatHours, duration]);
@@ -67,30 +60,17 @@ const NowCard = ({
   useEffect(() => {
     if (!endTime || !currentTime) return;
 
-    const currentTimeInSeconds = timeStringToSeconds(currentTime);
-    const endTimeInSeconds = timeStringToSeconds(endTime);
-
-    const durationInSeconds = Number(duration) * 60;
-    const startTimeInSeconds = endTimeInSeconds - durationInSeconds;
-
-    const elapsedTime = currentTimeInSeconds - startTimeInSeconds;
-    const progress = Math.min(Math.max(elapsedTime / durationInSeconds, 0), 1);
-    setProgressValue(progress);
-
-    const timeLeftSeconds = Math.max(
-      0,
-      endTimeInSeconds - currentTimeInSeconds,
+    const {progress, isFinished} = calculateProgress(
+      currentTime,
+      endTime,
+      duration,
     );
+    const timeLeft = calculateTimeLeft(currentTime, endTime);
 
-    const minutes = Math.floor(timeLeftSeconds / 60);
-    const seconds = Math.floor(timeLeftSeconds % 60);
-    const formattedTimeLeft = `${minutes}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
+    setProgressValue(progress);
+    setRemainingTime(timeLeft);
 
-    setRemainingTime(formattedTimeLeft);
-
-    if (currentTimeInSeconds >= endTimeInSeconds) {
+    if (isFinished) {
       onChoice();
     }
   }, [currentTime, endTime, duration, onChoice]);
