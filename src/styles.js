@@ -55,6 +55,11 @@ export const useStyles = () => {
     card__container: {
       flex: 1,
     },
+    card__center: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: theme.dimensions.padding,
+    },
     card__deactivated: {
       minHeight: theme.dimensions.height,
       width: '100%',
@@ -87,11 +92,16 @@ export const useStyles = () => {
     card__buttons: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: theme.dimensions.margin,
-      marginLeft: 'auto',
+      flex: 1,
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
     chip: {
       borderRadius: 12,
+    },
+    chip__button: {
+      borderRadius: 12,
+      marginBottom: theme.dimensions.margin,
     },
     progressBar: {
       marginVertical: theme.dimensions.margin,

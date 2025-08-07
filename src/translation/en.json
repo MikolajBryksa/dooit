@@ -61,6 +61,7 @@
     "done": "All done for today!",
     "start": "Start",
     "finish": "Next",
+    "begin": "Start",
     "remaining": "Remaining"
   },
   "date": {

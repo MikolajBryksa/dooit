@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
 import {useSelector} from 'react-redux';
+import PieChart from '@/components/pie.chart';
 import {
   formatHourString,
   getFormattedTime,
@@ -35,14 +36,15 @@ const NowCard = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
-  const [processed, setProcessed] = useState(false);
   const [currentTime, setCurrentTime] = useState(getFormattedTime(false));
   const [endTime, setEndTime] = useState();
   const [progressValue, setProgressValue] = useState(0);
   const [remainingTime, setRemainingTime] = useState('');
+  const [displayScore, setDisplayScore] = useState(score);
+  const [displayLevel, setDisplayLevel] = useState(level);
 
   useEffect(() => {
-    if (repeatHours && repeatHours.length > 0 && duration) {
+    if (duration) {
       const calculatedEndTime = calculateEndTime(repeatHours[0], duration);
       setEndTime(calculatedEndTime);
     }
@@ -75,16 +77,15 @@ const NowCard = ({
     }
   }, [currentTime, endTime, duration, onChoice]);
 
+  useEffect(() => {
+    setDisplayScore(score);
+    setDisplayLevel(level);
+  }, [score, level]);
+
   const handleSkipHabit = () => {
     if (onChoice) {
       onChoice();
     }
-  };
-
-  const handleNextHabit = () => {
-    saveChoice();
-    setSelectedChoice(null);
-    onChoice();
   };
 
   const handleGoodChoice = () => {
@@ -102,6 +103,7 @@ const NowCard = ({
     } else {
       newScore = Math.max(0, score - 1);
     }
+    setDisplayScore(newScore);
 
     const isLastRepetition =
       originalRepeatHours.length > 0 &&
@@ -109,125 +111,134 @@ const NowCard = ({
 
     let newLevel = level;
     if (isLastRepetition) {
-      if (newScore == originalRepeatHours.length) {
-        newLevel = level + 1;
-      } else if (newScore == 0) {
-        newLevel = level - 1;
-      } else {
-        newLevel = level;
-      }
-      newScore = 0;
-    }
+      const levelUpThreshold = Math.ceil(originalRepeatHours.length / 2);
 
-    updateHabit(
-      id,
-      habitName,
-      goodChoice,
-      badChoice,
-      newScore,
-      newLevel,
-      duration,
-      repeatDays,
-      originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
-      available,
-    );
-    fetchHabits();
+      if (newScore > levelUpThreshold) {
+        newLevel = level + 1;
+      } else if (newScore === 0) {
+        newLevel = level - 1;
+      }
+
+      setDisplayLevel(newLevel);
+    } else {
+      updateHabit(
+        id,
+        habitName,
+        goodChoice,
+        badChoice,
+        newScore,
+        newLevel,
+        duration,
+        repeatDays,
+        originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
+        available,
+      );
+      fetchHabits();
+    }
+    return {newScore, newLevel, isLastRepetition};
   };
 
   useEffect(() => {
     if (selectedChoice) {
-      setProcessed(true);
+      const result = saveChoice();
+
+      if (result && result.isLastRepetition) {
+        setTimeout(() => {
+          updateHabit(
+            id,
+            habitName,
+            goodChoice,
+            badChoice,
+            0,
+            result.newLevel,
+            duration,
+            repeatDays,
+            originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
+            available,
+          );
+          fetchHabits();
+
+          setSelectedChoice(null);
+          onChoice();
+        }, 1800);
+      } else {
+        setTimeout(() => {
+          setSelectedChoice(null);
+          onChoice();
+        }, 1800);
+      }
     }
   }, [selectedChoice]);
 
   return (
     <>
       <Card style={active ? styles.card : styles.card__deactivated}>
-        <Card.Content style={styles.card__title}>
+        <Card.Content style={styles.card__center}>
           <Text variant="titleMedium">{habitName}</Text>
-          <View style={styles.card__options}>
+          {/* <View style={styles.card__options}>
             <IconButton
               icon="close"
               onPress={() => setSkipDialogVisible(true)}
             />
-          </View>
+          </View> */}
         </Card.Content>
 
-        <Card.Content style={styles.card__container}>
-          <View style={styles.card__row}>
-            <IconButton
-              icon="clock"
-              size={18}
-              style={{margin: 0, marginRight: 4}}
+        <Card.Content style={styles.card__center}>
+          <View style={[styles.card__row, styles.pieChartContainer]}>
+            <PieChart
+              score={displayScore}
+              max={originalRepeatHours.length || 1}
+              level={displayLevel}
+              label={t('card.level')}
+              size={100}
             />
-            <Text variant="bodyMedium">
-              {repeatHours && repeatHours.length > 0
-                ? repeatHours
-                    .map(h => formatHourString(h, clockFormat))
-                    .join(', ')
-                : ''}
-            </Text>
           </View>
 
-          <View style={styles.card__row}>
-            <IconButton
-              icon="chart-line"
-              size={18}
-              style={{margin: 0, marginRight: 4}}
-            />
-            <Text variant="bodyMedium">
-              {t('card.score')}: {score} / {originalRepeatHours.length}
-            </Text>
+          <View style={styles.card__center}>
+            {!active ? (
+              <Text variant="bodyMedium">
+                {t('card.begin')}:{' '}
+                {repeatHours
+                  .map(h => formatHourString(h, clockFormat))
+                  .join(', ')}
+              </Text>
+            ) : (
+              <Text variant="bodyMedium">
+                {t('card.remaining')}: {remainingTime}
+              </Text>
+            )}
           </View>
 
-          <View style={styles.card__row}>
-            <IconButton
-              icon="star"
-              size={18}
-              style={{margin: 0, marginRight: 4}}
+          <View
+            style={{
+              width: '100%',
+            }}>
+            <ProgressBar
+              progress={progressValue}
+              style={{height: 6, borderRadius: 4}}
             />
-            <Text variant="bodyMedium">
-              {t('card.level')}: {level}
-            </Text>
           </View>
-
-          <View style={styles.card__row}>
-            <IconButton
-              icon="timer"
-              size={18}
-              style={{margin: 0, marginRight: 4}}
-            />
-            <Text variant="bodyMedium">
-              {t('card.remaining')}: {remainingTime}
-            </Text>
-          </View>
-
-          <ProgressBar
-            progress={progressValue}
-            style={{width: '100%', height: 6}}
-          />
         </Card.Content>
         <View style={styles.gap} />
         <Card.Content style={styles.card__buttons}>
-          <Chip
-            mode="outlined"
-            selected={selectedChoice === 'bad'}
-            onPress={handleBadChoice}
-            style={styles.chip}>
-            {badChoice}
-          </Chip>
-          <Chip
-            mode="outlined"
-            selected={selectedChoice === 'good'}
-            onPress={handleGoodChoice}
-            style={styles.chip}>
-            {goodChoice}
-          </Chip>
-          {processed && (
-            <Chip mode="outlined" onPress={handleNextHabit} style={styles.chip}>
-              {t('card.finish')}
+          <>
+            <Chip
+              mode="outlined"
+              selected={selectedChoice === 'bad'}
+              onPress={handleBadChoice}
+              disabled={selectedChoice === 'good'}
+              style={styles.chip__button}>
+              {badChoice}
             </Chip>
-          )}
+            <Chip
+              mode="outlined"
+              selected={selectedChoice === 'good'}
+              onPress={handleGoodChoice}
+              disabled={selectedChoice === 'bad'}
+              style={styles.chip__button}>
+              {goodChoice}
+            </Chip>
+          </>
         </Card.Content>
       </Card>
 
