@@ -100,12 +100,12 @@
     "to-app": "w aplikacji Dooit",
     "option": {
       "1": {
-        "title": "Twórz nawyki",
-        "subtitle": "Buduj rutyny, które pozostaną z Tobą i sprawią, że rozwój osobisty stanie się łatwiejszy."
+        "title": "Wyrabiaj nawyki",
+        "subtitle": "Zbuduj rutynę, która przez długi czas będzie korzystnie na Ciebie wpływać."
       },
       "2": {
         "title": "Monitoruj postępy",
-        "subtitle": "Śledź swoją podróż i zobacz, jak daleko zaszedłeś, dzień po dniu."
+        "subtitle": "Śledź swoją podróż i zobacz, jak wiele możesz osiągnąć kadego dnia."
       },
       "3": {
         "title": "Ciesz się życiem",
@@ -114,7 +114,7 @@
     },
     "choose-habits": "Wybierz nawyki",
     "choose": "Wybierz",
-    "which-habits": "Jakie nawyki chcesz stworzyć?",
+    "which-habits": "jakie nawyki chcesz wyrobić",
     "start": "Zacznij"
   },
   "default-habits": {
@@ -145,7 +145,7 @@
     },
     "6": {
       "habitName": "Rozwój",
-      "goodChoice": "Nauka czegoś",
+      "goodChoice": "Nauka",
       "badChoice": "Rutynowa praca"
     },
     "7": {
