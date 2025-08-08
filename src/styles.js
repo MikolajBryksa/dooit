@@ -38,7 +38,7 @@ export const useStyles = () => {
       marginTop: theme.dimensions.padding * 3,
     },
     button: {
-      width: '50%',
+      alignSelf: 'center',
     },
     title: {
       flexDirection: 'row',

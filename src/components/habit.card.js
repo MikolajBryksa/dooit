@@ -187,7 +187,7 @@ const HabitCard = ({
               </View>
             </TouchableRipple>
 
-            <TouchableRipple onPress={() => openEditModal('score', score)}>
+            {/* <TouchableRipple onPress={() => openEditModal('score', score)}>
               <View style={styles.card__row}>
                 <IconButton
                   icon="chart-line"
@@ -198,9 +198,9 @@ const HabitCard = ({
                   {t('card.score')}: {score}
                 </Text>
               </View>
-            </TouchableRipple>
+            </TouchableRipple> */}
 
-            <TouchableRipple onPress={() => openEditModal('level', level)}>
+            {/* <TouchableRipple onPress={() => openEditModal('level', level)}>
               <View style={styles.card__row}>
                 <IconButton
                   icon="star"
@@ -211,7 +211,7 @@ const HabitCard = ({
                   {t('card.level')}: {level}
                 </Text>
               </View>
-            </TouchableRipple>
+            </TouchableRipple> */}
 
             <TouchableRipple
               onPress={() => openEditModal('duration', duration)}>
