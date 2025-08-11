@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {TriggerType} from '@notifee/react-native';
 import {ScrollView, View} from 'react-native';
-import {Appbar, Text, Card, Chip, useTheme} from 'react-native-paper';
+import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -9,7 +9,7 @@ import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
 import PlanDialog from '@/dialogs/plan.dialog';
 import {setHabits, setCurrentItem} from '@/redux/actions';
-import {getHabits} from '@/services/habits.service';
+import {getHabits, resetDailyHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
 import {dayMap} from '@/constants';
@@ -18,7 +18,6 @@ import notifee from '@notifee/react-native';
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const theme = useTheme();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const currentDay = useSelector(state => state.settings.currentDay);
@@ -62,6 +61,7 @@ const HomeView = () => {
     ) {
       dispatch({type: 'SET_SETTINGS', payload: {currentDay: todayKey}});
       updateSettingValue('currentDay', todayKey);
+      resetDailyHabits();
       fetchHabits();
       setCurrentItemAll(0);
     }
@@ -104,14 +104,19 @@ const HomeView = () => {
       availableHabits.forEach(habit => {
         if (habit.repeatHours && habit.repeatHours.length > 0) {
           habit.repeatHours.forEach((hour, index) => {
-            expandedHabits.push({
-              ...habit,
-              id: `${habit.id}_${index}`,
-              originalId: habit.id,
-              originalRepeatHours: habit.repeatHours,
-              currentHour: hour,
-              repeatHours: [hour],
-            });
+            const isCompleted =
+              habit.completedHours && habit.completedHours.includes(hour);
+            if (!isCompleted) {
+              expandedHabits.push({
+                ...habit,
+                id: `${habit.id}_${index}`,
+                originalId: habit.id,
+                originalRepeatHours: habit.repeatHours,
+                currentHour: hour,
+                repeatHours: [hour],
+                repetitionIndex: index,
+              });
+            }
           });
         } else {
           expandedHabits.push({
@@ -119,6 +124,7 @@ const HomeView = () => {
             originalId: habit.id,
             originalRepeatHours: habit.repeatHours,
             currentHour: null,
+            repetitionIndex: null,
           });
         }
       });

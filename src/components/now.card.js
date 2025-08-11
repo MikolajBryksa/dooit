@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Card, Text, Chip, IconButton, ProgressBar} from 'react-native-paper';
 import {View} from 'react-native';
-import {updateHabit} from '@/services/habits.service';
+import {updateHabit, markRepetitionCompleted} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
@@ -141,6 +141,10 @@ const NowCard = ({
   useEffect(() => {
     if (selectedChoice) {
       const result = saveChoice();
+
+      if (repeatHours[0]) {
+        markRepetitionCompleted(id, repeatHours[0]);
+      }
 
       if (result && result.isLastRepetition) {
         setTimeout(() => {

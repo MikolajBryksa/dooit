@@ -24,6 +24,7 @@ export const addHabit = (
       duration,
       repeatDays,
       repeatHours,
+      completedHours: [],
       available: true,
     });
   });
@@ -90,6 +91,7 @@ export const getHabits = () => {
     duration: habit.duration,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
+    completedHours: Array.from(habit.completedHours || []),
     available: habit.available,
   }));
 };
@@ -196,4 +198,36 @@ export const createDefaultHabits = () => {
   });
 
   return createdHabits;
+};
+
+export const resetDailyHabits = () => {
+  const habits = realm.objects('Habit');
+
+  realm.write(() => {
+    habits.forEach(habit => {
+      habit.completedHours = [];
+      habit.score = 0;
+    });
+  });
+};
+
+export const markRepetitionCompleted = (habitId, hour) => {
+  const habit = realm.objectForPrimaryKey('Habit', habitId);
+
+  if (habit) {
+    realm.write(() => {
+      if (!habit.completedHours.includes(hour)) {
+        habit.completedHours.push(hour);
+      }
+    });
+  }
+};
+
+export const isRepetitionCompleted = (habitId, hour) => {
+  const habit = realm.objectForPrimaryKey('Habit', habitId);
+
+  if (habit) {
+    return habit.completedHours.includes(hour);
+  }
+  return false;
 };

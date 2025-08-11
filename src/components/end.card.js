@@ -4,15 +4,15 @@ import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {getFormattedTime} from '@/utils';
+import {resetDailyHabits} from '@/services/habits.service';
 
 const EndCard = ({setCurrentItemAll, fetchHabits}) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const [currentTime, setCurrentTime] = useState(getFormattedTime(false, true));
   const [timeToMidnight, setTimeToMidnight] = useState('');
   const [progressValue, setProgressValue] = useState(0);
 
-  const calculateTimeToMidnight = currentTime => {
+  const calculateTimeToMidnight = () => {
     const now = new Date();
     const midnight = new Date();
     midnight.setHours(24, 0, 0, 0);
@@ -34,10 +34,7 @@ const EndCard = ({setCurrentItemAll, fetchHabits}) => {
 
   useEffect(() => {
     const updateTime = () => {
-      const formattedTime = getFormattedTime(false, true);
-      setCurrentTime(formattedTime);
-
-      const {timeString, progress} = calculateTimeToMidnight(formattedTime);
+      const {timeString, progress} = calculateTimeToMidnight();
       setTimeToMidnight(timeString);
       setProgressValue(progress);
     };
@@ -75,8 +72,9 @@ const EndCard = ({setCurrentItemAll, fetchHabits}) => {
             icon="refresh"
             mode="outlined"
             onPress={() => {
-              setCurrentItemAll(0);
+              resetDailyHabits();
               fetchHabits();
+              setCurrentItemAll(0);
             }}
             style={styles.chip}>
             {t('card.start')}

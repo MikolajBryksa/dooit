@@ -15,6 +15,7 @@ Habit.schema = {
     level: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
+    completedHours: 'string[]',
     duration: 'int',
     available: 'bool',
   },
@@ -39,7 +40,7 @@ Settings.schema = {
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 8,
+  schemaVersion: 9,
   deleteRealmIfMigrationNeeded: true,
 };
 
