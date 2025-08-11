@@ -30,21 +30,40 @@ const HabitsView = () => {
     fetchHabits();
   }, []);
 
+  const getNextAvailableTime = repeatHours => {
+    if (!repeatHours || repeatHours.length === 0) {
+      return '99:99';
+    }
+
+    const now = new Date();
+    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
+
+    const futureHours = repeatHours.filter(hour => hour && hour > currentTime);
+
+    if (futureHours.length > 0) {
+      const sorted = futureHours.sort();
+      return sorted[0] || '99:99';
+    } else {
+      const validHours = repeatHours.filter(hour => hour);
+      const sorted = validHours.sort();
+      return sorted[0] || '99:99';
+    }
+  };
+
   const sortHabits = () => {
     if (habits && habits.length > 0) {
       const sortedHabits = habits.slice().sort((a, b) => {
         if (a.available !== b.available) {
           return a.available ? -1 : 1;
         }
-        const aHour =
-          a.repeatHours && a.repeatHours.length > 0
-            ? a.repeatHours[0]
-            : '99:99';
-        const bHour =
-          b.repeatHours && b.repeatHours.length > 0
-            ? b.repeatHours[0]
-            : '99:99';
-        return aHour.localeCompare(bHour);
+
+        const aNextTime = getNextAvailableTime(a.repeatHours);
+        const bNextTime = getNextAvailableTime(b.repeatHours);
+
+        return aNextTime.localeCompare(bNextTime);
       });
       setSortedHabits(sortedHabits);
     }

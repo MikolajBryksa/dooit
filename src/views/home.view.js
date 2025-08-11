@@ -131,7 +131,57 @@ const HomeView = () => {
 
   useEffect(() => {
     filterHabits();
+  }, [habits, todayKey]);
+
+  useEffect(() => {
+    if (filteredHabits.length === 0 && currentHabitIndex !== -1) {
+      setCurrentItemAll(-1);
+    } else if (
+      filteredHabits.length > 0 &&
+      currentHabitIndex >= filteredHabits.length
+    ) {
+      const firstAvailableIndex = filteredHabits.findIndex(
+        habit => habit.available,
+      );
+      setCurrentItemAll(firstAvailableIndex !== -1 ? firstAvailableIndex : -1);
+    }
   }, [habits]);
+
+  useEffect(() => {
+    if (filteredHabits.length > 0) {
+      if (currentHabitIndex >= filteredHabits.length) {
+        setCurrentItemAll(0);
+        return;
+      }
+
+      if (currentHabitIndex < 0) {
+        setCurrentItemAll(0);
+        return;
+      }
+
+      const currentHabit = filteredHabits[currentHabitIndex];
+      if (!currentHabit?.available) {
+        const nextAvailableIndex = filteredHabits.findIndex(
+          (habit, index) => index > currentHabitIndex && habit.available,
+        );
+
+        if (nextAvailableIndex !== -1) {
+          setCurrentItemAll(nextAvailableIndex);
+        } else {
+          const firstAvailableIndex = filteredHabits.findIndex(
+            habit => habit.available,
+          );
+          if (firstAvailableIndex !== -1) {
+            setCurrentItemAll(firstAvailableIndex);
+          } else {
+            setCurrentItemAll(-1);
+          }
+        }
+      }
+    } else if (currentHabitIndex !== -1) {
+      setCurrentItemAll(-1);
+    }
+  }, [filteredHabits.length]);
 
   useEffect(() => {
     (async () => {
