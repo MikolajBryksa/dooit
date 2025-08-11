@@ -99,7 +99,18 @@ const EditModal = ({
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}
-              onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
+              onChangeText={text => {
+                const numericValue = text.replace(/[^0-9]/g, '');
+                const parsedValue = parseInt(numericValue, 10);
+
+                if (isNaN(parsedValue)) {
+                  setInputValue('');
+                } else if (parsedValue > 999) {
+                  setInputValue('999');
+                } else {
+                  setInputValue(numericValue);
+                }
+              }}
               keyboardType="numeric"
               autoFocus
               style={{marginBottom: 16}}
