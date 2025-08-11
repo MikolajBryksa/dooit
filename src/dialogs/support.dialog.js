@@ -18,7 +18,7 @@ const SupportDialog = ({visible, onDismiss, onDone}) => {
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>{t('title.support')}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium">{t('message.support')}?</Text>
+          <Text variant="bodyMedium">{t('message.support')}</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onDismiss}>{t('button.cancel')}</Button>

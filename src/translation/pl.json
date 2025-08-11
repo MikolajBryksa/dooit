@@ -27,14 +27,15 @@
     "disabled": "Wyłączone"
   },
   "message": {
-    "delete": "Czy na pewno chcesz usunąć nawyk",
-    "skip": "Czy na pewno chcesz pominąć nawyk",
+    "delete": "Czy na pewno chcesz usunąć nawyk?",
+    "skip": "Czy na pewno chcesz pominąć nawyk?",
     "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
     "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?"
   },
   "button": {
     "delete": "Usuń",
     "cancel": "Anuluj",
+    "close": "Zamknij",
     "contact": "Kontakt",
     "support": "Wsparcie",
     "save": "Zapisz",
@@ -58,7 +59,7 @@
     "repeat-hours": "Godziny powtarzania",
     "repeatHours": "Godziny powtarzania",
     "available": "Dostępne",
-    "done": "Wszystko zrobione!",
+    "done": "Wszystko na dzisiaj zrobione!",
     "start": "Zacznij",
     "finish": "Dalej",
     "begin": "Początek",

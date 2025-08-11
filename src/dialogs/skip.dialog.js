@@ -22,7 +22,7 @@ const SkipDialog = ({
         <Dialog.Title>{t('title.skip')}</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">
-            {t('message.skip')} "{habitName}"?
+            {t('message.skip')} "{habitName}"
           </Text>
         </Dialog.Content>
         <Dialog.Actions>

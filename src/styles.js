@@ -116,6 +116,9 @@ export const useStyles = () => {
       paddingBottom: theme.dimensions.padding,
       borderRadius: 12,
     },
+    plan: {
+      maxHeight: 400,
+    },
     daysSelector__container: {
       justifyContent: 'flex-end',
       alignItems: 'center',

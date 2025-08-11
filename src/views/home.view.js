@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import NowCard from '@/components/now.card';
-import AddModal from '@/modals/add.modal';
+import PlanDialog from '@/dialogs/plan.dialog';
 import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
@@ -27,8 +27,11 @@ const HomeView = () => {
   const [filteredHabits, setFilteredHabits] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
   const [todayKey, setTodayKey] = useState('');
-  const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [disabledFinal, setDisabledFinal] = useState(true);
+  const [visiblePlanDialog, setVisiblePlanDialog] = useState(false);
+
+  const handlePlanDialog = () => {
+    setVisiblePlanDialog(!visiblePlanDialog);
+  };
 
   const setCurrentItemAll = useCallback(
     value => {
@@ -50,16 +53,18 @@ const HomeView = () => {
   }, []);
 
   useEffect(() => {
-    if (todayKey && currentDay && todayKey !== currentDay) {
-      setDisabledFinal(false);
+    if (
+      todayKey &&
+      currentDay &&
+      todayKey !== currentDay &&
+      currentHabitIndex === -1
+    ) {
       dispatch({type: 'SET_SETTINGS', payload: {currentDay: todayKey}});
       updateSettingValue('currentDay', todayKey);
+      fetchHabits();
+      setCurrentItemAll(0);
     }
-  }, [todayKey, currentDay, dispatch]);
-
-  const handleAddModal = () => {
-    setVisibleAddModal(!visibleAddModal);
-  };
+  }, [todayKey, currentDay, currentHabitIndex, dispatch]);
 
   const fetchHabits = () => {
     const habits = getHabits() || [];
@@ -141,12 +146,9 @@ const HomeView = () => {
       filteredHabits.length > 0 &&
       currentHabitIndex >= filteredHabits.length
     ) {
-      const firstAvailableIndex = filteredHabits.findIndex(
-        habit => habit.available,
-      );
-      setCurrentItemAll(firstAvailableIndex !== -1 ? firstAvailableIndex : -1);
+      setCurrentItemAll(-1);
     }
-  }, [habits]);
+  }, [filteredHabits.length, currentHabitIndex]);
 
   useEffect(() => {
     if (filteredHabits.length > 0) {
@@ -226,14 +228,6 @@ const HomeView = () => {
     })();
   }, [filteredHabits]);
 
-  useEffect(() => {
-    if (
-      filteredHabits.length > 0 &&
-      currentHabitIndex >= filteredHabits.length
-    ) {
-    }
-  }, [filteredHabits, currentHabitIndex, dispatch]);
-
   const currentHabit =
     filteredHabits.length > 0 &&
     typeof currentHabitIndex === 'number' &&
@@ -246,6 +240,13 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
+
+        <Appbar.Action
+          icon="format-list-bulleted"
+          onPress={() => {
+            handlePlanDialog();
+          }}
+        />
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
@@ -253,39 +254,6 @@ const HomeView = () => {
           <Card style={styles.card}>
             <Card.Content style={styles.card__title}>
               <Text variant="titleMedium">{t('card.done')}</Text>
-
-              <Chip
-                icon="refresh"
-                mode="outlined"
-                // disabled={disabledFinal}
-                disabled={false}
-                onPress={() => {
-                  setCurrentItemAll(0);
-                  fetchHabits();
-                  setDisabledFinal(true);
-                }}
-                style={styles.chip}>
-                {(() => {
-                  const tomorrowKey =
-                    dayMap[(dayMap.indexOf(todayKey) + 1) % dayMap.length];
-                  return `${t('card.start')} ${t(
-                    `date.${dayFullMap[tomorrowKey]}`,
-                  )}`;
-                })()}
-              </Chip>
-            </Card.Content>
-          </Card>
-        ) : filteredHabits.length === 0 ? (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('title.no-habits')}</Text>
-              <Chip
-                icon="plus"
-                mode="outlined"
-                onPress={handleAddModal}
-                style={styles.chip}>
-                {t(`title.add`)}
-              </Chip>
             </Card.Content>
           </Card>
         ) : currentHabit ? (
@@ -312,28 +280,19 @@ const HomeView = () => {
           />
         ) : null}
 
-        {filteredHabits.length > 0 && (
+        {currentHabitIndex === -1 && (
           <Card style={styles.card}>
             <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">
-                {t(`date.${dayFullMap[todayKey] || dayFullMap[currentDay]}`)}
-              </Text>
-            </Card.Content>
-            <Card.Content>
-              {filteredHabits.map((habit, index) => (
-                <View key={habit.id} style={styles.habitListItem}>
-                  <Text
-                    variant="bodyMedium"
-                    style={[
-                      styles.habitListText,
-                      index === currentHabitIndex && {
-                        color: theme.colors.primary,
-                      },
-                    ]}>
-                    {habit.currentHour} {habit.habitName}
-                  </Text>
-                </View>
-              ))}
+              <Chip
+                icon="refresh"
+                mode="outlined"
+                onPress={() => {
+                  setCurrentItemAll(0);
+                  fetchHabits();
+                }}
+                style={styles.chip}>
+                {t('card.start')}
+              </Chip>
             </Card.Content>
           </Card>
         )}
@@ -341,10 +300,12 @@ const HomeView = () => {
         <View style={styles.gap} />
       </ScrollView>
 
-      <AddModal
-        visible={visibleAddModal}
-        onDismiss={handleAddModal}
-        fetchHabits={fetchHabits}
+      <PlanDialog
+        visible={visiblePlanDialog}
+        onDismiss={handlePlanDialog}
+        filteredHabits={filteredHabits}
+        currentHabitIndex={currentHabitIndex}
+        currentDay={currentDay}
       />
     </>
   );

@@ -18,7 +18,7 @@ const ContactDialog = ({visible, onDismiss, onDone}) => {
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>{t('title.contact')}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium">{t('message.contact')}?</Text>
+          <Text variant="bodyMedium">{t('message.contact')}</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onDismiss}>{t('button.cancel')}</Button>
