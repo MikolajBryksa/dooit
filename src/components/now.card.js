@@ -113,10 +113,10 @@ const NowCard = ({
     if (isLastRepetition) {
       const levelUpThreshold = Math.ceil(originalRepeatHours.length / 2);
 
-      if (newScore > levelUpThreshold) {
+      if (newScore >= levelUpThreshold) {
         newLevel = level + 1;
-      } else if (newScore === 0) {
-        newLevel = level - 1;
+      } else if (newScore === 0 && level > 0) {
+        newLevel = Math.max(0, level - 1);
       }
 
       setDisplayLevel(newLevel);
