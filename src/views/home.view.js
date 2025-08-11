@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {TriggerType} from '@notifee/react-native';
 import {ScrollView, View} from 'react-native';
-import {Appbar, Text, Card, Chip} from 'react-native-paper';
+import {Appbar, Text, Card, Chip, useTheme} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -17,6 +17,7 @@ import notifee from '@notifee/react-native';
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const theme = useTheme();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const currentDay = useSelector(state => state.settings.currentDay);
@@ -310,6 +311,33 @@ const HomeView = () => {
             }
           />
         ) : null}
+
+        {filteredHabits.length > 0 && (
+          <Card style={styles.card}>
+            <Card.Content style={styles.card__title}>
+              <Text variant="titleMedium">
+                {t(`date.${dayFullMap[todayKey] || dayFullMap[currentDay]}`)}
+              </Text>
+            </Card.Content>
+            <Card.Content>
+              {filteredHabits.map((habit, index) => (
+                <View key={habit.id} style={styles.habitListItem}>
+                  <Text
+                    variant="bodyMedium"
+                    style={[
+                      styles.habitListText,
+                      index === currentHabitIndex && {
+                        color: theme.colors.primary,
+                      },
+                    ]}>
+                    {habit.currentHour} {habit.habitName}
+                  </Text>
+                </View>
+              ))}
+            </Card.Content>
+          </Card>
+        )}
+
         <View style={styles.gap} />
       </ScrollView>
 
