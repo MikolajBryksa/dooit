@@ -63,7 +63,8 @@
     "start": "Start",
     "finish": "Next",
     "begin": "Start",
-    "remaining": "Remaining"
+    "remaining": "Remaining",
+    "remaining-new-day": "Time until new day"
   },
   "date": {
     "daily": "Daily",

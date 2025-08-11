@@ -6,12 +6,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import NowCard from '@/components/now.card';
+import EndCard from '@/components/end.card';
 import PlanDialog from '@/dialogs/plan.dialog';
 import {setHabits, setCurrentItem} from '@/redux/actions';
 import {getHabits} from '@/services/habits.service';
 import {updateSettingValue} from '@/services/settings.service';
 import {getFormattedTime, timeStringToSeconds} from '@/utils';
-import {dayMap, dayFullMap} from '@/constants';
+import {dayMap} from '@/constants';
 import notifee from '@notifee/react-native';
 
 const HomeView = () => {
@@ -48,7 +49,7 @@ const HomeView = () => {
       setTodayKey(dayMap[jsDay]);
     };
     updateDateTime();
-    const interval = setInterval(updateDateTime, 3000);
+    const interval = setInterval(updateDateTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -251,11 +252,10 @@ const HomeView = () => {
 
       <ScrollView style={styles.container}>
         {currentHabitIndex === -1 ? (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('card.done')}</Text>
-            </Card.Content>
-          </Card>
+          <EndCard
+            setCurrentItemAll={setCurrentItemAll}
+            fetchHabits={fetchHabits}
+          />
         ) : currentHabit ? (
           <NowCard
             key={currentHabit.id}
@@ -279,24 +279,6 @@ const HomeView = () => {
             }
           />
         ) : null}
-
-        {currentHabitIndex === -1 && (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Chip
-                icon="refresh"
-                mode="outlined"
-                onPress={() => {
-                  setCurrentItemAll(0);
-                  fetchHabits();
-                }}
-                style={styles.chip}>
-                {t('card.start')}
-              </Chip>
-            </Card.Content>
-          </Card>
-        )}
-
         <View style={styles.gap} />
       </ScrollView>
 

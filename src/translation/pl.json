@@ -63,7 +63,8 @@
     "start": "Zacznij",
     "finish": "Dalej",
     "begin": "Początek",
-    "remaining": "Pozostało"
+    "remaining": "Pozostało",
+    "remaining-new-day": "Do nowego dnia zostało"
   },
   "date": {
     "daily": "Codziennie",
