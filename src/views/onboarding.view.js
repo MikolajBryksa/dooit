@@ -18,7 +18,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
-  const [chooseHabitsView, setChooseHabitsView] = useState(false);
+  const [step, setStep] = useState(1);
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -31,8 +31,8 @@ const OnboardingView = ({setShowOnboarding}) => {
     8: false,
   });
 
-  function handleChooseHabits() {
-    setChooseHabitsView(true);
+  function handleStep1() {
+    setStep(2);
   }
 
   function handleHabitToggle(habitId) {
@@ -42,8 +42,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     }));
   }
 
-  function handleGetStarted() {
-    handleNotificationPermission();
+  function handleStep2() {
     createDefaultHabits();
 
     const allHabits = getHabits();
@@ -66,10 +65,15 @@ const OnboardingView = ({setShowOnboarding}) => {
       );
     });
 
+    setStep(3);
+  }
+
+  function handleStep3() {
     updateSettingValue('firstLaunch', false);
     const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
     setShowOnboarding(false);
+    handleNotificationPermission();
   }
 
   async function handleNotificationPermission() {
@@ -83,7 +87,11 @@ const OnboardingView = ({setShowOnboarding}) => {
     dispatch(setSettings(updatedSettings));
   }
 
-  if (!chooseHabitsView) {
+  const hasSelectedHabits = Object.values(selectedHabits).some(
+    selected => selected,
+  );
+
+  if (step === 1) {
     return (
       <View style={styles.container__center}>
         <View style={styles.onboarding__bar}>
@@ -123,14 +131,14 @@ const OnboardingView = ({setShowOnboarding}) => {
             style={styles.button}
             mode="contained"
             onPress={() => {
-              handleChooseHabits();
+              handleStep1();
             }}>
             {t('onboarding.choose-habits')}
           </Button>
         </View>
       </View>
     );
-  } else {
+  } else if (step === 2) {
     const habitIcons = [
       'alarm',
       'water',
@@ -190,8 +198,53 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Button
             style={styles.button}
             mode="contained"
+            disabled={!hasSelectedHabits}
             onPress={() => {
-              handleGetStarted();
+              handleStep2();
+            }}>
+            {t('onboarding.read-intro')}
+          </Button>
+        </View>
+      </View>
+    );
+  } else if (step === 3) {
+    return (
+      <View style={styles.container__center}>
+        <View style={styles.onboarding__bar}>
+          <Text variant="headlineMedium">{t('onboarding.great')}</Text>
+          <Text variant="bodyLarge">{t('onboarding.you-know')}</Text>
+        </View>
+
+        <Card style={styles.onboarding__card}>
+          <Card.Content>
+            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+              {t('onboarding.how-to-start-1')}
+            </Text>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.onboarding__card}>
+          <Card.Content>
+            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+              {t('onboarding.how-to-start-2')}
+            </Text>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.onboarding__card}>
+          <Card.Content>
+            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
+              {t('onboarding.how-to-start-3')}
+            </Text>
+          </Card.Content>
+        </Card>
+
+        <View style={styles.onboarding__bar}>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              handleStep3();
             }}>
             {t('onboarding.start')}
           </Button>

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {PaperProvider, BottomNavigation} from 'react-native-paper';
 import {Provider, useDispatch, useSelector} from 'react-redux';
-import {AppState} from 'react-native';
 import store from './src/redux/store';
 import LoadingView from './src/views/loading.view';
 import HomeView from './src/views/home.view';
@@ -12,7 +11,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
 import {LocaleConfig} from 'react-native-calendars';
-import {getSettings, updateSettingValue} from './src/services/settings.service';
+import {getSettings} from './src/services/settings.service';
 import {setSettings} from './src/redux/actions';
 import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -21,7 +20,7 @@ import {getTheme} from './src/theme/theme';
 import {useColorScheme} from 'react-native';
 import OnboardingView from './src/views/onboarding.view';
 import {useStyles} from './src/styles';
-import notifee from '@notifee/react-native';
+import {setupNotificationSync} from './src/services/notifications.service';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,23 +31,6 @@ function AppContent() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const {t} = useTranslation();
   const settings = useSelector((state: any) => state.settings);
-
-  async function syncNotificationStatus() {
-    try {
-      const settingsStatus = await notifee.getNotificationSettings();
-      const granted =
-        settingsStatus.authorizationStatus === 1 ||
-        settingsStatus.authorizationStatus === 2;
-
-      if (settings && settings.notifications !== granted) {
-        updateSettingValue('notifications', granted);
-        const updatedSettings = {...settings, notifications: granted};
-        dispatch(setSettings(updatedSettings));
-      }
-    } catch (error) {
-      console.error('Error syncing notification status:', error);
-    }
-  }
 
   useEffect(() => {
     const start = Date.now();
@@ -80,30 +62,14 @@ function AppContent() {
         setTimeout(() => setLoading(false), remainingTime);
       }
     }
-
     loadData();
   }, [dispatch]);
 
   useEffect(() => {
-    if (!loading && settings) {
-      const handleAppStateChange = (nextAppState: string) => {
-        if (nextAppState === 'active') {
-          syncNotificationStatus();
-        }
-      };
-
-      const subscription = AppState.addEventListener(
-        'change',
-        handleAppStateChange,
-      );
-
-      syncNotificationStatus();
-
-      return () => {
-        subscription.remove();
-      };
-    }
-  }, [loading, settings]);
+    // Syncs notification permissions with system settings
+    // Runs when app becomes active or settings change
+    return setupNotificationSync(settings, loading, dispatch, setSettings);
+  }, [loading, settings, dispatch]);
 
   if (loading) {
     return <LoadingView />;

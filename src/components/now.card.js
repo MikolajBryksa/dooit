@@ -42,6 +42,7 @@ const NowCard = ({
   const [remainingTime, setRemainingTime] = useState('');
   const [displayScore, setDisplayScore] = useState(score);
   const [displayLevel, setDisplayLevel] = useState(level);
+  const [timeFinished, setTimeFinished] = useState(false);
 
   useEffect(() => {
     if (duration) {
@@ -72,15 +73,17 @@ const NowCard = ({
     setProgressValue(progress);
     setRemainingTime(timeLeft);
 
-    if (isFinished) {
+    if (isFinished && !timeFinished) {
+      setTimeFinished(true);
       onChoice();
     }
-  }, [currentTime, endTime, duration, onChoice]);
+  }, [currentTime, endTime, duration, onChoice, timeFinished]);
 
   useEffect(() => {
     setDisplayScore(score);
     setDisplayLevel(level);
-  }, [score, level]);
+    setTimeFinished(false);
+  }, [score, level, id]);
 
   const handleSkipHabit = () => {
     if (onChoice) {

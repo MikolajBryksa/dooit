@@ -117,6 +117,12 @@
     "choose-habits": "Wybierz nawyki",
     "choose": "Wybierz",
     "which-habits": "jakie nawyki chcesz wyrobić",
+    "read-intro": "Jak to działa",
+    "great": "Świetnie!",
+    "you-know": "Wiesz już, które nawyki rozwijać",
+    "how-to-start-1": "Aplikacja domyślnie ustawiła dni i godziny w których będziesz wyrabiać nawyki - możesz je dowolnie modyfikować.",
+    "how-to-start-2": "Przy każdym powtórzeniu nawyku masz prosty wybór - możesz zrobić to co wzmocni nawyk lub to co go osłabi.",
+    "how-to-start-3": "Każdego dnia możesz zwiększyć poziom zaawansowania swojego nawyku - wystarczy wykonać co najmniej połowę powtórzeń.",
     "start": "Zacznij"
   },
   "default-habits": {
