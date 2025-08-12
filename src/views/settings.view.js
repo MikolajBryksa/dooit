@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View, AppState, Linking} from 'react-native';
+import React, {useState} from 'react';
+import {ScrollView, View, Linking} from 'react-native';
 import {Appbar, Text, Card, Chip} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -26,12 +26,19 @@ const SettingsView = () => {
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [notifications, setNotifications] = useState(settings.notifications);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [currentTheme, setCurrentTheme] = useState(
     settings.currentTheme || systemTheme,
   );
+
+  const handleContactDialog = () => {
+    setVisibleContactDialog(!visibleContactDialog);
+  };
+
+  const handleSupportDialog = () => {
+    setVisibleSupportDialog(!visibleSupportDialog);
+  };
 
   function handleVersion() {
     Linking.openURL(
@@ -58,54 +65,9 @@ const SettingsView = () => {
     dispatch(setSettings(updatedSettings));
   }
 
-  const syncNotificationStatus = async () => {
-    const settingsStatus = await notifee.getNotificationSettings();
-    const granted =
-      settingsStatus.authorizationStatus === 1 ||
-      settingsStatus.authorizationStatus === 2;
-    setNotifications(granted);
-    if (settings.notifications !== granted) {
-      updateSettingValue('notifications', granted);
-      const updatedSettings = {...settings, notifications: granted};
-      dispatch(setSettings(updatedSettings));
-    }
-  };
-
-  useEffect(() => {
-    const handleAppStateChange = nextAppState => {
-      if (nextAppState === 'active') {
-        syncNotificationStatus();
-      }
-    };
-    const subscription = AppState.addEventListener(
-      'change',
-      handleAppStateChange,
-    );
-    syncNotificationStatus();
-    return () => {
-      subscription.remove();
-    };
-  }, [settings, dispatch]);
-
   async function handleNotifications() {
     await notifee.openNotificationSettings();
-    const settingsStatus = await notifee.getNotificationSettings();
-    const granted =
-      settingsStatus.authorizationStatus === 1 ||
-      settingsStatus.authorizationStatus === 2;
-    setNotifications(granted);
-    updateSettingValue('notifications', granted);
-    const updatedSettings = {...settings, notifications: granted};
-    dispatch(setSettings(updatedSettings));
   }
-
-  const handleContactDialog = () => {
-    setVisibleContactDialog(!visibleContactDialog);
-  };
-
-  const handleSupportDialog = () => {
-    setVisibleSupportDialog(!visibleSupportDialog);
-  };
 
   function handleClockFormat() {
     const newClockFormat = clockFormat === '24h' ? '12h' : '24h';
@@ -181,11 +143,15 @@ const SettingsView = () => {
           <Card.Content style={styles.card__title}>
             <Text variant="titleMedium">{t('settings.notifications')}</Text>
             <Chip
-              icon={notifications ? 'bell-outline' : 'bell-off-outline'}
+              icon={
+                settings.notifications ? 'bell-outline' : 'bell-off-outline'
+              }
               mode="outlined"
               onPress={handleNotifications}
               style={styles.chip}>
-              {notifications ? t('settings.enabled') : t('settings.disabled')}
+              {settings.notifications
+                ? t('settings.enabled')
+                : t('settings.disabled')}
             </Chip>
           </Card.Content>
         </Card>

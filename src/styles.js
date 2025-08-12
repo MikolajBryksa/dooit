@@ -66,15 +66,6 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
-    // card__active: {
-    //   minHeight: theme.dimensions.height,
-    //   width: '100%',
-    //   marginBottom: theme.dimensions.padding,
-    //   backgroundColor: theme.colors.background,
-    //   borderWidth: 1,
-    //   borderColor: theme.colors.primary,
-    //   shadowColor: theme.colors.primary,
-    // },
     card__title: {
       flexDirection: 'row',
       justifyContent: 'space-between',
