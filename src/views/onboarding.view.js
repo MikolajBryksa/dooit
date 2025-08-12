@@ -11,7 +11,7 @@ import {
   updateHabit,
   getHabits,
 } from '@/services/habits.service';
-import notifee from '@notifee/react-native';
+import {requestNotificationPermission} from '@/services/notifications.service';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -73,18 +73,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
     setShowOnboarding(false);
-    handleNotificationPermission();
-  }
-
-  async function handleNotificationPermission() {
-    await notifee.requestPermission();
-    const settingsStatus = await notifee.getNotificationSettings();
-    const granted =
-      settingsStatus.authorizationStatus === 1 ||
-      settingsStatus.authorizationStatus === 2;
-    updateSettingValue('notifications', granted);
-    const updatedSettings = {...settings, notifications: granted};
-    dispatch(setSettings(updatedSettings));
+    requestNotificationPermission(settings, dispatch, setSettings);
   }
 
   const hasSelectedHabits = Object.values(selectedHabits).some(
@@ -112,7 +101,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Card.Title
             title={t('onboarding.option.2.title')}
             subtitle={t('onboarding.option.2.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="chart-bar" />}
+            left={props => <Avatar.Icon {...props} icon="chart-arc" />}
             subtitleNumberOfLines={2}
           />
         </Card>

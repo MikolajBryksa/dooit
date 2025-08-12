@@ -20,6 +20,30 @@ export async function syncNotificationStatus(settings, dispatch, setSettings) {
   }
 }
 
+export async function requestNotificationPermission(
+  // Requests notification permission and updates app settings
+  settings,
+  dispatch,
+  setSettings,
+) {
+  try {
+    await notifee.requestPermission();
+    const settingsStatus = await notifee.getNotificationSettings();
+    const granted =
+      settingsStatus.authorizationStatus === 1 ||
+      settingsStatus.authorizationStatus === 2;
+
+    updateSettingValue('notifications', granted);
+    const updatedSettings = {...settings, notifications: granted};
+    dispatch(setSettings(updatedSettings));
+
+    return granted;
+  } catch (error) {
+    console.error('Error requesting notification permission:', error);
+    return false;
+  }
+}
+
 export function setupNotificationSync(
   // Sets up notification sync when app becomes active
   settings,
