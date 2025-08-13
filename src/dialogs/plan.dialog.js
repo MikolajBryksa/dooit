@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, ScrollView} from 'react-native';
-import {Dialog, Portal, Button, Text, useTheme, Card} from 'react-native-paper';
+import {Dialog, Portal, Button, Text, useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {dayFullMap} from '@/constants';
