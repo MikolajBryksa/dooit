@@ -117,12 +117,6 @@
     "choose-habits": "Choose habits",
     "choose": "Choose",
     "which-habits": "which habits do you want to create",
-    "read-intro": "How it works",
-    "great": "Great!",
-    "you-know": "You already know which habits to develop",
-    "how-to-start-1": "The app has set default days and hours for your selected habits – you can modify them as you wish.",
-    "how-to-start-2": "Every time you repeat a habit, you have a simple choice - you can do something that will strengthen the habit or something that will weaken it.",
-    "how-to-start-3": "Every day, you can increase the level of advancement of your habit - just do at least half of the repetitions.",
     "start": "Get started"
   },
   "default-habits": {

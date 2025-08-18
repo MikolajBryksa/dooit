@@ -65,15 +65,12 @@ const OnboardingView = ({setShowOnboarding}) => {
       );
     });
 
-    setStep(3);
-  }
-
-  function handleStep3() {
     updateSettingValue('firstLaunch', false);
     const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
     setShowOnboarding(false);
     requestNotificationPermission(settings, dispatch, setSettings);
+    navigation.navigate('Habits');
   }
 
   const hasSelectedHabits = Object.values(selectedHabits).some(
@@ -190,50 +187,6 @@ const OnboardingView = ({setShowOnboarding}) => {
             disabled={!hasSelectedHabits}
             onPress={() => {
               handleStep2();
-            }}>
-            {t('onboarding.read-intro')}
-          </Button>
-        </View>
-      </View>
-    );
-  } else if (step === 3) {
-    return (
-      <View style={styles.container__center}>
-        <View style={styles.onboarding__bar}>
-          <Text variant="headlineMedium">{t('onboarding.great')}</Text>
-          <Text variant="bodyLarge">{t('onboarding.you-know')}</Text>
-        </View>
-
-        <Card style={styles.onboarding__card}>
-          <Card.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
-              {t('onboarding.how-to-start-1')}
-            </Text>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.onboarding__card}>
-          <Card.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
-              {t('onboarding.how-to-start-2')}
-            </Text>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.onboarding__card}>
-          <Card.Content>
-            <Text variant="bodyMedium" style={{textAlign: 'center'}}>
-              {t('onboarding.how-to-start-3')}
-            </Text>
-          </Card.Content>
-        </Card>
-
-        <View style={styles.onboarding__bar}>
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={() => {
-              handleStep3();
             }}>
             {t('onboarding.start')}
           </Button>
