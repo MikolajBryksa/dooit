@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Text, Chip, IconButton, ProgressBar} from 'react-native-paper';
+import {Card, Text, Chip, ProgressBar} from 'react-native-paper';
 import {View} from 'react-native';
-import {updateHabit, markRepetitionCompleted} from '@/services/habits.service';
+import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import SkipDialog from '@/dialogs/skip.dialog';
@@ -91,91 +91,46 @@ const NowCard = ({
     }
   };
 
-  const handleGoodChoice = () => {
-    setSelectedChoice('good');
-  };
-
-  const handleBadChoice = () => {
-    setSelectedChoice('bad');
-  };
-
-  const saveChoice = () => {
-    let newScore;
-    if (selectedChoice === 'good') {
-      newScore = score + 1;
-    } else {
-      newScore = Math.max(0, score - 1);
-    }
+  const handleChoice = type => {
+    if (selectedChoice) return;
+    setSelectedChoice(type);
+    let newScore = type === 'good' ? score + 1 : Math.max(0, score - 1);
     setDisplayScore(newScore);
-
+    let newLevel = level;
     const isLastRepetition =
       originalRepeatHours.length > 0 &&
       repeatHours[0] === originalRepeatHours[originalRepeatHours.length - 1];
 
-    let newLevel = level;
     if (isLastRepetition) {
       const levelUpThreshold = Math.ceil(originalRepeatHours.length / 2);
-
       if (newScore >= levelUpThreshold && level < 999) {
         newLevel = Math.min(999, level + 1);
       } else if (newScore === 0 && level > 0) {
         newLevel = Math.max(0, level - 1);
       }
-
       setDisplayLevel(newLevel);
-    } else {
+    }
+
+    setTimeout(() => {
       updateHabit(
         id,
         habitName,
         goodChoice,
         badChoice,
-        newScore,
+        isLastRepetition ? 0 : newScore,
         newLevel,
         duration,
         repeatDays,
         originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
         available,
       );
-      fetchHabits();
-    }
-    return {newScore, newLevel, isLastRepetition};
+      if (!isLastRepetition) {
+        fetchHabits();
+      }
+      setSelectedChoice(null);
+      if (onChoice) onChoice();
+    }, 1800);
   };
-
-  useEffect(() => {
-    if (selectedChoice) {
-      const result = saveChoice();
-
-      if (repeatHours[0]) {
-        markRepetitionCompleted(id, repeatHours[0]);
-      }
-
-      if (result && result.isLastRepetition) {
-        setTimeout(() => {
-          updateHabit(
-            id,
-            habitName,
-            goodChoice,
-            badChoice,
-            0,
-            result.newLevel,
-            duration,
-            repeatDays,
-            originalRepeatHours.length > 0 ? originalRepeatHours : repeatHours,
-            available,
-          );
-          fetchHabits();
-
-          setSelectedChoice(null);
-          onChoice();
-        }, 1800);
-      } else {
-        setTimeout(() => {
-          setSelectedChoice(null);
-          onChoice();
-        }, 1800);
-      }
-    }
-  }, [selectedChoice]);
 
   return (
     <>
@@ -232,16 +187,16 @@ const NowCard = ({
             <Chip
               mode="outlined"
               selected={selectedChoice === 'bad'}
-              onPress={handleBadChoice}
-              disabled={selectedChoice === 'good'}
+              onPress={() => handleChoice('bad')}
+              disabled={!!selectedChoice}
               style={styles.chip__button}>
               {badChoice}
             </Chip>
             <Chip
               mode="outlined"
               selected={selectedChoice === 'good'}
-              onPress={handleGoodChoice}
-              disabled={selectedChoice === 'bad'}
+              onPress={() => handleChoice('good')}
+              disabled={!!selectedChoice}
               style={styles.chip__button}>
               {goodChoice}
             </Chip>

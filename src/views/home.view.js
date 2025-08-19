@@ -20,6 +20,7 @@ const HomeView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
+  const settings = useSelector(state => state.settings);
   const currentDay = useSelector(state => state.settings.currentDay);
   const currentHabitIndex = useSelector(state =>
     typeof state.currentItem === 'number' ? state.currentItem : 0,

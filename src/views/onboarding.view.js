@@ -70,7 +70,6 @@ const OnboardingView = ({setShowOnboarding}) => {
     dispatch(setSettings(updatedSettings));
     setShowOnboarding(false);
     requestNotificationPermission(settings, dispatch, setSettings);
-    navigation.navigate('Habits');
   }
 
   const hasSelectedHabits = Object.values(selectedHabits).some(

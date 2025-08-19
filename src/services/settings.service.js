@@ -13,6 +13,8 @@ export const getSettings = () => {
     currentTheme: settings.currentTheme,
     currentItem: settings.currentItem,
     currentDay: settings.currentDay,
+    notifications: settings.notifications,
+    debugger: settings.debugger,
   };
 };
 
@@ -31,6 +33,8 @@ export const updateSettings = updates => {
     currentTheme: updatedSettings.currentTheme,
     currentItem: updatedSettings.currentItem,
     currentDay: updatedSettings.currentDay,
+    notifications: updatedSettings.notifications,
+    debugger: updatedSettings.debugger,
   };
 };
 

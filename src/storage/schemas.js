@@ -35,6 +35,7 @@ Settings.schema = {
     currentItem: 'int?',
     currentDay: 'string?',
     notifications: 'bool',
+    debugger: 'bool',
   },
 };
 
@@ -64,6 +65,7 @@ realm.write(() => {
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
+      debugger: false,
     });
   }
 });
