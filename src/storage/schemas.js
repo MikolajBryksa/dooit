@@ -9,15 +9,14 @@ Habit.schema = {
   properties: {
     id: 'int',
     habitName: 'string',
-    goodChoice: 'string',
-    badChoice: 'string',
+    habitEnemy: 'string',
     score: 'int',
     level: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
     completedHours: 'string[]',
-    duration: 'int',
     available: 'bool',
+    icon: 'string',
   },
 };
 
@@ -35,7 +34,7 @@ Settings.schema = {
     currentItem: 'int?',
     currentDay: 'string?',
     notifications: 'bool',
-    debugger: 'bool',
+    debugMode: 'bool',
   },
 };
 
@@ -65,7 +64,7 @@ realm.write(() => {
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
-      debugger: false,
+      debugMode: false,
     });
   }
 });

@@ -12,6 +12,7 @@ import {
   getHabits,
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
+import {habitIcons} from '@/constants';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -29,6 +30,8 @@ const OnboardingView = ({setShowOnboarding}) => {
     6: false,
     7: false,
     8: false,
+    9: false,
+    10: false,
   });
 
   function handleStep1() {
@@ -54,11 +57,9 @@ const OnboardingView = ({setShowOnboarding}) => {
       updateHabit(
         habit.id,
         habit.habitName,
-        habit.goodChoice,
-        habit.badChoice,
+        habit.habitEnemy,
         habit.score,
         habit.level,
-        habit.duration,
         habit.repeatDays,
         habit.repeatHours,
         isSelected,
@@ -80,14 +81,14 @@ const OnboardingView = ({setShowOnboarding}) => {
     return (
       <View style={styles.container__center}>
         <View style={styles.onboarding__bar}>
-          <Text variant="headlineMedium">{t('onboarding.welcome')}</Text>
-          <Text variant="bodyLarge">{t('onboarding.to-app')}</Text>
+          <Text variant="headlineMedium">{t('onboarding.step1.welcome')}</Text>
+          <Text variant="bodyLarge">{t('onboarding.step1.to-app')}</Text>
         </View>
 
         <Card style={styles.onboarding__card}>
           <Card.Title
-            title={t('onboarding.option.1.title')}
-            subtitle={t('onboarding.option.1.subtitle')}
+            title={t('onboarding.step1.option1.title')}
+            subtitle={t('onboarding.step1.option1.subtitle')}
             left={props => <Avatar.Icon {...props} icon="infinity" />}
             subtitleNumberOfLines={2}
           />
@@ -95,8 +96,8 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <Card style={styles.onboarding__card}>
           <Card.Title
-            title={t('onboarding.option.2.title')}
-            subtitle={t('onboarding.option.2.subtitle')}
+            title={t('onboarding.step1.option2.title')}
+            subtitle={t('onboarding.step1.option2.subtitle')}
             left={props => <Avatar.Icon {...props} icon="chart-arc" />}
             subtitleNumberOfLines={2}
           />
@@ -104,8 +105,8 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <Card style={styles.onboarding__card}>
           <Card.Title
-            title={t('onboarding.option.3.title')}
-            subtitle={t('onboarding.option.3.subtitle')}
+            title={t('onboarding.step1.option3.title')}
+            subtitle={t('onboarding.step1.option3.subtitle')}
             left={props => <Avatar.Icon {...props} icon="heart" />}
             subtitleNumberOfLines={2}
           />
@@ -118,32 +119,21 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep1();
             }}>
-            {t('onboarding.choose-habits')}
+            {t('onboarding.step1.choose-habits')}
           </Button>
         </View>
       </View>
     );
   } else if (step === 2) {
-    const habitIcons = [
-      'alarm',
-      'water',
-      'dumbbell',
-      'food-apple',
-      'book-open',
-      'school',
-      'meditation',
-      'broom',
-    ];
-
     return (
       <View style={styles.container}>
         <View style={styles.onboarding__bar}>
-          <Text variant="headlineMedium">{t('onboarding.choose')}</Text>
-          <Text variant="bodyLarge">{t('onboarding.which-habits')}</Text>
+          <Text variant="headlineMedium">{t('onboarding.step2.choose')}</Text>
+          <Text variant="bodyLarge">{t('onboarding.step2.which-habits')}</Text>
         </View>
 
         <ScrollView style={styles.container}>
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(habitId => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(habitId => (
             <Card
               key={habitId}
               style={[
@@ -165,8 +155,8 @@ const OnboardingView = ({setShowOnboarding}) => {
                     {t(`default-habits.${habitId}.habitName`)}
                   </Text>
                   <Text variant="bodySmall" numberOfLines={2}>
-                    {t(`default-habits.${habitId}.goodChoice`)} vs{' '}
-                    {t(`default-habits.${habitId}.badChoice`)}
+                    {t(`card.instead`)}{' '}
+                    {t(`default-habits.${habitId}.habitEnemy`)}
                   </Text>
                 </View>
                 <Checkbox
@@ -187,7 +177,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep2();
             }}>
-            {t('onboarding.start')}
+            {t('onboarding.step2.start')}
           </Button>
         </View>
       </View>

@@ -1,14 +1,14 @@
 import realm from '@/storage/schemas';
 import {getNextId} from '@/utils';
 import i18next from 'i18next';
+import {habitIcons} from '@/constants';
 
 export const addHabit = (
   habitName,
-  goodChoice,
-  badChoice,
+  habitEnemy,
   repeatDays,
   repeatHours,
-  duration,
+  icon,
 ) => {
   const id = getNextId('Habit');
 
@@ -17,15 +17,14 @@ export const addHabit = (
     newHabit = realm.create('Habit', {
       id,
       habitName,
-      goodChoice,
-      badChoice,
+      habitEnemy,
       score: 0,
       level: 0,
-      duration,
       repeatDays,
       repeatHours,
       completedHours: [],
       available: true,
+      icon: icon || 'infinity',
     });
   });
   return newHabit;
@@ -34,11 +33,9 @@ export const addHabit = (
 export const updateHabit = (
   id,
   habitName,
-  goodChoice,
-  badChoice,
+  habitEnemy,
   score,
   level,
-  duration,
   repeatDays,
   repeatHours,
   available,
@@ -52,14 +49,13 @@ export const updateHabit = (
       {
         id,
         habitName,
-        goodChoice,
-        badChoice,
+        habitEnemy,
         score,
         level,
-        duration,
         repeatDays: repeatDays !== undefined ? repeatDays : habit.repeatDays,
         repeatHours,
         available,
+        icon: habit.icon,
       },
       'modified',
     );
@@ -84,15 +80,14 @@ export const getHabits = () => {
   return Array.from(realmHabits).map(habit => ({
     id: habit.id,
     habitName: habit.habitName,
-    goodChoice: habit.goodChoice,
-    badChoice: habit.badChoice,
+    habitEnemy: habit.habitEnemy,
     score: habit.score,
     level: habit.level,
-    duration: habit.duration,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     completedHours: Array.from(habit.completedHours || []),
     available: habit.available,
+    icon: habit.icon,
   }));
 };
 
@@ -103,14 +98,13 @@ export const getHabitById = id => {
   return {
     id: habit.id,
     habitName: habit.habitName,
-    goodChoice: habit.goodChoice,
-    badChoice: habit.badChoice,
+    habitEnemy: habit.habitEnemy,
     score: habit.score,
     level: habit.level,
-    duration: habit.duration,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     available: habit.available,
+    icon: habit.icon,
   };
 };
 
@@ -119,67 +113,73 @@ export const createDefaultHabits = () => {
   const defaultHabitsData = [
     {
       habitName: t('default-habits.1.habitName'),
-      goodChoice: t('default-habits.1.goodChoice'),
-      badChoice: t('default-habits.1.badChoice'),
+      habitEnemy: t('default-habits.1.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
       repeatHours: ['07:00'],
-      duration: 15,
+      icon: habitIcons[0],
     },
     {
       habitName: t('default-habits.2.habitName'),
-      goodChoice: t('default-habits.2.goodChoice'),
-      badChoice: t('default-habits.2.badChoice'),
+      habitEnemy: t('default-habits.2.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
       repeatHours: ['08:00', '10:00', '12:00', '14:00', '18:00', '20:30'],
-      duration: 30,
+      icon: habitIcons[1],
     },
     {
       habitName: t('default-habits.3.habitName'),
-      goodChoice: t('default-habits.3.goodChoice'),
-      badChoice: t('default-habits.3.badChoice'),
+      habitEnemy: t('default-habits.3.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
       repeatHours: ['17:30'],
-      duration: 45,
+      icon: habitIcons[2],
     },
     {
       habitName: t('default-habits.4.habitName'),
-      goodChoice: t('default-habits.4.goodChoice'),
-      badChoice: t('default-habits.4.badChoice'),
+      habitEnemy: t('default-habits.4.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
       repeatHours: ['07:30', '13:00', '18:30'],
-      duration: 30,
+      icon: habitIcons[3],
     },
     {
       habitName: t('default-habits.5.habitName'),
-      goodChoice: t('default-habits.5.goodChoice'),
-      badChoice: t('default-habits.5.badChoice'),
+      habitEnemy: t('default-habits.5.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
       repeatHours: ['22:00'],
-      duration: 30,
+      icon: habitIcons[4],
     },
     {
       habitName: t('default-habits.6.habitName'),
-      goodChoice: t('default-habits.6.goodChoice'),
-      badChoice: t('default-habits.6.badChoice'),
+      habitEnemy: t('default-habits.6.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
       repeatHours: ['09:00'],
-      duration: 30,
+      icon: habitIcons[5],
     },
     {
       habitName: t('default-habits.7.habitName'),
-      goodChoice: t('default-habits.7.goodChoice'),
-      badChoice: t('default-habits.7.badChoice'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['21:30'],
-      duration: 30,
+      habitEnemy: t('default-habits.7.habitEnemy'),
+      repeatDays: ['tue', 'thu'],
+      repeatHours: ['19:30'],
+      icon: habitIcons[6],
     },
     {
       habitName: t('default-habits.8.habitName'),
-      goodChoice: t('default-habits.8.goodChoice'),
-      badChoice: t('default-habits.8.badChoice'),
+      habitEnemy: t('default-habits.8.habitEnemy'),
+      repeatDays: ['mon', 'tue', 'wed', 'thu'],
+      repeatHours: ['21:30'],
+      icon: habitIcons[7],
+    },
+    {
+      habitName: t('default-habits.9.habitName'),
+      habitEnemy: t('default-habits.9.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
       repeatHours: ['21:00'],
-      duration: 20,
+      icon: habitIcons[8],
+    },
+    {
+      habitName: t('default-habits.10.habitName'),
+      habitEnemy: t('default-habits.10.habitEnemy'),
+      repeatDays: ['mon', 'tue', 'wed', 'thu'],
+      repeatHours: ['22:30'],
+      icon: habitIcons[9],
     },
   ];
 
@@ -188,11 +188,10 @@ export const createDefaultHabits = () => {
   defaultHabitsData.forEach(habitData => {
     const newHabit = addHabit(
       habitData.habitName,
-      habitData.goodChoice,
-      habitData.badChoice,
+      habitData.habitEnemy,
       habitData.repeatDays,
       habitData.repeatHours,
-      habitData.duration,
+      habitData.icon,
     );
     createdHabits.push(newHabit);
   });
@@ -205,29 +204,7 @@ export const resetDailyHabits = () => {
 
   realm.write(() => {
     habits.forEach(habit => {
-      habit.completedHours = [];
       habit.score = 0;
     });
   });
-};
-
-export const markRepetitionCompleted = (habitId, hour) => {
-  const habit = realm.objectForPrimaryKey('Habit', habitId);
-
-  if (habit) {
-    realm.write(() => {
-      if (!habit.completedHours.includes(hour)) {
-        habit.completedHours.push(hour);
-      }
-    });
-  }
-};
-
-export const isRepetitionCompleted = (habitId, hour) => {
-  const habit = realm.objectForPrimaryKey('Habit', habitId);
-
-  if (habit) {
-    return habit.completedHours.includes(hour);
-  }
-  return false;
 };

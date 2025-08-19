@@ -36,8 +36,8 @@ function AppContent() {
     const start = Date.now();
     async function loadData() {
       try {
-        // Enable debugger mode in Realm settings
-        updateSettingValue('debugger', true);
+        // Enable debug mode in Realm settings
+        updateSettingValue('debugMode', true);
 
         const settings = getSettings();
 

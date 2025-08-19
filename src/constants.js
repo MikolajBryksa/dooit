@@ -1,4 +1,5 @@
 export const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
 export const dayFullMap = {
   mon: 'monday',
   tue: 'tuesday',
@@ -8,3 +9,16 @@ export const dayFullMap = {
   sat: 'saturday',
   sun: 'sunday',
 };
+
+export const habitIcons = [
+  'alarm',
+  'water',
+  'dumbbell',
+  'food-apple',
+  'book-open',
+  'school',
+  'face-agent',
+  'meditation',
+  'broom',
+  'shower',
+];

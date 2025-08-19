@@ -14,7 +14,7 @@ export const getSettings = () => {
     currentItem: settings.currentItem,
     currentDay: settings.currentDay,
     notifications: settings.notifications,
-    debugger: settings.debugger,
+    debugMode: settings.debugMode,
   };
 };
 
@@ -34,7 +34,7 @@ export const updateSettings = updates => {
     currentItem: updatedSettings.currentItem,
     currentDay: updatedSettings.currentDay,
     notifications: updatedSettings.notifications,
-    debugger: updatedSettings.debugger,
+    debugMode: updatedSettings.debugMode,
   };
 };
 

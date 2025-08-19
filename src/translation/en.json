@@ -27,8 +27,8 @@
     "disabled": "Disabled"
   },
   "message": {
-    "delete": "Are you sure to remove the habit?",
-    "skip": "Are you sure to skip the habit?",
+    "delete": "Are you sure to remove the habit",
+    "skip": "Are you sure to skip the habit",
     "contact": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin?",
     "support": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee?"
   },
@@ -44,25 +44,18 @@
     "skip": "Skip"
   },
   "card": {
-    "habit-name": "Habit name",
     "habitName": "Habit name",
-    "good-choice": "Good choice",
-    "goodChoice": "Good choice",
-    "bad-choice": "Bad choice",
-    "badChoice": "Bad choice",
+    "instead": "vs",
+    "habitEnemy": "Opposite of habit",
     "score": "Score",
     "level": "Level",
-    "duration": "Duration",
     "minutes": "(in minutes)",
-    "repeat-days": "Repeat days",
     "repeatDays": "Repeat days",
-    "repeat-hours": "Repeat hours",
     "repeatHours": "Repeat Hours",
     "available": "Available",
     "done": "All done for today!",
     "start": "Start",
     "finish": "Next",
-    "begin": "Start",
     "remaining": "Remaining",
     "remaining-new-day": "Time until new day"
   },
@@ -89,76 +82,76 @@
     "yes": "Yes",
     "no": "No"
   },
-  "step": {
-    "habit-name": "What do you want to do regularly?",
-    "good-choice": "What is the good choice?",
-    "bad-choice": "What is the bad choice?",
-    "repeat-days": "On what days you want to do it?",
-    "repeat-hours": "What time do you want to do it?",
-    "duration": "How long do you want to do it?"
+  "addStep": {
+    "habitName": "What do you want to do regularly?",
+    "habitEnemy": "What is the opposite of the habit?",
+    "repeatDays": "On what days you want to do it?",
+    "repeatHours": "What time do you want to do it?"
   },
   "onboarding": {
-    "welcome": "Welcome",
-    "to-app": "to the Dooit app",
-    "option": {
-      "1": {
+    "step1": {
+      "welcome": "Welcome",
+      "to-app": "to the Dooit app",
+      "option1": {
         "title": "Create habits",
         "subtitle": "Build routines that stick and make personal growth effortless."
       },
-      "2": {
+      "option2": {
         "title": "Monitor progress",
         "subtitle": "Track your journey and see how far you’ve come, day by day."
       },
-      "3": {
+      "option3": {
         "title": "Enjoy life",
         "subtitle": "Feel the impact of small steps adding up to a more fulfilling life."
-      }
+      },
+      "choose-habits": "Choose habits"
     },
-    "choose-habits": "Choose habits",
-    "choose": "Choose",
-    "which-habits": "which habits do you want to create",
-    "start": "Get started"
+    "step2": {
+      "choose": "Choose",
+      "which-habits": "which habits do you want to create",
+      "start": "Get started"
+    }
   },
   "default-habits": {
     "1": {
       "habitName": "Early wake up",
-      "goodChoice": "Woken by alarm",
-      "badChoice": "Snooze"
+      "habitEnemy": "Snooze"
     },
     "2": {
       "habitName": "Drinking water",
-      "goodChoice": "Drink water",
-      "badChoice": "Drink soda"
+      "habitEnemy": "Drinking soda"
     },
     "3": {
       "habitName": "Physical exercise",
-      "goodChoice": "Some exercise",
-      "badChoice": "Just sitting"
+      "habitEnemy": "Just sitting"
     },
     "4": {
       "habitName": "Healthy eating",
-      "goodChoice": "Protein and fiber",
-      "badChoice": "Sugar and fat"
+      "habitEnemy": "Unhealthy snacks"
     },
     "5": {
       "habitName": "Reading books",
-      "goodChoice": "Book",
-      "badChoice": "Social media"
+      "habitEnemy": "Social media"
     },
     "6": {
-      "habitName": "Development",
-      "goodChoice": "Learning",
-      "badChoice": "Routine work"
+      "habitName": "Career development",
+      "habitEnemy": "Routine work"
     },
     "7": {
-      "habitName": "Stress relief",
-      "goodChoice": "Mindfulness",
-      "badChoice": "Videos"
+      "habitName": "Language learning",
+      "habitEnemy": "Skipping lessons"
     },
     "8": {
+      "habitName": "Stress relief",
+      "habitEnemy": "Videos"
+    },
+    "9": {
       "habitName": "Cleaning",
-      "goodChoice": "Organizing things",
-      "badChoice": "Leaving mess"
+      "habitEnemy": "Leaving mess"
+    },
+    "10": {
+      "habitName": "Cold shower",
+      "habitEnemy": "Long shower"
     }
   }
 }

@@ -17,7 +17,7 @@ const DeleteDialog = ({visible, onDismiss, onDone, habitId, habitName}) => {
         <Dialog.Title>{t('title.delete')}</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">
-            {t('message.delete')} "{habitName}"
+            {t('message.delete')} "{habitName}"?
           </Text>
         </Dialog.Content>
         <Dialog.Actions>

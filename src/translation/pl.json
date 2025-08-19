@@ -27,8 +27,8 @@
     "disabled": "Wyłączone"
   },
   "message": {
-    "delete": "Czy na pewno chcesz usunąć nawyk?",
-    "skip": "Czy na pewno chcesz pominąć nawyk?",
+    "delete": "Czy na pewno chcesz usunąć nawyk",
+    "skip": "Czy na pewno chcesz pominąć nawyk",
     "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
     "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?"
   },
@@ -44,25 +44,18 @@
     "skip": "Pomiń"
   },
   "card": {
-    "habit-name": "Nazwa nawyku",
     "habitName": "Nazwa nawyku",
-    "good-choice": "Dobry wybór",
-    "goodChoice": "Dobry wybór",
-    "bad-choice": "Zły wybór",
-    "badChoice": "Zły wybór",
+    "instead": "vs",
+    "habitEnemy": "Przeciwieństwo nawyku",
     "score": "Wynik",
     "level": "Poziom",
-    "duration": "Czas trwania",
     "minutes": "(w minutach)",
-    "repeat-days": "Dni powtarzania",
     "repeatDays": "Dni powtarzania",
-    "repeat-hours": "Godziny powtarzania",
     "repeatHours": "Godziny powtarzania",
     "available": "Dostępne",
     "done": "Wszystko na dzisiaj zrobione!",
     "start": "Zacznij",
     "finish": "Dalej",
-    "begin": "Początek",
     "remaining": "Pozostało",
     "remaining-new-day": "Do nowego dnia zostało"
   },
@@ -89,76 +82,77 @@
     "yes": "Tak",
     "no": "Nie"
   },
-  "step": {
-    "habit-name": "Co chcesz robić regularnie?",
-    "good-choice": "Jaki jest dobry wybór?",
-    "bad-choice": "Jaki jest zły wybór?",
-    "repeat-days": "W jakie dni chcesz to robić?",
-    "repeat-hours": "O jakiej godzinie chcesz to robić?",
-    "duration": "Jak długo chcesz to robić?"
+  "addStep": {
+    "habitName": "Co chcesz robić regularnie?",
+    "habitEnemy": "Co jest przeciwieństwem nawyku?",
+    "repeatDays": "W jakie dni chcesz to robić?",
+    "repeatHours": "O jakiej godzinie chcesz to robić?"
   },
   "onboarding": {
-    "welcome": "Witaj",
-    "to-app": "w aplikacji Dooit",
-    "option": {
-      "1": {
+    "step1": {
+      "welcome": "Witaj",
+      "to-app": "w aplikacji Dooit",
+
+      "option1": {
         "title": "Wyrabiaj nawyki",
         "subtitle": "Zbuduj rutynę, która przez długi czas będzie korzystnie na Ciebie wpływać."
       },
-      "2": {
+      "option2": {
         "title": "Monitoruj postępy",
         "subtitle": "Śledź swoją podróż i zobacz, jak wiele możesz osiągnąć kadego dnia."
       },
-      "3": {
+      "option3": {
         "title": "Ciesz się życiem",
         "subtitle": "Poczuj wpływ małych kroków, które prowadzą do pełniejszego życia."
-      }
+      },
+      "choose-habits": "Wybierz nawyki"
     },
-    "choose-habits": "Wybierz nawyki",
-    "choose": "Wybierz",
-    "which-habits": "jakie nawyki chcesz wyrobić",
-    "start": "Zacznij"
+    "step2": {
+      "choose": "Wybierz",
+      "which-habits": "jakie nawyki chcesz wyrobić",
+      "start": "Zacznij"
+    }
   },
   "default-habits": {
     "1": {
       "habitName": "Wczesne wstawanie",
-      "goodChoice": "Wstawanie z budzikiem",
-      "badChoice": "Drzemka"
+      "habitEnemy": "Drzemka"
     },
     "2": {
       "habitName": "Picie wody",
-      "goodChoice": "Picie wody",
-      "badChoice": "Picie napojów"
+      "habitEnemy": "Picie napojów"
     },
     "3": {
       "habitName": "Ćwiczenia fizyczne",
-      "goodChoice": "Ćwiczenia fizyczne",
-      "badChoice": "Siedzenie"
+      "habitEnemy": "Tylko siedzenie"
     },
     "4": {
       "habitName": "Zdrowe jedzenie",
-      "goodChoice": "Białko i błonnik",
-      "badChoice": "Cukier i tłuszcze"
+      "habitEnemy": "Niezdrowa przekąska"
     },
     "5": {
       "habitName": "Czytanie książek",
-      "goodChoice": "Książka",
-      "badChoice": "Media społecznościowe"
+      "habitEnemy": "Media społecznościowe"
     },
     "6": {
-      "habitName": "Rozwój",
-      "goodChoice": "Nauka",
-      "badChoice": "Rutynowa praca"
+      "habitName": "Rozwój zawodowy",
+      "habitEnemy": "Rutynowa praca"
     },
     "7": {
-      "habitName": "Relaksacja",
-      "goodChoice": "Świadoma obecność",
-      "badChoice": "Filmy"
+      "habitName": "Nauka języka",
+      "habitEnemy": "Pominięcie lekcji"
     },
     "8": {
+      "habitName": "Odstresowanie",
+      "habitEnemy": "Oglądanie filmów"
+    },
+    "9": {
       "habitName": "Sprzątanie",
-      "goodChoice": "Układanie rzeczy",
-      "badChoice": "Zostawianie bałaganu"
+      "habitEnemy": "Zostawianie bałaganu"
+    },
+    "10": {
+      "habitName": "Zimny prysznic",
+      "habitEnemy": "Długi prysznic"
     }
   }
 }

@@ -20,7 +20,6 @@ const HomeView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
-  const settings = useSelector(state => state.settings);
   const currentDay = useSelector(state => state.settings.currentDay);
   const currentHabitIndex = useSelector(state =>
     typeof state.currentItem === 'number' ? state.currentItem : 0,
@@ -268,11 +267,9 @@ const HomeView = () => {
             key={currentHabit.id}
             id={currentHabit.originalId || currentHabit.id}
             habitName={currentHabit.habitName}
-            goodChoice={currentHabit.goodChoice}
-            badChoice={currentHabit.badChoice}
+            habitEnemy={currentHabit.habitEnemy}
             score={currentHabit.score}
             level={currentHabit.level}
-            duration={currentHabit.duration}
             repeatDays={currentHabit.repeatDays}
             repeatHours={currentHabit.repeatHours}
             originalRepeatHours={currentHabit.originalRepeatHours}
@@ -284,6 +281,7 @@ const HomeView = () => {
               timeStringToSeconds(currentHabit.currentHour) <=
                 timeStringToSeconds(currentTime)
             }
+            icon={currentHabit.icon}
           />
         ) : null}
         <View style={styles.gap} />

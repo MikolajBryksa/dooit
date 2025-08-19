@@ -48,7 +48,7 @@ const EditModal = ({
 
   const handleSave = () => {
     let valueToSave = inputValue;
-    const numericFields = ['score', 'level', 'duration'];
+    const numericFields = ['score', 'level'];
     if (numericFields.includes(field)) {
       const parsed = parseInt(inputValue, 10);
       valueToSave = isNaN(parsed) ? 0 : parsed;
@@ -83,7 +83,7 @@ const EditModal = ({
             />
           )}
 
-          {['score', 'level', 'duration'].includes(field) && (
+          {['score', 'level'].includes(field) && (
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}
@@ -95,7 +95,7 @@ const EditModal = ({
             />
           )}
 
-          {['habitName', 'goodChoice', 'badChoice'].includes(field) && (
+          {['habitName', 'habitEnemy'].includes(field) && (
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}
@@ -103,7 +103,7 @@ const EditModal = ({
               keyboardType={keyboardType}
               autoFocus
               style={{marginBottom: 16}}
-              maxLength={255}
+              maxLength={30}
             />
           )}
           <Card.Actions>

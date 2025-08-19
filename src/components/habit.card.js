@@ -18,11 +18,9 @@ import {formatHourString} from '@/utils';
 const HabitCard = ({
   id,
   habitName,
-  goodChoice,
-  badChoice,
+  habitEnemy,
   score,
   level,
-  duration,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -32,7 +30,7 @@ const HabitCard = ({
   const styles = useStyles();
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const firstDay = useSelector(state => state.settings.firstDay);
-
+  const debugMode = useSelector(state => state.settings.debugMode);
   const [isAvailable, setIsAvailable] = useState(available);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalField, setModalField] = useState(null);
@@ -45,11 +43,9 @@ const HabitCard = ({
     updateHabit(
       id,
       habitName,
-      goodChoice,
-      badChoice,
+      habitEnemy,
       score,
       level,
-      duration,
       repeatDays,
       repeatHours,
       newAvailable,
@@ -77,11 +73,9 @@ const HabitCard = ({
     let updated = {
       id,
       habitName,
-      goodChoice,
-      badChoice,
+      habitEnemy,
       score,
       level,
-      duration,
       repeatDays,
       repeatHours,
       available: isAvailable,
@@ -90,11 +84,9 @@ const HabitCard = ({
     updateHabit(
       updated.id,
       updated.habitName,
-      updated.goodChoice,
-      updated.badChoice,
+      updated.habitEnemy,
       updated.score,
       updated.level,
-      updated.duration,
       updated.repeatDays,
       updated.repeatHours,
       updated.available,
@@ -121,6 +113,24 @@ const HabitCard = ({
 
         {available && (
           <Card.Content style={styles.card__container}>
+            <TouchableRipple
+              onPress={() => openEditModal('habitEnemy', habitEnemy)}>
+              <View style={styles.card__row}>
+                <IconButton
+                  icon="thumb-down"
+                  size={18}
+                  style={{margin: 0, marginRight: 4}}
+                />
+                <View style={{flex: 1}}>
+                  <Text
+                    variant="bodyMedium"
+                    style={{maxWidth: '100%', flexShrink: 1}}>
+                    {habitEnemy}
+                  </Text>
+                </View>
+              </View>
+            </TouchableRipple>
+
             <TouchableRipple
               onPress={() => openEditModal('repeatHours', repeatHours)}>
               <View style={styles.card__row}>
@@ -187,81 +197,35 @@ const HabitCard = ({
               </View>
             </TouchableRipple>
 
-            {/* <TouchableRipple onPress={() => openEditModal('score', score)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="chart-line"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.score')}: {score}
-                </Text>
-              </View>
-            </TouchableRipple> */}
-
-            {/* <TouchableRipple onPress={() => openEditModal('level', level)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="star"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.level')}: {level}
-                </Text>
-              </View>
-            </TouchableRipple> */}
-
-            <TouchableRipple
-              onPress={() => openEditModal('duration', duration)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="timer"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.duration')}: {duration} min
-                </Text>
-              </View>
-            </TouchableRipple>
-
-            <TouchableRipple
-              onPress={() => openEditModal('goodChoice', goodChoice)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="thumb-up"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <View style={{flex: 1}}>
-                  <Text
-                    variant="bodyMedium"
-                    style={{maxWidth: '100%', flexShrink: 1}}>
-                    {goodChoice}
+            {debugMode && (
+              <TouchableRipple onPress={() => openEditModal('score', score)}>
+                <View style={styles.card__row}>
+                  <IconButton
+                    icon="chart-line"
+                    size={18}
+                    style={{margin: 0, marginRight: 4}}
+                  />
+                  <Text variant="bodyMedium">
+                    {t('card.score')}: {score}
                   </Text>
                 </View>
-              </View>
-            </TouchableRipple>
+              </TouchableRipple>
+            )}
 
-            <TouchableRipple
-              onPress={() => openEditModal('badChoice', badChoice)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="thumb-down"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <View style={{flex: 1}}>
-                  <Text
-                    variant="bodyMedium"
-                    style={{maxWidth: '100%', flexShrink: 1}}>
-                    {badChoice}
+            {debugMode && (
+              <TouchableRipple onPress={() => openEditModal('level', level)}>
+                <View style={styles.card__row}>
+                  <IconButton
+                    icon="star"
+                    size={18}
+                    style={{margin: 0, marginRight: 4}}
+                  />
+                  <Text variant="bodyMedium">
+                    {t('card.level')}: {level}
                   </Text>
                 </View>
-              </View>
-            </TouchableRipple>
+              </TouchableRipple>
+            )}
           </Card.Content>
         )}
       </Card>
@@ -279,9 +243,7 @@ const HabitCard = ({
             : undefined
         }
         keyboardType={
-          ['score', 'level', 'duration'].includes(modalField)
-            ? 'numeric'
-            : 'default'
+          ['score', 'level'].includes(modalField) ? 'numeric' : 'default'
         }
       />
 
