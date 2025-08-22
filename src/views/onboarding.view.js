@@ -98,7 +98,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Card.Title
             title={t('onboarding.step1.option2.title')}
             subtitle={t('onboarding.step1.option2.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="chart-arc" />}
+            left={props => <Avatar.Icon {...props} icon="heart" />}
             subtitleNumberOfLines={2}
           />
         </Card>
@@ -107,7 +107,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Card.Title
             title={t('onboarding.step1.option3.title')}
             subtitle={t('onboarding.step1.option3.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="heart" />}
+            left={props => <Avatar.Icon {...props} icon="chart-arc" />}
             subtitleNumberOfLines={2}
           />
         </Card>

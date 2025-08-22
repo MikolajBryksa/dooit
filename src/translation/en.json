@@ -94,15 +94,15 @@
       "to-app": "to the Dooit app",
       "option1": {
         "title": "Create habits",
-        "subtitle": "Build routines that stick and make personal growth effortless."
+        "subtitle": "Select the activities you want to repeat regularly."
       },
       "option2": {
-        "title": "Monitor progress",
-        "subtitle": "Track your journey and see how far you’ve come, day by day."
+        "title": "Enjoy life",
+        "subtitle": "Every day, choose between what is right and what is easy."
       },
       "option3": {
-        "title": "Enjoy life",
-        "subtitle": "Feel the impact of small steps adding up to a more fulfilling life."
+        "title": "Monitor progress",
+        "subtitle": "Track your journey with levels and see how far you've come."
       },
       "choose-habits": "Choose habits"
     },

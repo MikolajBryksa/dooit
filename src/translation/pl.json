@@ -95,15 +95,15 @@
 
       "option1": {
         "title": "Wyrabiaj nawyki",
-        "subtitle": "Zbuduj rutynę, która przez długi czas będzie korzystnie na Ciebie wpływać."
+        "subtitle": "Wybierz czynności, które chcesz powtarzać regularnie."
       },
       "option2": {
-        "title": "Monitoruj postępy",
-        "subtitle": "Śledź swoją podróż i zobacz, jak wiele możesz osiągnąć kadego dnia."
+        "title": "Ciesz się życiem",
+        "subtitle": "Każdego dnia dokonuj wyboru między tym, co dobre, a tym, co łatwe."
       },
       "option3": {
-        "title": "Ciesz się życiem",
-        "subtitle": "Poczuj wpływ małych kroków, które prowadzą do pełniejszego życia."
+        "title": "Monitoruj postępy",
+        "subtitle": "Śledź swoją podróż za pomocą poziomów i zobacz ile możesz osiągnąć."
       },
       "choose-habits": "Wybierz nawyki"
     },
