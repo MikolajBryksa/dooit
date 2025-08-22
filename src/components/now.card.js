@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Text, IconButton, Avatar} from 'react-native-paper';
+import {Card, Text, IconButton, Avatar, ProgressBar} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
@@ -31,11 +31,19 @@ const NowCard = ({
   const [skipDialogVisible, setSkipDialogVisible] = useState(false);
   const [displayScore, setDisplayScore] = useState(score);
   const [displayLevel, setDisplayLevel] = useState(level);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setDisplayScore(score);
     setDisplayLevel(level);
   }, [score, level, id]);
+
+  // useEffect(() => {
+  //   const done = originalRepeatHours.length - repeatHours.length;
+  //   const total = originalRepeatHours.length;
+  //   setProgress(total > 0 ? done / total : 0);
+  //   console.log(originalRepeatHours.length, repeatHours.length);
+  // }, [repeatHours, originalRepeatHours]);
 
   const handleSkipHabit = () => {
     if (onChoice) {
@@ -62,6 +70,10 @@ const NowCard = ({
       }
       setDisplayLevel(newLevel);
     }
+
+    // const done = originalRepeatHours.length - repeatHours.length + 1;
+    // const total = originalRepeatHours.length;
+    // setProgress(total > 0 ? done / total : 0);
 
     setTimeout(() => {
       updateHabit(
@@ -93,6 +105,7 @@ const NowCard = ({
             {t('card.instead')} {habitEnemy}
           </Text>
         </Card.Content>
+        <View style={styles.gap} />
 
         <Card.Content style={styles.card__center}>
           <View style={[styles.card__row, styles.pieChartContainer]}>
@@ -112,8 +125,20 @@ const NowCard = ({
                 .join(', ')}
             </Text>
           </View>
+
+          {/* <View
+            style={{
+              width: '100%',
+            }}>
+            <ProgressBar
+              progress={progress}
+              style={{height: 6, borderRadius: 4}}
+            />
+          </View> */}
         </Card.Content>
+
         <View style={styles.gap} />
+
         <Card.Content style={styles.card__buttons}>
           <>
             <IconButton icon="thumb-down" onPress={() => handleChoice('bad')} />
