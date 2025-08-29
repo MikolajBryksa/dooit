@@ -5,7 +5,7 @@ import {Text, Button, Card, Avatar, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
-import {setSettings} from '@/redux/actions';
+import {setSettings, setHabits} from '@/redux/actions';
 import {
   createDefaultHabits,
   updateHabit,
@@ -69,6 +69,9 @@ const OnboardingView = ({setShowOnboarding}) => {
     updateSettingValue('firstLaunch', false);
     const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
+    const habits = getHabits() || [];
+    dispatch(setHabits(habits));
+
     setShowOnboarding(false);
     requestNotificationPermission(settings, dispatch, setSettings);
   }

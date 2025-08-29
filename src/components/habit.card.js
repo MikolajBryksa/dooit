@@ -24,7 +24,7 @@ const HabitCard = ({
   repeatDays = [],
   repeatHours = [],
   available,
-  fetchHabits,
+  fetchAllHabits,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -50,7 +50,7 @@ const HabitCard = ({
       repeatHours,
       newAvailable,
     );
-    fetchHabits();
+    fetchAllHabits();
   };
 
   const openEditModal = (field, value) => {
@@ -91,7 +91,7 @@ const HabitCard = ({
       updated.repeatHours,
       updated.available,
     );
-    fetchHabits();
+    fetchAllHabits();
   };
 
   return (
@@ -252,7 +252,7 @@ const HabitCard = ({
         onDismiss={() => setDeleteDialogVisible(false)}
         onDone={() => {
           setDeleteDialogVisible(false);
-          fetchHabits();
+          fetchAllHabits();
         }}
         habitId={id}
         habitName={habitName}

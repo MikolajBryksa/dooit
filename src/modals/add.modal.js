@@ -16,7 +16,7 @@ import {useStyles} from '@/styles';
 import DaysSelector from '@/components/days.selector';
 import HoursSelector from '@/components/hours.selector';
 
-const AddModal = ({visible, onDismiss, fetchHabits}) => {
+const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -49,7 +49,7 @@ const AddModal = ({visible, onDismiss, fetchHabits}) => {
   const handleSave = async () => {
     try {
       addHabit(habitName, habitEnemy, repeatDays, repeatHours);
-      fetchHabits();
+      fetchAllHabits();
       onDismiss();
       setTimeout(() => {
         resetInputs();

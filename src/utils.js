@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog, faList, faClock} from '@fortawesome/free-solid-svg-icons';
 import realm from '@/storage/schemas';
+import {dayMap} from '@/constants';
 
 export function getNextId(itemName) {
   // Retrieves the next available ID for a given item type from the database
@@ -9,6 +10,13 @@ export function getNextId(itemName) {
 
   const lastItem = realm.objects(itemName).sorted('id', true)[0];
   return lastItem ? lastItem.id + 1 : 1;
+}
+
+export function hourToSec(hourString) {
+  // Converts a time string (HH:MM) into seconds
+
+  const [h, m] = hourString.split(':').map(Number);
+  return h * 3600 + m * 60;
 }
 
 export function timeStringToSeconds(timeString) {
@@ -81,4 +89,29 @@ export function hexToRgba(hex, opacity) {
   const b = bigint & 255;
 
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+export function getTodayKey() {
+  // Returns the current day's key
+  const jsDay = new Date().getDay();
+  return dayMap[jsDay];
+}
+
+export function checkTodayKey(onDayChange) {
+  // Checks current day's key
+  const [todayKey, setTodayKey] = useState(getTodayKey());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newKey = getTodayKey();
+      if (newKey !== todayKey) {
+        setTodayKey(newKey);
+        onDayChange?.(newKey);
+      }
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [todayKey, onDayChange]);
+
+  return todayKey;
 }

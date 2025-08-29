@@ -77,7 +77,8 @@ export const deleteHabit = id => {
 
 export const getHabits = () => {
   const realmHabits = realm.objects('Habit');
-  return Array.from(realmHabits).map(habit => ({
+
+  const habitsArr = Array.from(realmHabits).map(habit => ({
     id: habit.id,
     habitName: habit.habitName,
     habitEnemy: habit.habitEnemy,
@@ -89,6 +90,23 @@ export const getHabits = () => {
     available: habit.available,
     icon: habit.icon,
   }));
+
+  habitsArr.sort((a, b) => {
+    if (a.available !== b.available) {
+      return a.available ? -1 : 1;
+    }
+    const aFirstHour =
+      Array.isArray(a.repeatHours) &&
+      a.repeatHours.length > 0 &&
+      a.repeatHours[0];
+    const bFirstHour =
+      Array.isArray(b.repeatHours) &&
+      b.repeatHours.length > 0 &&
+      b.repeatHours[0];
+    return aFirstHour.localeCompare(bFirstHour);
+  });
+
+  return habitsArr;
 };
 
 export const getHabitById = id => {

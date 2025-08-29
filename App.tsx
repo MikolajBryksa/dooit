@@ -21,6 +21,8 @@ import {useColorScheme} from 'react-native';
 import OnboardingView from './src/views/onboarding.view';
 import {useStyles} from './src/styles';
 import {setupNotificationSync} from './src/services/notifications.service';
+import {getHabits} from '@/services/habits.service';
+import {setHabits} from '@/redux/actions';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,6 +59,9 @@ function AppContent() {
         const newLocale = settings.language as string;
         i18next.changeLanguage(newLocale);
         LocaleConfig.defaultLocale = newLocale;
+
+        const habits = getHabits() || [];
+        dispatch(setHabits(habits));
       } catch (error) {
         console.error('Error loading settings:', error);
       } finally {
