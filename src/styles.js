@@ -66,6 +66,10 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.padding,
       opacity: 0.5,
     },
+    card__selected: {
+      borderColor: theme.colors.primary,
+      borderWidth: 2,
+    },
     card__title: {
       flexDirection: 'row',
       justifyContent: 'space-between',

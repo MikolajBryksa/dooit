@@ -106,6 +106,7 @@ export function getLocalDateKey(day = new Date()) {
 }
 
 export function dateToWeekday(dateKey) {
+  // Converts a date (YYYY-MM-DD) into a weekday key
   const [y, m, d] = dateKey.split('-');
   const dow = new Date(+y, +m - 1, +d).getDay();
   return dayMap[dow];

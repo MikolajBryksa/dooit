@@ -80,6 +80,16 @@ const HomeView = () => {
     return expandedHabits;
   }, [habits, todayKey]);
 
+  const firstActiveKey = useMemo(() => {
+    for (const habit of todayHabits) {
+      const done =
+        Array.isArray(habit.completedHours) &&
+        habit.completedHours.includes(habit.selectedHour);
+      if (!done) return habit.key;
+    }
+    return null;
+  }, [todayHabits]);
+
   return (
     <>
       <Appbar.Header style={styles.topBar__shadow}>
@@ -117,6 +127,7 @@ const HomeView = () => {
               completedHours={habit.completedHours}
               selectedHour={habit.selectedHour}
               icon={habit.icon}
+              isNext={habit.key === firstActiveKey}
               onUpdated={refreshHabits}
             />
           ))

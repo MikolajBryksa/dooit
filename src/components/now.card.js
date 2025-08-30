@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Card, Text, IconButton, Avatar} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
@@ -19,22 +19,18 @@ const NowCard = ({
   completedHours = [],
   selectedHour,
   icon,
+  isNext = false,
   onUpdated,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const clockFormat = useSelector(state => state.settings.clockFormat);
 
-  const [justCompleted, setJustCompleted] = useState(false);
-  const initiallyCompleted =
-    Array.isArray(completedHours) && completedHours.includes(selectedHour);
-
-  const isCompleted = useMemo(
-    () => initiallyCompleted || justCompleted,
-    [initiallyCompleted, justCompleted],
-  );
-
-  const active = !isCompleted;
+  const isCompleted = useMemo(() => {
+    return (
+      Array.isArray(completedHours) && completedHours.includes(selectedHour)
+    );
+  }, [completedHours, selectedHour]);
 
   const addHour = (list, hour) => Array.from(new Set([...(list || []), hour]));
 
@@ -56,7 +52,6 @@ const NowCard = ({
       if (choice === 'skip') patch.skipCounter = (skipCounter || 0) + 1;
 
       updateHabit(id, patch);
-      setJustCompleted(true);
       onUpdated?.();
     },
     [
@@ -75,8 +70,13 @@ const NowCard = ({
     ],
   );
 
+  const containerStyle = [
+    !isCompleted ? styles.card : styles.card__deactivated,
+    isNext && !isCompleted && styles.card__selected,
+  ];
+
   return (
-    <Card style={active ? styles.card : styles.card__deactivated}>
+    <Card style={containerStyle}>
       <Card.Content style={styles.card__center}>
         <Avatar.Icon icon={icon} size={36} />
         <View style={styles.gap} />
