@@ -18,8 +18,9 @@ export const addHabit = (
       id,
       habitName,
       habitEnemy,
-      score: 0,
-      level: 0,
+      goodCounter: 0,
+      badCounter: 0,
+      skipCounter: 0,
       repeatDays,
       repeatHours,
       completedHours: [],
@@ -30,32 +31,27 @@ export const addHabit = (
   return newHabit;
 };
 
-export const updateHabit = (
-  id,
-  habitName,
-  habitEnemy,
-  score,
-  level,
-  repeatDays,
-  repeatHours,
-  available,
-) => {
+export const updateHabit = (id, updates) => {
   let updatedHabit;
   realm.write(() => {
     const habit = realm.objectForPrimaryKey('Habit', id);
+    if (!habit) return null;
 
     updatedHabit = realm.create(
       'Habit',
       {
         id,
-        habitName,
-        habitEnemy,
-        score,
-        level,
-        repeatDays: repeatDays !== undefined ? repeatDays : habit.repeatDays,
-        repeatHours,
-        available,
-        icon: habit.icon,
+        habitName: updates.habitName ?? habit.habitName,
+        habitEnemy: updates.habitEnemy ?? habit.habitEnemy,
+        goodCounter: updates.goodCounter ?? habit.goodCounter,
+        badCounter: updates.badCounter ?? habit.badCounter,
+        skipCounter: updates.skipCounter ?? habit.skipCounter,
+        repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
+        repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
+        completedHours:
+          updates.completedHours ?? Array.from(habit.completedHours || []),
+        available: updates.available ?? habit.available,
+        icon: updates.icon ?? habit.icon,
       },
       'modified',
     );
@@ -82,8 +78,9 @@ export const getHabits = () => {
     id: habit.id,
     habitName: habit.habitName,
     habitEnemy: habit.habitEnemy,
-    score: habit.score,
-    level: habit.level,
+    goodCounter: habit.goodCounter,
+    badCounter: habit.badCounter,
+    skipCounter: habit.skipCounter,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     completedHours: Array.from(habit.completedHours || []),
@@ -117,8 +114,9 @@ export const getHabitById = id => {
     id: habit.id,
     habitName: habit.habitName,
     habitEnemy: habit.habitEnemy,
-    score: habit.score,
-    level: habit.level,
+    goodCounter: habit.goodCounter,
+    badCounter: habit.badCounter,
+    skipCounter: habit.skipCounter,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     available: habit.available,
@@ -215,14 +213,4 @@ export const createDefaultHabits = () => {
   });
 
   return createdHabits;
-};
-
-export const resetDailyHabits = () => {
-  const habits = realm.objects('Habit');
-
-  realm.write(() => {
-    habits.forEach(habit => {
-      habit.score = 0;
-    });
-  });
 };

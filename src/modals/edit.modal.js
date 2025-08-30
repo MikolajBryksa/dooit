@@ -11,8 +11,8 @@ import {
 import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import DaysSelector from '@/components/days.selector';
-import HoursSelector from '@/components/hours.selector';
+import DaysSelector from '@/selectors/days.selector';
+import HoursSelector from '@/selectors/hours.selector';
 
 const EditModal = ({
   visible,
@@ -48,7 +48,7 @@ const EditModal = ({
 
   const handleSave = () => {
     let valueToSave = inputValue;
-    const numericFields = ['score', 'level'];
+    const numericFields = ['goodCounter', 'badCounter', 'skipCounter'];
     if (numericFields.includes(field)) {
       const parsed = parseInt(inputValue, 10);
       valueToSave = isNaN(parsed) ? 0 : parsed;
@@ -83,7 +83,7 @@ const EditModal = ({
             />
           )}
 
-          {['score', 'level'].includes(field) && (
+          {['goodCounter', 'badCounter', 'skipCounter'].includes(field) && (
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}

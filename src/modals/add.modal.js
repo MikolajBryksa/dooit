@@ -13,8 +13,8 @@ import {
 import {addHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import DaysSelector from '@/components/days.selector';
-import HoursSelector from '@/components/hours.selector';
+import DaysSelector from '@/selectors/days.selector';
+import HoursSelector from '@/selectors/hours.selector';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();

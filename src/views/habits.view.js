@@ -50,8 +50,9 @@ const HabitsView = () => {
               id={habit.id}
               habitName={habit.habitName}
               habitEnemy={habit.habitEnemy}
-              score={habit.score}
-              level={habit.level}
+              goodCounter={habit.goodCounter}
+              badCounter={habit.badCounter}
+              skipCounter={habit.skipCounter}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}

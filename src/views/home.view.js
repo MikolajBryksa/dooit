@@ -1,19 +1,27 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useCallback} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Card, Text} from 'react-native-paper';
-import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {hourToSec} from '@/utils';
 import {useTodayKey} from '@/hooks';
+import {getHabits} from '@/services/habits.service';
+import {setHabits} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
 
   const todayKey = useTodayKey();
+
+  const refreshHabits = React.useCallback(() => {
+    const newHabits = getHabits() || [];
+    dispatch(setHabits(newHabits));
+  }, [dispatch]);
 
   const todayHabits = useMemo(() => {
     if (!habits || habits.length === 0) return [];
@@ -31,10 +39,12 @@ const HomeView = () => {
         id: habit.id,
         habitName: habit.habitName,
         habitEnemy: habit.habitEnemy,
-        score: habit.score,
-        level: habit.level,
+        goodCounter: habit.goodCounter,
+        badCounter: habit.badCounter,
+        skipCounter: habit.skipCounter,
         repeatDays: habit.repeatDays,
         repeatHours: habit.repeatHours,
+        completedHours: habit.completedHours || [],
         selectedHour: hour,
         icon: habit.icon,
       })),
@@ -43,6 +53,7 @@ const HomeView = () => {
     expandedHabits.sort(
       (a, b) => hourToSec(a.selectedHour) - hourToSec(b.selectedHour),
     );
+
     return expandedHabits;
   }, [habits, todayKey]);
 
@@ -66,11 +77,15 @@ const HomeView = () => {
               id={habit.id}
               habitName={habit.habitName}
               habitEnemy={habit.habitEnemy}
-              score={habit.score}
-              level={habit.level}
+              goodCounter={habit.goodCounter}
+              badCounter={habit.badCounter}
+              skipCounter={habit.skipCounter}
+              repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
+              completedHours={habit.completedHours}
               selectedHour={habit.selectedHour}
               icon={habit.icon}
+              onUpdated={refreshHabits}
             />
           ))
         )}

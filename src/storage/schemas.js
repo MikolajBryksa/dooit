@@ -10,8 +10,9 @@ Habit.schema = {
     id: 'int',
     habitName: 'string',
     habitEnemy: 'string',
-    score: 'int',
-    level: 'int',
+    goodCounter: 'int',
+    badCounter: 'int',
+    skipCounter: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
     completedHours: 'string[]',
@@ -40,7 +41,7 @@ Settings.schema = {
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 9,
+  schemaVersion: 10,
   deleteRealmIfMigrationNeeded: true,
 };
 

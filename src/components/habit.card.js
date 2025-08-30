@@ -19,8 +19,9 @@ const HabitCard = ({
   id,
   habitName,
   habitEnemy,
-  score,
-  level,
+  goodCounter = 0,
+  badCounter = 0,
+  skipCounter = 0,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -30,7 +31,6 @@ const HabitCard = ({
   const styles = useStyles();
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const firstDay = useSelector(state => state.settings.firstDay);
-  const debugMode = useSelector(state => state.settings.debugMode);
   const [isAvailable, setIsAvailable] = useState(available);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalField, setModalField] = useState(null);
@@ -40,16 +40,7 @@ const HabitCard = ({
   const handleToggleAvailable = () => {
     const newAvailable = !isAvailable;
     setIsAvailable(newAvailable);
-    updateHabit(
-      id,
-      habitName,
-      habitEnemy,
-      score,
-      level,
-      repeatDays,
-      repeatHours,
-      newAvailable,
-    );
+    updateHabit(id, {available: newAvailable});
     fetchAllHabits();
   };
 
@@ -74,23 +65,24 @@ const HabitCard = ({
       id,
       habitName,
       habitEnemy,
-      score,
-      level,
+      goodCounter,
+      badCounter,
+      skipCounter,
       repeatDays,
       repeatHours,
       available: isAvailable,
     };
     updated[modalField] = sortedValue;
-    updateHabit(
-      updated.id,
-      updated.habitName,
-      updated.habitEnemy,
-      updated.score,
-      updated.level,
-      updated.repeatDays,
-      updated.repeatHours,
-      updated.available,
-    );
+    updateHabit(id, {
+      habitName: updated.habitName,
+      habitEnemy: updated.habitEnemy,
+      goodCounter: updated.goodCounter,
+      badCounter: updated.badCounter,
+      skipCounter: updated.skipCounter,
+      repeatDays: updated.repeatDays,
+      repeatHours: updated.repeatHours,
+      available: updated.available,
+    });
     fetchAllHabits();
   };
 
@@ -117,7 +109,7 @@ const HabitCard = ({
               onPress={() => openEditModal('habitEnemy', habitEnemy)}>
               <View style={styles.card__row}>
                 <IconButton
-                  icon="thumb-down"
+                  icon="alert-circle-outline"
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />
@@ -197,35 +189,49 @@ const HabitCard = ({
               </View>
             </TouchableRipple>
 
-            {debugMode && (
-              <TouchableRipple onPress={() => openEditModal('score', score)}>
-                <View style={styles.card__row}>
-                  <IconButton
-                    icon="chart-line"
-                    size={18}
-                    style={{margin: 0, marginRight: 4}}
-                  />
-                  <Text variant="bodyMedium">
-                    {t('card.score')}: {score}
-                  </Text>
-                </View>
-              </TouchableRipple>
-            )}
+            <View style={styles.gap} />
 
-            {debugMode && (
-              <TouchableRipple onPress={() => openEditModal('level', level)}>
-                <View style={styles.card__row}>
-                  <IconButton
-                    icon="star"
-                    size={18}
-                    style={{margin: 0, marginRight: 4}}
-                  />
-                  <Text variant="bodyMedium">
-                    {t('card.level')}: {level}
-                  </Text>
-                </View>
-              </TouchableRipple>
-            )}
+            <TouchableRipple
+              onPress={() => openEditModal('goodCounter', goodCounter)}>
+              <View style={styles.card__row}>
+                <IconButton
+                  icon="thumb-up"
+                  size={18}
+                  style={{margin: 0, marginRight: 4}}
+                />
+                <Text variant="bodyMedium">
+                  {t('card.goodCounter')}: {goodCounter}
+                </Text>
+              </View>
+            </TouchableRipple>
+
+            <TouchableRipple
+              onPress={() => openEditModal('badCounter', badCounter)}>
+              <View style={styles.card__row}>
+                <IconButton
+                  icon="thumb-down"
+                  size={18}
+                  style={{margin: 0, marginRight: 4}}
+                />
+                <Text variant="bodyMedium">
+                  {t('card.badCounter')}: {badCounter}
+                </Text>
+              </View>
+            </TouchableRipple>
+
+            <TouchableRipple
+              onPress={() => openEditModal('skipCounter', skipCounter)}>
+              <View style={styles.card__row}>
+                <IconButton
+                  icon="close"
+                  size={18}
+                  style={{margin: 0, marginRight: 4}}
+                />
+                <Text variant="bodyMedium">
+                  {t('card.skipCounter')}: {skipCounter}
+                </Text>
+              </View>
+            </TouchableRipple>
           </Card.Content>
         )}
       </Card>
@@ -243,7 +249,9 @@ const HabitCard = ({
             : undefined
         }
         keyboardType={
-          ['score', 'level'].includes(modalField) ? 'numeric' : 'default'
+          ['goodCounter', 'badCounter', 'skipCounter'].includes(modalField)
+            ? 'numeric'
+            : 'default'
         }
       />
 
