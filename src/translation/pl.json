@@ -79,6 +79,11 @@
     "saturday": "Sobota",
     "sunday": "Niedziela"
   },
+  "hour": {
+    "morning": "Rano",
+    "afternoon": "Popołudnie",
+    "evening": "Wieczór"
+  },
   "common": {
     "yes": "Tak",
     "no": "Nie"

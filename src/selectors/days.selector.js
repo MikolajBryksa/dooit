@@ -1,7 +1,6 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {View} from 'react-native';
-import {Chip, Checkbox} from 'react-native-paper';
+import {SegmentedButtons, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 
@@ -24,62 +23,62 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
     firstDay === 'sun'
       ? ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
       : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
   const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
   const weekend = ['sat', 'sun'];
 
+  const isSameSet = (a, b) =>
+    Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every(x => b.includes(x));
+
+  const segmentValue = React.useMemo(() => {
+    if (!Array.isArray(repeatDays) || repeatDays.length === 0) return '';
+    if (isSameSet(repeatDays, daily)) return 'daily';
+    if (isSameSet(repeatDays, workdays)) return 'workdays';
+    if (isSameSet(repeatDays, weekend)) return 'weekend';
+    return '';
+  }, [repeatDays, daily]);
+
+  const handleSegmentChange = value => {
+    if (value === 'daily') setRepeatDays(daily);
+    else if (value === 'workdays') setRepeatDays(workdays);
+    else if (value === 'weekend') setRepeatDays(weekend);
+  };
+
   const handleCheckboxChange = day => {
-    setRepeatDays(prevState =>
-      Array.isArray(prevState)
-        ? prevState.includes(day)
-          ? prevState.filter(d => d !== day)
-          : [...prevState, day]
+    setRepeatDays(prev =>
+      Array.isArray(prev)
+        ? prev.includes(day)
+          ? prev.filter(d => d !== day)
+          : [...prev, day]
         : [day],
     );
   };
 
   return (
     <>
-      <View style={styles.daysSelector__container}>
-        <Chip
-          mode="outlined"
-          onPress={() =>
-            setRepeatDays(prevState =>
-              daily.every(day => prevState.includes(day))
-                ? prevState.filter(day => !daily.includes(day))
-                : [...new Set([...prevState, ...daily])],
-            )
-          }
-          style={styles.daysSelector__chip}>
-          {t('date.daily')}
-        </Chip>
-        <Chip
-          mode="outlined"
-          onPress={() =>
-            setRepeatDays(prevState => {
-              const newDays = workdays;
-              return newDays;
-            })
-          }
-          style={styles.daysSelector__chip}>
-          {t('date.workdays')}
-        </Chip>
-        <Chip
-          mode="outlined"
-          onPress={() =>
-            setRepeatDays(prevState => {
-              return weekend;
-            })
-          }
-          style={styles.daysSelector__chip}>
-          {t('date.weekend')}
-        </Chip>
-      </View>
+      <SegmentedButtons
+        value={segmentValue}
+        onValueChange={handleSegmentChange}
+        style={styles.segment}
+        buttons={[
+          {value: 'daily', label: t('date.daily')},
+          {value: 'workdays', label: t('date.workdays')},
+          {value: 'weekend', label: t('date.weekend')},
+        ]}
+      />
 
       {daily.map(day => (
         <Checkbox.Item
           key={day}
           label={dayNames[day]}
-          status={repeatDays.includes(day) ? 'checked' : 'unchecked'}
+          status={
+            Array.isArray(repeatDays) && repeatDays.includes(day)
+              ? 'checked'
+              : 'unchecked'
+          }
           onPress={() => handleCheckboxChange(day)}
         />
       ))}

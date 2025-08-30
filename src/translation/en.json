@@ -79,6 +79,11 @@
     "saturday": "Saturday",
     "sunday": "Sunday"
   },
+  "hour": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening"
+  },
   "common": {
     "yes": "Yes",
     "no": "No"

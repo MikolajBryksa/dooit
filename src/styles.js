@@ -94,6 +94,9 @@ export const useStyles = () => {
       borderRadius: 12,
       marginBottom: theme.dimensions.margin,
     },
+    segment: {
+      marginBottom: theme.dimensions.padding,
+    },
     progressBar: {
       marginVertical: theme.dimensions.margin,
     },
