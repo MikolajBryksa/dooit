@@ -1,13 +1,13 @@
 import {useEffect, useState} from 'react';
-import {getTodayKey} from '@/utils';
+import {getLocalDateKey} from '@/utils';
 
 export function useTodayKey() {
-  const [todayKey, setTodayKey] = useState(getTodayKey());
+  const [todayKey, setTodayKey] = useState(getLocalDateKey());
 
   useEffect(() => {
     const id = setInterval(() => {
       setTodayKey(prev => {
-        const next = getTodayKey();
+        const next = getLocalDateKey();
         return next !== prev ? next : prev;
       });
     }, 60000);

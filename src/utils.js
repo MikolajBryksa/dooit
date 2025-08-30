@@ -97,21 +97,16 @@ export function getTodayKey() {
   return dayMap[jsDay];
 }
 
-export function checkTodayKey(onDayChange) {
-  // Checks current day's key
-  const [todayKey, setTodayKey] = useState(getTodayKey());
+export function getLocalDateKey(day = new Date()) {
+  // Returns the current day's date
+  const y = day.getFullYear();
+  const m = String(day.getMonth() + 1).padStart(2, '0');
+  const d = String(day.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newKey = getTodayKey();
-      if (newKey !== todayKey) {
-        setTodayKey(newKey);
-        onDayChange?.(newKey);
-      }
-    }, 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, [todayKey, onDayChange]);
-
-  return todayKey;
+export function dateToWeekday(dateKey) {
+  const [y, m, d] = dateKey.split('-');
+  const dow = new Date(+y, +m - 1, +d).getDay();
+  return dayMap[dow];
 }

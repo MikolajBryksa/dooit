@@ -214,3 +214,17 @@ export const createDefaultHabits = () => {
 
   return createdHabits;
 };
+
+export const resetCompletedHoursForAllHabits = () => {
+  let affected = 0;
+  realm.write(() => {
+    const habits = realm.objects('Habit');
+    habits.forEach(habit => {
+      if (habit.completedHours && habit.completedHours.length > 0) {
+        habit.completedHours.splice(0, habit.completedHours.length);
+        affected += 1;
+      }
+    });
+  });
+  return affected;
+};

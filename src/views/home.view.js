@@ -1,12 +1,15 @@
-import React, {useMemo, useCallback} from 'react';
+import React, {useMemo, useEffect, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Card, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {hourToSec} from '@/utils';
+import {hourToSec, dateToWeekday} from '@/utils';
 import {useTodayKey} from '@/hooks';
-import {getHabits} from '@/services/habits.service';
+import {
+  getHabits,
+  resetCompletedHoursForAllHabits,
+} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 
@@ -15,22 +18,42 @@ const HomeView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
+  const debugMode = useSelector(state => state.settings.debugMode);
 
-  const todayKey = useTodayKey();
-
-  const refreshHabits = React.useCallback(() => {
+  const refreshHabits = useCallback(() => {
+    // Updates the list of habits after changing one
     const newHabits = getHabits() || [];
     dispatch(setHabits(newHabits));
   }, [dispatch]);
 
+  const todayKey = useTodayKey();
+
+  useEffect(() => {
+    // Updates the list of habits after changing the date
+    (async () => {
+      const LAST_RESET_DATE = 'habits:lastResetDate';
+      const lastDate = await AsyncStorage.getItem(LAST_RESET_DATE);
+
+      if (lastDate !== todayKey) {
+        resetCompletedHoursForAllHabits();
+        await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
+        refreshHabits();
+      }
+    })();
+  }, [todayKey, refreshHabits]);
+
   const todayHabits = useMemo(() => {
+    // Filters habits into those that are available today
+    // Expands habits for repeat hours and sorts them
     if (!habits || habits.length === 0) return [];
+
+    const weekdayKey = dateToWeekday(todayKey);
 
     const filteredHabits = habits.filter(
       habit =>
         habit.available &&
         Array.isArray(habit.repeatDays) &&
-        habit.repeatDays.includes(todayKey),
+        habit.repeatDays.includes(weekdayKey),
     );
 
     const expandedHabits = filteredHabits.flatMap(habit =>
@@ -61,6 +84,15 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
+        {debugMode && (
+          <Appbar.Action
+            icon="refresh"
+            onPress={() => {
+              resetCompletedHoursForAllHabits();
+              refreshHabits();
+            }}
+          />
+        )}
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
