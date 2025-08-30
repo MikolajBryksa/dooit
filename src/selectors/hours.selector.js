@@ -33,15 +33,11 @@ const HoursSelector = ({repeatHours, setRepeatHours}) => {
 
   const handleToggleHour = hourStr => {
     const hour24 = to24h(hourStr);
-    if (Array.isArray(repeatHours)) {
-      setRepeatHours(
-        repeatHours.includes(hour24)
-          ? repeatHours.filter(h => h !== hour24)
-          : [...repeatHours, hour24],
-      );
-    } else {
-      setRepeatHours([hour24]);
-    }
+    setRepeatHours(
+      repeatHours.includes(hour24)
+        ? repeatHours.filter(h => h !== hour24)
+        : [...repeatHours, hour24],
+    );
   };
 
   const allSlots = [];
@@ -83,8 +79,7 @@ const HoursSelector = ({repeatHours, setRepeatHours}) => {
           const hour24 = `${h.toString().padStart(2, '0')}:${m
             .toString()
             .padStart(2, '0')}`;
-          const selected =
-            Array.isArray(repeatHours) && repeatHours.includes(hour24);
+          const selected = repeatHours.includes(hour24);
           return (
             <Chip
               key={hour24}

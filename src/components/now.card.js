@@ -1,11 +1,12 @@
-import React, {useCallback, useMemo} from 'react';
-import {Card, Text, IconButton, Avatar} from 'react-native-paper';
+import React, {useCallback, useState, useMemo, useEffect} from 'react';
+import {Card, Text, Button} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
-import {formatHourString} from '@/utils';
+import {formatHourString, addHour} from '@/utils';
+import PieChart from './pie.chart';
 
 const NowCard = ({
   id,
@@ -25,14 +26,35 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const clockFormat = useSelector(state => state.settings.clockFormat);
+  const debugMode = useSelector(state => state.settings.debugMode);
+  const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    setStep(1);
+  }, [isNext]);
 
   const isCompleted = useMemo(() => {
-    return (
-      Array.isArray(completedHours) && completedHours.includes(selectedHour)
-    );
+    return completedHours.includes(selectedHour);
   }, [completedHours, selectedHour]);
 
-  const addHour = (list, hour) => Array.from(new Set([...(list || []), hour]));
+  const addGoodChoice = () => {
+    handleChoice('good');
+    setStep(3);
+  };
+
+  const skipGoodChoice = () => {
+    setStep(2);
+  };
+
+  const addBadChoice = () => {
+    handleChoice('bad');
+    setStep(3);
+  };
+
+  const skipBadChoice = () => {
+    handleChoice('skip');
+    setStep(3);
+  };
 
   const handleChoice = useCallback(
     choice => {
@@ -70,50 +92,94 @@ const NowCard = ({
     ],
   );
 
-  const containerStyle = [
-    !isCompleted ? styles.card : styles.card__deactivated,
-    isNext && !isCompleted && styles.card__selected,
-  ];
+  if (!isNext && !debugMode) {
+    return null;
+  }
 
   return (
-    <Card style={containerStyle}>
+    <Card
+      style={[
+        styles.card,
+        debugMode && isCompleted && styles.card__deactivated,
+        debugMode && isNext && styles.card__selected,
+      ]}>
       <Card.Content style={styles.card__center}>
-        <Avatar.Icon icon={icon} size={36} />
+        <PieChart
+          size={120}
+          strokeWidth={12}
+          icon={icon}
+          good={goodCounter}
+          bad={badCounter}
+          skip={skipCounter}
+        />
         <View style={styles.gap} />
-
-        <Text variant="bodyMedium">
-          {goodCounter} {t('done.good', {defaultValue: habitName})}
-        </Text>
-        <Text variant="bodyMedium">
-          {badCounter} {t('done.bad', {defaultValue: habitEnemy})}
-        </Text>
-        <Text variant="bodyMedium">
-          {skipCounter} {t('done.skipped', {defaultValue: 'Skipped'})}
-        </Text>
-
-        <Card.Content style={styles.card__buttons}>
-          <IconButton
-            icon="thumb-up"
-            disabled={isCompleted}
-            onPress={() => handleChoice('good')}
-          />
-          <IconButton
-            icon="thumb-down"
-            disabled={isCompleted}
-            onPress={() => handleChoice('bad')}
-          />
-          <IconButton
-            icon="close"
-            disabled={isCompleted}
-            onPress={() => handleChoice('skip')}
-          />
-        </Card.Content>
-
-        <View style={styles.gap} />
+        {/* Time */}
         <Text variant="bodyLarge">{selectedHour}</Text>
         <Text variant="bodyMedium">
           {repeatHours.map(h => formatHourString(h, clockFormat)).join(', ')}
         </Text>
+        <View style={styles.gap} />
+
+        {step === 1 && (
+          <>
+            {/* Good */}
+            <Text variant="titleLarge">{habitName}</Text>
+            <Card.Content style={styles.card__buttons}>
+              <Button
+                style={styles.button}
+                mode="outlined"
+                onPress={() => {
+                  skipGoodChoice();
+                }}>
+                {t('button.skip')}
+              </Button>
+              <Button
+                style={styles.button}
+                mode="contained"
+                onPress={() => {
+                  addGoodChoice();
+                }}>
+                {t('button.done')}
+              </Button>
+            </Card.Content>
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            {/* Bad */}
+            <Text variant="titleLarge">{habitEnemy}</Text>
+            <Card.Content style={styles.card__buttons}>
+              <Button
+                style={styles.button}
+                mode="outlined"
+                onPress={() => {
+                  skipBadChoice();
+                }}>
+                {t('button.skip')}
+              </Button>
+              <Button
+                style={styles.button}
+                mode="contained"
+                onPress={() => {
+                  addBadChoice();
+                }}>
+                {t('button.done')}
+              </Button>
+            </Card.Content>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            {/* Next */}
+            <Card.Content style={styles.card__buttons}>
+              <Text variant="bodyLarge">TODO</Text>
+            </Card.Content>
+          </>
+        )}
+
+        <View style={styles.gap} />
       </Card.Content>
       <View style={styles.gap} />
     </Card>

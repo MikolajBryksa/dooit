@@ -41,7 +41,8 @@
     "save": "Save",
     "back": "Back",
     "next": "Next",
-    "skip": "Skip"
+    "skip": "Skip",
+    "done": "Done"
   },
   "card": {
     "habitName": "Habit name",

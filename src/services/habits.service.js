@@ -92,14 +92,8 @@ export const getHabits = () => {
     if (a.available !== b.available) {
       return a.available ? -1 : 1;
     }
-    const aFirstHour =
-      Array.isArray(a.repeatHours) &&
-      a.repeatHours.length > 0 &&
-      a.repeatHours[0];
-    const bFirstHour =
-      Array.isArray(b.repeatHours) &&
-      b.repeatHours.length > 0 &&
-      b.repeatHours[0];
+    const aFirstHour = a.repeatHours.length > 0 && a.repeatHours[0];
+    const bFirstHour = b.repeatHours.length > 0 && b.repeatHours[0];
     return aFirstHour.localeCompare(bFirstHour);
   });
 

@@ -1,118 +1,281 @@
-import React, {useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, Animated, Easing} from 'react-native';
-import {useTheme} from 'react-native-paper';
+import React from 'react';
+import {View, StyleSheet, Animated, Easing} from 'react-native';
+import {Avatar, useTheme} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const PieChart = ({
+  good = 0,
+  bad = 0,
+  skip = 0,
+  icon, // np. "star"
+  size = 120,
+  strokeWidth = 10,
 
-const PieChart = ({score = 0, max = 1, level = 1, label = '', size = 100}) => {
+  goodColor = '#3B82F6', // niebieski (good) + kolor ikony
+  badColor = '#EF4444', // czerwony (bad)
+  skipColor = '#FFFFFF', // biały (skip)
+  trackColor = 'rgba(255,255,255,0.28)', // delikatna biel przy 0/0/0
+
+  // Animacja
+  animateDuration = 550, // ms
+  flashDuration = 700,
+}) => {
   const theme = useTheme();
-  const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
+  const cx = size / 2,
+    cy = size / 2;
+  const C = 2 * Math.PI * radius;
+  const EPS = 1e-3; // na szumy float
 
-  const [displayLevelValue, setDisplayLevelValue] = React.useState(level);
+  // --- Frakcje docelowe ---
+  const total = Math.max(0, good + bad + skip);
+  const fG = total > 0 ? good / total : 0;
+  const fB = total > 0 ? bad / total : 0;
+  const fS = total > 0 ? skip / total : 0;
 
-  const progressAnimation = useRef(new Animated.Value(0)).current;
-  const levelAnimation = useRef(new Animated.Value(level)).current;
-  const opacityAnimation = useRef(new Animated.Value(1)).current;
+  // Docelowe długości
+  const target = React.useMemo(() => {
+    return {
+      g: C * fG,
+      b: C * fB,
+      s: C * fS,
+    };
+  }, [C, fG, fB, fS]);
 
-  const prevLevelRef = useRef(level);
-  const prevScoreRef = useRef(score);
+  // --- Animacja między poprzednim a nowym stanem ---
+  const mountedRef = React.useRef(false);
+  const prevRef = React.useRef({g: 0, b: 0, s: 0});
+  const t = React.useRef(new Animated.Value(1)).current;
+  const [animT, setAnimT] = React.useState(1);
+  const [isAnimating, setIsAnimating] = React.useState(false);
 
-  const percentage = max > 0 ? Math.min(score / max, 1) : 0;
+  // nasłuch animacji -> force re-render
+  React.useEffect(() => {
+    const sub = t.addListener(({value}) => setAnimT(value));
+    return () => t.removeListener(sub);
+  }, [t]);
 
-  useEffect(() => {
-    prevScoreRef.current = score;
-
-    Animated.timing(progressAnimation, {
-      toValue: percentage,
-      duration: 1000,
+  // uruchamiaj animację przy zmianach wartości / rozmiaru
+  React.useEffect(() => {
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      prevRef.current = target;
+      t.setValue(1);
+      setAnimT(1);
+      setIsAnimating(false);
+      return;
+    }
+    setIsAnimating(true);
+    t.setValue(0);
+    Animated.timing(t, {
+      toValue: 1,
+      duration: animateDuration,
       easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
+      useNativeDriver: false, // animujemy liczby
+    }).start(({finished}) => {
+      if (finished) {
+        prevRef.current = target;
+        setIsAnimating(false);
+      }
+    });
+  }, [target.g, target.b, target.s, animateDuration, t]);
 
-    if (level !== prevLevelRef.current) {
-      prevLevelRef.current = level;
+  const lerp = (a, b, k) => a + (b - a) * k;
 
-      Animated.timing(opacityAnimation, {
-        toValue: 0,
-        duration: 300,
-        easing: Easing.in(Easing.quad),
-        useNativeDriver: true,
-      }).start(() => {
-        setDisplayLevelValue(level);
+  // aktualne (animowane) długości
+  const lenG = lerp(prevRef.current.g, target.g, animT);
+  const lenB = lerp(prevRef.current.b, target.b, animT);
+  const lenS = lerp(prevRef.current.s, target.s, animT);
 
-        levelAnimation.setValue(level);
+  // animowane starty segmentów (kolejność: good → bad → skip), start = góra
+  const startG = 0;
+  const startB = lenG;
+  const startS = lenG + lenB;
 
-        Animated.timing(opacityAnimation, {
+  const hasAny = lenG > EPS || lenB > EPS || lenS > EPS;
+
+  // po zakończeniu animacji, jeśli 100% jednego segmentu — pełne koło w jego kolorze
+  const targetSingle =
+    total > 0 &&
+    (good > 0 && bad === 0 && skip === 0
+      ? 'good'
+      : bad > 0 && good === 0 && skip === 0
+      ? 'bad'
+      : skip > 0 && good === 0 && bad === 0
+      ? 'skip'
+      : null);
+  const showSolidSingle = targetSingle && !isAnimating;
+
+  // --- Flash (+1/-1/0) ---
+  const prevVals = React.useRef({good, bad, skip});
+  const [flash, setFlash] = React.useState({
+    text: '',
+    color: '#000',
+    visible: false,
+  });
+  const flashScale = React.useRef(new Animated.Value(0.9)).current;
+  const flashOpacity = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    const dg = good - prevVals.current.good;
+    const db = bad - prevVals.current.bad;
+    const ds = skip - prevVals.current.skip;
+    prevVals.current = {good, bad, skip};
+    let show = null;
+    if (dg === 1) show = {text: '+1', color: goodColor};
+    else if (db === 1) show = {text: '-1', color: badColor};
+    else if (ds === 1)
+      show = {text: '0', color: theme.colors?.onSurface ?? '#111827'};
+    if (show) {
+      setFlash({...show, visible: true});
+      flashScale.setValue(0.9);
+      flashOpacity.setValue(0);
+      Animated.parallel([
+        Animated.spring(flashScale, {toValue: 1, useNativeDriver: true}),
+        Animated.timing(flashOpacity, {
           toValue: 1,
-          duration: 300,
+          duration: 160,
           easing: Easing.out(Easing.quad),
           useNativeDriver: true,
-        }).start();
-      });
+        }),
+      ]).start();
+      const timer = setTimeout(() => {
+        Animated.timing(flashOpacity, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }).start(() => setFlash(f => ({...f, visible: false})));
+      }, flashDuration);
+      return () => clearTimeout(timer);
     }
   }, [
-    percentage,
-    score,
-    level,
-    progressAnimation,
-    levelAnimation,
-    opacityAnimation,
-    setDisplayLevelValue,
+    good,
+    bad,
+    skip,
+    goodColor,
+    badColor,
+    theme.colors,
+    flashDuration,
+    flashOpacity,
+    flashScale,
   ]);
 
-  const strokeDashoffset = progressAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [circumference, 0],
-  });
+  const iconSize = Math.max(24, size - (strokeWidth + 8) * 2);
 
   return (
     <View style={[styles.container, {width: size, height: size}]}>
-      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Background Circle */}
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={theme.colors.surfaceVariant}
-          strokeWidth={strokeWidth}
-          fill="transparent"
-        />
-
-        {/* Progress Circle */}
-        <G rotation="-90" origin={`${size / 2}, ${size / 2}`}>
-          <AnimatedCircle
-            cx={size / 2}
-            cy={size / 2}
+      <Svg width={size} height={size}>
+        {/* Start w górze (12:00) i CW */}
+        <G rotation="-90" origin={`${cx}, ${cy}`}>
+          {/* delikatny track */}
+          <Circle
+            cx={cx}
+            cy={cy}
             r={radius}
-            stroke={theme.colors.primary}
+            stroke={trackColor}
             strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
+            fill="none"
+            strokeLinecap="butt"
           />
+
+          {/* pełne koło dla 100% jednego segmentu tylko gdy animacja zakończona */}
+          {showSolidSingle === 'good' && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={goodColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+            />
+          )}
+          {showSolidSingle === 'bad' && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={badColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+            />
+          )}
+          {showSolidSingle === 'skip' && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={skipColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+            />
+          )}
+
+          {/* W trakcie animacji lub gdy to nie 100% jednego segmentu — 3 dashi */}
+          {!showSolidSingle && hasAny && lenG > EPS && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={goodColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+              strokeDasharray={`${lenG} ${Math.max(0, C - lenG)}`}
+              strokeDashoffset={-startG}
+              strokeLinecap="butt"
+            />
+          )}
+          {!showSolidSingle && hasAny && lenB > EPS && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={badColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+              strokeDasharray={`${lenB} ${Math.max(0, C - lenB)}`}
+              strokeDashoffset={-startB}
+              strokeLinecap="butt"
+            />
+          )}
+          {!showSolidSingle && hasAny && lenS > EPS && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={skipColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+              strokeDasharray={`${lenS} ${Math.max(0, C - lenS)}`}
+              strokeDashoffset={-startS}
+              strokeLinecap="butt"
+            />
+          )}
         </G>
       </Svg>
 
-      {/* Center Content */}
-      <View style={styles.centerContent}>
-        <Text style={[styles.labelText, {color: theme.colors.onSurface}]}>
-          {label}
-        </Text>
-        <Animated.Text
-          style={[
-            styles.levelText,
-            {
-              color: theme.colors.primary,
-              fontSize: size / 3,
-              opacity: opacityAnimation,
-            },
-          ]}>
-          {displayLevelValue}
-        </Animated.Text>
+      {/* Środek: flash albo niebieska ikona */}
+      <View pointerEvents="none" style={styles.centerContent}>
+        {flash.visible ? (
+          <Animated.Text
+            style={[
+              styles.flashText,
+              {
+                color: flash.color,
+                transform: [{scale: flashScale}],
+                opacity: flashOpacity,
+                fontSize: Math.min(40, size * 0.28),
+              },
+            ]}>
+            {flash.text}
+          </Animated.Text>
+        ) : (
+          <Avatar.Icon
+            icon={icon}
+            size={iconSize}
+            style={{backgroundColor: 'transparent'}}
+            color={goodColor}
+          />
+        )}
       </View>
     </View>
   );
@@ -133,24 +296,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  labelText: {
-    fontSize: 12,
-    marginBottom: 2,
-    opacity: 0.8,
-  },
-  levelText: {
-    fontWeight: 'bold',
-  },
-  scoreTextContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  scoreText: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
+  flashText: {fontWeight: '800', letterSpacing: 0.5},
 });
 
 export default PieChart;

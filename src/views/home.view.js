@@ -1,4 +1,4 @@
-import React, {useMemo, useEffect, useCallback} from 'react';
+import React, {useMemo, useEffect, useCallback, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Card, Text} from 'react-native-paper';
@@ -50,10 +50,7 @@ const HomeView = () => {
     const weekdayKey = dateToWeekday(todayKey);
 
     const filteredHabits = habits.filter(
-      habit =>
-        habit.available &&
-        Array.isArray(habit.repeatDays) &&
-        habit.repeatDays.includes(weekdayKey),
+      habit => habit.available && habit.repeatDays.includes(weekdayKey),
     );
 
     const expandedHabits = filteredHabits.flatMap(habit =>
@@ -80,15 +77,30 @@ const HomeView = () => {
     return expandedHabits;
   }, [habits, todayKey]);
 
-  const firstActiveKey = useMemo(() => {
+  const firstActiveKeyCandidate = useMemo(() => {
     for (const habit of todayHabits) {
-      const done =
-        Array.isArray(habit.completedHours) &&
-        habit.completedHours.includes(habit.selectedHour);
+      const done = habit.completedHours.includes(habit.selectedHour);
       if (!done) return habit.key;
     }
     return null;
   }, [todayHabits]);
+
+  const [activeKey, setActiveKey] = useState(null);
+  const ADVANCE_DELAY_MS = 2000;
+
+  useEffect(() => {
+    if (activeKey === null && firstActiveKeyCandidate !== null) {
+      setActiveKey(firstActiveKeyCandidate);
+      return;
+    }
+    if (firstActiveKeyCandidate !== activeKey) {
+      const id = setTimeout(
+        () => setActiveKey(firstActiveKeyCandidate),
+        ADVANCE_DELAY_MS,
+      );
+      return () => clearTimeout(id);
+    }
+  }, [firstActiveKeyCandidate, activeKey]);
 
   return (
     <>
@@ -127,7 +139,7 @@ const HomeView = () => {
               completedHours={habit.completedHours}
               selectedHour={habit.selectedHour}
               icon={habit.icon}
-              isNext={habit.key === firstActiveKey}
+              isNext={habit.key === activeKey}
               onUpdated={refreshHabits}
             />
           ))

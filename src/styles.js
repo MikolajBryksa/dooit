@@ -88,7 +88,8 @@ export const useStyles = () => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       flex: 1,
-      justifyContent: 'space-between',
+      marginTop: theme.dimensions.padding,
+      gap: theme.dimensions.padding,
       alignItems: 'center',
     },
     chip: {

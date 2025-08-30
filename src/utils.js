@@ -62,6 +62,10 @@ export function formatHourString(hour, clockFormat = '24h') {
   return hour;
 }
 
+export function addHour(list, hour) {
+  return Array.from(new Set([...(list || []), hour]));
+}
+
 export function renderIcon(name, color, size) {
   // Renders a FontAwesome icon based on the provided name, color, and size
 

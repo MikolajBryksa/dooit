@@ -41,7 +41,8 @@
     "save": "Zapisz",
     "back": "Wstecz",
     "next": "Dalej",
-    "skip": "Pomiń"
+    "skip": "Pomiń",
+    "done": "Zrobione"
   },
   "card": {
     "habitName": "Nazwa nawyku",

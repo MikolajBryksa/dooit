@@ -28,13 +28,10 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const weekend = ['sat', 'sun'];
 
   const isSameSet = (a, b) =>
-    Array.isArray(a) &&
-    Array.isArray(b) &&
-    a.length === b.length &&
-    a.every(x => b.includes(x));
+    a.length === b.length && a.every(x => b.includes(x));
 
   const segmentValue = React.useMemo(() => {
-    if (!Array.isArray(repeatDays) || repeatDays.length === 0) return '';
+    if (repeatDays.length === 0) return '';
     if (isSameSet(repeatDays, daily)) return 'daily';
     if (isSameSet(repeatDays, workdays)) return 'workdays';
     if (isSameSet(repeatDays, weekend)) return 'weekend';
@@ -49,11 +46,7 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
 
   const handleCheckboxChange = day => {
     setRepeatDays(prev =>
-      Array.isArray(prev)
-        ? prev.includes(day)
-          ? prev.filter(d => d !== day)
-          : [...prev, day]
-        : [day],
+      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day],
     );
   };
 
@@ -74,11 +67,7 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         <Checkbox.Item
           key={day}
           label={dayNames[day]}
-          status={
-            Array.isArray(repeatDays) && repeatDays.includes(day)
-              ? 'checked'
-              : 'unchecked'
-          }
+          status={repeatDays.includes(day) ? 'checked' : 'unchecked'}
           onPress={() => handleCheckboxChange(day)}
         />
       ))}
