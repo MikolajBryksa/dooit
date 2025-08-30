@@ -102,8 +102,13 @@ export const useStyles = () => {
     segment: {
       marginVertical: theme.dimensions.padding,
     },
-    progressBar: {
+    progress__container: {
+      width: '50%',
+    },
+    progress__bar: {
       marginVertical: theme.dimensions.margin,
+      height: theme.dimensions.margin,
+      borderRadius: theme.dimensions.margin / 2,
     },
     gap: {
       height: theme.dimensions.margin * 3,

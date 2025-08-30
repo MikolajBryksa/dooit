@@ -96,7 +96,10 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
               }}
             />
           </View>
-          <ProgressBar style={styles.progressBar} progress={progressBarValue} />
+          <ProgressBar
+            style={styles.progress__bar}
+            progress={progressBarValue}
+          />
 
           {step === 1 && (
             <>

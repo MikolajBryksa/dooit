@@ -7,20 +7,24 @@ const PieChart = ({
   good = 0,
   bad = 0,
   skip = 0,
-  icon, // np. "star"
+  icon,
   size = 120,
   strokeWidth = 10,
 
-  goodColor = '#3B82F6', // niebieski (good) + kolor ikony
-  badColor = '#EF4444', // czerwony (bad)
-  skipColor = '#FFFFFF', // biały (skip)
-  trackColor = 'rgba(255,255,255,0.28)', // delikatna biel przy 0/0/0
+  goodColor = '#3B82F6',
+  badColor = '#EF4444',
+  skipColor = '#FFFFFF',
+  trackColor = 'rgba(255,255,255,0.28)',
 
-  // Animacja
-  animateDuration = 550, // ms
+  animateDuration = 550,
   flashDuration = 700,
 }) => {
   const theme = useTheme();
+  goodColor = theme.colors.primary;
+  badColor = theme.colors.error;
+  skipColor = theme.colors.background;
+  trackColor = theme.colors.background;
+
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2,
     cy = size / 2;

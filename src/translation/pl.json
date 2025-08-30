@@ -161,5 +161,28 @@
       "habitName": "Zimny prysznic",
       "habitEnemy": "Długi prysznic"
     }
+  },
+  "motivation": {
+    "good": [
+      "Świetnie, Twój wybór wzmocnił Twój nawyk.",
+      "Tak trzymaj — konsekwencja buduje mistrzostwo.",
+      "Mały krok, wielki efekt w dłuższej perspektywie.",
+      "Mądre wybory stają się Twoją normą.",
+      "Jeden dobry nawyk pociąga za sobą kolejne."
+    ],
+    "bad": [
+      "To się zdarza, wybierz lepiej następnym razem.",
+      "Nie karz się — wracaj na właściwy tor.",
+      "Jeden słabszy wybór nie definiuje Twojego dnia.",
+      "Skup się na kolejnym kroku, nie na błędzie.",
+      "Każdy ma gorsze momenty."
+    ],
+    "skip": [
+      "Okej, pauza. Wybierz mądrze przy następnej okazji.",
+      "Mała przerwa nie niszczy drogi, kontynuuj.",
+      "Zadbaj o energię i spróbuj ponownie.",
+      "Jedno pominięcie nie przekreśla serii.",
+      "Zaakceptuj przerwę i wybierz mądrze następnym razem."
+    ]
   }
 }

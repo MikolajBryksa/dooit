@@ -8,17 +8,19 @@ export const getTheme = currentTheme => {
   const systemTheme = useColorScheme();
   const themeToUse = currentTheme || systemTheme;
 
+  const dimensions = {
+    height: 60,
+    padding: 10,
+    margin: 5,
+  };
+
   const LightScheme = {
     ...MD3LightTheme,
     colors: {
       ...MD3LightTheme.colors,
       ...lightScheme,
     },
-    dimensions: {
-      height: 60,
-      padding: 10,
-      margin: 5,
-    },
+    dimensions: dimensions,
     fonts: fontConfig,
   };
 
@@ -28,11 +30,7 @@ export const getTheme = currentTheme => {
       ...MD3DarkTheme.colors,
       ...darkScheme,
     },
-    dimensions: {
-      height: 60,
-      padding: 10,
-      margin: 5,
-    },
+    dimensions: dimensions,
     fonts: fontConfig,
   };
 

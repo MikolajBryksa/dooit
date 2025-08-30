@@ -1,11 +1,11 @@
 import React, {useCallback, useState, useMemo, useEffect} from 'react';
-import {Card, Text, Button} from 'react-native-paper';
+import {Card, Text, Button, ProgressBar} from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
-import {formatHourString, addHour} from '@/utils';
+import {addHour} from '@/utils';
 import PieChart from './pie.chart';
 
 const NowCard = ({
@@ -25,19 +25,32 @@ const NowCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const clockFormat = useSelector(state => state.settings.clockFormat);
   const debugMode = useSelector(state => state.settings.debugMode);
   const [step, setStep] = useState(1);
+  const [motivation, setMotivation] = useState('');
 
   useEffect(() => {
     setStep(1);
+    setMotivation('');
   }, [isNext]);
 
   const isCompleted = useMemo(() => {
     return completedHours.includes(selectedHour);
   }, [completedHours, selectedHour]);
 
+  const pickMotivation = useCallback(
+    kind => {
+      const pool = t(`motivation.${kind}`, {returnObjects: true});
+      const arr = Array.isArray(pool) ? pool : [];
+      if (!arr.length) return '';
+      const idx = Math.floor(Math.random() * arr.length);
+      return arr[idx];
+    },
+    [t],
+  );
+
   const addGoodChoice = () => {
+    setMotivation(pickMotivation('good'));
     handleChoice('good');
     setStep(3);
   };
@@ -47,11 +60,13 @@ const NowCard = ({
   };
 
   const addBadChoice = () => {
+    setMotivation(pickMotivation('bad'));
     handleChoice('bad');
     setStep(3);
   };
 
   const skipBadChoice = () => {
+    setMotivation(pickMotivation('skip'));
     handleChoice('skip');
     setStep(3);
   };
@@ -96,6 +111,15 @@ const NowCard = ({
     return null;
   }
 
+  const progressBarValue = useMemo(() => {
+    const planned = new Set(repeatHours || []);
+    const done = new Set((completedHours || []).filter(h => planned.has(h)))
+      .size;
+
+    const value = done / repeatHours?.length;
+    return Math.max(0, Math.min(1, value));
+  }, [repeatHours, completedHours]);
+
   return (
     <Card
       style={[
@@ -104,6 +128,7 @@ const NowCard = ({
         debugMode && isNext && styles.card__selected,
       ]}>
       <Card.Content style={styles.card__center}>
+        {/* Counter */}
         <PieChart
           size={120}
           strokeWidth={12}
@@ -115,9 +140,12 @@ const NowCard = ({
         <View style={styles.gap} />
         {/* Time */}
         <Text variant="bodyLarge">{selectedHour}</Text>
-        <Text variant="bodyMedium">
-          {repeatHours.map(h => formatHourString(h, clockFormat)).join(', ')}
-        </Text>
+        <View style={styles.progress__container}>
+          <ProgressBar
+            style={styles.progress__bar}
+            progress={progressBarValue}
+          />
+        </View>
         <View style={styles.gap} />
 
         {step === 1 && (
@@ -172,10 +200,8 @@ const NowCard = ({
 
         {step === 3 && (
           <>
-            {/* Next */}
-            <Card.Content style={styles.card__buttons}>
-              <Text variant="bodyLarge">TODO</Text>
-            </Card.Content>
+            {/* Finish */}
+            <Text variant="bodyLarge">{motivation}</Text>
           </>
         )}
 
