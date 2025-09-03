@@ -4,6 +4,7 @@ import {ScrollView, View} from 'react-native';
 import {Appbar, Card, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import notifee, {TriggerType} from '@notifee/react-native';
 import {useStyles} from '@/styles';
 import {hourToSec, dateToWeekday} from '@/utils';
 import {useTodayKey} from '@/hooks';
@@ -27,6 +28,7 @@ const HomeView = () => {
     dispatch(setHabits(newHabits));
   }, [dispatch]);
 
+  // Updates the date every minute
   const todayKey = useTodayKey();
 
   useEffect(() => {
@@ -44,17 +46,18 @@ const HomeView = () => {
   }, [todayKey, refreshHabits]);
 
   const todayHabits = useMemo(() => {
-    // Filters habits into those that are available today
-    // Expands habits for repeat hours and sorts them
-    if (!habits || habits.length === 0) return [];
+    // Creates today's habits
 
+    if (!habits || habits.length === 0) return [];
     const weekdayKey = dateToWeekday(todayKey);
 
     const filteredHabits = habits.filter(
+      // Filters habits into those that are available today
       habit => habit.available && habit.repeatDays.includes(weekdayKey),
     );
 
     const expandedHabits = filteredHabits.flatMap(habit =>
+      // Expands habits for repeat hours and sorts them
       habit.repeatHours.map((hour, idx) => ({
         key: `${habit.id}__${idx}__${hour}`,
         id: habit.id,
@@ -79,6 +82,7 @@ const HomeView = () => {
   }, [habits, todayKey]);
 
   const firstActiveKeyCandidate = useMemo(() => {
+    // Selects the key of the first incomplete habit for today
     for (const habit of todayHabits) {
       const done = habit.completedHours.includes(habit.selectedHour);
       if (!done) return habit.key;
@@ -116,8 +120,8 @@ const HomeView = () => {
 
       const now = new Date();
       todayHabits.forEach(habit => {
-        if (habit.currentHour) {
-          const [hour, minute] = habit.currentHour.split(':').map(Number);
+        if (habit.selectedHour) {
+          const [hour, minute] = habit.selectedHour.split(':').map(Number);
           const triggerDate = new Date(
             now.getFullYear(),
             now.getMonth(),
@@ -130,7 +134,7 @@ const HomeView = () => {
           if (triggerDate > now) {
             notifee.createTriggerNotification(
               {
-                title: `${habit.currentHour} ${habit.habitName}`,
+                title: `${habit.selectedHour} ${habit.habitName}`,
                 android: {
                   channelId: 'default',
                   smallIcon: 'ic_notification',
