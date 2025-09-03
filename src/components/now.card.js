@@ -107,10 +107,6 @@ const NowCard = ({
     ],
   );
 
-  if (!isNext && !debugMode) {
-    return null;
-  }
-
   const progressBarValue = useMemo(() => {
     const planned = new Set(repeatHours || []);
     const done = new Set((completedHours || []).filter(h => planned.has(h)))
@@ -119,6 +115,10 @@ const NowCard = ({
     const value = done / repeatHours?.length;
     return Math.max(0, Math.min(1, value));
   }, [repeatHours, completedHours]);
+
+  if (!isNext && !debugMode) {
+    return null;
+  }
 
   return (
     <Card

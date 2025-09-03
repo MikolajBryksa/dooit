@@ -90,6 +90,7 @@ const HomeView = () => {
   const ADVANCE_DELAY_MS = 2000;
 
   useEffect(() => {
+    // Manages which habit card is currently active
     if (activeKey === null && firstActiveKeyCandidate !== null) {
       setActiveKey(firstActiveKeyCandidate);
       return;
@@ -102,6 +103,49 @@ const HomeView = () => {
       return () => clearTimeout(id);
     }
   }, [firstActiveKeyCandidate, activeKey]);
+
+  useEffect(() => {
+    // Creates notifications about today's habits
+    (async () => {
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Dooit Channel',
+      });
+
+      await notifee.cancelAllNotifications();
+
+      const now = new Date();
+      todayHabits.forEach(habit => {
+        if (habit.currentHour) {
+          const [hour, minute] = habit.currentHour.split(':').map(Number);
+          const triggerDate = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            hour,
+            minute,
+            0,
+            0,
+          );
+          if (triggerDate > now) {
+            notifee.createTriggerNotification(
+              {
+                title: `${habit.currentHour} ${habit.habitName}`,
+                android: {
+                  channelId: 'default',
+                  smallIcon: 'ic_notification',
+                },
+              },
+              {
+                type: TriggerType.TIMESTAMP,
+                timestamp: triggerDate.getTime(),
+              },
+            );
+          }
+        }
+      });
+    })();
+  }, [todayHabits]);
 
   return (
     <>
