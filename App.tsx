@@ -39,7 +39,7 @@ function AppContent() {
     async function loadData() {
       try {
         // Enable debug mode in Realm settings
-        updateSettingValue('debugMode', false);
+        updateSettingValue('debugMode', true);
 
         const settings = getSettings();
 

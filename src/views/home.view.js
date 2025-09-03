@@ -87,7 +87,7 @@ const HomeView = () => {
   }, [todayHabits]);
 
   const [activeKey, setActiveKey] = useState(null);
-  const ADVANCE_DELAY_MS = 2000;
+  const ADVANCE_DELAY_MS = 3000;
 
   useEffect(() => {
     // Manages which habit card is currently active
