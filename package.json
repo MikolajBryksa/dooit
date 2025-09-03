@@ -18,6 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-native-fontawesome": "^0.3.2",
     "@notifee/react-native": "^9.1.8",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@reduxjs/toolkit": "^2.2.7",
     "babel-plugin-module-resolver": "^5.0.2",
     "i18next": "^24.1.2",

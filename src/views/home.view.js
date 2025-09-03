@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {Appbar, Card, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
 import {hourToSec, dateToWeekday} from '@/utils';
 import {useTodayKey} from '@/hooks';
