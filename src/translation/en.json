@@ -120,7 +120,12 @@
     "step2": {
       "choose": "Choose",
       "which-habits": "which habits do you want to create",
-      "start": "Get started"
+      "select-time": "Select time"
+    },
+    "step3": {
+      "select-repetition": "Select the repetition time",
+      "accept-default": "or accept the default days and hours",
+      "start": "Start"
     }
   },
   "default-habits": {

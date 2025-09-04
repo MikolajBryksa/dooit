@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView} from 'react-native';
 import {Text, Button, Card, Avatar, Checkbox} from 'react-native-paper';
+import HabitCard from '@/components/habit.card';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
@@ -19,6 +20,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
+  const habits = useSelector(state => state.habits);
   const [step, setStep] = useState(1);
 
   const [selectedHabits, setSelectedHabits] = useState({
@@ -49,9 +51,8 @@ const OnboardingView = ({setShowOnboarding}) => {
     createDefaultHabits();
 
     const allHabits = getHabits();
-
-    allHabits.forEach((habit, index) => {
-      const habitId = index + 1;
+    allHabits.forEach(habit => {
+      const habitId = habit.id;
       const isSelected = selectedHabits[habitId];
 
       updateHabit(habit.id, {
@@ -59,16 +60,27 @@ const OnboardingView = ({setShowOnboarding}) => {
       });
     });
 
+    const habits = getHabits() || [];
+    dispatch(setHabits(habits));
+    setStep(3);
+  }
+
+  function handleStep3() {
     updateSettingValue('firstLaunch', false);
     const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
-    const habits = getHabits() || [];
-    dispatch(setHabits(habits));
 
     setShowOnboarding(false);
     requestNotificationPermission(settings, dispatch, setSettings);
   }
 
+  const fetchAllHabits = () => {
+    const updatedHabits = getHabits() || [];
+    dispatch(setHabits(updatedHabits));
+  };
+
+  // Filters only available habits
+  const availableHabits = (habits || []).filter(habit => habit.available);
   const hasSelectedHabits = Object.values(selectedHabits).some(
     selected => selected,
   );
@@ -173,7 +185,46 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep2();
             }}>
-            {t('onboarding.step2.start')}
+            {t('onboarding.step2.select-time')}
+          </Button>
+        </View>
+      </View>
+    );
+  } else if (step === 3) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.onboarding__bar}>
+          <Text variant="headlineMedium">
+            {t('onboarding.step3.select-repetition')}
+          </Text>
+          <Text variant="bodyLarge">
+            {t('onboarding.step3.accept-default')}
+          </Text>
+        </View>
+
+        <ScrollView style={styles.container}>
+          {availableHabits.map(habit => (
+            <HabitCard
+              key={habit.id}
+              id={habit.id}
+              habitName={habit.habitName}
+              habitEnemy={habit.habitEnemy}
+              goodCounter={habit.goodCounter}
+              badCounter={habit.badCounter}
+              skipCounter={habit.skipCounter}
+              repeatDays={habit.repeatDays}
+              repeatHours={habit.repeatHours}
+              available={habit.available}
+              fetchAllHabits={fetchAllHabits}
+              onboardingMode={true}
+            />
+          ))}
+          <View style={styles.gap} />
+        </ScrollView>
+
+        <View style={styles.onboarding__bar}>
+          <Button style={styles.button} mode="contained" onPress={handleStep3}>
+            {t('onboarding.step3.start')}
           </Button>
         </View>
       </View>

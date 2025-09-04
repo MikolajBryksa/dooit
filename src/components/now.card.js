@@ -144,7 +144,7 @@ const NowCard = ({
           <View style={styles.gap} />
           <View style={styles.gap} />
           {/* Time */}
-          <Text variant="bodyLarge">{selectedHour}</Text>
+          <Text variant="titleLarge">{selectedHour}</Text>
           <View style={styles.progress__container}>
             <ProgressBar
               style={styles.progress__bar}

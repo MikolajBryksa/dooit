@@ -28,6 +28,7 @@ const HabitCard = ({
   repeatHours = [],
   available,
   fetchAllHabits,
+  onboardingMode = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -97,13 +98,18 @@ const HabitCard = ({
             onPress={() => openEditModal('habitName', habitName)}>
             <Text variant="titleMedium">{habitName}</Text>
           </TouchableRipple>
-          <View style={styles.card__options}>
-            <IconButton
-              icon="trash-can"
-              onPress={() => setDeleteDialogVisible(true)}
-            />
-            <Switch value={isAvailable} onValueChange={handleToggleAvailable} />
-          </View>
+          {!onboardingMode && (
+            <View style={styles.card__options}>
+              <IconButton
+                icon="trash-can"
+                onPress={() => setDeleteDialogVisible(true)}
+              />
+              <Switch
+                value={isAvailable}
+                onValueChange={handleToggleAvailable}
+              />
+            </View>
+          )}
         </Card.Content>
 
         {available && (
@@ -192,63 +198,68 @@ const HabitCard = ({
               </View>
             </TouchableRipple>
 
-            <View style={styles.gap} />
+            {!onboardingMode && (
+              <>
+                <View style={styles.gap} />
 
-            <TouchableRipple
-              onPress={() => openEditModal('goodCounter', goodCounter)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="thumb-up"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.goodCounter')}: {goodCounter}
-                </Text>
-              </View>
-            </TouchableRipple>
+                <TouchableRipple
+                  onPress={() => openEditModal('goodCounter', goodCounter)}>
+                  <View style={styles.card__row}>
+                    <IconButton
+                      icon="thumb-up"
+                      size={18}
+                      style={{margin: 0, marginRight: 4}}
+                    />
+                    <Text variant="bodyMedium">
+                      {t('card.goodCounter')}: {goodCounter}
+                    </Text>
+                  </View>
+                </TouchableRipple>
 
-            <TouchableRipple
-              onPress={() => openEditModal('badCounter', badCounter)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="thumb-down"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.badCounter')}: {badCounter}
-                </Text>
-              </View>
-            </TouchableRipple>
+                <TouchableRipple
+                  onPress={() => openEditModal('badCounter', badCounter)}>
+                  <View style={styles.card__row}>
+                    <IconButton
+                      icon="thumb-down"
+                      size={18}
+                      style={{margin: 0, marginRight: 4}}
+                    />
+                    <Text variant="bodyMedium">
+                      {t('card.badCounter')}: {badCounter}
+                    </Text>
+                  </View>
+                </TouchableRipple>
 
-            <TouchableRipple
-              onPress={() => openEditModal('skipCounter', skipCounter)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="close"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <Text variant="bodyMedium">
-                  {t('card.skipCounter')}: {skipCounter}
-                </Text>
-              </View>
-            </TouchableRipple>
+                <TouchableRipple
+                  onPress={() => openEditModal('skipCounter', skipCounter)}>
+                  <View style={styles.card__row}>
+                    <IconButton
+                      icon="close"
+                      size={18}
+                      style={{margin: 0, marginRight: 4}}
+                    />
+                    <Text variant="bodyMedium">
+                      {t('card.skipCounter')}: {skipCounter}
+                    </Text>
+                  </View>
+                </TouchableRipple>
 
-            <View style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="contained"
-                disabled={
-                  (goodCounter === 0 || badCounter === 0) && skipCounter === 0
-                }
-                onPress={() => {
-                  setEqualizeDialogVisible(true);
-                }}>
-                {t('button.equalize')}
-              </Button>
-            </View>
+                <View style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    disabled={
+                      (goodCounter === 0 || badCounter === 0) &&
+                      skipCounter === 0
+                    }
+                    onPress={() => {
+                      setEqualizeDialogVisible(true);
+                    }}>
+                    {t('button.equalize')}
+                  </Button>
+                </View>
+              </>
+            )}
           </Card.Content>
         )}
       </Card>

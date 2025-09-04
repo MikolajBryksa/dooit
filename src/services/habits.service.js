@@ -9,8 +9,9 @@ export const addHabit = (
   repeatDays,
   repeatHours,
   icon,
+  id = null,
 ) => {
-  const id = getNextId('Habit');
+  id = id || getNextId('Habit');
 
   let newHabit;
   realm.write(() => {
@@ -122,6 +123,7 @@ export const createDefaultHabits = () => {
   const t = i18next.t;
   const defaultHabitsData = [
     {
+      id: 1,
       habitName: t('default-habits.1.habitName'),
       habitEnemy: t('default-habits.1.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
@@ -129,6 +131,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[0],
     },
     {
+      id: 2,
       habitName: t('default-habits.2.habitName'),
       habitEnemy: t('default-habits.2.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
@@ -136,6 +139,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[1],
     },
     {
+      id: 3,
       habitName: t('default-habits.3.habitName'),
       habitEnemy: t('default-habits.3.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
@@ -143,6 +147,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[2],
     },
     {
+      id: 4,
       habitName: t('default-habits.4.habitName'),
       habitEnemy: t('default-habits.4.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
@@ -150,6 +155,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[3],
     },
     {
+      id: 5,
       habitName: t('default-habits.5.habitName'),
       habitEnemy: t('default-habits.5.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
@@ -157,6 +163,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[4],
     },
     {
+      id: 6,
       habitName: t('default-habits.6.habitName'),
       habitEnemy: t('default-habits.6.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
@@ -164,6 +171,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[5],
     },
     {
+      id: 7,
       habitName: t('default-habits.7.habitName'),
       habitEnemy: t('default-habits.7.habitEnemy'),
       repeatDays: ['tue', 'thu'],
@@ -171,6 +179,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[6],
     },
     {
+      id: 8,
       habitName: t('default-habits.8.habitName'),
       habitEnemy: t('default-habits.8.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
@@ -178,6 +187,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[7],
     },
     {
+      id: 9,
       habitName: t('default-habits.9.habitName'),
       habitEnemy: t('default-habits.9.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
@@ -185,6 +195,7 @@ export const createDefaultHabits = () => {
       icon: habitIcons[8],
     },
     {
+      id: 10,
       habitName: t('default-habits.10.habitName'),
       habitEnemy: t('default-habits.10.habitEnemy'),
       repeatDays: ['mon', 'tue', 'wed', 'thu'],
@@ -202,6 +213,7 @@ export const createDefaultHabits = () => {
       habitData.repeatDays,
       habitData.repeatHours,
       habitData.icon,
+      habitData.id,
     );
     createdHabits.push(newHabit);
   });

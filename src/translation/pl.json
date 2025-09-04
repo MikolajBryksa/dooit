@@ -121,7 +121,12 @@
     "step2": {
       "choose": "Wybierz",
       "which-habits": "jakie nawyki chcesz wyrobić",
-      "start": "Zacznij"
+      "select-time": "Wybierz czas"
+    },
+    "step3": {
+      "select-repetition": "Wybierz czas powtórzeń",
+      "accept-default": "lub zaakceptuj domyślne dni i godziny",
+      "start": "Start"
     }
   },
   "default-habits": {
