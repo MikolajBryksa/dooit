@@ -21,6 +21,7 @@ const HomeView = () => {
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const debugMode = useSelector(state => state.settings.debugMode);
+  const cardDuration = useSelector(state => state.settings.cardDuration);
 
   const refreshHabits = useCallback(() => {
     // Updates the list of habits after changing one
@@ -91,7 +92,6 @@ const HomeView = () => {
   }, [todayHabits]);
 
   const [activeKey, setActiveKey] = useState(null);
-  const ADVANCE_DELAY_MS = 3500;
 
   useEffect(() => {
     // Manages which habit card is currently active
@@ -102,7 +102,7 @@ const HomeView = () => {
     if (firstActiveKeyCandidate !== activeKey) {
       const id = setTimeout(
         () => setActiveKey(firstActiveKeyCandidate),
-        ADVANCE_DELAY_MS,
+        cardDuration * 1000,
       );
       return () => clearTimeout(id);
     }

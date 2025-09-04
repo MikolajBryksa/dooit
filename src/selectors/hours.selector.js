@@ -23,7 +23,7 @@ const HoursSelector = ({repeatHours, setRepeatHours}) => {
   };
 
   const toDisplay = (h, m) => {
-    if (clockFormat === '12h') {
+    if (clockFormat === '12 h') {
       const period = h < 12 ? 'AM' : 'PM';
       const hour12 = h % 12 === 0 ? 12 : h % 12;
       return `${hour12}:${m.toString().padStart(2, '0')} ${period}`;

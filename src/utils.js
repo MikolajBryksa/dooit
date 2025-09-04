@@ -49,10 +49,10 @@ export function getFormattedTime(hour12 = false, withSeconds = false) {
   });
 }
 
-export function formatHourString(hour, clockFormat = '24h') {
+export function formatHourString(hour, clockFormat = '24 h') {
   // Converts a 24-hour time string to a 12-hour format with AM/PM
 
-  if (clockFormat === '12h') {
+  if (clockFormat === '12 h') {
     const [h, m] = hour.split(':');
     let hNum = parseInt(h, 10);
     let period = hNum < 12 ? 'AM' : 'PM';

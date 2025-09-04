@@ -36,6 +36,7 @@ Settings.schema = {
     currentDay: 'string?',
     notifications: 'bool',
     debugMode: 'bool',
+    cardDuration: 'int',
   },
 };
 
@@ -59,13 +60,14 @@ realm.write(() => {
     realm.create('Settings', {
       id: 1,
       language: deviceLanguage,
-      clockFormat: '24h',
+      clockFormat: '24 h',
       firstDay: 'mon',
       firstLaunch: true,
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
       debugMode: false,
+      cardDuration: 4,
     });
   }
 });

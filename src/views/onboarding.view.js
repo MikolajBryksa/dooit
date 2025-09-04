@@ -54,17 +54,9 @@ const OnboardingView = ({setShowOnboarding}) => {
       const habitId = index + 1;
       const isSelected = selectedHabits[habitId];
 
-      updateHabit(
-        habit.id,
-        habit.habitName,
-        habit.habitEnemy,
-        habit.goodCounter,
-        habit.badCounter,
-        habit.skipCounter,
-        habit.repeatDays,
-        habit.repeatHours,
-        isSelected,
-      );
+      updateHabit(habit.id, {
+        available: isSelected,
+      });
     });
 
     updateSettingValue('firstLaunch', false);
