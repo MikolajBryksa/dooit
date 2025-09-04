@@ -27,11 +27,13 @@ const NowCard = ({
   const styles = useStyles();
   const debugMode = useSelector(state => state.settings.debugMode);
   const [step, setStep] = useState(1);
-  const [motivation, setMotivation] = useState('');
+  const [motivation, setMotivation] = useState(
+    pickRandomMotivation(t, 'notification'),
+  );
 
   useEffect(() => {
     setStep(1);
-    setMotivation('');
+    setMotivation(pickRandomMotivation(t, 'notification'));
   }, [isNext]);
 
   const isCompleted = useMemo(() => {
@@ -117,6 +119,7 @@ const NowCard = ({
         debugMode && isNext && styles.card__selected,
       ]}>
       <Card.Content style={styles.card__center}>
+        <View style={styles.gap} />
         {/* Counter */}
         <PieChart
           size={120}
@@ -127,6 +130,7 @@ const NowCard = ({
           skip={skipCounter}
         />
         <View style={styles.gap} />
+        <View style={styles.gap} />
         {/* Time */}
         <Text variant="bodyLarge">{selectedHour}</Text>
         <View style={styles.progress__container}>
@@ -135,66 +139,59 @@ const NowCard = ({
             progress={progressBarValue}
           />
         </View>
+        <Text variant="bodyLarge">{motivation}</Text>
+        <View style={styles.gap} />
         <View style={styles.gap} />
 
-        {step === 1 && (
-          <>
-            {/* Good */}
-            <Text variant="titleLarge">{habitName}</Text>
-            <Card.Content style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="outlined"
-                onPress={() => {
-                  skipGoodChoice();
-                }}>
-                {t('button.skip')}
-              </Button>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={() => {
-                  addGoodChoice();
-                }}>
-                {t('button.done')}
-              </Button>
-            </Card.Content>
-          </>
-        )}
+        <View style={[styles.card__choices, step !== 1 && {opacity: 0.5}]}>
+          {/* Good */}
+          <Text variant="titleLarge">{habitName}</Text>
+          <Card.Content style={styles.card__buttons}>
+            <Button
+              style={styles.button}
+              mode="outlined"
+              onPress={() => {
+                skipGoodChoice();
+              }}>
+              {t('button.skip')}
+            </Button>
+            <Button
+              style={styles.button}
+              mode="contained"
+              onPress={() => {
+                addGoodChoice();
+              }}>
+              {t('button.done')}
+            </Button>
+          </Card.Content>
+        </View>
 
-        {step === 2 && (
-          <>
-            {/* Bad */}
-            <Text variant="titleLarge">{habitEnemy}</Text>
-            <Card.Content style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="outlined"
-                onPress={() => {
-                  skipBadChoice();
-                }}>
-                {t('button.skip')}
-              </Button>
-              <Button
-                style={styles.button}
-                mode="contained"
-                onPress={() => {
-                  addBadChoice();
-                }}>
-                {t('button.done')}
-              </Button>
-            </Card.Content>
-          </>
-        )}
+        <Text variant="bodyLarge">{t('card.instead')}</Text>
 
-        {step === 3 && (
-          <>
-            {/* Finish */}
-            <Text variant="bodyLarge">{motivation}</Text>
-          </>
-        )}
-
-        <View style={styles.gap} />
+        <View style={[styles.card__choices, step !== 2 && {opacity: 0.5}]}>
+          {/* Bad */}
+          <Text variant="titleLarge">{habitEnemy}</Text>
+          <Card.Content style={styles.card__buttons}>
+            <Button
+              style={styles.button}
+              mode="outlined"
+              onPress={() => {
+                skipBadChoice();
+              }}>
+              {t('button.skip')}
+            </Button>
+            <Button
+              style={step === 2 ? styles.button__bad : styles.button}
+              mode="contained"
+              disabled={step !== 2}
+              onPress={() => {
+                addBadChoice();
+              }}>
+              {t('button.done')}
+            </Button>
+          </Card.Content>
+          <View style={styles.gap} />
+        </View>
       </Card.Content>
       <View style={styles.gap} />
     </Card>

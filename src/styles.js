@@ -40,6 +40,10 @@ export const useStyles = () => {
     button: {
       alignSelf: 'center',
     },
+    button__bad: {
+      alignSelf: 'center',
+      backgroundColor: theme.colors.error,
+    },
     title: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -87,10 +91,15 @@ export const useStyles = () => {
     card__buttons: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      flex: 1,
       marginTop: theme.dimensions.padding,
       gap: theme.dimensions.padding,
       alignItems: 'center',
+    },
+    card__choices: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: theme.dimensions.padding,
+      marginVertical: theme.dimensions.margin,
     },
     chip: {
       borderRadius: 12,
@@ -106,7 +115,7 @@ export const useStyles = () => {
       width: '50%',
     },
     progress__bar: {
-      marginVertical: theme.dimensions.margin,
+      marginVertical: theme.dimensions.padding,
       height: theme.dimensions.margin,
       borderRadius: theme.dimensions.margin / 2,
     },
