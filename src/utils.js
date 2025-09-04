@@ -115,3 +115,23 @@ export function dateToWeekday(dateKey) {
   const dow = new Date(+y, +m - 1, +d).getDay();
   return dayMap[dow];
 }
+
+let lastPickedMessages = {
+  notification: '',
+  good: '',
+  bad: '',
+  skip: '',
+};
+
+export function pickRandomMotivation(translationFunction, category) {
+  // Gets a random motivation message from translation that's different from the last one
+  const messagesArray = translationFunction(`motivation.${category}`, {
+    returnObjects: true,
+  });
+  const lastMessage = lastPickedMessages[category];
+  const messagesToPickFrom = messagesArray.filter(msg => msg !== lastMessage);
+  const randomIndex = Math.floor(Math.random() * messagesToPickFrom.length);
+  const selectedMessage = messagesToPickFrom[randomIndex];
+  lastPickedMessages[category] = selectedMessage;
+  return selectedMessage;
+}

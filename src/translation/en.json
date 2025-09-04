@@ -162,26 +162,53 @@
     }
   },
   "motivation": {
+    "notification": [
+      "Small step, big progress.",
+      "Your habits shape your future.",
+      "One habit at a time.",
+      "Discipline beats motivation.",
+      "Do it now, feel proud later.",
+      "Progress, not perfection.",
+      "Tiny habits, huge impact.",
+      "Consistency creates results.",
+      "Today’s effort, tomorrow’s reward.",
+      "Little effort, lasting change."
+    ],
     "good": [
-      "Great, your choice has reinforced your habit.",
-      "Keep it up — consistency builds mastery.",
-      "A small step, a big effect in the long run.",
-      "Smart choices are becoming your new normal.",
-      "One good habit leads to another."
+      "One good habit leads to another.",
+      "You’re proving your commitment.",
+      "Step by step, you’re transforming.",
+      "Keep going, you’re making progress.",
+      "Your discipline is paying off.",
+      "Another brick in the wall of success.",
+      "Each action shapes who you become.",
+      "You’re building the best version of you.",
+      "You’re writing your success story.",
+      "Great choice — your routine is working."
     ],
     "bad": [
-      "It happens — choose better next time.",
-      "Don't punish yourself — get back on track.",
-      "One weaker choice doesn't define your day.",
-      "Focus on the next step, not the mistake.",
-      "Everyone has rough moments."
+      "One slip doesn’t erase your progress.",
+      "Tomorrow is another chance.",
+      "Learn from it, then move forward.",
+      "Your journey is bigger than one choice.",
+      "Don’t quit — adjust and continue.",
+      "It’s a stumble, not a failure.",
+      "Focus on progress, not perfection.",
+      "Your habit is stronger than this moment.",
+      "What matters most is your next choice.",
+      "Even champions stumble."
     ],
     "skip": [
-      "Okay, a pause. Choose wisely next time.",
-      "A short break doesn't derail the journey.",
-      "Recharge and try again.",
-      "One skip doesn't break the streak.",
-      "Accept the break and choose wisely next time."
+      "One skip is not the end.",
+      "Rest is part of the process.",
+      "A pause doesn’t erase progress.",
+      "You’re still on track.",
+      "It’s just a break, not a setback.",
+      "Skips happen — keep moving forward.",
+      "The streak is more than one repeat.",
+      "A missed habit doesn’t erase your effort.",
+      "Even breaks can fuel progress.",
+      "It’s just a pause — your journey continues."
     ]
   }
 }

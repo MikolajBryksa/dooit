@@ -5,7 +5,7 @@ import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
-import {addHour} from '@/utils';
+import {addHour, pickRandomMotivation} from '@/utils';
 import PieChart from './pie.chart';
 
 const NowCard = ({
@@ -38,19 +38,8 @@ const NowCard = ({
     return completedHours.includes(selectedHour);
   }, [completedHours, selectedHour]);
 
-  const pickMotivation = useCallback(
-    kind => {
-      const pool = t(`motivation.${kind}`, {returnObjects: true});
-      const arr = Array.isArray(pool) ? pool : [];
-      if (!arr.length) return '';
-      const idx = Math.floor(Math.random() * arr.length);
-      return arr[idx];
-    },
-    [t],
-  );
-
   const addGoodChoice = () => {
-    setMotivation(pickMotivation('good'));
+    setMotivation(pickRandomMotivation(t, 'good'));
     handleChoice('good');
     setStep(3);
   };
@@ -60,13 +49,13 @@ const NowCard = ({
   };
 
   const addBadChoice = () => {
-    setMotivation(pickMotivation('bad'));
+    setMotivation(pickRandomMotivation(t, 'bad'));
     handleChoice('bad');
     setStep(3);
   };
 
   const skipBadChoice = () => {
-    setMotivation(pickMotivation('skip'));
+    setMotivation(pickRandomMotivation(t, 'skip'));
     handleChoice('skip');
     setStep(3);
   };

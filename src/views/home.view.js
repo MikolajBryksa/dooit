@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, {TriggerType} from '@notifee/react-native';
 import {useStyles} from '@/styles';
-import {hourToSec, dateToWeekday} from '@/utils';
+import {hourToSec, dateToWeekday, pickRandomMotivation} from '@/utils';
 import {useTodayKey} from '@/hooks';
 import {
   getHabits,
@@ -119,8 +119,11 @@ const HomeView = () => {
       await notifee.cancelAllNotifications();
 
       const now = new Date();
+
       todayHabits.forEach(habit => {
-        if (habit.selectedHour) {
+        const isCompleted = habit.completedHours.includes(habit.selectedHour);
+
+        if (habit.selectedHour && !isCompleted) {
           const [hour, minute] = habit.selectedHour.split(':').map(Number);
           const triggerDate = new Date(
             now.getFullYear(),
@@ -131,10 +134,12 @@ const HomeView = () => {
             0,
             0,
           );
+
           if (triggerDate > now) {
             notifee.createTriggerNotification(
               {
                 title: `${habit.selectedHour} ${habit.habitName}`,
+                body: pickRandomMotivation(t, 'notification'),
                 android: {
                   channelId: 'default',
                   smallIcon: 'ic_notification',

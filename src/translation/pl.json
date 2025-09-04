@@ -163,26 +163,53 @@
     }
   },
   "motivation": {
+    "notification": [
+      "Mały krok, wielki postęp.",
+      "Twoje nawyki kształtują twoją przyszłość.",
+      "Tylko jeden nawyk naraz.",
+      "Dyscyplina wygrywa z motywacją.",
+      "Zrób to teraz, poczuj dumę później.",
+      "Postęp, nie perfekcja.",
+      "Małe nawyki dają wielki efekt.",
+      "Konsekwencja daje rezultaty.",
+      "Dzisiejszy wysiłek to jutrzejsza nagroda.",
+      "Mały wysiłek daje trwałą zmianę."
+    ],
     "good": [
-      "Świetnie, Twój wybór wzmocnił Twój nawyk.",
-      "Tak trzymaj — konsekwencja buduje mistrzostwo.",
-      "Mały krok, wielki efekt w dłuższej perspektywie.",
-      "Mądre wybory stają się Twoją normą.",
-      "Jeden dobry nawyk pociąga za sobą kolejne."
+      "Jeden dobry nawyk pociąga za sobą kolejne.",
+      "Udowadniasz swoją determinację.",
+      "Z każdym wykonanym krokiem się zmieniasz",
+      "Tak trzymaj, robisz postępy.",
+      "Twoja dyscyplina się opłaca.",
+      "Kolejna cegiełka w murze sukcesu.",
+      "Każde działanie kształtuje to, kim się stajesz.",
+      "Budujesz najlepszą wersję siebie.",
+      "Piszesz swoją własną historię sukcesu.",
+      "Świetny wybór — Twoja rutyna działa."
     ],
     "bad": [
-      "To się zdarza, wybierz lepiej następnym razem.",
-      "Nie karz się — wracaj na właściwy tor.",
-      "Jeden słabszy wybór nie definiuje Twojego dnia.",
-      "Skup się na kolejnym kroku, nie na błędzie.",
-      "Każdy ma gorsze momenty."
+      "Jedno potknięcie nie kasuje całego postępu.",
+      "Jutro to nowa szansa.",
+      "Wyciągnij wniosek i idź dalej.",
+      "Twoja droga jest większa niż jeden wybór.",
+      "Nie rezygnuj — popraw kurs i idź dalej.",
+      "To potknięcie, nie porażka.",
+      "Skup się na postępie, nie na perfekcji.",
+      "Twój nawyk jest silniejszy niż ta chwila.",
+      "Najważniejszy jest Twój następny wybór.",
+      "Nawet mistrzowie się potykają."
     ],
     "skip": [
-      "Okej, pauza. Wybierz mądrze przy następnej okazji.",
-      "Mała przerwa nie niszczy drogi, kontynuuj.",
-      "Zadbaj o energię i spróbuj ponownie.",
-      "Jedno pominięcie nie przekreśla serii.",
-      "Zaakceptuj przerwę i wybierz mądrze następnym razem."
+      "Jedno pominięcie to nie koniec.",
+      "Odpoczynek jest częścią procesu.",
+      "Przerwa nie kasuje całego postępu.",
+      "Wciąż jesteś na właściwej drodze.",
+      "To tylko przerwa, nie krok wstecz.",
+      "Pominięcia się zdarzają — idź dalej.",
+      "Seria to coś więcej niż jeden dzień.",
+      "Pominięty nawyk nie kasuje Twojego wysiłku.",
+      "Nawet przerwy mogą napędzać postęp.",
+      "To tylko pauza — Twoja podróż trwa dalej."
     ]
   }
 }
