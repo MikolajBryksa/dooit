@@ -101,8 +101,7 @@ const PieChart = ({
     let show = null;
     if (dg === 1) show = {text: '+1', color: _goodColor};
     else if (db === 1) show = {text: '-1', color: _badColor};
-    else if (ds === 1)
-      show = {text: '0', color: theme?.colors?.onSurface ?? '#111827'};
+    else if (ds === 1) show = {text: '0', color: theme?.colors?._skipColor};
 
     if (show) {
       setFlash({...show, visible: true});

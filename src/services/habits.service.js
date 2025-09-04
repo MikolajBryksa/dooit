@@ -222,3 +222,17 @@ export const resetCompletedHoursForAllHabits = () => {
   });
   return affected;
 };
+
+export const getHabitValue = (id, key) => {
+  const habit = getHabitById(id);
+  return habit ? habit[key] : null;
+};
+
+export const updateHabitValue = (id, key, value) => {
+  const updates = {[key]: value};
+  return updateHabit(id, updates);
+};
+
+export const updateHabitValues = (id, updates) => {
+  return updateHabit(id, updates);
+};

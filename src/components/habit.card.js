@@ -5,11 +5,13 @@ import {
   Switch,
   IconButton,
   TouchableRipple,
+  Button,
 } from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import EditModal from '@/modals/edit.modal';
 import DeleteDialog from '@/dialogs/delete.dialog';
+import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
@@ -36,6 +38,7 @@ const HabitCard = ({
   const [modalField, setModalField] = useState(null);
   const [modalValue, setModalValue] = useState(null);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
 
   const handleToggleAvailable = () => {
     const newAvailable = !isAvailable;
@@ -232,6 +235,20 @@ const HabitCard = ({
                 </Text>
               </View>
             </TouchableRipple>
+
+            <View style={styles.card__buttons}>
+              <Button
+                style={styles.button}
+                mode="contained"
+                disabled={
+                  (goodCounter === 0 || badCounter === 0) && skipCounter === 0
+                }
+                onPress={() => {
+                  setEqualizeDialogVisible(true);
+                }}>
+                {t('button.equalize')}
+              </Button>
+            </View>
           </Card.Content>
         )}
       </Card>
@@ -264,6 +281,18 @@ const HabitCard = ({
         }}
         habitId={id}
         habitName={habitName}
+      />
+
+      <EqualizeDialog
+        visible={equalizeDialogVisible}
+        onDismiss={() => setEqualizeDialogVisible(false)}
+        onDone={() => {
+          setEqualizeDialogVisible(false);
+          fetchAllHabits();
+        }}
+        habitId={id}
+        goodCounter={goodCounter}
+        badCounter={badCounter}
       />
     </>
   );
