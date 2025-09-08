@@ -17,3 +17,19 @@ export function useTodayKey() {
 
   return todayKey;
 }
+
+export function useCurrentTime() {
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date();
+    return now;
+  });
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return currentTime;
+}

@@ -1,5 +1,6 @@
 import React, {useCallback, useState, useMemo, useEffect, useRef} from 'react';
 import {Card, Text, Button, ProgressBar} from 'react-native-paper';
+import {useCurrentTime} from '@/hooks';
 import {View, Animated} from 'react-native';
 import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
@@ -30,6 +31,16 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
+
+  const currentTime = useCurrentTime();
+  const isSelectedHourLater = useMemo(() => {
+    // Comparison of selectedHour with the current time
+    if (!selectedHour || !currentTime) return false;
+    const [h, m] = selectedHour.split(':').map(Number);
+    const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+    const selMinutes = h * 60 + (m || 0);
+    return selMinutes > nowMinutes;
+  }, [selectedHour, currentTime]);
 
   useEffect(() => {
     // Resets the step and motivation when the card changes
@@ -140,6 +151,7 @@ const NowCard = ({
             good={goodCounter}
             bad={badCounter}
             skip={skipCounter}
+            opacity={isSelectedHourLater ? 0.5 : 1}
           />
           <View style={styles.gap} />
           <View style={styles.gap} />
@@ -149,19 +161,25 @@ const NowCard = ({
             <ProgressBar
               style={styles.progress__bar}
               progress={progressBarValue}
+              indeterminate={isSelectedHourLater}
             />
           </View>
           <Text variant="bodyLarge">{motivation}</Text>
           <View style={styles.gap} />
           <View style={styles.gap} />
 
-          <View style={[styles.card__choices, step !== 1 && {opacity: 0.5}]}>
+          <View
+            style={[
+              styles.card__choices,
+              step !== 1 || (isSelectedHourLater && {opacity: 0.5}),
+            ]}>
             {/* Good */}
             <Text variant="titleLarge">{habitName}</Text>
             <Card.Content style={styles.card__buttons}>
               <Button
                 style={styles.button}
                 mode="outlined"
+                disabled={isSelectedHourLater || step !== 1}
                 onPress={() => {
                   skipGoodChoice();
                 }}>
@@ -170,6 +188,7 @@ const NowCard = ({
               <Button
                 style={styles.button}
                 mode="contained"
+                disabled={isSelectedHourLater || step !== 1}
                 onPress={() => {
                   addGoodChoice();
                 }}>
@@ -178,7 +197,11 @@ const NowCard = ({
             </Card.Content>
           </View>
 
-          <Text variant="bodyLarge">{t('card.instead')}</Text>
+          <Text
+            variant="bodyLarge"
+            style={{opacity: isSelectedHourLater ? 0.5 : 1}}>
+            {t('card.instead')}
+          </Text>
 
           <View style={[styles.card__choices, step !== 2 && {opacity: 0.5}]}>
             {/* Bad */}
@@ -187,6 +210,7 @@ const NowCard = ({
               <Button
                 style={styles.button}
                 mode="outlined"
+                disabled={isSelectedHourLater || step !== 2}
                 onPress={() => {
                   skipBadChoice();
                 }}>
@@ -195,7 +219,7 @@ const NowCard = ({
               <Button
                 style={step === 2 ? styles.button__bad : styles.button}
                 mode="contained"
-                disabled={step !== 2}
+                disabled={isSelectedHourLater || step !== 2}
                 onPress={() => {
                   addBadChoice();
                 }}>

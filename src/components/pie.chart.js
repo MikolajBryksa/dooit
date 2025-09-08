@@ -15,6 +15,7 @@ const PieChart = ({
   flashDuration = 700,
   showTicks = true,
   tickArcLen = 1.3,
+  opacity = 1,
 }) => {
   const theme = useTheme();
 
@@ -170,7 +171,7 @@ const PieChart = ({
   const iconSize = Math.max(24, size - (strokeWidth + 8) * 2);
 
   return (
-    <View style={[styles.container, {width: size, height: size}]}>
+    <View style={[styles.container, {width: size, height: size, opacity}]}>
       <Svg width={size} height={size}>
         <G rotation="-90" origin={`${cx}, ${cy}`}>
           {/* track */}
