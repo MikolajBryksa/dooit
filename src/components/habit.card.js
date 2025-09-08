@@ -8,7 +8,7 @@ import {
   Button,
 } from 'react-native-paper';
 import {View} from 'react-native';
-import {updateHabit} from '@/services/habits.service';
+import {updateHabitValue} from '@/services/habits.service';
 import EditModal from '@/modals/edit.modal';
 import DeleteDialog from '@/dialogs/delete.dialog';
 import EqualizeDialog from '@/dialogs/equalize.dialog';
@@ -44,7 +44,7 @@ const HabitCard = ({
   const handleToggleAvailable = () => {
     const newAvailable = !isAvailable;
     setIsAvailable(newAvailable);
-    updateHabit(id, {available: newAvailable});
+    updateHabitValue(id, 'available', newAvailable);
     fetchAllHabits();
   };
 
@@ -65,28 +65,7 @@ const HabitCard = ({
         return toSeconds(a) - toSeconds(b);
       });
     }
-    let updated = {
-      id,
-      habitName,
-      habitEnemy,
-      goodCounter,
-      badCounter,
-      skipCounter,
-      repeatDays,
-      repeatHours,
-      available: isAvailable,
-    };
-    updated[modalField] = sortedValue;
-    updateHabit(id, {
-      habitName: updated.habitName,
-      habitEnemy: updated.habitEnemy,
-      goodCounter: updated.goodCounter,
-      badCounter: updated.badCounter,
-      skipCounter: updated.skipCounter,
-      repeatDays: updated.repeatDays,
-      repeatHours: updated.repeatHours,
-      available: updated.available,
-    });
+    updateHabitValue(id, modalField, sortedValue);
     fetchAllHabits();
   };
 
@@ -114,23 +93,25 @@ const HabitCard = ({
 
         {available && (
           <Card.Content style={styles.card__container}>
-            <TouchableRipple
-              onPress={() => openEditModal('habitEnemy', habitEnemy)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="alert-circle-outline"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <View style={{flex: 1}}>
-                  <Text
-                    variant="bodyMedium"
-                    style={{maxWidth: '100%', flexShrink: 1}}>
-                    {habitEnemy}
-                  </Text>
+            {!onboardingMode && (
+              <TouchableRipple
+                onPress={() => openEditModal('habitEnemy', habitEnemy)}>
+                <View style={styles.card__row}>
+                  <IconButton
+                    icon="alert-circle-outline"
+                    size={18}
+                    style={{margin: 0, marginRight: 4}}
+                  />
+                  <View style={{flex: 1}}>
+                    <Text
+                      variant="bodyMedium"
+                      style={{maxWidth: '100%', flexShrink: 1}}>
+                      {habitEnemy}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableRipple>
+              </TouchableRipple>
+            )}
 
             <TouchableRipple
               onPress={() => openEditModal('repeatHours', repeatHours)}>

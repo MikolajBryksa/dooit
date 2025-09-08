@@ -1,6 +1,6 @@
 import React, {useMemo, useEffect, useState, useRef} from 'react';
 import {View, StyleSheet, Animated, Easing} from 'react-native';
-import {Avatar, useTheme} from 'react-native-paper';
+import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 
 const PieChart = ({
@@ -89,6 +89,7 @@ const PieChart = ({
     text: '',
     color: '#000',
     visible: false,
+    showValue: null,
   });
   const flashScale = useRef(new Animated.Value(0.9)).current;
   const flashOpacity = useRef(new Animated.Value(0)).current;
@@ -99,12 +100,20 @@ const PieChart = ({
     const ds = skip - prevVals.current.skip;
     prevVals.current = {good, bad, skip};
     let show = null;
-    if (dg === 1) show = {text: '+1', color: _goodColor};
-    else if (db === 1) show = {text: '-1', color: _badColor};
-    else if (ds === 1) show = {text: '0', color: theme?.colors?._skipColor};
+    let showValue = null;
+    if (dg === 1) {
+      show = {text: '+1', color: _goodColor};
+      showValue = 'good';
+    } else if (db === 1) {
+      show = {text: '-1', color: _badColor};
+      showValue = 'bad';
+    } else if (ds === 1) {
+      show = {text: '0', color: _skipColor};
+      showValue = 'skip';
+    }
 
     if (show) {
-      setFlash({...show, visible: true});
+      setFlash({...show, visible: true, showValue: null});
       flashScale.setValue(0.9);
       flashOpacity.setValue(0);
       Animated.parallel([
@@ -121,7 +130,7 @@ const PieChart = ({
           toValue: 0,
           duration: 150,
           useNativeDriver: true,
-        }).start(() => setFlash(f => ({...f, visible: false})));
+        }).start(() => setFlash(f => ({...f, visible: false, showValue})));
       }, flashDuration);
       return () => clearTimeout(timer);
     }
@@ -211,6 +220,30 @@ const PieChart = ({
             ]}>
             {flash.text}
           </Animated.Text>
+        ) : flash.showValue === 'good' ? (
+          <Text
+            style={[
+              styles.flashText,
+              {color: _goodColor, fontSize: Math.min(40, size * 0.28)},
+            ]}>
+            {good}
+          </Text>
+        ) : flash.showValue === 'bad' ? (
+          <Text
+            style={[
+              styles.flashText,
+              {color: _badColor, fontSize: Math.min(40, size * 0.28)},
+            ]}>
+            {bad}
+          </Text>
+        ) : flash.showValue === 'skip' ? (
+          <Text
+            style={[
+              styles.flashText,
+              {color: _skipColor, fontSize: Math.min(40, size * 0.28)},
+            ]}>
+            {skip}
+          </Text>
         ) : (
           <Avatar.Icon
             icon={icon}

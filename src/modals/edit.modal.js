@@ -86,7 +86,7 @@ const EditModal = ({
           {['goodCounter', 'badCounter', 'skipCounter'].includes(field) && (
             <TextInput
               mode="outlined"
-              value={inputValue?.toString()}
+              value={inputValue === 0 ? '' : inputValue?.toString()}
               onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
               keyboardType="numeric"
               autoFocus
