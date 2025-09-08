@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCog, faList, faClock} from '@fortawesome/free-solid-svg-icons';
 import realm from '@/storage/schemas';

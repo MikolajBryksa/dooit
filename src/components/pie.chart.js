@@ -13,13 +13,26 @@ const PieChart = ({
 
   animateDuration = 550,
   flashDuration = 700,
+  showTicks = true,
+  tickArcLen = 1.3,
 }) => {
   const theme = useTheme();
+
+  if (good + bad + skip >= 200) {
+    tickArcLen = 0;
+  } else if (good + bad + skip >= 150) {
+    tickArcLen = 0.4;
+  } else if (good + bad + skip >= 100) {
+    tickArcLen = 0.7;
+  } else if (good + bad + skip >= 50) {
+    tickArcLen = 1;
+  }
 
   const _goodColor = theme?.colors?.primary;
   const _badColor = theme?.colors?.error;
   const _skipColor = theme?.colors?.background;
   const _trackColor = theme?.colors?.surfaceVariant;
+  const _tickColor = theme?.colors?.surface;
 
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2,
@@ -83,6 +96,14 @@ const PieChart = ({
   const startS = lenG + lenB;
 
   const hasAny = lenG > EPS || lenB > EPS || lenS > EPS;
+
+  const isFullG = lenG > C - EPS;
+  const isFullB = lenB > C - EPS;
+  const isFullS = lenS > C - EPS;
+
+  const unitG = good > 0 ? lenG / good : 0;
+  const unitB = bad > 0 ? lenB / bad : 0;
+  const unitS = skip > 0 ? lenS / skip : 0;
 
   const prevVals = useRef({good, bad, skip});
   const [flash, setFlash] = useState({
@@ -152,7 +173,7 @@ const PieChart = ({
     <View style={[styles.container, {width: size, height: size}]}>
       <Svg width={size} height={size}>
         <G rotation="-90" origin={`${cx}, ${cy}`}>
-          {/* tor */}
+          {/* track */}
           <Circle
             cx={cx}
             cy={cy}
@@ -163,7 +184,7 @@ const PieChart = ({
             strokeLinecap="butt"
           />
 
-          {/* segmenty */}
+          {/* segments */}
           {hasAny && lenG > EPS && (
             <Circle
               cx={cx}
@@ -203,6 +224,96 @@ const PieChart = ({
               strokeLinecap="butt"
             />
           )}
+
+          {/* good */}
+          {showTicks &&
+            lenG > EPS &&
+            good > 0 &&
+            unitG > 0 &&
+            Array.from({length: isFullG ? good : Math.max(0, good - 1)}).map(
+              (_, i) => {
+                const m = (isFullG ? 0 : 1) + i;
+                const pos = startG + m * unitG;
+                const offset = -(pos - tickArcLen / 2);
+                return (
+                  <Circle
+                    key={`g-tick-${i}`}
+                    cx={cx}
+                    cy={cy}
+                    r={radius}
+                    stroke={_tickColor}
+                    strokeWidth={strokeWidth}
+                    fill="none"
+                    strokeDasharray={`${tickArcLen} ${Math.max(
+                      0,
+                      C - tickArcLen,
+                    )}`}
+                    strokeDashoffset={offset}
+                    strokeLinecap="butt"
+                  />
+                );
+              },
+            )}
+
+          {/* bad */}
+          {showTicks &&
+            lenB > EPS &&
+            bad > 0 &&
+            unitB > 0 &&
+            Array.from({length: isFullB ? bad : Math.max(0, bad - 1)}).map(
+              (_, i) => {
+                const m = (isFullB ? 0 : 1) + i;
+                const pos = startB + m * unitB;
+                const offset = -(pos - tickArcLen / 2);
+                return (
+                  <Circle
+                    key={`b-tick-${i}`}
+                    cx={cx}
+                    cy={cy}
+                    r={radius}
+                    stroke={_tickColor}
+                    strokeWidth={strokeWidth}
+                    fill="none"
+                    strokeDasharray={`${tickArcLen} ${Math.max(
+                      0,
+                      C - tickArcLen,
+                    )}`}
+                    strokeDashoffset={offset}
+                    strokeLinecap="butt"
+                  />
+                );
+              },
+            )}
+
+          {/* skip */}
+          {showTicks &&
+            lenS > EPS &&
+            skip > 0 &&
+            unitS > 0 &&
+            Array.from({length: isFullS ? skip : Math.max(0, skip - 1)}).map(
+              (_, i) => {
+                const m = (isFullS ? 0 : 1) + i;
+                const pos = startS + m * unitS;
+                const offset = -(pos - tickArcLen / 2);
+                return (
+                  <Circle
+                    key={`s-tick-${i}`}
+                    cx={cx}
+                    cy={cy}
+                    r={radius}
+                    stroke={_tickColor}
+                    strokeWidth={strokeWidth}
+                    fill="none"
+                    strokeDasharray={`${tickArcLen} ${Math.max(
+                      0,
+                      C - tickArcLen,
+                    )}`}
+                    strokeDashoffset={offset}
+                    strokeLinecap="butt"
+                  />
+                );
+              },
+            )}
         </G>
       </Svg>
 
