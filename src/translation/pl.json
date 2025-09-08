@@ -33,7 +33,8 @@
     "skip": "Czy na pewno chcesz pominąć nawyk",
     "equalize": "Czy na pewno chcesz wyrównać liczniki?",
     "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
-    "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?"
+    "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?",
+    "see-you": "Do zobaczenia jutro"
   },
   "button": {
     "delete": "Usuń",
@@ -59,7 +60,7 @@
     "goodCounter": "Dobre wybory",
     "badCounter": "Łatwe wybory",
     "skipCounter": "Pominięte wybory",
-    "done": "Wszystko na dzisiaj zrobione!",
+    "done": "Wszystko zrobione!",
     "start": "Zacznij",
     "finish": "Dalej",
     "remaining": "Pozostało",
@@ -219,6 +220,12 @@
       "Pominięty nawyk nie kasuje Twojego wysiłku.",
       "Nawet przerwy mogą napędzać postęp.",
       "To tylko pauza — Twoja podróż trwa dalej."
+    ],
+    "end": [
+      "Co dziś wzbudziło Twoją wdzięczność?",
+      "Co dziś wzbudziło Twoją dumę?",
+      "Co dziś wywołało Twój uśmiech?",
+      "Co dziś nauczyło Cię czegoś nowego?"
     ]
   }
 }

@@ -164,7 +164,9 @@ const NowCard = ({
               indeterminate={isSelectedHourLater}
             />
           </View>
-          <Text variant="bodyLarge">{motivation}</Text>
+          <Text variant="bodyLarge" style={styles.motivation__message}>
+            {motivation}
+          </Text>
           <View style={styles.gap} />
           <View style={styles.gap} />
 
@@ -199,7 +201,7 @@ const NowCard = ({
 
           <Text
             variant="bodyLarge"
-            style={{opacity: isSelectedHourLater ? 0.5 : 1}}>
+            style={{opacity: isSelectedHourLater || step === 1 ? 0.5 : 1}}>
             {t('card.instead')}
           </Text>
 

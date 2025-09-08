@@ -101,6 +101,11 @@ export const useStyles = () => {
       paddingVertical: theme.dimensions.padding,
       marginVertical: theme.dimensions.margin,
     },
+    card__end: {
+      backgroundColor: theme.colors.primaryContainer,
+      borderColor: theme.colors.primary,
+      borderWidth: 2,
+    },
     chip: {
       borderRadius: 12,
     },
@@ -118,6 +123,10 @@ export const useStyles = () => {
       marginVertical: theme.dimensions.padding,
       height: theme.dimensions.margin,
       borderRadius: theme.dimensions.margin / 2,
+    },
+    motivation__message: {
+      textAlign: 'center',
+      fontStyle: 'italic',
     },
     gap: {
       height: theme.dimensions.margin * 3,
@@ -142,6 +151,18 @@ export const useStyles = () => {
     daysSelector__chip: {
       marginLeft: theme.dimensions.margin,
       borderRadius: 25,
+    },
+    end__icon: {
+      fontSize: 48,
+      textAlign: 'center',
+    },
+    end__title: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    end__tomorrow: {
+      textAlign: 'center',
+      opacity: 0.7,
     },
   });
 };

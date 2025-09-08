@@ -121,6 +121,7 @@ let lastPickedMessages = {
   good: '',
   bad: '',
   skip: '',
+  end: '',
 };
 
 export function pickRandomMotivation(translationFunction, category) {

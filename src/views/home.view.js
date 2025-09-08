@@ -14,6 +14,7 @@ import {
 } from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import NowCard from '@/components/now.card';
+import EndCard from '@/components/end.card';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -22,6 +23,8 @@ const HomeView = () => {
   const habits = useSelector(state => state.habits);
   const debugMode = useSelector(state => state.settings.debugMode);
   const cardDuration = useSelector(state => state.settings.cardDuration);
+  const [activeKey, setActiveKey] = useState(null);
+  const [allCompleted, setAllCompleted] = useState(false);
 
   const refreshHabits = useCallback(() => {
     // Updates the list of habits after changing one
@@ -91,22 +94,43 @@ const HomeView = () => {
     return null;
   }, [todayHabits]);
 
-  const [activeKey, setActiveKey] = useState(null);
-
   useEffect(() => {
-    // Manages which habit card is currently active
+    // Manages habit completion state and active card switching
+
+    if (todayHabits.length === 0) {
+      setAllCompleted(false);
+      return;
+    }
+
+    const hasIncompleteHabits = todayHabits.some(
+      habit => !habit.completedHours.includes(habit.selectedHour),
+    );
+
+    if (!hasIncompleteHabits) {
+      setAllCompleted(true);
+      return;
+    } else {
+      setAllCompleted(false);
+    }
+
     if (activeKey === null && firstActiveKeyCandidate !== null) {
       setActiveKey(firstActiveKeyCandidate);
       return;
     }
+
     if (firstActiveKeyCandidate !== activeKey) {
-      const id = setTimeout(
-        () => setActiveKey(firstActiveKeyCandidate),
-        cardDuration * 1000,
-      );
+      const id = setTimeout(() => {
+        setActiveKey(firstActiveKeyCandidate);
+        // If no more active habits, mark as completed after animation
+        if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
+          setAllCompleted(true);
+        } else if (firstActiveKeyCandidate !== null) {
+          setAllCompleted(false);
+        }
+      }, cardDuration * 1000);
       return () => clearTimeout(id);
     }
-  }, [firstActiveKeyCandidate, activeKey]);
+  }, [todayHabits, firstActiveKeyCandidate, activeKey, cardDuration]);
 
   useEffect(() => {
     // Creates notifications about today's habits
@@ -178,6 +202,8 @@ const HomeView = () => {
               <Text variant="titleMedium">{t('title.no-habits')}</Text>
             </Card.Content>
           </Card>
+        ) : allCompleted ? (
+          <EndCard />
         ) : (
           todayHabits.map(habit => (
             <NowCard
