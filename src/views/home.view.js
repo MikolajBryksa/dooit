@@ -106,10 +106,11 @@ const HomeView = () => {
       habit => !habit.completedHours.includes(habit.selectedHour),
     );
 
-    if (!hasIncompleteHabits) {
+    // Only set allCompleted immediately if we're not transitioning from an active card
+    if (!hasIncompleteHabits && activeKey === null) {
       setAllCompleted(true);
       return;
-    } else {
+    } else if (hasIncompleteHabits) {
       setAllCompleted(false);
     }
 
