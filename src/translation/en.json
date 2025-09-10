@@ -21,6 +21,9 @@
     "clock-format": "Clock format",
     "first-day": "First day of the week",
     "card-duration": "Time to switch cards",
+    "future-habits": "Future habits view",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
     "theme": "Theme",
     "dark": "Dark",
     "light": "Light",
@@ -109,7 +112,7 @@
         "subtitle": "Select the activities you want to repeat regularly."
       },
       "option2": {
-        "title": "Enjoy life",
+        "title": "Make choices",
         "subtitle": "Every day, choose between what is right and what is easy."
       },
       "option3": {
@@ -156,11 +159,11 @@
     },
     "7": {
       "habitName": "Language learning",
-      "habitEnemy": "Skipping lessons"
+      "habitEnemy": "Only native language"
     },
     "8": {
       "habitName": "Stress relief",
-      "habitEnemy": "Videos"
+      "habitEnemy": "Short videos"
     },
     "9": {
       "habitName": "Cleaning",

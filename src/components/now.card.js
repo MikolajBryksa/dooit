@@ -27,6 +27,9 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const debugMode = useSelector(state => state.settings.debugMode);
+  const blockFutureHabits = useSelector(
+    state => state.settings.blockFutureHabits,
+  );
   const [step, setStep] = useState(1);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
@@ -35,6 +38,7 @@ const NowCard = ({
   const currentTime = useCurrentTime();
   const isSelectedHourLater = useMemo(() => {
     // Comparison of selectedHour with the current time
+    if (!blockFutureHabits) return false;
     if (!selectedHour || !currentTime) return false;
     const [h, m] = selectedHour.split(':').map(Number);
     const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();

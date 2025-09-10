@@ -17,7 +17,7 @@ export const habitIcons = [
   'food-apple',
   'book-open',
   'school',
-  'face-agent',
+  'translate',
   'meditation',
   'broom',
   'shower',

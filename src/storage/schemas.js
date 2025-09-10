@@ -37,12 +37,13 @@ Settings.schema = {
     notifications: 'bool',
     debugMode: 'bool',
     cardDuration: 'int',
+    blockFutureHabits: 'bool',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Settings],
-  schemaVersion: 10,
+  schemaVersion: 11,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -68,6 +69,7 @@ realm.write(() => {
       notifications: false,
       debugMode: false,
       cardDuration: 4,
+      blockFutureHabits: true,
     });
   }
 });

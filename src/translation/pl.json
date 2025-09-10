@@ -21,6 +21,9 @@
     "clock-format": "Format zegara",
     "first-day": "Pierwszy dzień tygodnia",
     "card-duration": "Czas na zmianę karty",
+    "future-habits": "Widok przyszłych nawyków",
+    "locked": "Zablokowany",
+    "unlocked": "Odblokowany",
     "theme": "Motyw",
     "dark": "Ciemny",
     "light": "Jasny",
@@ -110,12 +113,12 @@
         "subtitle": "Wybierz czynności, które chcesz powtarzać regularnie."
       },
       "option2": {
-        "title": "Ciesz się życiem",
-        "subtitle": "Każdego dnia dokonuj wyboru między tym, co dobre, a tym, co łatwe."
+        "title": "Dokonuj wyborów",
+        "subtitle": "Każdego dnia wybieraj między tym, co dobre, a tym, co łatwe."
       },
       "option3": {
         "title": "Monitoruj postępy",
-        "subtitle": "Śledź swoją podróż licznikiem powtórzeń i zobacz ile możesz osiągnąć."
+        "subtitle": "Śledź swoją podróż licznikiem powtórzeń i zobacz ile osiągasz."
       },
       "choose-habits": "Wybierz nawyki"
     },
@@ -157,15 +160,15 @@
     },
     "7": {
       "habitName": "Nauka języka",
-      "habitEnemy": "Pominięcie lekcji"
+      "habitEnemy": "Tylko język ojczysty"
     },
     "8": {
       "habitName": "Odstresowanie",
-      "habitEnemy": "Oglądanie filmów"
+      "habitEnemy": "Krótkie filmiki"
     },
     "9": {
       "habitName": "Sprzątanie",
-      "habitEnemy": "Zostawianie bałaganu"
+      "habitEnemy": "Zostawienie bałaganu"
     },
     "10": {
       "habitName": "Zimny prysznic",
