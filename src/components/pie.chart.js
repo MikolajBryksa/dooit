@@ -16,6 +16,10 @@ const PieChart = ({
   showTicks = true,
   tickArcLen = 1.3,
   opacity = 1,
+
+  showSeparators = true,
+  separatorArcLen,
+  separatorColor,
 }) => {
   const theme = useTheme();
 
@@ -34,6 +38,9 @@ const PieChart = ({
   const _skipColor = theme?.colors?.background;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
+
+  const _separatorColor = separatorColor ?? _tickColor;
+  const _separatorArcLen = separatorArcLen ?? tickArcLen;
 
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2,
@@ -170,6 +177,25 @@ const PieChart = ({
 
   const iconSize = Math.max(24, size - (strokeWidth + 8) * 2);
 
+  const TinyArc = ({at, length, stroke}) => {
+    if (!hasAny || length <= 0) return null;
+    const arc = Math.max(0, Math.min(C - EPS, length));
+    const offset = -(at - arc / 2);
+    return (
+      <Circle
+        cx={cx}
+        cy={cy}
+        r={radius}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        fill="none"
+        strokeDasharray={`${arc} ${Math.max(0, C - arc)}`}
+        strokeDashoffset={offset}
+        strokeLinecap="butt"
+      />
+    );
+  };
+
   return (
     <View style={[styles.container, {width: size, height: size, opacity}]}>
       <Svg width={size} height={size}>
@@ -226,7 +252,7 @@ const PieChart = ({
             />
           )}
 
-          {/* good */}
+          {/* ticks */}
           {showTicks &&
             lenG > EPS &&
             good > 0 &&
@@ -235,28 +261,17 @@ const PieChart = ({
               (_, i) => {
                 const m = (isFullG ? 0 : 1) + i;
                 const pos = startG + m * unitG;
-                const offset = -(pos - tickArcLen / 2);
                 return (
-                  <Circle
-                    key={`g-tick-${i}`}
-                    cx={cx}
-                    cy={cy}
-                    r={radius}
+                  <TinyArc
+                    key={`tick-g-${i}`}
+                    at={pos}
+                    length={tickArcLen}
                     stroke={_tickColor}
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                    strokeDasharray={`${tickArcLen} ${Math.max(
-                      0,
-                      C - tickArcLen,
-                    )}`}
-                    strokeDashoffset={offset}
-                    strokeLinecap="butt"
                   />
                 );
               },
             )}
 
-          {/* bad */}
           {showTicks &&
             lenB > EPS &&
             bad > 0 &&
@@ -265,28 +280,17 @@ const PieChart = ({
               (_, i) => {
                 const m = (isFullB ? 0 : 1) + i;
                 const pos = startB + m * unitB;
-                const offset = -(pos - tickArcLen / 2);
                 return (
-                  <Circle
-                    key={`b-tick-${i}`}
-                    cx={cx}
-                    cy={cy}
-                    r={radius}
+                  <TinyArc
+                    key={`tick-b-${i}`}
+                    at={pos}
+                    length={tickArcLen}
                     stroke={_tickColor}
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                    strokeDasharray={`${tickArcLen} ${Math.max(
-                      0,
-                      C - tickArcLen,
-                    )}`}
-                    strokeDashoffset={offset}
-                    strokeLinecap="butt"
                   />
                 );
               },
             )}
 
-          {/* skip */}
           {showTicks &&
             lenS > EPS &&
             skip > 0 &&
@@ -295,26 +299,62 @@ const PieChart = ({
               (_, i) => {
                 const m = (isFullS ? 0 : 1) + i;
                 const pos = startS + m * unitS;
-                const offset = -(pos - tickArcLen / 2);
                 return (
-                  <Circle
-                    key={`s-tick-${i}`}
-                    cx={cx}
-                    cy={cy}
-                    r={radius}
+                  <TinyArc
+                    key={`tick-s-${i}`}
+                    at={pos}
+                    length={tickArcLen}
                     stroke={_tickColor}
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                    strokeDasharray={`${tickArcLen} ${Math.max(
-                      0,
-                      C - tickArcLen,
-                    )}`}
-                    strokeDashoffset={offset}
-                    strokeLinecap="butt"
                   />
                 );
               },
             )}
+
+          {/* separators */}
+          {showSeparators && _separatorArcLen > 0 && (
+            <>
+              {/* Between GOOD and BAD */}
+              {lenG > EPS && lenB > EPS && (
+                <>
+                  <TinyArc
+                    key="sep-g-b"
+                    at={startB}
+                    length={_separatorArcLen}
+                    stroke={_separatorColor}
+                  />
+                  {/* Top wrap when both segments >1 */}
+                  {good > 1 && bad > 1 && (
+                    <TinyArc
+                      key="sep-g-b-top"
+                      at={startG}
+                      length={_separatorArcLen}
+                      stroke={_separatorColor}
+                    />
+                  )}
+                </>
+              )}
+
+              {/* Between BAD and SKIP */}
+              {lenB > EPS && lenS > EPS && (
+                <TinyArc
+                  key="sep-b-s"
+                  at={startS}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
+              )}
+
+              {/* Wrap-around */}
+              {lenS > EPS && lenG > EPS && (
+                <TinyArc
+                  key="sep-s-g"
+                  at={startG}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
+              )}
+            </>
+          )}
         </G>
       </Svg>
 
