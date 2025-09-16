@@ -114,6 +114,16 @@ const HomeView = () => {
       setAllCompleted(false);
     }
 
+    // If coming back from allCompleted state and we have a new habit to show, show it immediately
+    if (
+      activeKey === null &&
+      firstActiveKeyCandidate !== null &&
+      allCompleted
+    ) {
+      setActiveKey(firstActiveKeyCandidate);
+      return;
+    }
+
     if (activeKey === null && firstActiveKeyCandidate !== null) {
       setActiveKey(firstActiveKeyCandidate);
       return;
@@ -131,7 +141,13 @@ const HomeView = () => {
       }, cardDuration * 1000);
       return () => clearTimeout(id);
     }
-  }, [todayHabits, firstActiveKeyCandidate, activeKey, cardDuration]);
+  }, [
+    todayHabits,
+    firstActiveKeyCandidate,
+    activeKey,
+    cardDuration,
+    allCompleted,
+  ]);
 
   useEffect(() => {
     // Creates notifications about today's habits
