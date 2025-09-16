@@ -6,7 +6,6 @@ import {
   Text,
   Modal,
   TextInput,
-  Portal,
   ProgressBar,
   IconButton,
 } from 'react-native-paper';
@@ -79,98 +78,93 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   };
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={styles.modal}>
-        <Card.Content>
-          <View style={styles.title}>
-            <Text variant="titleLarge">{t('title.add')}</Text>
-            <IconButton
-              icon="close"
-              size={20}
-              onPress={() => {
-                onDismiss();
-                resetInputs();
-              }}
-            />
-          </View>
-          <ProgressBar
-            style={styles.progress__bar}
-            progress={progressBarValue}
+    <Modal
+      visible={visible}
+      onDismiss={onDismiss}
+      contentContainerStyle={styles.modal}>
+      <Card.Content>
+        <View style={styles.title}>
+          <Text variant="titleLarge">{t('title.add')}</Text>
+          <IconButton
+            icon="close"
+            size={20}
+            onPress={() => {
+              onDismiss();
+              resetInputs();
+            }}
           />
+        </View>
+        <ProgressBar style={styles.progress__bar} progress={progressBarValue} />
 
-          {step === 1 && (
-            <>
-              <Text variant="bodyMedium">{t('addStep.habitName')}</Text>
-              <TextInput
-                mode="outlined"
-                label={t('card.habitName')}
-                value={habitName}
-                onChangeText={setHabitName}
-                maxLength={30}
-              />
-            </>
+        {step === 1 && (
+          <>
+            <Text variant="bodyMedium">{t('addStep.habitName')}</Text>
+            <TextInput
+              mode="outlined"
+              label={t('card.habitName')}
+              value={habitName}
+              onChangeText={setHabitName}
+              maxLength={30}
+            />
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            <Text variant="bodyMedium">{t('addStep.habitEnemy')}</Text>
+            <TextInput
+              mode="outlined"
+              label={t('card.habitEnemy')}
+              value={habitEnemy}
+              onChangeText={setHabitEnemy}
+              maxLength={30}
+            />
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <Text variant="bodyMedium">{t('addStep.repeatDays')}</Text>
+            <DaysSelector
+              repeatDays={repeatDays}
+              setRepeatDays={setRepeatDays}
+            />
+          </>
+        )}
+
+        {step === 4 && (
+          <>
+            <Text variant="bodyMedium">{t('addStep.repeatHours')}</Text>
+            <HoursSelector
+              repeatHours={repeatHours}
+              setRepeatHours={setRepeatHours}
+            />
+          </>
+        )}
+
+        <View style={styles.gap} />
+
+        <Card.Actions>
+          {step > 1 && (
+            <Button mode="outlined" onPress={handlePrevStep}>
+              {t('button.back')}
+            </Button>
           )}
 
-          {step === 2 && (
-            <>
-              <Text variant="bodyMedium">{t('addStep.habitEnemy')}</Text>
-              <TextInput
-                mode="outlined"
-                label={t('card.habitEnemy')}
-                value={habitEnemy}
-                onChangeText={setHabitEnemy}
-                maxLength={30}
-              />
-            </>
+          {step < maxSteps && (
+            <Button onPress={handleNextStep} disabled={!canProceed()}>
+              {t('button.next')}
+            </Button>
           )}
 
-          {step === 3 && (
-            <>
-              <Text variant="bodyMedium">{t('addStep.repeatDays')}</Text>
-              <DaysSelector
-                repeatDays={repeatDays}
-                setRepeatDays={setRepeatDays}
-              />
-            </>
+          {step === maxSteps && (
+            <Button onPress={handleSave} disabled={!canProceed()}>
+              {t('button.save')}
+            </Button>
           )}
-
-          {step === 4 && (
-            <>
-              <Text variant="bodyMedium">{t('addStep.repeatHours')}</Text>
-              <HoursSelector
-                repeatHours={repeatHours}
-                setRepeatHours={setRepeatHours}
-              />
-            </>
-          )}
-
-          <View style={styles.gap} />
-
-          <Card.Actions>
-            {step > 1 && (
-              <Button mode="outlined" onPress={handlePrevStep}>
-                {t('button.back')}
-              </Button>
-            )}
-
-            {step < maxSteps && (
-              <Button onPress={handleNextStep} disabled={!canProceed()}>
-                {t('button.next')}
-              </Button>
-            )}
-
-            {step === maxSteps && (
-              <Button onPress={handleSave} disabled={!canProceed()}>
-                {t('button.save')}
-              </Button>
-            )}
-          </Card.Actions>
-        </Card.Content>
-      </Modal>
-    </Portal>
+        </Card.Actions>
+      </Card.Content>
+    </Modal>
   );
 };
 

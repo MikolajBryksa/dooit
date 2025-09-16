@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
   Modal,
-  Portal,
   Text,
   Button,
   TextInput,
@@ -11,6 +10,8 @@ import {
 import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
+import {updateHabitValue} from '@/services/habits.service';
+import {hourToSec} from '@/utils';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 
@@ -19,8 +20,9 @@ const EditModal = ({
   onDismiss,
   field,
   value,
-  onSave,
   label,
+  habitId,
+  fetchAllHabits,
   keyboardType = 'default',
 }) => {
   const {t} = useTranslation();
@@ -46,77 +48,87 @@ const EditModal = ({
     }
   }, [value, field]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     let valueToSave = inputValue;
     const numericFields = ['goodCounter', 'badCounter', 'skipCounter'];
     if (numericFields.includes(field)) {
       const parsed = parseInt(inputValue, 10);
       valueToSave = isNaN(parsed) ? 0 : parsed;
     }
-    onSave(valueToSave);
-    onDismiss();
+
+    if (field === 'repeatHours' && Array.isArray(valueToSave)) {
+      valueToSave = [...valueToSave].sort(
+        (a, b) => hourToSec(a) - hourToSec(b),
+      );
+    }
+
+    try {
+      updateHabitValue(habitId, field, valueToSave);
+      fetchAllHabits();
+      setTimeout(() => {
+        onDismiss();
+      }, 100);
+    } catch (error) {
+      console.error('Error updating habit:', error);
+      onDismiss();
+    }
   };
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={styles.modal}>
-        <Card.Content>
-          <View style={styles.title}>
-            <Text variant="titleMedium">{label || t(`card.${field}`)}</Text>
-            <IconButton icon="close" size={20} onPress={onDismiss} />
-          </View>
+    <Modal
+      visible={visible}
+      onDismiss={onDismiss}
+      contentContainerStyle={styles.modal}>
+      <Card.Content>
+        <View style={styles.title}>
+          <Text variant="titleMedium">{label || t(`card.${field}`)}</Text>
+          <IconButton icon="close" size={20} onPress={onDismiss} />
+        </View>
 
-          {field === 'repeatDays' && (
-            <DaysSelector
-              repeatDays={inputValue}
-              setRepeatDays={setInputValue}
-            />
-          )}
+        {field === 'repeatDays' && (
+          <DaysSelector repeatDays={inputValue} setRepeatDays={setInputValue} />
+        )}
 
-          {field === 'repeatHours' && (
-            <HoursSelector
-              repeatHours={inputValue}
-              setRepeatHours={setInputValue}
-            />
-          )}
+        {field === 'repeatHours' && (
+          <HoursSelector
+            repeatHours={inputValue}
+            setRepeatHours={setInputValue}
+          />
+        )}
 
-          {['goodCounter', 'badCounter', 'skipCounter'].includes(field) && (
-            <TextInput
-              mode="outlined"
-              value={inputValue === 0 ? '' : inputValue?.toString()}
-              onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
-              keyboardType="numeric"
-              autoFocus
-              style={{marginBottom: 16}}
-              maxLength={3}
-            />
-          )}
+        {['goodCounter', 'badCounter', 'skipCounter'].includes(field) && (
+          <TextInput
+            mode="outlined"
+            value={inputValue === 0 ? '' : inputValue?.toString()}
+            onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
+            keyboardType="numeric"
+            autoFocus
+            style={{marginBottom: 16}}
+            maxLength={3}
+          />
+        )}
 
-          {['habitName', 'habitEnemy'].includes(field) && (
-            <TextInput
-              mode="outlined"
-              value={inputValue?.toString()}
-              onChangeText={setInputValue}
-              keyboardType={keyboardType}
-              autoFocus
-              style={{marginBottom: 16}}
-              maxLength={30}
-            />
-          )}
-          <Card.Actions>
-            <Button
-              mode="contained"
-              onPress={handleSave}
-              disabled={!inputValue || inputValue.length === 0}>
-              {t('button.save')}
-            </Button>
-          </Card.Actions>
-        </Card.Content>
-      </Modal>
-    </Portal>
+        {['habitName', 'habitEnemy'].includes(field) && (
+          <TextInput
+            mode="outlined"
+            value={inputValue?.toString()}
+            onChangeText={setInputValue}
+            keyboardType={keyboardType}
+            autoFocus
+            style={{marginBottom: 16}}
+            maxLength={30}
+          />
+        )}
+        <Card.Actions>
+          <Button
+            mode="contained"
+            onPress={handleSave}
+            disabled={!inputValue || inputValue.length === 0}>
+            {t('button.save')}
+          </Button>
+        </Card.Actions>
+      </Card.Content>
+    </Modal>
   );
 };
 

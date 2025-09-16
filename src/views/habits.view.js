@@ -5,6 +5,7 @@ import {Appbar} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
 import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
+import EditModal from '@/modals/edit.modal';
 import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
@@ -16,9 +17,22 @@ const HabitsView = () => {
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
+  const [visibleEditModal, setVisibleEditModal] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
+  };
+
+  const handleEditModal = (habitId, field, value, label) => {
+    setEditModalData({habitId, field, value, label});
+    setVisibleEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setTimeout(() => {
+      setVisibleEditModal(false);
+    }, 100);
   };
 
   const fetchAllHabits = () => {
@@ -58,6 +72,7 @@ const HabitsView = () => {
               repeatHours={habit.repeatHours}
               available={habit.available}
               fetchAllHabits={fetchAllHabits}
+              onEdit={handleEditModal}
             />
           ))
         ) : (
@@ -69,6 +84,16 @@ const HabitsView = () => {
       <AddModal
         visible={visibleAddModal}
         onDismiss={handleAddModal}
+        fetchAllHabits={fetchAllHabits}
+      />
+
+      <EditModal
+        visible={visibleEditModal}
+        onDismiss={closeEditModal}
+        field={editModalData?.field}
+        value={editModalData?.value}
+        label={editModalData?.label}
+        habitId={editModalData?.habitId}
         fetchAllHabits={fetchAllHabits}
       />
     </>

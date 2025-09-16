@@ -9,7 +9,6 @@ import {
 } from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabitValue} from '@/services/habits.service';
-import EditModal from '@/modals/edit.modal';
 import DeleteDialog from '@/dialogs/delete.dialog';
 import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {useTranslation} from 'react-i18next';
@@ -28,6 +27,7 @@ const HabitCard = ({
   repeatHours = [],
   available,
   fetchAllHabits,
+  onEdit,
   onboardingMode = false,
 }) => {
   const {t} = useTranslation();
@@ -35,9 +35,6 @@ const HabitCard = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const firstDay = useSelector(state => state.settings.firstDay);
   const [isAvailable, setIsAvailable] = useState(available);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalField, setModalField] = useState(null);
-  const [modalValue, setModalValue] = useState(null);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
 
@@ -49,24 +46,7 @@ const HabitCard = ({
   };
 
   const openEditModal = (field, value) => {
-    setModalField(field);
-    setModalValue(value);
-    setModalVisible(true);
-  };
-
-  const handleSaveField = newValue => {
-    let sortedValue = newValue;
-    if (modalField === 'repeatHours' && Array.isArray(newValue)) {
-      sortedValue = [...newValue].sort((a, b) => {
-        const toSeconds = str => {
-          const [h, m] = str.split(':').map(Number);
-          return h * 3600 + (m || 0) * 60;
-        };
-        return toSeconds(a) - toSeconds(b);
-      });
-    }
-    updateHabitValue(id, modalField, sortedValue);
-    fetchAllHabits();
+    onEdit(id, field, value, t(`card.${field}`));
   };
 
   return (
@@ -244,25 +224,6 @@ const HabitCard = ({
           </Card.Content>
         )}
       </Card>
-
-      <EditModal
-        visible={modalVisible}
-        onDismiss={() => setModalVisible(false)}
-        field={modalField}
-        value={modalValue}
-        onSave={handleSaveField}
-        label={t(`card.${modalField}`)}
-        options={
-          modalField === 'repeatDays'
-            ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-            : undefined
-        }
-        keyboardType={
-          ['goodCounter', 'badCounter', 'skipCounter'].includes(modalField)
-            ? 'numeric'
-            : 'default'
-        }
-      />
 
       <DeleteDialog
         visible={deleteDialogVisible}
