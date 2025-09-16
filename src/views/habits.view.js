@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, ScrollView} from 'react-native';
-import {Appbar, Text, Card, Chip} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
+import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
@@ -60,18 +61,7 @@ const HabitsView = () => {
             />
           ))
         ) : (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('title.no-habits')}</Text>
-              <Chip
-                icon="plus"
-                mode="outlined"
-                onPress={handleAddModal}
-                style={styles.chip}>
-                {t(`title.add`)}
-              </Chip>
-            </Card.Content>
-          </Card>
+          <NoHabitsCard onAddHabit={handleAddModal} />
         )}
         <View style={styles.gap} />
       </ScrollView>

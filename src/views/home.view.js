@@ -15,6 +15,7 @@ import {
 import {setHabits} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
+import NoHabitsCard from '@/components/no-habits.card';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -214,11 +215,7 @@ const HomeView = () => {
 
       <ScrollView style={styles.container}>
         {todayHabits.length === 0 ? (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('title.no-habits')}</Text>
-            </Card.Content>
-          </Card>
+          <NoHabitsCard />
         ) : allCompleted ? (
           <EndCard />
         ) : (
