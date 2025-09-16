@@ -131,13 +131,13 @@ const PieChart = ({
     let show = null;
     let showValue = null;
     if (dg === 1) {
-      show = {text: '+1', color: _goodColor};
+      show = {icon: 'plus-thick', color: _goodColor};
       showValue = 'good';
     } else if (db === 1) {
-      show = {text: '-1', color: _badColor};
+      show = {icon: 'minus-thick', color: _badColor};
       showValue = 'bad';
     } else if (ds === 1) {
-      show = {text: '0', color: _skipColor};
+      show = {icon: 'close-thick', color: _skipColor};
       showValue = 'skip';
     }
 
@@ -313,42 +313,56 @@ const PieChart = ({
           {/* separators */}
           {showSeparators && _separatorArcLen > 0 && (
             <>
-              {/* Between GOOD and BAD */}
+              {/* Primary boundaries (always when both adjacent segments exist) */}
               {lenG > EPS && lenB > EPS && (
-                <>
-                  <TinyArc
-                    key="sep-g-b"
-                    at={startB}
-                    length={_separatorArcLen}
-                    stroke={_separatorColor}
-                  />
-                  {/* Top wrap when both segments >1 */}
-                  {good > 1 && bad > 1 && (
-                    <TinyArc
-                      key="sep-g-b-top"
-                      at={startG}
-                      length={_separatorArcLen}
-                      stroke={_separatorColor}
-                    />
-                  )}
-                </>
+                <TinyArc
+                  key="sep-g-b-main"
+                  at={startB}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
               )}
-
-              {/* Between BAD and SKIP */}
               {lenB > EPS && lenS > EPS && (
                 <TinyArc
-                  key="sep-b-s"
+                  key="sep-b-s-main"
                   at={startS}
                   length={_separatorArcLen}
                   stroke={_separatorColor}
                 />
               )}
-
-              {/* Wrap-around */}
               {lenS > EPS && lenG > EPS && (
                 <TinyArc
-                  key="sep-s-g"
+                  key="sep-s-g-main"
                   at={startG}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
+              )}
+
+              {/* Extra wrap-around separators when the third segment is zero (so only two colors are present) */}
+              {/* For GOOD-BAD when SKIP is empty: add the opposite separator at 0/2π */}
+              {lenS <= EPS && lenG > EPS && lenB > EPS && (
+                <TinyArc
+                  key="sep-g-b-wrap"
+                  at={startG}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
+              )}
+              {/* For BAD-SKIP when GOOD is empty: add the opposite separator at 0/2π */}
+              {lenG <= EPS && lenB > EPS && lenS > EPS && (
+                <TinyArc
+                  key="sep-b-s-wrap"
+                  at={startG}
+                  length={_separatorArcLen}
+                  stroke={_separatorColor}
+                />
+              )}
+              {/* For SKIP-GOOD when BAD is empty: add the opposite separator at startS (== lenG) */}
+              {lenB <= EPS && lenS > EPS && lenG > EPS && (
+                <TinyArc
+                  key="sep-s-g-wrap"
+                  at={startS}
                   length={_separatorArcLen}
                   stroke={_separatorColor}
                 />
@@ -360,18 +374,18 @@ const PieChart = ({
 
       <View pointerEvents="none" style={styles.centerContent}>
         {flash.visible ? (
-          <Animated.Text
-            style={[
-              styles.flashText,
-              {
-                color: flash.color,
-                transform: [{scale: flashScale}],
-                opacity: flashOpacity,
-                fontSize: Math.min(40, size * 0.28),
-              },
-            ]}>
-            {flash.text}
-          </Animated.Text>
+          <Animated.View
+            style={{
+              transform: [{scale: flashScale}],
+              opacity: flashOpacity,
+            }}>
+            <Avatar.Icon
+              icon={flash.icon}
+              size={Math.min(60, size * 0.5)}
+              style={{backgroundColor: 'transparent'}}
+              color={flash.color}
+            />
+          </Animated.View>
         ) : flash.showValue === 'good' ? (
           <Text
             style={[
