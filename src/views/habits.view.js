@@ -6,6 +6,7 @@ import HabitCard from '@/components/habit.card';
 import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
+import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
@@ -19,6 +20,7 @@ const HabitsView = () => {
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -48,6 +50,11 @@ const HabitsView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.habits')} />
+
+        <Appbar.Action
+          icon="fire"
+          onPress={() => setEqualizeDialogVisible(true)}
+        />
 
         <Appbar.Action
           icon="plus"
@@ -95,6 +102,15 @@ const HabitsView = () => {
         label={editModalData?.label}
         habitId={editModalData?.habitId}
         fetchAllHabits={fetchAllHabits}
+      />
+
+      <EqualizeDialog
+        visible={equalizeDialogVisible}
+        onDismiss={() => setEqualizeDialogVisible(false)}
+        onDone={() => {
+          setEqualizeDialogVisible(false);
+          fetchAllHabits();
+        }}
       />
     </>
   );

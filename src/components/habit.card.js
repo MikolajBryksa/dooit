@@ -5,12 +5,10 @@ import {
   Switch,
   IconButton,
   TouchableRipple,
-  Button,
 } from 'react-native-paper';
 import {View} from 'react-native';
 import {updateHabitValue} from '@/services/habits.service';
 import DeleteDialog from '@/dialogs/delete.dialog';
-import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
@@ -167,7 +165,7 @@ const HabitCard = ({
                   onPress={() => openEditModal('goodCounter', goodCounter)}>
                   <View style={styles.card__row}>
                     <IconButton
-                      icon="thumb-up"
+                      icon="plus-thick"
                       size={18}
                       style={{margin: 0, marginRight: 4}}
                     />
@@ -181,7 +179,7 @@ const HabitCard = ({
                   onPress={() => openEditModal('badCounter', badCounter)}>
                   <View style={styles.card__row}>
                     <IconButton
-                      icon="thumb-down"
+                      icon="minus-thick"
                       size={18}
                       style={{margin: 0, marginRight: 4}}
                     />
@@ -195,7 +193,7 @@ const HabitCard = ({
                   onPress={() => openEditModal('skipCounter', skipCounter)}>
                   <View style={styles.card__row}>
                     <IconButton
-                      icon="close"
+                      icon="close-thick"
                       size={18}
                       style={{margin: 0, marginRight: 4}}
                     />
@@ -204,21 +202,6 @@ const HabitCard = ({
                     </Text>
                   </View>
                 </TouchableRipple>
-
-                <View style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    disabled={
-                      (goodCounter === 0 || badCounter === 0) &&
-                      skipCounter === 0
-                    }
-                    onPress={() => {
-                      setEqualizeDialogVisible(true);
-                    }}>
-                    {t('button.equalize')}
-                  </Button>
-                </View>
               </>
             )}
           </Card.Content>
@@ -234,18 +217,6 @@ const HabitCard = ({
         }}
         habitId={id}
         habitName={habitName}
-      />
-
-      <EqualizeDialog
-        visible={equalizeDialogVisible}
-        onDismiss={() => setEqualizeDialogVisible(false)}
-        onDone={() => {
-          setEqualizeDialogVisible(false);
-          fetchAllHabits();
-        }}
-        habitId={id}
-        goodCounter={goodCounter}
-        badCounter={badCounter}
       />
     </>
   );

@@ -34,7 +34,7 @@
   "message": {
     "delete": "Czy na pewno chcesz usunąć nawyk",
     "skip": "Czy na pewno chcesz pominąć nawyk",
-    "equalize": "Czy na pewno chcesz wyrównać liczniki?",
+    "equalize": "Czy chcesz od dobrych wyborów odjąć łatwe wybory oraz wyzerować pominięte wybory?",
     "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
     "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?",
     "see-you": "Do zobaczenia jutro"

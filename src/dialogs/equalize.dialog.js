@@ -1,38 +1,35 @@
 import React from 'react';
 import {Dialog, Portal, Button, Text} from 'react-native-paper';
-import {updateHabitValues} from '@/services/habits.service';
+import {updateHabitValues, getHabits} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 
-const EqualizeDialog = ({
-  visible,
-  onDismiss,
-  onDone,
-  habitId,
-  goodCounter,
-  badCounter,
-}) => {
+const EqualizeDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
 
   const handleEqualize = () => {
-    let newGood = goodCounter;
-    let newBad = badCounter;
+    const habits = getHabits() || [];
+    habits.forEach(habit => {
+      let newGood = habit.goodCounter;
+      let newBad = habit.badCounter;
 
-    if (goodCounter > badCounter) {
-      newGood = goodCounter - badCounter;
-      newBad = 0;
-    } else if (badCounter > goodCounter) {
-      newBad = badCounter - goodCounter;
-      newGood = 0;
-    } else {
-      newGood = 0;
-      newBad = 0;
-    }
+      if (habit.goodCounter > habit.badCounter) {
+        newGood = habit.goodCounter - habit.badCounter;
+        newBad = 0;
+      } else if (habit.badCounter > habit.goodCounter) {
+        newBad = habit.badCounter - habit.goodCounter;
+        newGood = 0;
+      } else {
+        newGood = 0;
+        newBad = 0;
+      }
 
-    updateHabitValues(habitId, {
-      goodCounter: newGood,
-      badCounter: newBad,
-      skipCounter: 0,
+      updateHabitValues(habit.id, {
+        goodCounter: newGood,
+        badCounter: newBad,
+        skipCounter: 0,
+      });
     });
+
     onDone();
   };
 
