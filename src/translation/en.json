@@ -9,8 +9,8 @@
     "delete": "Delete habit",
     "skip": "Skip habit",
     "no-habits": "No habits",
-    "contact": "Contact author",
-    "support": "Support author",
+    "contact": "Contact",
+    "support": "Coffee",
     "equalize": "Equalize counters"
   },
   "settings": {
@@ -35,7 +35,7 @@
     "delete": "Are you sure to remove the habit",
     "skip": "Are you sure to skip the habit",
     "equalize": "Do you want to subtract easy choices from right choices and reset skipped choices?",
-    "contact": "Do you want to contact the author of this app (Mikołaj Bryksa) on Linkedin?",
+    "contact": "Fill out the form to contact the app’s author (Mikołaj Bryksa).",
     "support": "Do you want to support the author of this app (Mikołaj Bryksa) by buying coffee?",
     "see-you": "See you tomorrow"
   },
@@ -51,7 +51,13 @@
     "skip": "Skip",
     "done": "Done",
     "equalize": "Equalize",
-    "unlock": "Unlock"
+    "unlock": "Unlock",
+    "send": "Send",
+    "sent": "Sent"
+  },
+  "contact": {
+    "email": "E-mail",
+    "message": "Message"
   },
   "card": {
     "habitName": "Habit name",

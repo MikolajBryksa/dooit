@@ -9,8 +9,8 @@
     "delete": "Usuń nawyk",
     "skip": "Pomiń nawyk",
     "no-habits": "Brak nawyków",
-    "contact": "Kontakt z autorem",
-    "support": "Wsparcie autora",
+    "contact": "Kontakt",
+    "support": "Kawusia",
     "equalize": "Wyrównaj liczniki"
   },
   "settings": {
@@ -35,7 +35,7 @@
     "delete": "Czy na pewno chcesz usunąć nawyk",
     "skip": "Czy na pewno chcesz pominąć nawyk",
     "equalize": "Czy chcesz od dobrych wyborów odjąć łatwe wybory oraz wyzerować pominięte wybory?",
-    "contact": "Czy chcesz skontaktować się z autorem tej aplikacji (Mikołaj Bryksa) na Linkedin?",
+    "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji (Mikołaj Bryksa).",
     "support": "Czy chcesz wesprzeć autora tej aplikacji (Mikołaj Bryksa) kupując kawę?",
     "see-you": "Do zobaczenia jutro"
   },
@@ -51,7 +51,13 @@
     "skip": "Pomiń",
     "done": "Zrobione",
     "equalize": "Wyrównaj",
-    "unlock": "Odblokuj"
+    "unlock": "Odblokuj",
+    "send": "Wyślij",
+    "sent": "Wysłano"
+  },
+  "contact": {
+    "email": "E-mail",
+    "message": "Wiadomość"
   },
   "card": {
     "habitName": "Nazwa nawyku",
