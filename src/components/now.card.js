@@ -50,9 +50,23 @@ const NowCard = ({
     // Resets the step and motivation when the card changes
     setStep(1);
     setMotivation(pickRandomMotivation(t, 'notification'));
+
+    // Animate container height from 0 to full when card appears
+    if (isNext) {
+      habitContainerHeight.setValue(0);
+      Animated.timing(habitContainerHeight, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: false,
+      }).start();
+    }
   }, [isNext]);
 
   const opacity = useRef(new Animated.Value(1)).current;
+  const goodHabitOpacity = useRef(new Animated.Value(1)).current;
+  const badHabitOpacity = useRef(new Animated.Value(0)).current;
+  const habitContainerHeight = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
     // Animates opacity for the current card
     Animated.timing(opacity, {
@@ -61,6 +75,47 @@ const NowCard = ({
       useNativeDriver: false,
     }).start();
   }, [isNext, opacity]);
+
+  useEffect(() => {
+    // Animates transition between good and bad habit
+    if (step === 1) {
+      goodHabitOpacity.setValue(1);
+      badHabitOpacity.setValue(0);
+    } else if (step === 2) {
+      Animated.parallel([
+        Animated.timing(goodHabitOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(badHabitOpacity, {
+          toValue: 1,
+          duration: 300,
+          delay: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else if (step === 3) {
+      Animated.parallel([
+        Animated.timing(goodHabitOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(badHabitOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(habitContainerHeight, {
+          toValue: 0,
+          duration: 600,
+          delay: 100,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }
+  }, [step, goodHabitOpacity, badHabitOpacity, habitContainerHeight]);
 
   const isCompleted = useMemo(() => {
     return completedHours.includes(selectedHour);
@@ -174,66 +229,89 @@ const NowCard = ({
           <View style={styles.gap} />
           <View style={styles.gap} />
 
-          <View
-            style={[
-              styles.card__choices,
-              step !== 1 || (isSelectedHourLater && {opacity: 0.5}),
-            ]}>
-            {/* Good */}
-            <Text variant="titleLarge">{habitName}</Text>
-            <Card.Content style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="outlined"
-                disabled={isSelectedHourLater || step !== 1}
-                onPress={() => {
-                  skipGoodChoice();
-                }}>
-                {t('button.skip')}
-              </Button>
-              <Button
-                style={styles.button}
-                mode="contained"
-                disabled={isSelectedHourLater || step !== 1}
-                onPress={() => {
-                  addGoodChoice();
-                }}>
-                {t('button.done')}
-              </Button>
-            </Card.Content>
-          </View>
+          <Animated.View
+            style={{
+              width: '100%',
+              overflow: 'hidden',
+              height: habitContainerHeight.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 130],
+              }),
+            }}>
+            <View style={{position: 'relative', width: '100%'}}>
+              {/* Good Habit - Step 1 */}
+              <Animated.View
+                style={[
+                  styles.card__choices,
+                  {
+                    opacity: goodHabitOpacity,
+                    position: 'absolute',
+                    width: '100%',
+                    top: 0,
+                    left: 0,
+                  },
+                ]}
+                pointerEvents={step === 1 ? 'auto' : 'none'}>
+                <Text variant="titleLarge">{habitName}</Text>
+                <Card.Content style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="outlined"
+                    disabled={isSelectedHourLater || step !== 1}
+                    onPress={() => {
+                      skipGoodChoice();
+                    }}>
+                    {t('button.skip')}
+                  </Button>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    disabled={isSelectedHourLater || step !== 1}
+                    onPress={() => {
+                      addGoodChoice();
+                    }}>
+                    {t('button.done')}
+                  </Button>
+                </Card.Content>
+              </Animated.View>
 
-          <Text
-            variant="bodyLarge"
-            style={{opacity: isSelectedHourLater || step === 1 ? 0.5 : 1}}>
-            {t('card.instead')}
-          </Text>
-
-          <View style={[styles.card__choices, step !== 2 && {opacity: 0.5}]}>
-            {/* Bad */}
-            <Text variant="titleLarge">{habitEnemy}</Text>
-            <Card.Content style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="outlined"
-                disabled={isSelectedHourLater || step !== 2}
-                onPress={() => {
-                  skipBadChoice();
-                }}>
-                {t('button.skip')}
-              </Button>
-              <Button
-                style={step === 2 ? styles.button__bad : styles.button}
-                mode="contained"
-                disabled={isSelectedHourLater || step !== 2}
-                onPress={() => {
-                  addBadChoice();
-                }}>
-                {t('button.done')}
-              </Button>
-            </Card.Content>
-            <View style={styles.gap} />
-          </View>
+              {/* Bad Habit - Step 2 */}
+              <Animated.View
+                style={[
+                  styles.card__choices,
+                  {
+                    opacity: badHabitOpacity,
+                    position: 'absolute',
+                    width: '100%',
+                    top: 0,
+                    left: 0,
+                  },
+                ]}
+                pointerEvents={step === 2 ? 'auto' : 'none'}>
+                <Text variant="titleLarge">{habitEnemy}</Text>
+                <Card.Content style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="outlined"
+                    disabled={isSelectedHourLater || step !== 2}
+                    onPress={() => {
+                      skipBadChoice();
+                    }}>
+                    {t('button.skip')}
+                  </Button>
+                  <Button
+                    style={styles.button__bad}
+                    mode="contained"
+                    disabled={isSelectedHourLater || step !== 2}
+                    onPress={() => {
+                      addBadChoice();
+                    }}>
+                    {t('button.done')}
+                  </Button>
+                </Card.Content>
+              </Animated.View>
+            </View>
+          </Animated.View>
         </Card.Content>
       </Animated.View>
       <View style={styles.gap} />
