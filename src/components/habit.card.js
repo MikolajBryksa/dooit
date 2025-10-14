@@ -34,7 +34,6 @@ const HabitCard = ({
   const firstDay = useSelector(state => state.settings.firstDay);
   const [isAvailable, setIsAvailable] = useState(available);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
 
   const handleToggleAvailable = () => {
     const newAvailable = !isAvailable;

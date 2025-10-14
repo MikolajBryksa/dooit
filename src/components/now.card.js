@@ -27,10 +27,8 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const debugMode = useSelector(state => state.settings.debugMode);
-  const blockFutureHabits = useSelector(
-    state => state.settings.blockFutureHabits,
-  );
   const [step, setStep] = useState(1);
+  const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
@@ -38,7 +36,6 @@ const NowCard = ({
   const currentTime = useCurrentTime();
   const isSelectedHourLater = useMemo(() => {
     // Comparison of selectedHour with the current time
-    if (!blockFutureHabits) return false;
     if (!selectedHour || !currentTime) return false;
     const [h, m] = selectedHour.split(':').map(Number);
     const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
@@ -46,9 +43,12 @@ const NowCard = ({
     return selMinutes > nowMinutes;
   }, [selectedHour, currentTime]);
 
+  const isLocked = isSelectedHourLater && !isManuallyUnlocked;
+
   useEffect(() => {
     // Resets the step and motivation when the card changes
     setStep(1);
+    setIsManuallyUnlocked(false);
     setMotivation(pickRandomMotivation(t, 'notification'));
 
     // Animate container height from 0 to full when card appears
@@ -143,6 +143,10 @@ const NowCard = ({
     setStep(3);
   };
 
+  const handleUnlock = () => {
+    setIsManuallyUnlocked(true);
+  };
+
   const handleChoice = useCallback(
     choice => {
       if (isCompleted) return;
@@ -210,7 +214,7 @@ const NowCard = ({
             good={goodCounter}
             bad={badCounter}
             skip={skipCounter}
-            opacity={isSelectedHourLater ? 0.5 : 1}
+            opacity={isLocked ? 0.5 : 1}
           />
           <View style={styles.gap} />
           <View style={styles.gap} />
@@ -220,7 +224,7 @@ const NowCard = ({
             <ProgressBar
               style={styles.progress__bar}
               progress={progressBarValue}
-              indeterminate={isSelectedHourLater}
+              indeterminate={isLocked}
             />
           </View>
           <Text variant="bodyLarge" style={styles.motivation__message}>
@@ -253,26 +257,39 @@ const NowCard = ({
                 ]}
                 pointerEvents={step === 1 ? 'auto' : 'none'}>
                 <Text variant="titleLarge">{habitName}</Text>
-                <Card.Content style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="outlined"
-                    disabled={isSelectedHourLater || step !== 1}
-                    onPress={() => {
-                      skipGoodChoice();
-                    }}>
-                    {t('button.skip')}
-                  </Button>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    disabled={isSelectedHourLater || step !== 1}
-                    onPress={() => {
-                      addGoodChoice();
-                    }}>
-                    {t('button.done')}
-                  </Button>
-                </Card.Content>
+                {isLocked ? (
+                  <Card.Content style={styles.card__buttons}>
+                    <Button
+                      style={styles.button}
+                      mode="contained"
+                      onPress={() => {
+                        handleUnlock();
+                      }}>
+                      {t('button.unlock')}
+                    </Button>
+                  </Card.Content>
+                ) : (
+                  <Card.Content style={styles.card__buttons}>
+                    <Button
+                      style={styles.button}
+                      mode="outlined"
+                      disabled={step !== 1}
+                      onPress={() => {
+                        skipGoodChoice();
+                      }}>
+                      {t('button.skip')}
+                    </Button>
+                    <Button
+                      style={styles.button}
+                      mode="contained"
+                      disabled={step !== 1}
+                      onPress={() => {
+                        addGoodChoice();
+                      }}>
+                      {t('button.done')}
+                    </Button>
+                  </Card.Content>
+                )}
               </Animated.View>
 
               {/* Bad Habit - Step 2 */}
@@ -289,26 +306,39 @@ const NowCard = ({
                 ]}
                 pointerEvents={step === 2 ? 'auto' : 'none'}>
                 <Text variant="titleLarge">{habitEnemy}</Text>
-                <Card.Content style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="outlined"
-                    disabled={isSelectedHourLater || step !== 2}
-                    onPress={() => {
-                      skipBadChoice();
-                    }}>
-                    {t('button.skip')}
-                  </Button>
-                  <Button
-                    style={styles.button__bad}
-                    mode="contained"
-                    disabled={isSelectedHourLater || step !== 2}
-                    onPress={() => {
-                      addBadChoice();
-                    }}>
-                    {t('button.done')}
-                  </Button>
-                </Card.Content>
+                {isLocked ? (
+                  <Card.Content style={styles.card__buttons}>
+                    <Button
+                      style={styles.button}
+                      mode="contained"
+                      onPress={() => {
+                        handleUnlock();
+                      }}>
+                      {t('button.unlock')}
+                    </Button>
+                  </Card.Content>
+                ) : (
+                  <Card.Content style={styles.card__buttons}>
+                    <Button
+                      style={styles.button}
+                      mode="outlined"
+                      disabled={step !== 2}
+                      onPress={() => {
+                        skipBadChoice();
+                      }}>
+                      {t('button.skip')}
+                    </Button>
+                    <Button
+                      style={styles.button__bad}
+                      mode="contained"
+                      disabled={step !== 2}
+                      onPress={() => {
+                        addBadChoice();
+                      }}>
+                      {t('button.done')}
+                    </Button>
+                  </Card.Content>
+                )}
               </Animated.View>
             </View>
           </Animated.View>

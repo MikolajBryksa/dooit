@@ -37,7 +37,6 @@ Settings.schema = {
     notifications: 'bool',
     debugMode: 'bool',
     cardDuration: 'int',
-    blockFutureHabits: 'bool',
   },
 };
 
@@ -69,7 +68,6 @@ realm.write(() => {
       notifications: false,
       debugMode: false,
       cardDuration: 4,
-      blockFutureHabits: true,
     });
   }
 });

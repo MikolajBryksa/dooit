@@ -52,7 +52,7 @@ const HabitsView = () => {
         <Appbar.Content title={t('view.habits')} />
 
         <Appbar.Action
-          icon="fire"
+          icon="speedometer"
           onPress={() => setEqualizeDialogVisible(true)}
         />
 

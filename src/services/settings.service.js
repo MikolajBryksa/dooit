@@ -16,7 +16,6 @@ export const getSettings = () => {
     notifications: settings.notifications,
     debugMode: settings.debugMode,
     cardDuration: settings.cardDuration,
-    blockFutureHabits: settings.blockFutureHabits,
   };
 };
 
@@ -38,7 +37,6 @@ export const updateSettings = updates => {
     notifications: updatedSettings.notifications,
     debugMode: updatedSettings.debugMode,
     cardDuration: updatedSettings.cardDuration,
-    blockFutureHabits: updatedSettings.blockFutureHabits,
   };
 };
 

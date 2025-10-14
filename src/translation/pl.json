@@ -50,7 +50,8 @@
     "next": "Dalej",
     "skip": "Pomiń",
     "done": "Zrobione",
-    "equalize": "Wyrównaj"
+    "equalize": "Wyrównaj",
+    "unlock": "Odblokuj"
   },
   "card": {
     "habitName": "Nazwa nawyku",

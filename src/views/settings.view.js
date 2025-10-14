@@ -29,9 +29,6 @@ const SettingsView = () => {
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [cardDuration, setCardDuration] = useState(settings.cardDuration);
-  const [blockFutureHabits, setBlockFutureHabits] = useState(
-    settings.blockFutureHabits,
-  );
   const [currentTheme, setCurrentTheme] = useState(
     settings.currentTheme || systemTheme,
   );
@@ -97,17 +94,6 @@ const SettingsView = () => {
     setCardDuration(newDuration);
     updateSettingValue('cardDuration', newDuration);
     const updatedSettings = {...settings, cardDuration: newDuration};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleBlockFutureHabits() {
-    const newBlockFutureHabits = !blockFutureHabits;
-    setBlockFutureHabits(newBlockFutureHabits);
-    updateSettingValue('blockFutureHabits', newBlockFutureHabits);
-    const updatedSettings = {
-      ...settings,
-      blockFutureHabits: newBlockFutureHabits,
-    };
     dispatch(setSettings(updatedSettings));
   }
 
@@ -219,21 +205,6 @@ const SettingsView = () => {
               onPress={handleCardDuration}
               style={styles.chip}>
               {cardDuration} s
-            </Chip>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
-            <Text variant="titleMedium">{t('settings.future-habits')}</Text>
-            <Chip
-              icon={blockFutureHabits ? 'lock-outline' : 'lock-open-outline'}
-              mode="outlined"
-              onPress={handleBlockFutureHabits}
-              style={styles.chip}>
-              {blockFutureHabits
-                ? t('settings.locked')
-                : t('settings.unlocked')}
             </Chip>
           </Card.Content>
         </Card>

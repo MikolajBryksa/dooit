@@ -1,7 +1,7 @@
 import React, {useMemo, useEffect, useCallback, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
-import {Appbar, Card, Text} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, {TriggerType} from '@notifee/react-native';

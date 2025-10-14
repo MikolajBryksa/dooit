@@ -50,7 +50,8 @@
     "next": "Next",
     "skip": "Skip",
     "done": "Done",
-    "equalize": "Equalize"
+    "equalize": "Equalize",
+    "unlock": "Unlock"
   },
   "card": {
     "habitName": "Habit name",
