@@ -86,6 +86,21 @@ const HomeView = () => {
     return expandedHabits;
   }, [habits, todayKey]);
 
+  const globalProgressValue = useMemo(() => {
+    // Calculate global progress for all habits scheduled for today
+    if (!todayHabits || todayHabits.length === 0) {
+      return 0;
+    }
+
+    const totalPlanned = todayHabits.length;
+    const totalCompleted = todayHabits.filter(habit =>
+      habit.completedHours.includes(habit.selectedHour),
+    ).length;
+
+    const value = totalCompleted / totalPlanned;
+    return Math.max(0, Math.min(1, value));
+  }, [todayHabits]);
+
   const firstActiveKeyCandidate = useMemo(() => {
     // Selects the key of the first incomplete habit for today
     for (const habit of todayHabits) {
@@ -235,6 +250,7 @@ const HomeView = () => {
               icon={habit.icon}
               isNext={habit.key === activeKey}
               onUpdated={refreshHabits}
+              globalProgressValue={globalProgressValue}
             />
           ))
         )}

@@ -23,6 +23,7 @@ const NowCard = ({
   icon,
   isNext = false,
   onUpdated,
+  globalProgressValue = 0,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -184,13 +185,8 @@ const NowCard = ({
   );
 
   const progressBarValue = useMemo(() => {
-    const planned = new Set(repeatHours || []);
-    const done = new Set((completedHours || []).filter(h => planned.has(h)))
-      .size;
-
-    const value = done / repeatHours?.length;
-    return Math.max(0, Math.min(1, value));
-  }, [repeatHours, completedHours]);
+    return Math.max(0, Math.min(1, globalProgressValue));
+  }, [globalProgressValue]);
 
   if (!isNext && !debugMode) {
     return null;
