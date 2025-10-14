@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView} from 'react-native';
 import {Text, Button, Card, Avatar, Checkbox} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
+import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
@@ -22,6 +23,8 @@ const OnboardingView = ({setShowOnboarding}) => {
   const settings = useSelector(state => state.settings);
   const habits = useSelector(state => state.habits);
   const [step, setStep] = useState(1);
+  const [visibleEditModal, setVisibleEditModal] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -46,6 +49,17 @@ const OnboardingView = ({setShowOnboarding}) => {
       [habitId]: !prev[habitId],
     }));
   }
+
+  const handleEditModal = (habitId, field, value, label) => {
+    setEditModalData({habitId, field, value, label});
+    setVisibleEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setTimeout(() => {
+      setVisibleEditModal(false);
+    }, 100);
+  };
 
   function handleStep2() {
     createDefaultHabits();
@@ -216,6 +230,7 @@ const OnboardingView = ({setShowOnboarding}) => {
               repeatHours={habit.repeatHours}
               available={habit.available}
               fetchAllHabits={fetchAllHabits}
+              onEdit={handleEditModal}
               onboardingMode={true}
             />
           ))}
@@ -227,6 +242,16 @@ const OnboardingView = ({setShowOnboarding}) => {
             {t('onboarding.step3.start')}
           </Button>
         </View>
+
+        <EditModal
+          visible={visibleEditModal}
+          onDismiss={closeEditModal}
+          field={editModalData?.field}
+          value={editModalData?.value}
+          label={editModalData?.label}
+          habitId={editModalData?.habitId}
+          fetchAllHabits={fetchAllHabits}
+        />
       </View>
     );
   }
