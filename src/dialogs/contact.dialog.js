@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Dialog, Portal, Button, Text, TextInput} from 'react-native-paper';
 import {ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {supabase} from '../services/supabase.service';
 
 const ContactDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
@@ -23,16 +24,19 @@ const ContactDialog = ({visible, onDismiss, onDone}) => {
     setLoading(true);
 
     try {
-      const url =
-        'https://script.google.com/macros/s/AKfycbwxN0xHTf7aB7f_UVAL5JzJdB1JGV9HeWD-707Iy1eF2VcLFx3RVA6x6gJ4tmBIO2yU/exec';
+      const {data, error} = await supabase
+        .from('Contact')
+        .insert([
+          {
+            email: email.trim(),
+            message: message.trim(),
+          },
+        ]);
 
-      await fetch(url, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `Time=${new Date().toISOString()}&Email=${encodeURIComponent(
-          email,
-        )}&Message=${encodeURIComponent(message)}`,
-      });
+      if (error) {
+        console.error(error);
+        return;
+      }
 
       setSuccess(true);
       setTimeout(() => {
@@ -42,7 +46,7 @@ const ContactDialog = ({visible, onDismiss, onDone}) => {
         onDone();
       }, 2000);
     } catch (error) {
-      console.error('Error sending form:', error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
