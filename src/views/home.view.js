@@ -178,7 +178,7 @@ const HomeView = () => {
   ]);
 
   useEffect(() => {
-    // Creates notifications about today's habits
+    // Creates notifications for next 3 days to ensure they work even if app isn't opened daily
     (async () => {
       await notifee.createChannel({
         id: 'default',
@@ -189,41 +189,56 @@ const HomeView = () => {
 
       const now = new Date();
 
-      todayHabits.forEach(habit => {
-        const isCompleted = habit.completedHours.includes(habit.selectedHour);
+      for (let daysAhead = 0; daysAhead < 3; daysAhead++) {
+        const targetDate = new Date(now);
+        targetDate.setDate(now.getDate() + daysAhead);
+        const weekdayKey = dateToWeekday(
+          `${targetDate.getFullYear()}-${String(
+            targetDate.getMonth() + 1,
+          ).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`,
+        );
 
-        if (habit.selectedHour && !isCompleted) {
-          const [hour, minute] = habit.selectedHour.split(':').map(Number);
-          const triggerDate = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            hour,
-            minute,
-            0,
-            0,
-          );
+        if (!habits || habits.length === 0) continue;
 
-          if (triggerDate > now) {
-            notifee.createTriggerNotification(
-              {
-                title: `${habit.selectedHour} ${habit.habitName}`,
-                body: pickRandomMotivation(t, 'notification'),
-                android: {
-                  channelId: 'default',
-                  smallIcon: 'ic_notification',
-                },
-              },
-              {
-                type: TriggerType.TIMESTAMP,
-                timestamp: triggerDate.getTime(),
-              },
+        const dayHabits = habits.filter(
+          habit => habit.available && habit.repeatDays.includes(weekdayKey),
+        );
+
+        dayHabits.forEach(habit => {
+          habit.repeatHours.forEach(hour => {
+            const [h, m] = hour.split(':').map(Number);
+            const triggerDate = new Date(
+              targetDate.getFullYear(),
+              targetDate.getMonth(),
+              targetDate.getDate(),
+              h,
+              m || 0,
+              0,
+              0,
             );
-          }
-        }
-      });
+
+            // Only schedule if time is in the future
+            if (triggerDate > now) {
+              notifee.createTriggerNotification(
+                {
+                  title: `${hour} ${habit.habitName}`,
+                  body: pickRandomMotivation(t, 'notification'),
+                  android: {
+                    channelId: 'default',
+                    smallIcon: 'ic_notification',
+                  },
+                },
+                {
+                  type: TriggerType.TIMESTAMP,
+                  timestamp: triggerDate.getTime(),
+                },
+              );
+            }
+          });
+        });
+      }
     })();
-  }, [todayHabits]);
+  }, [habits]);
 
   return (
     <>
