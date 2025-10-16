@@ -82,7 +82,8 @@ export const useStyles = () => {
     card__options: {
       flexDirection: 'row',
       alignItems: 'center',
-      maxHeight: theme.dimensions.height / 3,
+      justifyContent: 'center',
+      marginTop: theme.dimensions.margin,
     },
     card__row: {
       flexDirection: 'row',

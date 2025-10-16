@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Card,
   Text,
@@ -6,7 +6,7 @@ import {
   IconButton,
   TouchableRipple,
 } from 'react-native-paper';
-import {View} from 'react-native';
+import {View, Animated} from 'react-native';
 import {updateHabitValue} from '@/services/habits.service';
 import DeleteDialog from '@/dialogs/delete.dialog';
 import {useTranslation} from 'react-i18next';
@@ -35,6 +35,24 @@ const HabitCard = ({
   const [isAvailable, setIsAvailable] = useState(available);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
+  const contentHeight = useRef(new Animated.Value(available ? 1 : 0)).current;
+  const cardOpacity = useRef(new Animated.Value(available ? 1 : 0.5)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(contentHeight, {
+        toValue: isAvailable ? 1 : 0,
+        duration: 400,
+        useNativeDriver: false,
+      }),
+      Animated.timing(cardOpacity, {
+        toValue: isAvailable ? 1 : 0.5,
+        duration: 400,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  }, [isAvailable]);
+
   const handleToggleAvailable = () => {
     const newAvailable = !isAvailable;
     setIsAvailable(newAvailable);
@@ -48,27 +66,39 @@ const HabitCard = ({
 
   return (
     <>
-      <Card style={available ? styles.card : styles.card__deactivated}>
-        <Card.Content style={styles.card__title}>
-          <TouchableRipple
-            onPress={() => openEditModal('habitName', habitName)}>
-            <Text variant="titleMedium">{habitName}</Text>
-          </TouchableRipple>
-          {!onboardingMode && (
+      <Card style={styles.card}>
+        <Animated.View style={{opacity: cardOpacity}}>
+          <Card.Content style={styles.card__title}>
             <View style={styles.card__options}>
-              <IconButton
-                icon="trash-can"
-                onPress={() => setDeleteDialogVisible(true)}
-              />
-              <Switch
-                value={isAvailable}
-                onValueChange={handleToggleAvailable}
-              />
+              <TouchableRipple
+                onPress={() => openEditModal('habitName', habitName)}>
+                <Text variant="titleMedium">{habitName}</Text>
+              </TouchableRipple>
             </View>
-          )}
-        </Card.Content>
+            {!onboardingMode && (
+              <View style={styles.card__options}>
+                <IconButton
+                  icon="trash-can"
+                  onPress={() => setDeleteDialogVisible(true)}
+                />
+                <Switch
+                  value={isAvailable}
+                  onValueChange={handleToggleAvailable}
+                />
+              </View>
+            )}
+          </Card.Content>
+        </Animated.View>
 
-        {available && (
+        <Animated.View
+          style={{
+            overflow: 'hidden',
+            height: contentHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 250],
+            }),
+            opacity: cardOpacity,
+          }}>
           <Card.Content style={styles.card__container}>
             {!onboardingMode && (
               <TouchableRipple
@@ -204,7 +234,7 @@ const HabitCard = ({
               </>
             )}
           </Card.Content>
-        )}
+        </Animated.View>
       </Card>
 
       <DeleteDialog

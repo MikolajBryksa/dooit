@@ -42,6 +42,16 @@ const HabitsView = () => {
     dispatch(setHabits(habits));
   };
 
+  const sortedHabits = React.useMemo(() => {
+    if (!habits || habits.length === 0) return [];
+    
+    return [...habits].sort((a, b) => {
+      const aFirstHour = a.repeatHours[0] 
+      const bFirstHour = b.repeatHours[0] 
+      return aFirstHour.localeCompare(bFirstHour);
+    });
+  }, [habits]);
+
   useEffect(() => {
     fetchAllHabits();
   }, []);
@@ -65,8 +75,8 @@ const HabitsView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {habits && habits.length > 0 ? (
-          habits.map(habit => (
+        {sortedHabits && sortedHabits.length > 0 ? (
+          sortedHabits.map(habit => (
             <HabitCard
               key={habit.id}
               id={habit.id}
