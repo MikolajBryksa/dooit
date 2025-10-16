@@ -122,6 +122,18 @@ const HomeView = () => {
       habit => !habit.completedHours.includes(habit.selectedHour),
     );
 
+    // If activeKey doesn't exist anymore (habit was removed/changed) - reset immediately
+    const activeKeyExists =
+      activeKey !== null && todayHabits.some(habit => habit.key === activeKey);
+
+    if (activeKey !== null && !activeKeyExists) {
+      setActiveKey(firstActiveKeyCandidate);
+      if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
+        setAllCompleted(true);
+      }
+      return;
+    }
+
     // Only set allCompleted immediately if we're not transitioning from an active card
     if (!hasIncompleteHabits && activeKey === null) {
       setAllCompleted(true);

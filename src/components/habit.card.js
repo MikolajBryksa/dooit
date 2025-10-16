@@ -93,11 +93,14 @@ const HabitCard = ({
         <Animated.View
           style={{
             overflow: 'hidden',
-            height: contentHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 250],
-            }),
-            opacity: cardOpacity,
+            height: onboardingMode
+              ? 'auto'
+              : contentHeight.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 250],
+                }),
+            marginBottom: !onboardingMode ? 0 : 15,
+            opacity: onboardingMode ? 1 : cardOpacity,
           }}>
           <Card.Content style={styles.card__container}>
             {!onboardingMode && (
