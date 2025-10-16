@@ -1,0 +1,145 @@
+import React, {useState} from 'react';
+import {View, ScrollView} from 'react-native';
+import {
+  Card,
+  Button,
+  Text,
+  Modal,
+  TextInput,
+  IconButton,
+} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+import {useStyles} from '@/styles';
+import {supabase} from '@/services/supabase.service';
+
+const ContactModal = ({visible, onDismiss}) => {
+  const {t} = useTranslation();
+  const styles = useStyles();
+
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const resetInputs = () => {
+    setEmail('');
+    setMessage('');
+    setSuccess(false);
+  };
+
+  const isFormValid = React.useMemo(() => {
+    if (!email.trim() || !message.trim()) {
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }, [email, message]);
+
+  const handleSubmit = async () => {
+    if (!isFormValid) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const {data, error} = await supabase.from('Contact').insert([
+        {
+          email: email.trim(),
+          message: message.trim(),
+        },
+      ]);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setSuccess(true);
+      setTimeout(() => {
+        onDismiss();
+        setTimeout(() => {
+          resetInputs();
+        }, 500);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDismiss = () => {
+    if (!loading) {
+      onDismiss();
+      setTimeout(() => {
+        resetInputs();
+      }, 500);
+    }
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      onDismiss={handleDismiss}
+      contentContainerStyle={styles.modal}>
+      <Card.Content>
+        <View style={styles.title}>
+          <Text variant="titleLarge">{t('title.contact')}</Text>
+          <IconButton
+            icon="close"
+            size={20}
+            onPress={handleDismiss}
+            disabled={loading}
+          />
+        </View>
+
+        <ScrollView>
+          <Text variant="bodyMedium" style={{marginBottom: 16}}>
+            {t('message.contact')}
+          </Text>
+
+          <TextInput
+            mode="outlined"
+            label={t('contact.email')}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            disabled={loading || success}
+            style={{marginBottom: 12}}
+          />
+
+          <TextInput
+            mode="outlined"
+            label={t('contact.message')}
+            value={message}
+            onChangeText={setMessage}
+            multiline
+            numberOfLines={4}
+            disabled={loading || success}
+            style={{marginBottom: 8}}
+          />
+        </ScrollView>
+
+        <View style={styles.gap} />
+
+        <Card.Actions>
+          <Button mode="outlined" onPress={handleDismiss} disabled={loading}>
+            {t('button.cancel')}
+          </Button>
+
+          <Button
+            onPress={handleSubmit}
+            loading={loading}
+            disabled={!isFormValid || loading || success}
+            icon={success ? 'check' : undefined}>
+            {success ? t('button.sent') : t('button.send')}
+          </Button>
+        </Card.Actions>
+      </Card.Content>
+    </Modal>
+  );
+};
+
+export default ContactModal;

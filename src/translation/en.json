@@ -35,8 +35,8 @@
     "delete": "Are you sure to remove the habit",
     "skip": "Are you sure to skip the habit",
     "equalize": "Do you want to subtract easy choices from right choices and reset skipped choices?",
-    "contact": "Fill out the form to contact the app’s author (Mikołaj Bryksa).",
-    "support": "Do you want to support the app’s author (Mikołaj Bryksa) by buying coffee?",
+    "contact": "Fill out the form to contact the app's author.",
+    "support": "Hey there! 👋\n\nI'm an independent developer who built this app with love and many cups of coffee ☕.\n\nIf you enjoy using it and want to help me keep improving it, consider buying me a coffee. It really means a lot!\n\n~ Mikołaj Bryksa",
     "see-you": "See you tomorrow"
   },
   "button": {
@@ -44,7 +44,7 @@
     "cancel": "Cancel",
     "close": "Close",
     "contact": "Contact",
-    "support": "Support",
+    "support": "Buy",
     "save": "Save",
     "back": "Back",
     "next": "Next",
@@ -56,7 +56,7 @@
     "sent": "Sent"
   },
   "contact": {
-    "email": "E-mail",
+    "email": "Your e-mail",
     "message": "Message"
   },
   "card": {

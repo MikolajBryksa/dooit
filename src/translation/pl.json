@@ -35,8 +35,8 @@
     "delete": "Czy na pewno chcesz usunąć nawyk",
     "skip": "Czy na pewno chcesz pominąć nawyk",
     "equalize": "Czy chcesz od dobrych wyborów odjąć łatwe wybory oraz wyzerować pominięte wybory?",
-    "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji (Mikołaj Bryksa).",
-    "support": "Czy chcesz wesprzeć autora aplikacji (Mikołaj Bryksa) stawiając mu kawę?",
+    "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
+    "support": "Cześć! 👋\n\nJestem niezależnym twórcą, który stworzył tę aplikację z pasją i przy wielu filiżankach kawy ☕.\n\nJeśli lubisz z niej korzystać i chcesz pomóc mi dalej ją rozwijać, postaw mi kawę — to naprawdę wiele dla mnie znaczy!\n\n~ Mikołaj Bryksa",
     "see-you": "Do zobaczenia jutro"
   },
   "button": {
@@ -44,7 +44,7 @@
     "cancel": "Anuluj",
     "close": "Zamknij",
     "contact": "Kontakt",
-    "support": "Wsparcie",
+    "support": "Kup",
     "save": "Zapisz",
     "back": "Wstecz",
     "next": "Dalej",
@@ -56,7 +56,7 @@
     "sent": "Wysłano"
   },
   "contact": {
-    "email": "E-mail",
+    "email": "Twój e-mail",
     "message": "Wiadomość"
   },
   "card": {
@@ -114,7 +114,6 @@
     "step1": {
       "welcome": "Witaj",
       "to-app": "w aplikacji Dooit",
-
       "option1": {
         "title": "Wyrabiaj nawyki",
         "subtitle": "Wybierz czynności, które chcesz powtarzać regularnie."

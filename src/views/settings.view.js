@@ -9,7 +9,7 @@ import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
-import ContactDialog from '@/dialogs/contact.dialog';
+import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
@@ -22,7 +22,7 @@ const SettingsView = () => {
   const settings = useSelector(state => state.settings);
   const systemTheme = useColorScheme();
 
-  const [visibleContactDialog, setVisibleContactDialog] = useState(false);
+  const [visibleContactModal, setVisibleContactModal] = useState(false);
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
@@ -33,8 +33,8 @@ const SettingsView = () => {
     settings.currentTheme || systemTheme,
   );
 
-  const handleContactDialog = () => {
-    setVisibleContactDialog(!visibleContactDialog);
+  const handleContactModal = () => {
+    setVisibleContactModal(!visibleContactModal);
   };
 
   const handleSupportDialog = () => {
@@ -113,7 +113,7 @@ const SettingsView = () => {
         <Appbar.Action
           icon="chat"
           onPress={() => {
-            handleContactDialog();
+            handleContactModal();
           }}
         />
         <Appbar.Action
@@ -225,12 +225,9 @@ const SettingsView = () => {
         <View style={styles.gap} />
       </ScrollView>
 
-      <ContactDialog
-        visible={visibleContactDialog}
-        onDismiss={handleContactDialog}
-        onDone={() => {
-          handleContactDialog();
-        }}
+      <ContactModal
+        visible={visibleContactModal}
+        onDismiss={handleContactModal}
       />
 
       <SupportDialog
