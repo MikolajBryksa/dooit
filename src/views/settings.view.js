@@ -138,20 +138,18 @@ const SettingsView = () => {
           </Card.Content>
         </Card>
 
-        {settings.debugMode && (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__title}>
-              <Text variant="titleMedium">{t('settings.language')}</Text>
-              <Chip
-                icon="translate"
-                mode="outlined"
-                onPress={handleLanguage}
-                style={styles.chip}>
-                {t(`settings.${language}`)}
-              </Chip>
-            </Card.Content>
-          </Card>
-        )}
+        <Card style={styles.card}>
+          <Card.Content style={styles.card__title}>
+            <Text variant="titleMedium">{t('settings.language')}</Text>
+            <Chip
+              icon="translate"
+              mode="outlined"
+              onPress={handleLanguage}
+              style={styles.chip}>
+              {t(`settings.${language}`)}
+            </Chip>
+          </Card.Content>
+        </Card>
 
         <Card style={styles.card}>
           <Card.Content style={styles.card__title}>

@@ -61,7 +61,7 @@ const NowCard = ({
         useNativeDriver: false,
       }).start();
     }
-  }, [isNext]);
+  }, [isNext, t]);
 
   const opacity = useRef(new Animated.Value(1)).current;
   const goodHabitOpacity = useRef(new Animated.Value(1)).current;
