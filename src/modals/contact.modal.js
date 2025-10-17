@@ -11,6 +11,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {supabase} from '@/services/supabase.service';
+import {getSettingValue} from '@/services/settings.service';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -43,8 +44,11 @@ const ContactModal = ({visible, onDismiss}) => {
     setLoading(true);
 
     try {
+      const userId = getSettingValue('userId');
+
       const {data, error} = await supabase.from('Contact').insert([
         {
+          user_id: userId,
           email: email.trim(),
           message: message.trim(),
         },

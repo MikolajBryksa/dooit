@@ -6,6 +6,7 @@ export const getSettings = () => {
 
   return {
     id: settings.id,
+    userId: settings.userId,
     language: settings.language,
     clockFormat: settings.clockFormat,
     firstDay: settings.firstDay,
@@ -20,13 +21,21 @@ export const getSettings = () => {
 };
 
 export const updateSettings = updates => {
+  // Preventing userId changes
+  const {userId, ...safeUpdates} = updates;
+
   let updatedSettings;
   realm.write(() => {
-    updatedSettings = realm.create('Settings', {id: 1, ...updates}, 'modified');
+    updatedSettings = realm.create(
+      'Settings',
+      {id: 1, ...safeUpdates},
+      'modified',
+    );
   });
 
   return {
     id: updatedSettings.id,
+    userId: updatedSettings.userId,
     language: updatedSettings.language,
     clockFormat: updatedSettings.clockFormat,
     firstDay: updatedSettings.firstDay,
