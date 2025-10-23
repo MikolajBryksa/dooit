@@ -18,6 +18,7 @@ const EndCard = ({weekdayKey}) => {
   const [hintsRequested, setHintsRequested] = useState(false);
   const [loadingHints, setLoadingHints] = useState(false);
   const [hintsText, setHintsText] = useState('');
+  const [typingComplete, setTypingComplete] = useState(false);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
@@ -152,8 +153,6 @@ const EndCard = ({weekdayKey}) => {
     }
 
     if (currentParagraph >= summaryData.paragraphs.length) {
-      // All paragraphs displayed, show hints button
-      setShowHintsButton(true);
       return;
     }
 
@@ -180,11 +179,22 @@ const EndCard = ({weekdayKey}) => {
       }, 300); // Pause between paragraphs
 
       return () => clearTimeout(timer);
-    } else {
-      // Last paragraph finished, show hints button
+    } else if (!typingComplete) {
+      // Last paragraph finished typing
+      const timer = setTimeout(() => {
+        setTypingComplete(true);
+      }, 400);
+
+      return () => clearTimeout(timer);
+    }
+  }, [summaryData, currentParagraph, currentChar, typingComplete]);
+
+  // Show hints button after typing is complete
+  useEffect(() => {
+    if (typingComplete) {
       setShowHintsButton(true);
     }
-  }, [summaryData, currentParagraph, currentChar]);
+  }, [typingComplete]);
 
   // Animate button appearance
   useEffect(() => {
