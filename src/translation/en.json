@@ -41,19 +41,15 @@
   "summary": {
     "no-habits": "Add some habits to see your daily summary.",
     "no-habits-today": "No habits scheduled for today.",
-    "no-actions-yet": "Start completing your habits to see a summary.",
-    "excellent-day": "Incredible, you completed {{count}} good actions today.",
-    "great-day": "Great job. {{count}} successful habits today.",
-    "good-day": "Well done. You completed {{count}} habits.",
-    "mixed-day": "You completed {{count}} habits, but there's room to grow.",
-    "tough-day": "Today was challenging, but tomorrow is a fresh start.",
-    "best-habit": "Your '{{habit}}' habit is going strong with {{rate}}% success.",
-    "strong-progress": "You're showing excellent consistency.",
-    "positive-progress": "You're making solid progress.",
-    "improve-habit": "Focus on improving '{{habit}}' tomorrow.",
-    "reduce-skips": "Try to reduce skipping habits tomorrow.",
-    "keep-momentum": "Keep this momentum going.",
-    "tomorrow-better": "Tomorrow is a new opportunity to do better."
+    "no-actions-yet": "Start completing your habits to see a summary!",
+    "total_actions": "You have {{count}} habit repetitions behind you!",
+    "good_rate_high": "As much as {{rate}}% of all your choices are good decisions.",
+    "bad_rate_high": "However, in as much as {{rate}}% of situations you choose what is easier.",
+    "best_habit": "Your best habit is {{habit}}.",
+    "best_habit_rate": "(as much as {{rate}}% effectiveness)",
+    "worst_habit": "Focus on the habit of {{habit}}.",
+    "worst_habit_rate": "(only {{rate}}% effectiveness)",
+    "keep_going": "Keep up the great work!"
   },
   "button": {
     "delete": "Delete",

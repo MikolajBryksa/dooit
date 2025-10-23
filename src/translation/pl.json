@@ -41,19 +41,15 @@
   "summary": {
     "no-habits": "Dodaj nawyki, aby zobaczyć podsumowanie dnia.",
     "no-habits-today": "Brak zaplanowanych nawyków na dziś.",
-    "no-actions-yet": "Zacznij wykonywać nawyki, aby zobaczyć podsumowanie.",
-    "excellent-day": "Niesamowite. Masz za sobą {{count}} dobrych działań dzisiaj.",
-    "great-day": "Świetna robota. {{count}} udanych nawyków dzisiaj.",
-    "good-day": "Dobrze. Masz za sobą {{count}} nawyków.",
-    "mixed-day": "Masz za sobą {{count}} nawyków, ale jest jeszcze pole do poprawy.",
-    "tough-day": "Dzisiaj było trudno, ale jutro to nowy początek.",
-    "best-habit": "Twój nawyk '{{habit}}' idzie świetnie z {{rate}}% sukcesów.",
-    "strong-progress": "Pokazujesz doskonałą konsekwencję.",
-    "positive-progress": "Robisz solidne postępy.",
-    "improve-habit": "Skup się na poprawie nawyku '{{habit}}' jutro.",
-    "reduce-skips": "Spróbuj jutro mniej pomijać nawyków.",
-    "keep-momentum": "Utrzymuj to tempo.",
-    "tomorrow-better": "Jutro to nowa szansa, aby zrobić to lepiej."
+    "no-actions-yet": "Zacznij wykonywać nawyki, aby zobaczyć podsumowanie!",
+    "total_actions": "Masz za sobą już {{count}} powtórzeń nawyków!",
+    "good_rate_high": "Aż {{rate}}% wszystkich Twoich wyborów to dobre decyzje.",
+    "bad_rate_high": "Jednak w aż {{rate}}% sytuacji wybierasz to co jest łatwiejsze.",
+    "best_habit": "Najlepiej Ci idzie nawyk {{habit}}.",
+    "best_habit_rate": "(aż {{rate}}% skuteczności)",
+    "worst_habit": "Nawyk {{habit}} wymaga większej uwagi.",
+    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)",
+    "keep_going": "Tak trzymaj!"
   },
   "button": {
     "delete": "Usuń",

@@ -261,7 +261,7 @@ const HomeView = () => {
         {todayHabits.length === 0 ? (
           <NoHabitsCard />
         ) : allCompleted ? (
-          <EndCard />
+          <EndCard weekdayKey={weekdayKey} />
         ) : (
           todayHabits.map(habit => (
             <NowCard

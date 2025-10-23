@@ -340,7 +340,6 @@ const NowCard = ({
           </Animated.View>
         </Card.Content>
       </Animated.View>
-      <View style={styles.gap} />
     </Card>
   );
 };
