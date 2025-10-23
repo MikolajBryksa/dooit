@@ -134,10 +134,11 @@ export const useStyles = () => {
     },
     modal: {
       backgroundColor: theme.colors.surface,
-      margin: theme.dimensions.padding,
-      paddingTop: theme.dimensions.padding,
-      paddingBottom: theme.dimensions.padding,
-      borderRadius: 12,
+      margin: theme.dimensions.padding * 2,
+      paddingTop: theme.dimensions.padding * 2,
+      paddingBottom: theme.dimensions.padding * 2,
+      paddingHorizontal: theme.dimensions.padding,
+      borderRadius: 28,
     },
     plan: {
       maxHeight: 400,
