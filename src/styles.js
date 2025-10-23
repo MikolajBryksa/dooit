@@ -166,5 +166,9 @@ export const useStyles = () => {
       textAlign: 'center',
       opacity: 0.7,
     },
+    summary__text: {
+      textAlign: 'center',
+      lineHeight: 22,
+    },
   });
 };

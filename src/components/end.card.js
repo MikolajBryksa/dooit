@@ -1,13 +1,18 @@
-import React, {useEffect, useRef} from 'react';
-import {Card, Text} from 'react-native-paper';
+import React, {useEffect, useRef, useState} from 'react';
+import {Card, Text, ActivityIndicator} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {pickRandomMotivation} from '@/utils';
+import {generateDailySummary} from '@/utils';
+import {useSelector} from 'react-redux';
 
 const EndCard = () => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const habits = useSelector(state => state.habits);
+
+  const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState('');
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
@@ -26,9 +31,16 @@ const EndCard = () => {
         useNativeDriver: false,
       }),
     ]).start();
-  }, []);
 
-  const celebrationMessage = pickRandomMotivation(t, 'end');
+    // Automatically generate a summary after 1 second (AI simulation)
+    const timer = setTimeout(() => {
+      const dailySummary = generateDailySummary(habits, t);
+      setSummary(dailySummary);
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [habits, t]);
 
   return (
     <Card style={[styles.card, styles.card__end]}>
@@ -47,17 +59,17 @@ const EndCard = () => {
 
           <View style={styles.gap} />
 
-          <Text variant="bodyLarge" style={styles.motivation__message}>
-            {celebrationMessage}
-          </Text>
-
-          <View style={styles.gap} />
-          <View style={styles.gap} />
-
-          <Text variant="bodyMedium" style={styles.end__tomorrow}>
-            {t('message.see-you')}
-          </Text>
-
+          {loading ? (
+            <View style={styles.card__center}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            <View style={styles.card__center}>
+              <Text variant="bodyMedium" style={styles.summary__text}>
+                {summary}
+              </Text>
+            </View>
+          )}
           <View style={styles.gap} />
           <View style={styles.gap} />
           <View style={styles.gap} />

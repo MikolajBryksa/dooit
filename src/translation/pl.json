@@ -38,6 +38,23 @@
     "support": "Cześć! 👋\n\nJestem niezależnym twórcą, który stworzył tę aplikację z pasją i przy wielu kawusiach ☕.\n\nJeśli lubisz z niej korzystać i chcesz pomóc dalej ją rozwijać - możesz postawić mi kawę. To naprawdę wiele dla mnie znaczy!\n\n~ Mikołaj Bryksa",
     "see-you": "Do zobaczenia jutro"
   },
+  "summary": {
+    "no-habits": "Dodaj nawyki, aby zobaczyć podsumowanie dnia.",
+    "no-habits-today": "Brak zaplanowanych nawyków na dziś.",
+    "no-actions-yet": "Zacznij wykonywać nawyki, aby zobaczyć podsumowanie.",
+    "excellent-day": "Niesamowite. Masz za sobą {{count}} dobrych działań dzisiaj.",
+    "great-day": "Świetna robota. {{count}} udanych nawyków dzisiaj.",
+    "good-day": "Dobrze. Masz za sobą {{count}} nawyków.",
+    "mixed-day": "Masz za sobą {{count}} nawyków, ale jest jeszcze pole do poprawy.",
+    "tough-day": "Dzisiaj było trudno, ale jutro to nowy początek.",
+    "best-habit": "Twój nawyk '{{habit}}' idzie świetnie z {{rate}}% sukcesów.",
+    "strong-progress": "Pokazujesz doskonałą konsekwencję.",
+    "positive-progress": "Robisz solidne postępy.",
+    "improve-habit": "Skup się na poprawie nawyku '{{habit}}' jutro.",
+    "reduce-skips": "Spróbuj jutro mniej pomijać nawyków.",
+    "keep-momentum": "Utrzymuj to tempo.",
+    "tomorrow-better": "Jutro to nowa szansa, aby zrobić to lepiej."
+  },
   "button": {
     "delete": "Usuń",
     "cancel": "Anuluj",

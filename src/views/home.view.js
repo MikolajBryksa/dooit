@@ -36,6 +36,9 @@ const HomeView = () => {
   // Updates the date every minute
   const todayKey = useTodayKey();
 
+  // Calculate weekday key once for today
+  const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
+
   useEffect(() => {
     // Updates the list of habits after changing the date
     (async () => {
@@ -54,7 +57,6 @@ const HomeView = () => {
     // Creates today's habits
 
     if (!habits || habits.length === 0) return [];
-    const weekdayKey = dateToWeekday(todayKey);
 
     const filteredHabits = habits.filter(
       // Filters habits into those that are available today
