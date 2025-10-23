@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Card, Text, ActivityIndicator} from 'react-native-paper';
+import {Card, Text, ActivityIndicator, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -10,15 +10,19 @@ const EndCard = ({weekdayKey}) => {
   const styles = useStyles();
   const habits = useSelector(state => state.habits);
 
-  const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState({paragraphs: []});
   const [displayedText, setDisplayedText] = useState([]);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
+  const [showHintsButton, setShowHintsButton] = useState(false);
+  const [hintsRequested, setHintsRequested] = useState(false);
+  const [loadingHints, setLoadingHints] = useState(false);
+  const [hintsText, setHintsText] = useState('');
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
   const containerHeight = useRef(new Animated.Value(0)).current;
+  const buttonOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.sequence([
@@ -42,12 +46,10 @@ const EndCard = ({weekdayKey}) => {
       ]),
     ]).start();
 
-    // Automatically generate a summary after a moment (AI simulation)
     const timer = setTimeout(() => {
       const dailySummary = generateDailySummary(habits);
       setSummaryData(dailySummary);
-      setLoading(false);
-    }, 1500);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [habits]);
@@ -145,15 +147,13 @@ const EndCard = ({weekdayKey}) => {
 
   // Typewriter effect
   useEffect(() => {
-    if (
-      loading ||
-      !summaryData.paragraphs ||
-      summaryData.paragraphs.length === 0
-    ) {
+    if (!summaryData.paragraphs || summaryData.paragraphs.length === 0) {
       return;
     }
 
     if (currentParagraph >= summaryData.paragraphs.length) {
+      // All paragraphs displayed, show hints button
+      setShowHintsButton(true);
       return;
     }
 
@@ -170,18 +170,43 @@ const EndCard = ({weekdayKey}) => {
           return newText;
         });
         setCurrentChar(currentChar + 1);
-      }, 30); // Speed of typing (30ms per character)
+      }, 25); // Speed of typing
 
       return () => clearTimeout(timer);
     } else if (currentParagraph < summaryData.paragraphs.length - 1) {
       const timer = setTimeout(() => {
         setCurrentParagraph(currentParagraph + 1);
         setCurrentChar(0);
-      }, 400); // Pause between paragraphs
+      }, 300); // Pause between paragraphs
 
       return () => clearTimeout(timer);
+    } else {
+      // Last paragraph finished, show hints button
+      setShowHintsButton(true);
     }
-  }, [loading, summaryData, currentParagraph, currentChar]);
+  }, [summaryData, currentParagraph, currentChar]);
+
+  // Animate button appearance
+  useEffect(() => {
+    if (showHintsButton) {
+      Animated.timing(buttonOpacity, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showHintsButton]);
+
+  const handleHintsRequest = () => {
+    setHintsRequested(true);
+    setLoadingHints(true);
+
+    // Simulate AI response
+    setTimeout(() => {
+      setHintsText('AI not connected');
+      setLoadingHints(false);
+    }, 2000);
+  };
 
   return (
     <Card style={[styles.card, styles.card__end]}>
@@ -190,7 +215,7 @@ const EndCard = ({weekdayKey}) => {
           opacity: containerHeight,
           height: containerHeight.interpolate({
             inputRange: [0, 1],
-            outputRange: [300, 390],
+            outputRange: [300, 450],
           }),
           overflow: 'hidden',
         }}>
@@ -207,22 +232,41 @@ const EndCard = ({weekdayKey}) => {
             <View style={styles.gap} />
             <View style={styles.gap} />
 
-            {loading ? (
-              <View style={styles.card__center}>
-                <ActivityIndicator size="large" />
-              </View>
-            ) : (
-              <View>
-                {displayedText.map((paragraph, index) => (
-                  <Text
-                    key={index}
-                    variant="bodyMedium"
-                    style={[styles.summary__text, {marginBottom: 16}]}>
-                    {paragraph}
-                  </Text>
-                ))}
-              </View>
-            )}
+            <View>
+              {displayedText.map((paragraph, index) => (
+                <Text
+                  key={index}
+                  variant="bodyMedium"
+                  style={[styles.summary__text, {marginBottom: 16}]}>
+                  {paragraph}
+                </Text>
+              ))}
+
+              {showHintsButton && !hintsRequested && (
+                <Animated.View style={{marginTop: 8, opacity: buttonOpacity}}>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    onPress={handleHintsRequest}>
+                    {t('summary.hints_button')}
+                  </Button>
+                </Animated.View>
+              )}
+
+              {hintsRequested && (
+                <View>
+                  {loadingHints ? (
+                    <View style={[{marginTop: 8}]}>
+                      <ActivityIndicator size="small" />
+                    </View>
+                  ) : (
+                    <Text variant="bodyMedium" style={[styles.summary__text]}>
+                      {hintsText}
+                    </Text>
+                  )}
+                </View>
+              )}
+            </View>
           </Card.Content>
         </Animated.View>
       </Animated.View>
