@@ -38,9 +38,6 @@
     "support": "Cześć! 👋\n\nJestem niezależnym twórcą, który stworzył tę aplikację z pasją i przy wielu kawusiach ☕.\n\nJeśli lubisz z niej korzystać i chcesz pomóc dalej ją rozwijać - możesz postawić mi kawę. To naprawdę wiele dla mnie znaczy!\n\n~ Mikołaj Bryksa"
   },
   "summary": {
-    "no-habits": "Dodaj nawyki, aby zobaczyć podsumowanie dnia.",
-    "no-habits-today": "Brak zaplanowanych nawyków na dziś.",
-    "no-actions-yet": "Zacznij wykonywać nawyki, aby zobaczyć podsumowanie!",
     "total_actions": "Masz za sobą już {{count}} powtórzeń nawyków!",
     "good_rate_high": "Aż {{rate}}% wszystkich Twoich wyborów to dobre decyzje.",
     "bad_rate_high": "Jednak w aż {{rate}}% sytuacji wybierasz to co jest łatwiejsze.",

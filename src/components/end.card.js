@@ -4,13 +4,16 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
+import {supabase} from '@/services/supabase.service';
+import {getSettingValue} from '@/services/settings.service';
+import {use} from 'i18next';
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const habits = useSelector(state => state.habits);
-
   const [summaryData, setSummaryData] = useState({paragraphs: []});
+
   const [displayedText, setDisplayedText] = useState([]);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
@@ -46,30 +49,29 @@ const EndCard = ({weekdayKey}) => {
         }),
       ]),
     ]).start();
+  }, [habits]);
 
+  useEffect(() => {
+    if (showHintsButton) {
+      Animated.timing(buttonOpacity, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showHintsButton]);
+
+  useEffect(() => {
+    // Generate and save a summary based on habits performance
     const timer = setTimeout(() => {
-      const dailySummary = generateDailySummary(habits);
-      setSummaryData(dailySummary);
+      const summary = generateSummary(habits);
+      setSummaryData(summary);
+      summary && saveSummaryToSupabase(summary.stats);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [habits]);
 
-  function generateDailySummary(habits) {
-    // Generates a daily summary based on habits performance
-    if (!habits || habits.length === 0) {
-      return {paragraphs: [t('summary.no-habits')]};
-    }
-
-    const todayHabits = habits.filter(
-      habit => habit.available && habit.repeatDays.includes(weekdayKey),
-    );
-
-    if (todayHabits.length === 0) {
-      return {paragraphs: [t('summary.no-habits-today')]};
-    }
-
-    // Statistics
+  function generateSummary(habits) {
     let totalActions = 0;
     let goodActions = 0;
     let badActions = 0;
@@ -79,11 +81,13 @@ const EndCard = ({weekdayKey}) => {
     let maxSuccessRate = -1;
     let minSuccessRate = 101;
 
+    const todayHabits = habits.filter(
+      habit => habit.available && habit.repeatDays.includes(weekdayKey),
+    );
+
     todayHabits.forEach(habit => {
       const total = habit.goodCounter + habit.badCounter + habit.skipCounter;
-      if (total === 0) return;
-
-      const successRate = (habit.goodCounter / total) * 100;
+      const successRate = ((habit.goodCounter / total) * 100).toFixed(0);
 
       totalActions += total;
       goodActions += habit.goodCounter;
@@ -95,25 +99,18 @@ const EndCard = ({weekdayKey}) => {
         bestHabit = habit;
       }
 
-      if (
-        successRate < minSuccessRate &&
-        (habit.badCounter > 0 || habit.skipCounter > 0)
-      ) {
+      if (successRate < minSuccessRate && habit.badCounter > 0) {
         minSuccessRate = successRate;
         worstHabit = habit;
       }
     });
 
-    if (totalActions === 0) {
-      return {paragraphs: [t('summary.no-actions-yet')]};
-    }
-
     const goodRate = ((goodActions / totalActions) * 100).toFixed(0);
     const badRate = ((badActions / totalActions) * 100).toFixed(0);
 
+    // Paragraphs construction
     const paragraphs = [];
 
-    // Paragraph 1: Overall stats
     const para1 = [];
     para1.push(t('summary.total_actions', {count: totalActions}));
     if (parseFloat(goodRate) >= parseFloat(badRate)) {
@@ -123,28 +120,70 @@ const EndCard = ({weekdayKey}) => {
     }
     paragraphs.push(para1.join(' '));
 
-    // Paragraph 2: Best habit
     if (bestHabit && maxSuccessRate >= 50) {
       const para2 = [];
       para2.push(t('summary.best_habit', {habit: bestHabit.habitName}));
-      para2.push(
-        t('summary.best_habit_rate', {rate: Math.round(maxSuccessRate)}),
-      );
+      para2.push(t('summary.best_habit_rate', {rate: maxSuccessRate}));
       paragraphs.push(para2.join('\n'));
     }
 
-    // Paragraph 3: Worst habit
     if (worstHabit && minSuccessRate < 80) {
       const para3 = [];
       para3.push(t('summary.worst_habit', {habit: worstHabit.habitName}));
-      para3.push(
-        t('summary.worst_habit_rate', {rate: Math.round(minSuccessRate)}),
-      );
+      para3.push(t('summary.worst_habit_rate', {rate: minSuccessRate}));
       paragraphs.push(para3.join('\n'));
     }
 
-    return {paragraphs};
+    return {
+      paragraphs,
+      stats: {
+        totalActions,
+        goodActions,
+        badActions,
+        skipActions,
+        goodRate,
+        badRate,
+        bestHabit,
+        maxSuccessRate,
+        worstHabit,
+        minSuccessRate,
+      },
+    };
   }
+
+  const saveSummaryToSupabase = async stats => {
+    try {
+      const userId = getSettingValue('userId');
+
+      const dataToSave = {
+        user_id: userId,
+        updated_at: new Date().toISOString(),
+        total_actions: stats.totalActions,
+        good_actions: stats.goodActions,
+        bad_actions: stats.badActions,
+        skip_actions: stats.skipActions,
+        good_rate: stats.goodRate,
+        bad_rate: stats.badRate,
+        best_habit_name: stats.bestHabit?.habitName || null,
+        best_habit_rate:
+          stats.maxSuccessRate >= 0 ? stats.maxSuccessRate : null,
+        worst_habit_name: stats.worstHabit?.habitName || null,
+        worst_habit_rate:
+          stats.minSuccessRate <= 100 ? stats.minSuccessRate : null,
+      };
+
+      const {data, error} = await supabase.from('Users').upsert(dataToSave, {
+        onConflict: 'user_id',
+      });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Typewriter effect
   useEffect(() => {
@@ -196,25 +235,28 @@ const EndCard = ({weekdayKey}) => {
     }
   }, [typingComplete]);
 
-  // Animate button appearance
-  useEffect(() => {
-    if (showHintsButton) {
-      Animated.timing(buttonOpacity, {
-        toValue: 1,
-        duration: 600,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [showHintsButton]);
-
-  const handleHintsRequest = () => {
+  const handleHintsRequest = async () => {
     setHintsRequested(true);
     setLoadingHints(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      setHintsText('AI not connected');
+    setTimeout(async () => {
+      const aiResponse = 'AI not connected';
+      setHintsText(aiResponse);
       setLoadingHints(false);
+
+      try {
+        const userId = getSettingValue('userId');
+        if (userId) {
+          await supabase
+            .from('Users')
+            .update({
+              ai_summary: aiResponse,
+            })
+            .eq('user_id', userId);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }, 2000);
   };
 

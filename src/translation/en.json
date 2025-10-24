@@ -38,9 +38,6 @@
     "support": "Hey there! 👋\n\nI'm an independent developer who built this app with love and many cups of coffee ☕.\n\nIf you enjoy using it and want to help me keep improving it, consider buying me a coffee. It really means a lot!\n\n~ Mikołaj Bryksa"
   },
   "summary": {
-    "no-habits": "Add some habits to see your daily summary.",
-    "no-habits-today": "No habits scheduled for today.",
-    "no-actions-yet": "Start completing your habits to see a summary!",
     "total_actions": "You have {{count}} habit repetitions behind you!",
     "good_rate_high": "As much as {{rate}}% of all your choices are good decisions.",
     "bad_rate_high": "However, in as much as {{rate}}% of situations you choose what is easier.",
