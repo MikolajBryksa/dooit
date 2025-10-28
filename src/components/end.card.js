@@ -6,14 +6,14 @@ import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
-import {use} from 'i18next';
+import {useNetworkStatus} from '@/hooks/useNetworkStatus';
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const habits = useSelector(state => state.habits);
+  const {isConnected} = useNetworkStatus(true);
   const [summaryData, setSummaryData] = useState({paragraphs: []});
-
   const [displayedText, setDisplayedText] = useState([]);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
@@ -127,7 +127,7 @@ const EndCard = ({weekdayKey}) => {
       paragraphs.push(para2.join('\n'));
     }
 
-    if (worstHabit && minSuccessRate < 80) {
+    if (worstHabit && minSuccessRate < 80 && worstHabit !== bestHabit) {
       const para3 = [];
       para3.push(t('summary.worst_habit', {habit: worstHabit.habitName}));
       para3.push(t('summary.worst_habit_rate', {rate: minSuccessRate}));
@@ -152,6 +152,10 @@ const EndCard = ({weekdayKey}) => {
   }
 
   const saveSummaryToSupabase = async stats => {
+    if (!isConnected) {
+      return;
+    }
+
     try {
       const userId = getSettingValue('userId');
 
@@ -299,8 +303,10 @@ const EndCard = ({weekdayKey}) => {
                   <Button
                     style={styles.button}
                     mode="contained"
-                    onPress={handleHintsRequest}>
-                    {t('summary.hints_button')}
+                    onPress={handleHintsRequest}
+                    disabled={!isConnected}
+                    icon={!isConnected ? 'wifi-off' : undefined}>
+                    {!isConnected ? t('button.offline') : t('button.hints')}
                   </Button>
                 </Animated.View>
               )}

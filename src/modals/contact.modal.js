@@ -12,10 +12,12 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
+import {useNetworkStatus} from '@/hooks/useNetworkStatus';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {isConnected} = useNetworkStatus(true);
 
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -133,13 +135,19 @@ const ContactModal = ({visible, onDismiss}) => {
             {t('button.cancel')}
           </Button>
 
-          <Button
-            onPress={handleSubmit}
-            loading={loading}
-            disabled={!isFormValid || loading || success}
-            icon={success ? 'check' : undefined}>
-            {success ? t('button.sent') : t('button.send')}
-          </Button>
+          {isConnected ? (
+            <Button
+              onPress={handleSubmit}
+              loading={loading}
+              disabled={!isFormValid || loading || success}
+              icon={success ? 'check' : undefined}>
+              {success ? t('button.sent') : t('button.send')}
+            </Button>
+          ) : (
+            <Button disabled={true} icon="wifi-off">
+              {t('button.offline')}
+            </Button>
+          )}
         </Card.Actions>
       </Card.Content>
     </Modal>

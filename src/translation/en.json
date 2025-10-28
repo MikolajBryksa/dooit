@@ -44,8 +44,7 @@
     "best_habit": "Your best habit is {{habit}}.",
     "best_habit_rate": "(as much as {{rate}}% effectiveness)",
     "worst_habit": "Focus on the habit of {{habit}}.",
-    "worst_habit_rate": "(only {{rate}}% effectiveness)",
-    "hints_button": "Hints"
+    "worst_habit_rate": "(only {{rate}}% effectiveness)"
   },
   "button": {
     "delete": "Delete",
@@ -61,7 +60,9 @@
     "equalize": "Equalize",
     "unlock": "Unlock",
     "send": "Send",
-    "sent": "Sent"
+    "sent": "Sent",
+    "offline": "Offline",
+    "hints": "Hints"
   },
   "contact": {
     "email": "Your e-mail",
