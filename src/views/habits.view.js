@@ -7,10 +7,11 @@ import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
 import EqualizeDialog from '@/dialogs/equalize.dialog';
-import {getHabits} from '@/services/habits.service';
-import {setHabits} from '@/redux/actions';
+import {getHabits, autoSkipPastHabits} from '@/services/habits.service';
+import {setHabits, setHabitsLoading} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
+import {dateToWeekday, getLocalDateKey} from '@/utils';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -38,16 +39,21 @@ const HabitsView = () => {
   };
 
   const fetchAllHabits = () => {
+    const todayKey = getLocalDateKey();
+    const weekdayKey = dateToWeekday(todayKey);
+    autoSkipPastHabits(weekdayKey);
+
     const habits = getHabits() || [];
     dispatch(setHabits(habits));
+    dispatch(setHabitsLoading(true));
   };
 
   const sortedHabits = React.useMemo(() => {
     if (!habits || habits.length === 0) return [];
-    
+
     return [...habits].sort((a, b) => {
-      const aFirstHour = a.repeatHours[0] 
-      const bFirstHour = b.repeatHours[0] 
+      const aFirstHour = a.repeatHours[0];
+      const bFirstHour = b.repeatHours[0];
       return aFirstHour.localeCompare(bFirstHour);
     });
   }, [habits]);

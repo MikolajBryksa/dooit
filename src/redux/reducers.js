@@ -1,9 +1,15 @@
-import {SET_CURRENT_ITEM, SET_HABITS, SET_SETTINGS} from './actions';
+import {
+  SET_CURRENT_ITEM,
+  SET_HABITS,
+  SET_SETTINGS,
+  SET_HABITS_LOADING,
+} from './actions';
 
 const initialState = {
   currentItem: null,
   habits: [],
   settings: null,
+  habitsLoading: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,6 +28,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         settings: action.payload,
+      };
+    case SET_HABITS_LOADING:
+      return {
+        ...state,
+        habitsLoading: action.payload,
       };
     default:
       return state;

@@ -1,6 +1,7 @@
 export const SET_CURRENT_ITEM = 'SET_CURRENT_ITEM';
 export const SET_HABITS = 'SET_HABITS';
 export const SET_SETTINGS = 'SET_SETTINGS';
+export const SET_HABITS_LOADING = 'SET_HABITS_LOADING';
 
 export const setCurrentItem = item => ({
   type: SET_CURRENT_ITEM,
@@ -15,4 +16,9 @@ export const setHabits = habits => ({
 export const setSettings = settings => ({
   type: SET_SETTINGS,
   payload: settings,
+});
+
+export const setHabitsLoading = isLoading => ({
+  type: SET_HABITS_LOADING,
+  payload: isLoading,
 });

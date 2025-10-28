@@ -11,17 +11,20 @@ import {useTodayKey} from '@/hooks';
 import {
   getHabits,
   resetCompletedHoursForAllHabits,
+  autoSkipPastHabits,
 } from '@/services/habits.service';
-import {setHabits} from '@/redux/actions';
+import {setHabits, setHabitsLoading} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
 import NoHabitsCard from '@/components/no-habits.card';
+import LoadingHabitsCard from '@/components/loading-habits.card';
 
 const HomeView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
+  const habitsLoading = useSelector(state => state.habitsLoading);
   const debugMode = useSelector(state => state.settings.debugMode);
   const cardDuration = useSelector(state => state.settings.cardDuration);
   const [activeKey, setActiveKey] = useState(null);
@@ -38,6 +41,23 @@ const HomeView = () => {
 
   // Calculate weekday key once for today
   const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
+
+  useEffect(() => {
+    // On mount, auto-skip past habits and trigger loading
+    autoSkipPastHabits(weekdayKey);
+    dispatch(setHabitsLoading(true));
+  }, [dispatch, weekdayKey]);
+
+  useEffect(() => {
+    if (habitsLoading) {
+      refreshHabits();
+      const timer = setTimeout(() => {
+        dispatch(setHabitsLoading(false));
+      }, cardDuration * 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [habitsLoading, refreshHabits, cardDuration, dispatch]);
 
   useEffect(() => {
     // Updates the list of habits after changing the date
@@ -114,7 +134,6 @@ const HomeView = () => {
 
   useEffect(() => {
     // Manages habit completion state and active card switching
-
     if (todayHabits.length === 0) {
       setAllCompleted(false);
       return;
@@ -258,7 +277,9 @@ const HomeView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {todayHabits.length === 0 ? (
+        {habitsLoading ? (
+          <LoadingHabitsCard />
+        ) : todayHabits.length === 0 ? (
           <NoHabitsCard />
         ) : allCompleted ? (
           <EndCard weekdayKey={weekdayKey} />

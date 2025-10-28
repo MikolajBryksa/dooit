@@ -235,6 +235,48 @@ export const resetCompletedHoursForAllHabits = () => {
   return affected;
 };
 
+export const autoSkipPastHabits = weekdayKey => {
+  // Automatically marks past habits as skipped for today
+  // This prevents users from feeling overwhelmed when starting mid-day
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  let affected = 0;
+
+  realm.write(() => {
+    const habits = realm.objects('Habit');
+    habits.forEach(habit => {
+      if (!habit.available || !habit.repeatDays.includes(weekdayKey)) {
+        return;
+      }
+
+      const completedHours = Array.from(habit.completedHours || []);
+      let hasChanges = false;
+
+      habit.repeatHours.forEach(hour => {
+        const [h, m] = hour.split(':').map(Number);
+        const habitMinutes = h * 60 + (m || 0);
+
+        // If habit time is more than 45 minutes in the past and not yet completed
+        const minutesDiff = currentMinutes - habitMinutes;
+        if (minutesDiff > 45 && !completedHours.includes(hour)) {
+          completedHours.push(hour);
+          hasChanges = true;
+
+          habit.skipCounter = (habit.skipCounter || 0) + 1;
+        }
+      });
+
+      if (hasChanges) {
+        habit.completedHours.splice(0, habit.completedHours.length);
+        completedHours.forEach(hour => habit.completedHours.push(hour));
+        affected += 1;
+      }
+    });
+  });
+
+  return affected;
+};
+
 export const getHabitValue = (id, key) => {
   const habit = getHabitById(id);
   return habit ? habit[key] : null;

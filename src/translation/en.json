@@ -11,7 +11,8 @@
     "no-habits": "No habits",
     "contact": "Contact",
     "support": "Coffee",
-    "equalize": "Equalize counters"
+    "equalize": "Equalize counters",
+    "loading-habits": "Loading habits"
   },
   "settings": {
     "version": "Version",
