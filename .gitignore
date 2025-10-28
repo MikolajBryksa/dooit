@@ -30,7 +30,6 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
-secrets.json
 .vscode/
 
 # node.js
@@ -72,3 +71,7 @@ yarn-error.log
 
 # Format
 .metals
+
+# Secrets
+secrets.json
+dooit.config.js

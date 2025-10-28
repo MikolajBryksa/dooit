@@ -176,7 +176,7 @@ const EndCard = ({weekdayKey}) => {
           stats.minSuccessRate <= 100 ? stats.minSuccessRate : null,
       };
 
-      const {data, error} = await supabase.from('Users').upsert(dataToSave, {
+      const {error} = await supabase.from('Users').upsert(dataToSave, {
         onConflict: 'user_id',
       });
 

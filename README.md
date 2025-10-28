@@ -116,6 +116,9 @@ Before you begin, ensure you have met the following requirements:
       Paste 2 files to android/app:
       - dooit-release-key.keystore
       - secrets.json
+
+      Paste 1 file to main directory:
+      - dooit.config.js
   ```
 
 - **Update version**:

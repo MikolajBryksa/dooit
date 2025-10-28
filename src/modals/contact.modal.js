@@ -39,7 +39,7 @@ const ContactModal = ({visible, onDismiss}) => {
   }, [email, message]);
 
   const handleSubmit = async () => {
-    if (!isFormValid) {
+    if (!isFormValid || !isConnected) {
       return;
     }
 
@@ -48,7 +48,7 @@ const ContactModal = ({visible, onDismiss}) => {
     try {
       const userId = getSettingValue('userId');
 
-      const {data, error} = await supabase.from('Contact').insert([
+      const {error} = await supabase.from('Contact').insert([
         {
           user_id: userId,
           email: email.trim(),
