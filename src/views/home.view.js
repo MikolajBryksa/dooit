@@ -53,7 +53,7 @@ const HomeView = () => {
       refreshHabits();
       const timer = setTimeout(() => {
         dispatch(setHabitsLoading(false));
-      }, cardDuration * 1000);
+      }, cardDuration * 1100);
 
       return () => clearTimeout(timer);
     }
@@ -65,6 +65,10 @@ const HomeView = () => {
       const LAST_RESET_DATE = 'habits:lastResetDate';
       const lastDate = await AsyncStorage.getItem(LAST_RESET_DATE);
 
+      if (lastDate === null) {
+        await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
+        return; // no reset on Day 1
+      }
       if (lastDate !== todayKey) {
         resetCompletedHoursForAllHabits();
         await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);

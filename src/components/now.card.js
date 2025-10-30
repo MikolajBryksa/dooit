@@ -188,17 +188,12 @@ const NowCard = ({
     return Math.max(0, Math.min(1, globalProgressValue));
   }, [globalProgressValue]);
 
-  if (!isNext && !debugMode) {
+  if (!isNext) {
     return null;
   }
 
   return (
-    <Card
-      style={[
-        styles.card,
-        debugMode && isCompleted && styles.card__deactivated,
-        debugMode && isNext && styles.card__selected,
-      ]}>
+    <Card style={[styles.card]}>
       <Animated.View style={{opacity}}>
         <Card.Content style={styles.card__center}>
           <View style={styles.gap} />

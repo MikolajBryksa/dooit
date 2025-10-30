@@ -11,7 +11,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
 import {LocaleConfig} from 'react-native-calendars';
-import {getSettings, updateSettingValue} from './src/services/settings.service';
+import {getSettings} from './src/services/settings.service';
 import {setSettings} from './src/redux/actions';
 import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -38,9 +38,6 @@ function AppContent() {
     const start = Date.now();
     async function loadData() {
       try {
-        // Enable debug mode in Realm settings
-        updateSettingValue('debugMode', false);
-
         const settings = getSettings();
 
         if (!settings) {
