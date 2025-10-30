@@ -96,7 +96,7 @@ const EditModal = ({
           />
         )}
 
-        {['goodCounter', 'badCounter', 'skipCounter'].includes(field) && (
+        {['goodCounter', 'badCounter'].includes(field) && (
           <TextInput
             mode="outlined"
             value={inputValue === 0 ? '' : inputValue?.toString()}

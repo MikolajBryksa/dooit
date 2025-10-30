@@ -23,13 +23,13 @@ const PieChart = ({
 }) => {
   const theme = useTheme();
 
-  if (good + bad + skip >= 200) {
+  if (good + bad >= 200) {
     tickArcLen = 0;
-  } else if (good + bad + skip >= 150) {
+  } else if (good + bad >= 150) {
     tickArcLen = 0.4;
-  } else if (good + bad + skip >= 100) {
+  } else if (good + bad >= 100) {
     tickArcLen = 0.7;
-  } else if (good + bad + skip >= 50) {
+  } else if (good + bad >= 50) {
     tickArcLen = 1;
   }
 
@@ -48,22 +48,20 @@ const PieChart = ({
   const C = 2 * Math.PI * radius;
   const EPS = 1e-3;
 
-  const total = Math.max(0, good + bad + skip);
-  const fG = total > 0 ? good / total : 0;
-  const fB = total > 0 ? bad / total : 0;
-  const fS = total > 0 ? skip / total : 0;
+  const totalShown = Math.max(0, good + bad);
+  const fG = totalShown > 0 ? good / totalShown : 0;
+  const fB = totalShown > 0 ? bad / totalShown : 0;
 
   const target = useMemo(
     () => ({
       g: C * fG,
       b: C * fB,
-      s: C * fS,
     }),
-    [C, fG, fB, fS],
+    [C, fG, fB],
   );
 
   const mountedRef = useRef(false);
-  const prevRef = useRef({g: 0, b: 0, s: 0});
+  const prevRef = useRef({g: 0, b: 0});
   const t = useRef(new Animated.Value(1)).current;
   const [animT, setAnimT] = useState(1);
 
@@ -91,27 +89,23 @@ const PieChart = ({
         prevRef.current = target;
       }
     });
-  }, [target.g, target.b, target.s, animateDuration, t]);
+  }, [target.g, target.b, animateDuration, t]);
 
   const lerp = (a, b, k) => a + (b - a) * k;
 
   const lenG = lerp(prevRef.current.g, target.g, animT);
   const lenB = lerp(prevRef.current.b, target.b, animT);
-  const lenS = lerp(prevRef.current.s, target.s, animT);
 
   const startG = 0;
   const startB = lenG;
-  const startS = lenG + lenB;
 
-  const hasAny = lenG > EPS || lenB > EPS || lenS > EPS;
+  const hasAny = lenG > EPS || lenB > EPS;
 
   const isFullG = lenG > C - EPS;
   const isFullB = lenB > C - EPS;
-  const isFullS = lenS > C - EPS;
 
   const unitG = good > 0 ? lenG / good : 0;
   const unitB = bad > 0 ? lenB / bad : 0;
-  const unitS = skip > 0 ? lenS / skip : 0;
 
   const prevVals = useRef({good, bad, skip});
   const [flash, setFlash] = useState({
@@ -129,7 +123,8 @@ const PieChart = ({
     const ds = skip - prevVals.current.skip;
     prevVals.current = {good, bad, skip};
     let show = null;
-    let showValue = null;
+    let showValue = null | 'good' | 'bad';
+
     if (dg === 1) {
       show = {icon: 'plus-thick', color: _goodColor};
       showValue = 'good';
@@ -138,7 +133,7 @@ const PieChart = ({
       showValue = 'bad';
     } else if (ds === 1) {
       show = {icon: 'close-thick', color: _skipColor};
-      showValue = 'skip';
+      showValue = null;
     }
 
     if (show) {
@@ -159,7 +154,13 @@ const PieChart = ({
           toValue: 0,
           duration: 150,
           useNativeDriver: true,
-        }).start(() => setFlash(f => ({...f, visible: false, showValue})));
+        }).start(() =>
+          setFlash(f => ({
+            ...f,
+            visible: false,
+            showValue,
+          })),
+        );
       }, flashDuration);
       return () => clearTimeout(timer);
     }
@@ -200,7 +201,6 @@ const PieChart = ({
     <View style={[styles.container, {width: size, height: size, opacity}]}>
       <Svg width={size} height={size}>
         <G rotation="-90" origin={`${cx}, ${cy}`}>
-          {/* track */}
           <Circle
             cx={cx}
             cy={cy}
@@ -211,7 +211,6 @@ const PieChart = ({
             strokeLinecap="butt"
           />
 
-          {/* segments */}
           {hasAny && lenG > EPS && (
             <Circle
               cx={cx}
@@ -225,6 +224,7 @@ const PieChart = ({
               strokeLinecap="butt"
             />
           )}
+
           {hasAny && lenB > EPS && (
             <Circle
               cx={cx}
@@ -238,21 +238,7 @@ const PieChart = ({
               strokeLinecap="butt"
             />
           )}
-          {hasAny && lenS > EPS && (
-            <Circle
-              cx={cx}
-              cy={cy}
-              r={radius}
-              stroke={_skipColor}
-              strokeWidth={strokeWidth}
-              fill="none"
-              strokeDasharray={`${lenS} ${Math.max(0, C - lenS)}`}
-              strokeDashoffset={-startS}
-              strokeLinecap="butt"
-            />
-          )}
 
-          {/* ticks */}
           {showTicks &&
             lenG > EPS &&
             good > 0 &&
@@ -291,84 +277,25 @@ const PieChart = ({
               },
             )}
 
-          {showTicks &&
-            lenS > EPS &&
-            skip > 0 &&
-            unitS > 0 &&
-            Array.from({length: isFullS ? skip : Math.max(0, skip - 1)}).map(
-              (_, i) => {
-                const m = (isFullS ? 0 : 1) + i;
-                const pos = startS + m * unitS;
-                return (
-                  <TinyArc
-                    key={`tick-s-${i}`}
-                    at={pos}
-                    length={tickArcLen}
-                    stroke={_tickColor}
-                  />
-                );
-              },
-            )}
-
-          {/* separators */}
-          {showSeparators && _separatorArcLen > 0 && (
-            <>
-              {/* Primary boundaries (always when both adjacent segments exist) */}
-              {lenG > EPS && lenB > EPS && (
+          {showSeparators &&
+            _separatorArcLen > 0 &&
+            lenG > EPS &&
+            lenB > EPS && (
+              <>
                 <TinyArc
                   key="sep-g-b-main"
                   at={startB}
                   length={_separatorArcLen}
                   stroke={_separatorColor}
                 />
-              )}
-              {lenB > EPS && lenS > EPS && (
-                <TinyArc
-                  key="sep-b-s-main"
-                  at={startS}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
-                />
-              )}
-              {lenS > EPS && lenG > EPS && (
-                <TinyArc
-                  key="sep-s-g-main"
-                  at={startG}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
-                />
-              )}
-
-              {/* Extra wrap-around separators when the third segment is zero (so only two colors are present) */}
-              {/* For GOOD-BAD when SKIP is empty: add the opposite separator at 0/2π */}
-              {lenS <= EPS && lenG > EPS && lenB > EPS && (
                 <TinyArc
                   key="sep-g-b-wrap"
                   at={startG}
                   length={_separatorArcLen}
                   stroke={_separatorColor}
                 />
-              )}
-              {/* For BAD-SKIP when GOOD is empty: add the opposite separator at 0/2π */}
-              {lenG <= EPS && lenB > EPS && lenS > EPS && (
-                <TinyArc
-                  key="sep-b-s-wrap"
-                  at={startG}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
-                />
-              )}
-              {/* For SKIP-GOOD when BAD is empty: add the opposite separator at startS (== lenG) */}
-              {lenB <= EPS && lenS > EPS && lenG > EPS && (
-                <TinyArc
-                  key="sep-s-g-wrap"
-                  at={startS}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
-                />
-              )}
-            </>
-          )}
+              </>
+            )}
         </G>
       </Svg>
 
@@ -401,14 +328,6 @@ const PieChart = ({
               {color: _badColor, fontSize: Math.min(40, size * 0.28)},
             ]}>
             {bad}
-          </Text>
-        ) : flash.showValue === 'skip' ? (
-          <Text
-            style={[
-              styles.flashText,
-              {color: _skipColor, fontSize: Math.min(40, size * 0.28)},
-            ]}>
-            {skip}
           </Text>
         ) : (
           <Avatar.Icon

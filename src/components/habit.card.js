@@ -20,7 +20,6 @@ const HabitCard = ({
   habitEnemy,
   goodCounter = 0,
   badCounter = 0,
-  skipCounter = 0,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -97,7 +96,7 @@ const HabitCard = ({
               ? 'auto'
               : contentHeight.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 250],
+                  outputRange: [0, 200],
                 }),
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,
@@ -217,20 +216,6 @@ const HabitCard = ({
                     />
                     <Text variant="bodyMedium">
                       {t('card.badCounter')}: {badCounter}
-                    </Text>
-                  </View>
-                </TouchableRipple>
-
-                <TouchableRipple
-                  onPress={() => openEditModal('skipCounter', skipCounter)}>
-                  <View style={styles.card__row}>
-                    <IconButton
-                      icon="close-thick"
-                      size={18}
-                      style={{margin: 0, marginRight: 4}}
-                    />
-                    <Text variant="bodyMedium">
-                      {t('card.skipCounter')}: {skipCounter}
                     </Text>
                   </View>
                 </TouchableRipple>
