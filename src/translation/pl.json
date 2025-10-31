@@ -45,7 +45,8 @@
     "best_habit": "Najlepiej Ci idzie nawyk {{habit}}.",
     "best_habit_rate": "(aż {{rate}}% skuteczności)",
     "worst_habit": "Nawyk {{habit}} wymaga większej uwagi.",
-    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)"
+    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)",
+    "no_response": "AI nie udzieliło odpowiedzi."
   },
   "button": {
     "delete": "Usuń",

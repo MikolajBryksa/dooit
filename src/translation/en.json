@@ -45,7 +45,8 @@
     "best_habit": "Your best habit is {{habit}}.",
     "best_habit_rate": "(as much as {{rate}}% effectiveness)",
     "worst_habit": "Focus on the habit of {{habit}}.",
-    "worst_habit_rate": "(only {{rate}}% effectiveness)"
+    "worst_habit_rate": "(only {{rate}}% effectiveness)",
+    "no_response": "AI has not provided a response."
   },
   "button": {
     "delete": "Delete",

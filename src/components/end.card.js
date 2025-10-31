@@ -86,7 +86,7 @@ const EndCard = ({weekdayKey}) => {
     );
 
     todayHabits.forEach(habit => {
-      const total = habit.goodCounter + habit.badCounter + habit.skipCounter;
+      const total = habit.goodCounter + habit.badCounter;
       const successRate = ((habit.goodCounter / total) * 100).toFixed(0);
 
       totalActions += total;
@@ -127,7 +127,7 @@ const EndCard = ({weekdayKey}) => {
       paragraphs.push(para2.join('\n'));
     }
 
-    if (worstHabit && minSuccessRate < 80 && worstHabit !== bestHabit) {
+    if (worstHabit && minSuccessRate < 70 && worstHabit !== bestHabit) {
       const para3 = [];
       para3.push(t('summary.worst_habit', {habit: worstHabit.habitName}));
       para3.push(t('summary.worst_habit_rate', {rate: minSuccessRate}));
@@ -243,10 +243,50 @@ const EndCard = ({weekdayKey}) => {
     setHintsRequested(true);
     setLoadingHints(true);
 
-    setTimeout(async () => {
-      const aiResponse = 'AI not connected';
-      setHintsText(aiResponse);
+    try {
+      const language = getSettingValue('language');
+      const stats = summaryData.stats;
+      let prompt = '';
+      if (language === 'pl') {
+        prompt += `Użytkownik do tej pory wykonał ${stats.totalActions} powtórzeń wszystkich nawyków. `;
+        if (stats.bestHabit) {
+          prompt += `Najlepiej idzie użytkownikowi: ${stats.bestHabit.habitName} ze skutecznością na poziomie ${stats.maxSuccessRate}%. `;
+        }
+        if (stats.worstHabit) {
+          prompt += `Najgorzej idzie użytkownikowi: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
+        }
+        prompt += `Napisz krótką poradę lub motywację dla użytkownika, która korzystnie wpłynie na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity.`;
+      } else {
+        prompt += `The user has completed ${stats.totalActions} repetitions of all habits so far. `;
+        if (stats.bestHabit) {
+          prompt += `The best performing habit is: ${stats.bestHabit.habitName} with a success rate of ${stats.maxSuccessRate}%. `;
+        }
+        if (stats.worstHabit) {
+          prompt += `The weakest habit is: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
+        }
+        prompt += `Write a short piece of advice or motivation for the user that will positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs.`;
+      }
+
+      const response = await fetch(
+        'https://dooit-p7ffyo32ea-lm.a.run.app/api/agent/run',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({message: prompt}),
+        },
+      );
+      const data = await response.json();
+      const aiResponse =
+        data?.reply || data?.message || t('summary.no_response');
+      // Zamiast setHintsText, uruchom typewriter na AI odpowiedzi
       setLoadingHints(false);
+      setSummaryData({paragraphs: [aiResponse], stats: {}});
+      setDisplayedText([]);
+      setCurrentParagraph(0);
+      setCurrentChar(0);
+      setTypingComplete(false);
 
       try {
         const userId = getSettingValue('userId');
@@ -261,7 +301,11 @@ const EndCard = ({weekdayKey}) => {
       } catch (error) {
         console.error(error);
       }
-    }, 2000);
+    } catch (error) {
+      setHintsText('AI error: ' + error.message);
+      setLoadingHints(false);
+      console.error(error);
+    }
   };
 
   return (
