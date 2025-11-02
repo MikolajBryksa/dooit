@@ -206,7 +206,7 @@ const EndCard = ({weekdayKey}) => {
           return newText;
         });
         setCurrentChar(currentChar + 1);
-      }, 25); // Speed of typing
+      }, 50); // Speed of typing
 
       return () => clearTimeout(timer);
     } else if (currentParagraph < summaryData.paragraphs.length - 1) {
@@ -320,9 +320,6 @@ const EndCard = ({weekdayKey}) => {
   return (
     <MainCard
       outline={true}
-      animatedStyle={{
-        minHeight: 500,
-      }}
       iconContent={
         <Animated.View style={{opacity, transform: [{scale}]}}>
           <StatusIconCircle end />

@@ -232,33 +232,6 @@ const NowCard = ({
             }),
           }}>
           <View style={{position: 'relative', width: '100%'}}>
-            {/* Hidden measurement container */}
-            <View
-              style={{
-                position: 'absolute',
-                opacity: 0,
-                width: '100%',
-                pointerEvents: 'none',
-              }}
-              onLayout={event => {
-                const {height} = event.nativeEvent.layout;
-                if (height > 0 && height !== contentHeight) {
-                  setContentHeight(height);
-                }
-              }}>
-              <View style={styles.card__choices}>
-                <Text variant="titleLarge">{habitName}</Text>
-                <View style={styles.card__buttons}>
-                  <Button style={styles.button} mode="outlined">
-                    {t('button.skip')}
-                  </Button>
-                  <Button style={styles.button} mode="contained">
-                    {t('button.done')}
-                  </Button>
-                </View>
-              </View>
-            </View>
-
             {/* Good Habit - Step 1 */}
             <Animated.View
               style={[
@@ -271,13 +244,20 @@ const NowCard = ({
                   left: 0,
                 },
               ]}
-              pointerEvents={step === 1 ? 'auto' : 'none'}>
+              pointerEvents={step === 1 ? 'auto' : 'none'}
+              onLayout={event => {
+                const {height} = event.nativeEvent.layout;
+                if (height > 0 && height !== contentHeight) {
+                  setContentHeight(height);
+                }
+              }}>
               <Text variant="titleLarge">{habitName}</Text>
               {isLocked ? (
                 <View style={styles.card__buttons}>
                   <Button
                     style={styles.button}
                     mode="contained"
+                    icon="lock-open-variant"
                     onPress={() => {
                       handleUnlock();
                     }}>
@@ -289,6 +269,7 @@ const NowCard = ({
                   <Button
                     style={styles.button}
                     mode="outlined"
+                    icon="close"
                     disabled={step !== 1}
                     onPress={() => {
                       skipGoodChoice();
@@ -298,6 +279,7 @@ const NowCard = ({
                   <Button
                     style={styles.button}
                     mode="contained"
+                    icon="check"
                     disabled={step !== 1}
                     onPress={() => {
                       addGoodChoice();
@@ -322,39 +304,27 @@ const NowCard = ({
               ]}
               pointerEvents={step === 2 ? 'auto' : 'none'}>
               <Text variant="titleLarge">{habitEnemy}</Text>
-              {isLocked ? (
-                <View style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    onPress={() => {
-                      handleUnlock();
-                    }}>
-                    {t('button.unlock')}
-                  </Button>
-                </View>
-              ) : (
-                <View style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="outlined"
-                    disabled={step !== 2}
-                    onPress={() => {
-                      skipBadChoice();
-                    }}>
-                    {t('button.skip')}
-                  </Button>
-                  <Button
-                    style={styles.button__bad}
-                    mode="contained"
-                    disabled={step !== 2}
-                    onPress={() => {
-                      addBadChoice();
-                    }}>
-                    {t('button.done')}
-                  </Button>
-                </View>
-              )}
+
+              <View style={styles.card__buttons}>
+                <Button
+                  style={styles.button}
+                  mode="outlined"
+                  icon="close"
+                  onPress={() => {
+                    skipBadChoice();
+                  }}>
+                  {t('button.skip')}
+                </Button>
+                <Button
+                  style={styles.button__bad}
+                  mode="contained"
+                  icon="check"
+                  onPress={() => {
+                    addBadChoice();
+                  }}>
+                  {t('button.done')}
+                </Button>
+              </View>
             </Animated.View>
           </View>
         </Animated.View>

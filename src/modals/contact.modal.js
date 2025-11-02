@@ -131,16 +131,13 @@ const ContactModal = ({visible, onDismiss}) => {
         <View style={styles.gap} />
 
         <Card.Actions>
-          <Button mode="outlined" onPress={handleDismiss} disabled={loading}>
-            {t('button.cancel')}
-          </Button>
-
           {isConnected ? (
             <Button
+              mode="contained"
               onPress={handleSubmit}
               loading={loading}
               disabled={!isFormValid || loading || success}
-              icon={success ? 'check' : undefined}>
+              icon={success ? 'check' : !isFormValid ? 'lock' : 'send'}>
               {success ? t('button.sent') : t('button.send')}
             </Button>
           ) : (

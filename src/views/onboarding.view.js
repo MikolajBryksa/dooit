@@ -138,6 +138,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Button
             style={styles.button}
             mode="contained"
+            icon="check"
             onPress={() => {
               handleStep1();
             }}>
@@ -195,6 +196,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Button
             style={styles.button}
             mode="contained"
+            icon={!hasSelectedHabits ? 'lock' : 'check'}
             disabled={!hasSelectedHabits}
             onPress={() => {
               handleStep2();
@@ -238,7 +240,11 @@ const OnboardingView = ({setShowOnboarding}) => {
         </ScrollView>
 
         <View style={styles.onboarding__bar}>
-          <Button style={styles.button} mode="contained" onPress={handleStep3}>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={handleStep3}
+            icon="check">
             {t('onboarding.step3.start')}
           </Button>
         </View>

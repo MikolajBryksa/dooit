@@ -146,19 +146,22 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
         <Card.Actions>
           {step > 1 && (
-            <Button mode="outlined" onPress={handlePrevStep}>
+            <Button mode="outlined" onPress={handlePrevStep} icon="arrow-left">
               {t('button.back')}
             </Button>
           )}
 
           {step < maxSteps && (
-            <Button onPress={handleNextStep} disabled={!canProceed()}>
+            <Button
+              onPress={handleNextStep}
+              disabled={!canProceed()}
+              icon="arrow-right">
               {t('button.next')}
             </Button>
           )}
 
           {step === maxSteps && (
-            <Button onPress={handleSave} disabled={!canProceed()}>
+            <Button onPress={handleSave} disabled={!canProceed()} icon="check">
               {t('button.save')}
             </Button>
           )}
