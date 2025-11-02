@@ -1,13 +1,14 @@
-import React, {useCallback, useState, useMemo, useEffect, useRef} from 'react';
-import {Card, Text, Button, ProgressBar} from 'react-native-paper';
-import {useCurrentTime} from '@/hooks';
+import React, {useEffect, useRef, useState, useMemo, useCallback} from 'react';
+import {Text, Button, ProgressBar} from 'react-native-paper';
 import {View, Animated} from 'react-native';
-import {updateHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
+import {updateHabit} from '@/services/habits.service';
 import {addHour, pickRandomMotivation} from '@/utils';
-import PieChart from './pie.chart';
+import {useCurrentTime} from '@/hooks';
+import PieCircle from './pie.circle';
+import MainCard from './main.card';
 
 const NowCard = ({
   id,
@@ -33,6 +34,7 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
+  const [contentHeight, setContentHeight] = useState(0);
 
   const currentTime = useCurrentTime();
   const isSelectedHourLater = useMemo(() => {
@@ -193,23 +195,21 @@ const NowCard = ({
   }
 
   return (
-    <Card style={[styles.card]}>
-      <Animated.View style={{opacity}}>
-        <Card.Content style={styles.card__center}>
-          <View style={styles.gap} />
-          {/* Counter */}
-          <PieChart
-            size={120}
-            strokeWidth={12}
-            icon={icon}
-            good={goodCounter}
-            bad={badCounter}
-            skip={skipCounter}
-            opacity={isLocked ? 0.5 : 1}
-          />
-          <View style={styles.gap} />
-          <View style={styles.gap} />
-          {/* Time */}
+    <MainCard
+      animatedStyle={{opacity}}
+      iconContent={
+        <PieCircle
+          size={120}
+          strokeWidth={12}
+          icon={icon}
+          good={goodCounter}
+          bad={badCounter}
+          skip={skipCounter}
+          opacity={isLocked ? 0.5 : 1}
+        />
+      }
+      progressContent={
+        <>
           <Text variant="titleLarge">{selectedHour}</Text>
           <View style={styles.progress__container}>
             <ProgressBar
@@ -221,121 +221,147 @@ const NowCard = ({
           <Text variant="bodyLarge" style={styles.motivation__message}>
             {motivation}
           </Text>
-          <View style={styles.gap} />
-          <View style={styles.gap} />
-
-          <Animated.View
-            style={{
-              width: '100%',
-              overflow: 'hidden',
-              height: habitContainerHeight.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 130],
-              }),
-            }}>
-            <View style={{position: 'relative', width: '100%'}}>
-              {/* Good Habit - Step 1 */}
-              <Animated.View
-                style={[
-                  styles.card__choices,
-                  {
-                    opacity: goodHabitOpacity,
-                    position: 'absolute',
-                    width: '100%',
-                    top: 0,
-                    left: 0,
-                  },
-                ]}
-                pointerEvents={step === 1 ? 'auto' : 'none'}>
+        </>
+      }
+      buttonsContent={
+        <Animated.View
+          style={{
+            width: '100%',
+            overflow: 'hidden',
+            height: habitContainerHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, contentHeight],
+            }),
+          }}>
+          <View style={{position: 'relative', width: '100%'}}>
+            {/* Hidden measurement container */}
+            <View
+              style={{
+                position: 'absolute',
+                opacity: 0,
+                width: '100%',
+                pointerEvents: 'none',
+              }}
+              onLayout={event => {
+                const {height} = event.nativeEvent.layout;
+                if (height > 0 && height !== contentHeight) {
+                  setContentHeight(height);
+                }
+              }}>
+              <View style={styles.card__choices}>
                 <Text variant="titleLarge">{habitName}</Text>
-                {isLocked ? (
-                  <Card.Content style={styles.card__buttons}>
-                    <Button
-                      style={styles.button}
-                      mode="contained"
-                      onPress={() => {
-                        handleUnlock();
-                      }}>
-                      {t('button.unlock')}
-                    </Button>
-                  </Card.Content>
-                ) : (
-                  <Card.Content style={styles.card__buttons}>
-                    <Button
-                      style={styles.button}
-                      mode="outlined"
-                      disabled={step !== 1}
-                      onPress={() => {
-                        skipGoodChoice();
-                      }}>
-                      {t('button.skip')}
-                    </Button>
-                    <Button
-                      style={styles.button}
-                      mode="contained"
-                      disabled={step !== 1}
-                      onPress={() => {
-                        addGoodChoice();
-                      }}>
-                      {t('button.done')}
-                    </Button>
-                  </Card.Content>
-                )}
-              </Animated.View>
-
-              {/* Bad Habit - Step 2 */}
-              <Animated.View
-                style={[
-                  styles.card__choices,
-                  {
-                    opacity: badHabitOpacity,
-                    position: 'absolute',
-                    width: '100%',
-                    top: 0,
-                    left: 0,
-                  },
-                ]}
-                pointerEvents={step === 2 ? 'auto' : 'none'}>
-                <Text variant="titleLarge">{habitEnemy}</Text>
-                {isLocked ? (
-                  <Card.Content style={styles.card__buttons}>
-                    <Button
-                      style={styles.button}
-                      mode="contained"
-                      onPress={() => {
-                        handleUnlock();
-                      }}>
-                      {t('button.unlock')}
-                    </Button>
-                  </Card.Content>
-                ) : (
-                  <Card.Content style={styles.card__buttons}>
-                    <Button
-                      style={styles.button}
-                      mode="outlined"
-                      disabled={step !== 2}
-                      onPress={() => {
-                        skipBadChoice();
-                      }}>
-                      {t('button.skip')}
-                    </Button>
-                    <Button
-                      style={styles.button__bad}
-                      mode="contained"
-                      disabled={step !== 2}
-                      onPress={() => {
-                        addBadChoice();
-                      }}>
-                      {t('button.done')}
-                    </Button>
-                  </Card.Content>
-                )}
-              </Animated.View>
+                <View style={styles.card__buttons}>
+                  <Button style={styles.button} mode="outlined">
+                    {t('button.skip')}
+                  </Button>
+                  <Button style={styles.button} mode="contained">
+                    {t('button.done')}
+                  </Button>
+                </View>
+              </View>
             </View>
-          </Animated.View>
-        </Card.Content>
-      </Animated.View>
-    </Card>
+
+            {/* Good Habit - Step 1 */}
+            <Animated.View
+              style={[
+                styles.card__choices,
+                {
+                  opacity: goodHabitOpacity,
+                  position: 'absolute',
+                  width: '100%',
+                  top: 0,
+                  left: 0,
+                },
+              ]}
+              pointerEvents={step === 1 ? 'auto' : 'none'}>
+              <Text variant="titleLarge">{habitName}</Text>
+              {isLocked ? (
+                <View style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    onPress={() => {
+                      handleUnlock();
+                    }}>
+                    {t('button.unlock')}
+                  </Button>
+                </View>
+              ) : (
+                <View style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="outlined"
+                    disabled={step !== 1}
+                    onPress={() => {
+                      skipGoodChoice();
+                    }}>
+                    {t('button.skip')}
+                  </Button>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    disabled={step !== 1}
+                    onPress={() => {
+                      addGoodChoice();
+                    }}>
+                    {t('button.done')}
+                  </Button>
+                </View>
+              )}
+            </Animated.View>
+
+            {/* Bad Habit - Step 2 */}
+            <Animated.View
+              style={[
+                styles.card__choices,
+                {
+                  opacity: badHabitOpacity,
+                  position: 'absolute',
+                  width: '100%',
+                  top: 0,
+                  left: 0,
+                },
+              ]}
+              pointerEvents={step === 2 ? 'auto' : 'none'}>
+              <Text variant="titleLarge">{habitEnemy}</Text>
+              {isLocked ? (
+                <View style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="contained"
+                    onPress={() => {
+                      handleUnlock();
+                    }}>
+                    {t('button.unlock')}
+                  </Button>
+                </View>
+              ) : (
+                <View style={styles.card__buttons}>
+                  <Button
+                    style={styles.button}
+                    mode="outlined"
+                    disabled={step !== 2}
+                    onPress={() => {
+                      skipBadChoice();
+                    }}>
+                    {t('button.skip')}
+                  </Button>
+                  <Button
+                    style={styles.button__bad}
+                    mode="contained"
+                    disabled={step !== 2}
+                    onPress={() => {
+                      addBadChoice();
+                    }}>
+                    {t('button.done')}
+                  </Button>
+                </View>
+              )}
+            </Animated.View>
+          </View>
+        </Animated.View>
+      }
+    />
   );
 };
 

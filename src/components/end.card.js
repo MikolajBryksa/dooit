@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Card, Text, ActivityIndicator, Button} from 'react-native-paper';
+import {Text, ActivityIndicator, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -7,6 +7,8 @@ import {useSelector} from 'react-redux';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks/useNetworkStatus';
+import MainCard from './main.card';
+import StatusIconCircle from './status-icon.circle';
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
@@ -309,70 +311,74 @@ const EndCard = ({weekdayKey}) => {
   };
 
   return (
-    <Card style={[styles.card, styles.card__end]}>
-      <Animated.View
-        style={{
-          opacity: containerHeight,
-          height: containerHeight.interpolate({
-            inputRange: [0, 1],
-            outputRange: [300, 450],
-          }),
-          overflow: 'hidden',
-        }}>
+    <MainCard
+      outline={true}
+      animatedStyle={{
+        opacity: containerHeight,
+        height: containerHeight.interpolate({
+          inputRange: [0, 1],
+          outputRange: [300, 450],
+        }),
+        overflow: 'hidden',
+      }}
+      iconContent={
         <Animated.View style={{opacity, transform: [{scale}]}}>
-          <Card.Content style={styles.card__center}>
-            <View style={styles.gap} />
-            <Text style={styles.end__icon}>🎉</Text>
-            <View style={styles.gap} />
-
-            <Text variant="headlineMedium" style={styles.end__title}>
-              {t('card.done')}
-            </Text>
-
-            <View style={styles.gap} />
-            <View style={styles.gap} />
-
-            <View>
-              {displayedText.map((paragraph, index) => (
-                <Text
-                  key={index}
-                  variant="bodyMedium"
-                  style={[styles.summary__text, {marginBottom: 16}]}>
-                  {paragraph}
-                </Text>
-              ))}
-
-              {showHintsButton && !hintsRequested && (
-                <Animated.View style={{marginTop: 8, opacity: buttonOpacity}}>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    onPress={handleHintsRequest}
-                    disabled={!isConnected}
-                    icon={!isConnected ? 'wifi-off' : undefined}>
-                    {!isConnected ? t('button.offline') : t('button.hints')}
-                  </Button>
-                </Animated.View>
-              )}
-
-              {hintsRequested && (
-                <View>
-                  {loadingHints ? (
-                    <View style={[{marginTop: 8}]}>
-                      <ActivityIndicator size="small" />
-                    </View>
-                  ) : (
-                    <Text variant="bodyMedium" style={[styles.summary__text]}>
-                      {hintsText}
-                    </Text>
-                  )}
-                </View>
-              )}
-            </View>
-          </Card.Content>
+          {<StatusIconCircle end />}
         </Animated.View>
-      </Animated.View>
-    </Card>
+      }
+      titleContent={
+        <Animated.View style={{opacity, transform: [{scale}]}}>
+          <Text variant="titleLarge">{t('card.done')}</Text>
+        </Animated.View>
+      }
+      mainContent={
+        <Animated.View style={{opacity, transform: [{scale}]}}>
+          <View>
+            {displayedText.map((paragraph, index) => (
+              <Text
+                key={index}
+                variant="bodyMedium"
+                style={[styles.summary__text, {marginBottom: 16}]}>
+                {paragraph}
+              </Text>
+            ))}
+
+            {hintsRequested && (
+              <View>
+                {loadingHints ? (
+                  <View style={[{marginTop: 8}]}>
+                    <ActivityIndicator size="small" />
+                  </View>
+                ) : (
+                  <Text variant="bodyMedium" style={[styles.summary__text]}>
+                    {hintsText}
+                  </Text>
+                )}
+              </View>
+            )}
+          </View>
+        </Animated.View>
+      }
+      buttonsContent={
+        showHintsButton && !hintsRequested ? (
+          <Animated.View
+            style={{
+              marginTop: 8,
+              opacity: buttonOpacity,
+              transform: [{scale}],
+            }}>
+            <Button
+              style={styles.button}
+              mode="contained"
+              onPress={handleHintsRequest}
+              disabled={!isConnected}
+              icon={!isConnected ? 'wifi-off' : undefined}>
+              {!isConnected ? t('button.offline') : t('button.hints')}
+            </Button>
+          </Animated.View>
+        ) : null
+      }
+    />
   );
 };
 

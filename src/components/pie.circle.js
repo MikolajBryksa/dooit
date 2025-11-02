@@ -3,7 +3,7 @@ import {View, StyleSheet, Animated, Easing} from 'react-native';
 import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 
-const PieChart = ({
+const PieCircle = ({
   good = 0,
   bad = 0,
   skip = 0,
@@ -360,4 +360,4 @@ const styles = StyleSheet.create({
   flashText: {fontWeight: '800', letterSpacing: 0.5},
 });
 
-export default PieChart;
+export default PieCircle;

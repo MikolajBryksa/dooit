@@ -126,7 +126,7 @@ const SettingsView = () => {
 
       <ScrollView style={styles.container}>
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.version')}</Text>
             <Chip
               icon="information-outline"
@@ -139,7 +139,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.language')}</Text>
             <Chip
               icon="translate"
@@ -152,7 +152,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.notifications')}</Text>
             <Chip
               icon={
@@ -169,7 +169,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.clock-format')}</Text>
             <Chip
               icon="clock-outline"
@@ -182,7 +182,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.first-day')}</Text>
             <Chip
               icon="calendar"
@@ -195,7 +195,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.card-duration')}</Text>
             <Chip
               icon="clock-outline"
@@ -208,7 +208,7 @@ const SettingsView = () => {
         </Card>
 
         <Card style={styles.card}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.theme')}</Text>
             <Chip
               icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}

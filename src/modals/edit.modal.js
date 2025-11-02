@@ -80,7 +80,7 @@ const EditModal = ({
       onDismiss={onDismiss}
       contentContainerStyle={styles.modal}>
       <Card.Content>
-        <View style={styles.title}>
+        <View style={styles.modal__title}>
           <Text variant="titleMedium">{label || t(`card.${field}`)}</Text>
           <IconButton icon="close" size={20} onPress={onDismiss} />
         </View>

@@ -83,7 +83,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
       onDismiss={onDismiss}
       contentContainerStyle={styles.modal}>
       <Card.Content>
-        <View style={styles.title}>
+        <View style={styles.modal__title}>
           <Text variant="titleLarge">{t('title.add')}</Text>
           <IconButton
             icon="close"

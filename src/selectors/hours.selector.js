@@ -65,7 +65,7 @@ const HoursSelector = ({repeatHours, setRepeatHours}) => {
       <SegmentedButtons
         value={partOfDay}
         onValueChange={setPartOfDay}
-        style={styles.segment}
+        style={styles.segmentButtons}
         buttons={[
           {value: 'morning', label: t('hour.morning')},
           {value: 'afternoon', label: t('hour.afternoon')},

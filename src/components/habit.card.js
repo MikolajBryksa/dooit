@@ -67,7 +67,7 @@ const HabitCard = ({
     <>
       <Card style={styles.card}>
         <Animated.View style={{opacity: cardOpacity}}>
-          <Card.Content style={styles.card__title}>
+          <Card.Content style={styles.card__header}>
             <View style={styles.card__options}>
               <TouchableRipple
                 onPress={() => openEditModal('habitName', habitName)}>
@@ -101,7 +101,7 @@ const HabitCard = ({
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,
           }}>
-          <Card.Content style={styles.card__container}>
+          <Card.Content style={styles.card__list}>
             {!onboardingMode && (
               <TouchableRipple
                 onPress={() => openEditModal('habitEnemy', habitEnemy)}>

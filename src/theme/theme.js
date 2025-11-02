@@ -10,7 +10,7 @@ export const getTheme = currentTheme => {
 
   const dimensions = {
     height: 60,
-    padding: 10,
+    gap: 10,
     margin: 5,
   };
 

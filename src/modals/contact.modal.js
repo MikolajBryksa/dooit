@@ -90,7 +90,7 @@ const ContactModal = ({visible, onDismiss}) => {
       onDismiss={handleDismiss}
       contentContainerStyle={styles.modal}>
       <Card.Content>
-        <View style={styles.title}>
+        <View style={styles.modal__title}>
           <Text variant="titleLarge">{t('title.contact')}</Text>
           <IconButton
             icon="close"

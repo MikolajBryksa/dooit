@@ -18,6 +18,7 @@ import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
 import NoHabitsCard from '@/components/no-habits.card';
 import LoadingHabitsCard from '@/components/loading-habits.card';
+import MainCard from '@/components/main.card';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -308,7 +309,6 @@ const HomeView = () => {
             />
           ))
         )}
-        <View style={styles.gap} />
       </ScrollView>
     </>
   );

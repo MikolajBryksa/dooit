@@ -5,14 +5,15 @@ export const useStyles = () => {
   const theme = useTheme();
 
   return StyleSheet.create({
+    // main elements
     container: {
       flex: 1,
-      padding: theme.dimensions.padding,
+      padding: theme.dimensions.gap,
       backgroundColor: theme.colors.background,
     },
     container__center: {
       flex: 1,
-      padding: theme.dimensions.padding,
+      padding: theme.dimensions.gap,
       backgroundColor: theme.colors.background,
       justifyContent: 'center',
       alignItems: 'center',
@@ -25,18 +26,23 @@ export const useStyles = () => {
       borderTopWidth: 3,
       borderTopColor: theme.colors.background,
     },
+    gap: {
+      height: theme.dimensions.margin * 3,
+    },
+    // onboarding
     onboarding__card: {
       height: theme.dimensions.height * 2,
       justifyContent: 'center',
       width: '100%',
-      marginBottom: theme.dimensions.padding,
+      marginBottom: theme.dimensions.gap,
     },
     onboarding__bar: {
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: theme.dimensions.padding * 3,
-      marginTop: theme.dimensions.padding * 3,
+      marginBottom: theme.dimensions.gap * 3,
+      marginTop: theme.dimensions.gap * 3,
     },
+    // buttons
     button: {
       alignSelf: 'center',
     },
@@ -44,37 +50,85 @@ export const useStyles = () => {
       alignSelf: 'center',
       backgroundColor: theme.colors.error,
     },
-    title: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      height: theme.dimensions.height / 2,
-      marginBottom: theme.dimensions.margin,
-    },
+    // now card
     card: {
-      minHeight: theme.dimensions.height,
-      width: '100%',
-      marginBottom: theme.dimensions.padding,
+      marginBottom: theme.dimensions.gap,
     },
-    card__container: {
-      flex: 1,
-    },
-    card__center: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginVertical: theme.dimensions.padding,
-    },
-    card__deactivated: {
-      minHeight: theme.dimensions.height,
-      width: '100%',
-      marginBottom: theme.dimensions.padding,
-      opacity: 0.5,
-    },
-    card__selected: {
+    card__outline: {
+      backgroundColor: theme.colors.primaryContainer,
       borderColor: theme.colors.primary,
       borderWidth: 2,
+      marginBottom: theme.dimensions.gap,
     },
-    card__title: {
+    card__center: {
+      width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: theme.dimensions.gap,
+    },
+    card__iconContainer: {
+      width: '100%',
+      paddingTop: theme.dimensions.gap,
+      paddingBottom: theme.dimensions.gap * 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__titleContainer: {
+      width: '100%',
+      paddingBottom: theme.dimensions.gap,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__progressContainer: {
+      width: '100%',
+      paddingBottom: theme.dimensions.gap,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__contentContainer: {
+      width: '100%',
+      paddingBottom: theme.dimensions.gap,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__buttonsContainer: {
+      width: '100%',
+      paddingBottom: theme.dimensions.gap,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__choices: {
+      paddingTop: theme.dimensions.gap,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__buttons: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      paddingTop: theme.dimensions.margin,
+      gap: theme.dimensions.gap,
+      alignItems: 'center',
+    },
+    progress__container: {
+      width: '50%',
+    },
+    progress__bar: {
+      marginVertical: theme.dimensions.gap,
+      height: theme.dimensions.margin,
+      borderRadius: theme.dimensions.margin / 2,
+    },
+    motivation__message: {
+      textAlign: 'center',
+    },
+    summary__text: {
+      textAlign: 'center',
+      lineHeight: 22,
+    },
+    // habit & settings card
+    card__list: {
+      flex: 1,
+    },
+    card__header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       minHeight: theme.dimensions.height * 0.8,
@@ -89,24 +143,6 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
     },
-    card__buttons: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      marginTop: theme.dimensions.padding,
-      gap: theme.dimensions.padding,
-      alignItems: 'center',
-    },
-    card__choices: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: theme.dimensions.padding,
-      marginVertical: theme.dimensions.margin,
-    },
-    card__end: {
-      backgroundColor: theme.colors.primaryContainer,
-      borderColor: theme.colors.primary,
-      borderWidth: 2,
-    },
     chip: {
       borderRadius: 12,
     },
@@ -114,61 +150,24 @@ export const useStyles = () => {
       borderRadius: 12,
       marginBottom: theme.dimensions.margin,
     },
-    segment: {
-      marginVertical: theme.dimensions.padding,
-    },
-    progress__container: {
-      width: '50%',
-    },
-    progress__bar: {
-      marginVertical: theme.dimensions.padding,
-      height: theme.dimensions.margin,
-      borderRadius: theme.dimensions.margin / 2,
-    },
-    motivation__message: {
-      textAlign: 'center',
-      fontStyle: 'italic',
-    },
-    gap: {
-      height: theme.dimensions.margin * 3,
-    },
+    // modal
     modal: {
       backgroundColor: theme.colors.surface,
-      margin: theme.dimensions.padding * 2,
-      paddingTop: theme.dimensions.padding * 2,
-      paddingBottom: theme.dimensions.padding * 2,
-      paddingHorizontal: theme.dimensions.padding,
+      margin: theme.dimensions.gap * 2,
+      paddingTop: theme.dimensions.gap * 2,
+      paddingBottom: theme.dimensions.gap * 2,
+      paddingHorizontal: theme.dimensions.gap,
       borderRadius: 28,
     },
-    plan: {
-      maxHeight: 400,
-    },
-    daysSelector__container: {
-      justifyContent: 'flex-end',
-      alignItems: 'center',
+    modal__title: {
       flexDirection: 'row',
-      width: '100%',
-      marginTop: theme.dimensions.margin,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      height: theme.dimensions.height / 2,
+      marginBottom: theme.dimensions.margin,
     },
-    daysSelector__chip: {
-      marginLeft: theme.dimensions.margin,
-      borderRadius: 25,
-    },
-    end__icon: {
-      fontSize: 48,
-      textAlign: 'center',
-    },
-    end__title: {
-      textAlign: 'center',
-      fontWeight: 'bold',
-    },
-    end__tomorrow: {
-      textAlign: 'center',
-      opacity: 0.7,
-    },
-    summary__text: {
-      textAlign: 'center',
-      lineHeight: 22,
+    segmentButtons: {
+      marginVertical: theme.dimensions.gap,
     },
   });
 };
