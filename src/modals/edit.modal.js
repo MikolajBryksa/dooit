@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Modal,
   Text,
@@ -27,6 +27,7 @@ const EditModal = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const hoursResetRef = useRef(null);
 
   const normalizeArray = val => {
     if (Array.isArray(val)) return val;
@@ -74,6 +75,12 @@ const EditModal = ({
     }
   };
 
+  const handleReset = () => {
+    if (field === 'repeatHours' && hoursResetRef.current) {
+      hoursResetRef.current();
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -93,6 +100,7 @@ const EditModal = ({
           <HoursSelector
             repeatHours={inputValue}
             setRepeatHours={setInputValue}
+            onResetRef={hoursResetRef}
           />
         )}
 
@@ -120,6 +128,11 @@ const EditModal = ({
           />
         )}
         <Card.Actions>
+          {field === 'repeatHours' && (
+            <Button mode="outlined" onPress={handleReset} icon="refresh">
+              {t('button.reset')}
+            </Button>
+          )}
           <Button
             mode="contained"
             onPress={handleSave}

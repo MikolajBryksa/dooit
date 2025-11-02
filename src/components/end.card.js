@@ -22,6 +22,7 @@ const EndCard = ({weekdayKey}) => {
   const [showHintsButton, setShowHintsButton] = useState(false);
   const [loadingHints, setLoadingHints] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
+  const [aiHintsGenerated, setAiHintsGenerated] = useState(false);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
@@ -206,7 +207,7 @@ const EndCard = ({weekdayKey}) => {
           return newText;
         });
         setCurrentChar(currentChar + 1);
-      }, 50); // Speed of typing
+      }, 20); // Speed of typing
 
       return () => clearTimeout(timer);
     } else if (currentParagraph < summaryData.paragraphs.length - 1) {
@@ -228,10 +229,12 @@ const EndCard = ({weekdayKey}) => {
 
   // Show hints button after typing is complete
   useEffect(() => {
-    if (typingComplete) {
+    if (typingComplete && !aiHintsGenerated) {
       setShowHintsButton(true);
+    } else {
+      setShowHintsButton(false);
     }
-  }, [typingComplete]);
+  }, [typingComplete, aiHintsGenerated]);
 
   const handleHintsRequest = async () => {
     setLoadingHints(true);
@@ -286,6 +289,7 @@ const EndCard = ({weekdayKey}) => {
       setTypingComplete(false);
       setLoadingHints(false);
       setShowHintsButton(false);
+      setAiHintsGenerated(true);
 
       // Save AI response to database
       try {
@@ -304,6 +308,7 @@ const EndCard = ({weekdayKey}) => {
     } catch (error) {
       setLoadingHints(false);
       setShowHintsButton(false);
+      setAiHintsGenerated(true);
       console.error('AI request error:', error);
       const errorMessage = t('summary.error') || 'Error fetching hints';
       const currentParagraphs = summaryData.paragraphs || [];

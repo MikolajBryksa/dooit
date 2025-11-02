@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {Chip, SegmentedButtons} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 
-const HoursSelector = ({repeatHours, setRepeatHours}) => {
+const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const clockFormat = useSelector(state => state.settings.clockFormat);
 
   // 'morning' | 'afternoon' | 'evening'
   const [partOfDay, setPartOfDay] = React.useState('morning');
+
+  // Expose reset method via ref
+  useEffect(() => {
+    if (onResetRef) {
+      onResetRef.current = () => {
+        setRepeatHours([]);
+      };
+    }
+  }, [onResetRef, setRepeatHours]);
 
   const to24h = str => {
     if (!/AM|PM/.test(str)) return str;
