@@ -11,6 +11,7 @@ const MainCard = ({
   titleContent = null,
   progressContent = null,
   mainContent = null,
+  textContent = null,
   buttonsContent = null,
 }) => {
   const styles = useStyles();
@@ -45,6 +46,10 @@ const MainCard = ({
           {/* main content container */}
           {mainContent && (
             <View style={styles.card__contentContainer}>{mainContent}</View>
+          )}
+          {/* text content container with scroll */}
+          {textContent && (
+            <View style={styles.card__textContainer}>{textContent}</View>
           )}
           {/* buttons container */}
           {buttonsContent && (

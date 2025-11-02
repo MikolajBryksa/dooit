@@ -91,6 +91,10 @@ export const useStyles = () => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    card__textContainer: {
+      width: '100%',
+      flex: 1,
+    },
     card__buttonsContainer: {
       width: '100%',
       paddingBottom: theme.dimensions.gap,
@@ -105,7 +109,7 @@ export const useStyles = () => {
     card__buttons: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      paddingTop: theme.dimensions.margin,
+      paddingTop: theme.dimensions.gap,
       gap: theme.dimensions.gap,
       alignItems: 'center',
     },
@@ -120,9 +124,16 @@ export const useStyles = () => {
     motivation__message: {
       textAlign: 'center',
     },
+    summary_container: {
+      flex: 1,
+      width: '100%',
+      paddingHorizontal: theme.dimensions.gap,
+      paddingBottom: theme.dimensions.margin,
+    },
     summary__text: {
       textAlign: 'center',
       lineHeight: 22,
+      marginBottom: theme.dimensions.gap,
     },
     // habit & settings card
     card__list: {

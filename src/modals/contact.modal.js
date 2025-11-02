@@ -12,7 +12,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
-import {useNetworkStatus} from '@/hooks/useNetworkStatus';
+import {useNetworkStatus} from '@/hooks';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();

@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Text, ActivityIndicator, Button} from 'react-native-paper';
-import {View, Animated} from 'react-native';
+import {Animated, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
-import {useNetworkStatus} from '@/hooks/useNetworkStatus';
+import {useNetworkStatus} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 
@@ -20,14 +20,11 @@ const EndCard = ({weekdayKey}) => {
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChar, setCurrentChar] = useState(0);
   const [showHintsButton, setShowHintsButton] = useState(false);
-  const [hintsRequested, setHintsRequested] = useState(false);
   const [loadingHints, setLoadingHints] = useState(false);
-  const [hintsText, setHintsText] = useState('');
   const [typingComplete, setTypingComplete] = useState(false);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
-  const containerHeight = useRef(new Animated.Value(0)).current;
   const buttonOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -36,18 +33,13 @@ const EndCard = ({weekdayKey}) => {
         Animated.timing(opacity, {
           toValue: 1,
           duration: 800,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }),
         Animated.spring(scale, {
           toValue: 1,
           tension: 50,
           friction: 7,
-          useNativeDriver: false,
-        }),
-        Animated.timing(containerHeight, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }),
       ]),
     ]).start();
@@ -242,7 +234,6 @@ const EndCard = ({weekdayKey}) => {
   }, [typingComplete]);
 
   const handleHintsRequest = async () => {
-    setHintsRequested(true);
     setLoadingHints(true);
 
     try {
@@ -282,14 +273,21 @@ const EndCard = ({weekdayKey}) => {
       const data = await response.json();
       const aiResponse =
         data?.reply || data?.message || t('summary.no_response');
-      // Zamiast setHintsText, uruchom typewriter na AI odpowiedzi
-      setLoadingHints(false);
-      setSummaryData({paragraphs: [aiResponse], stats: {}});
-      setDisplayedText([]);
-      setCurrentParagraph(0);
+
+      // Add AI response to existing paragraphs
+      const currentParagraphs = summaryData.paragraphs || [];
+      setSummaryData({
+        paragraphs: [...currentParagraphs, aiResponse],
+        stats: summaryData.stats,
+      });
+      // Continue typewriter from where it was
+      setCurrentParagraph(currentParagraphs.length);
       setCurrentChar(0);
       setTypingComplete(false);
+      setLoadingHints(false);
+      setShowHintsButton(false);
 
+      // Save AI response to database
       try {
         const userId = getSettingValue('userId');
         if (userId) {
@@ -301,12 +299,21 @@ const EndCard = ({weekdayKey}) => {
             .eq('user_id', userId);
         }
       } catch (error) {
-        console.error(error);
+        console.error('Database save error:', error);
       }
     } catch (error) {
-      setHintsText('AI error: ' + error.message);
       setLoadingHints(false);
-      console.error(error);
+      setShowHintsButton(false);
+      console.error('AI request error:', error);
+      const errorMessage = t('summary.error') || 'Error fetching hints';
+      const currentParagraphs = summaryData.paragraphs || [];
+      setSummaryData({
+        paragraphs: [...currentParagraphs, errorMessage],
+        stats: summaryData.stats,
+      });
+      setCurrentParagraph(currentParagraphs.length);
+      setCurrentChar(0);
+      setTypingComplete(false);
     }
   };
 
@@ -314,16 +321,11 @@ const EndCard = ({weekdayKey}) => {
     <MainCard
       outline={true}
       animatedStyle={{
-        opacity: containerHeight,
-        height: containerHeight.interpolate({
-          inputRange: [0, 1],
-          outputRange: [300, 450],
-        }),
-        overflow: 'hidden',
+        minHeight: 500,
       }}
       iconContent={
         <Animated.View style={{opacity, transform: [{scale}]}}>
-          {<StatusIconCircle end />}
+          <StatusIconCircle end />
         </Animated.View>
       }
       titleContent={
@@ -331,39 +333,19 @@ const EndCard = ({weekdayKey}) => {
           <Text variant="titleLarge">{t('card.done')}</Text>
         </Animated.View>
       }
-      mainContent={
-        <Animated.View style={{opacity, transform: [{scale}]}}>
-          <View>
-            {displayedText.map((paragraph, index) => (
-              <Text
-                key={index}
-                variant="bodyMedium"
-                style={[styles.summary__text, {marginBottom: 16}]}>
-                {paragraph}
-              </Text>
-            ))}
-
-            {hintsRequested && (
-              <View>
-                {loadingHints ? (
-                  <View style={[{marginTop: 8}]}>
-                    <ActivityIndicator size="small" />
-                  </View>
-                ) : (
-                  <Text variant="bodyMedium" style={[styles.summary__text]}>
-                    {hintsText}
-                  </Text>
-                )}
-              </View>
-            )}
-          </View>
-        </Animated.View>
+      textContent={
+        <ScrollView style={styles.summary_container}>
+          {displayedText.map((paragraph, index) => (
+            <Text key={index} variant="bodyMedium" style={styles.summary__text}>
+              {paragraph}
+            </Text>
+          ))}
+        </ScrollView>
       }
       buttonsContent={
-        showHintsButton && !hintsRequested ? (
+        showHintsButton ? (
           <Animated.View
             style={{
-              marginTop: 8,
               opacity: buttonOpacity,
               transform: [{scale}],
             }}>
@@ -371,9 +353,19 @@ const EndCard = ({weekdayKey}) => {
               style={styles.button}
               mode="contained"
               onPress={handleHintsRequest}
-              disabled={!isConnected}
-              icon={!isConnected ? 'wifi-off' : undefined}>
-              {!isConnected ? t('button.offline') : t('button.hints')}
+              disabled={!isConnected || loadingHints}
+              icon={
+                !isConnected
+                  ? 'wifi-off'
+                  : loadingHints
+                  ? () => <ActivityIndicator size={16} />
+                  : 'auto-fix'
+              }>
+              {!isConnected
+                ? t('button.offline')
+                : loadingHints
+                ? t('button.generating')
+                : t('button.hints')}
             </Button>
           </Animated.View>
         ) : null

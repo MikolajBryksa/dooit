@@ -3,7 +3,6 @@ import {Text, Button, ProgressBar} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {useSelector} from 'react-redux';
 import {updateHabit} from '@/services/habits.service';
 import {addHour, pickRandomMotivation} from '@/utils';
 import {useCurrentTime} from '@/hooks';
@@ -28,7 +27,6 @@ const NowCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const debugMode = useSelector(state => state.settings.debugMode);
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
   const [motivation, setMotivation] = useState(

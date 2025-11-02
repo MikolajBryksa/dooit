@@ -64,7 +64,8 @@
     "send": "Wyślij",
     "sent": "Wysłano",
     "offline": "Offline",
-    "hints": "Podpowiedzi"
+    "hints": "Podpowiedzi",
+    "generating": "Generowanie"
   },
   "contact": {
     "email": "Twój e-mail",

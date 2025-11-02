@@ -3,22 +3,6 @@ import {View, StyleSheet, Animated, Easing} from 'react-native';
 import {Avatar, useTheme} from 'react-native-paper';
 import Svg, {Circle, Defs, LinearGradient, Stop, G} from 'react-native-svg';
 
-/**
- * StatusIconCircle
- *
- * Minimal, easy-to-maintain status ring that visually matches the existing diagram
- * (same circular shape, same default colors), but has a different job: show an icon
- * with a status ring around it.
- *
- * Props (boolean flags; if multiple are true, priority is: loading > end > empty):
- * - end:    show celebration/win icon; ring color = good choices color (theme.primary)
- * - loading:show hourglass/time icon; ring is a spinning segment with a subtle gradient
- * - empty:  show X icon; ring color = skip color (same as previous diagram's skip)
- *
- * Shared styling:
- * - Track uses theme.colors.surfaceVariant to match the diagram
- * - Ring shape and proportions match via size & strokeWidth
- */
 const StatusIconCircle = ({
   end = false,
   loading = false,
@@ -29,12 +13,9 @@ const StatusIconCircle = ({
 }) => {
   const theme = useTheme();
 
-  // color mapping aligned with the original diagram
-  const goodColor = theme?.colors?.primary; // good choices
-  const skipColor = theme?.colors?.background; // skip
-  const trackColor = theme?.colors?.surfaceVariant; // background track
+  const goodColor = theme?.colors?.primary;
+  const trackColor = theme?.colors?.surfaceVariant;
 
-  // geometry
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2;
   const cy = size / 2;
@@ -44,12 +25,9 @@ const StatusIconCircle = ({
     return iconSizeProp ?? Math.max(24, size - (strokeWidth + 8) * 2);
   }, [iconSizeProp, size, strokeWidth]);
 
-  // STATUS RESOLUTION (priority: loading > end > empty)
   const isLoading = !!loading;
   const isEnd = !isLoading && !!end;
-  const isEmpty = !isLoading && !isEnd && !!empty;
 
-  // ---- LOADING ANIMATION (spinning ring) ----
   const spin = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     if (isLoading) {
@@ -73,16 +51,10 @@ const StatusIconCircle = ({
     outputRange: ['0deg', '360deg'],
   });
 
-  // Spinner segment length (portion of circumference)
-  const spinnerArc = Math.max(24, C * 0.28);
-
-  // We keep the gradient definition simple/maintainable. Using a linear gradient across the canvas
-  // and rotating only the segment creates a visible shimmer that makes the motion clear without
-  // complex SVG animation.
+  const spinnerArc = Math.max(24, C * 0.7);
 
   return (
     <View style={[styles.container, {width: size, height: size}]}>
-      {/* --- BACKGROUND TRACK, always visible to keep the look consistent with the diagram --- */}
       <Svg width={size} height={size}>
         <Circle
           cx={cx}
@@ -95,7 +67,6 @@ const StatusIconCircle = ({
         />
       </Svg>
 
-      {/* --- STATUS RING LAYER --- */}
       {!isLoading && (
         <Svg width={size} height={size} style={StyleSheet.absoluteFill}>
           <Circle
@@ -115,19 +86,11 @@ const StatusIconCircle = ({
           style={[StyleSheet.absoluteFill, {transform: [{rotate}]}]}>
           <Svg width={size} height={size}>
             <Defs>
-              <LinearGradient
-                id="spinGrad"
-                x1="0"
-                y1="0"
-                x2={size}
-                y2={size}
-                gradientUnits="userSpaceOnUse">
-                <Stop offset="0%" stopColor={goodColor} stopOpacity="0.15" />
-                <Stop offset="50%" stopColor={goodColor} stopOpacity="0.85" />
-                <Stop offset="100%" stopColor={goodColor} stopOpacity="0.3" />
+              <LinearGradient id="spinGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <Stop offset="0%" stopColor={goodColor} stopOpacity="1" />
+                <Stop offset="100%" stopColor={goodColor} stopOpacity="0" />
               </LinearGradient>
             </Defs>
-            {/* a single segment that rotates around */}
             <G rotation="-90" origin={`${cx}, ${cy}`}>
               <Circle
                 cx={cx}
@@ -145,7 +108,6 @@ const StatusIconCircle = ({
         </Animated.View>
       )}
 
-      {/* --- CENTER ICON --- */}
       <View pointerEvents="none" style={styles.centerContent}>
         <Avatar.Icon
           size={iconSize}
