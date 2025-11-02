@@ -71,7 +71,12 @@ const HabitCard = ({
             <View style={styles.card__options}>
               <TouchableRipple
                 onPress={() => openEditModal('habitName', habitName)}>
-                <Text variant="titleMedium">{habitName}</Text>
+                <Text
+                  variant="titleMedium"
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {habitName}
+                </Text>
               </TouchableRipple>
             </View>
             {!onboardingMode && (
@@ -114,7 +119,9 @@ const HabitCard = ({
                   <View style={{flex: 1}}>
                     <Text
                       variant="bodyMedium"
-                      style={{maxWidth: '100%', flexShrink: 1}}>
+                      style={{maxWidth: '100%', flexShrink: 1}}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
                       {habitEnemy}
                     </Text>
                   </View>

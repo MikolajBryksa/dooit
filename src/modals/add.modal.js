@@ -104,7 +104,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
               label={t('card.habitName')}
               value={habitName}
               onChangeText={setHabitName}
-              maxLength={30}
+              maxLength={60}
             />
           </>
         )}
@@ -117,7 +117,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
               label={t('card.habitEnemy')}
               value={habitEnemy}
               onChangeText={setHabitEnemy}
-              maxLength={30}
+              maxLength={60}
             />
           </>
         )}

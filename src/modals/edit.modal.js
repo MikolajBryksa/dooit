@@ -104,7 +104,7 @@ const EditModal = ({
             keyboardType="numeric"
             autoFocus
             style={{marginBottom: 16}}
-            maxLength={3}
+            maxLength={5}
           />
         )}
 
@@ -116,7 +116,7 @@ const EditModal = ({
             keyboardType={keyboardType}
             autoFocus
             style={{marginBottom: 16}}
-            maxLength={30}
+            maxLength={60}
           />
         )}
         <Card.Actions>

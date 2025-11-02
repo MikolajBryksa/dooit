@@ -114,6 +114,7 @@ const ContactModal = ({visible, onDismiss}) => {
             autoCapitalize="none"
             disabled={loading || success}
             style={{marginBottom: 12}}
+            maxLength={60}
           />
 
           <TextInput
@@ -125,6 +126,7 @@ const ContactModal = ({visible, onDismiss}) => {
             numberOfLines={4}
             disabled={loading || success}
             style={{marginBottom: 8}}
+            maxLength={2000}
           />
         </ScrollView>
 
