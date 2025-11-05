@@ -6,6 +6,7 @@ import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
+import {generateAIHints} from '@/services/ai.service';
 import {useNetworkStatus} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
@@ -246,43 +247,7 @@ const EndCard = ({weekdayKey}) => {
     setLoadingHints(true);
 
     try {
-      const language = getSettingValue('language');
-      const userName = getSettingValue('userName');
-      const stats = summaryData.stats;
-      let prompt = '';
-      if (language === 'pl') {
-        prompt += `Użytkownik o imieniu ${userName} do tej pory wykonał ${stats.totalActions} powtórzeń wszystkich nawyków. `;
-        if (stats.bestHabit) {
-          prompt += `Najlepiej idzie użytkownikowi: ${stats.bestHabit.habitName} ze skutecznością na poziomie ${stats.maxSuccessRate}%. `;
-        }
-        if (stats.worstHabit) {
-          prompt += `Najgorzej idzie użytkownikowi: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
-        }
-        prompt += `Napisz krótką poradę lub motywację dla użytkownika, zwracając się do niego po imieniu (${userName}). Odpowiedź powinna korzystnie wpłynąć na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity.`;
-      } else {
-        prompt += `The user named ${userName} has completed ${stats.totalActions} repetitions of all habits so far. `;
-        if (stats.bestHabit) {
-          prompt += `The best performing habit is: ${stats.bestHabit.habitName} with a success rate of ${stats.maxSuccessRate}%. `;
-        }
-        if (stats.worstHabit) {
-          prompt += `The weakest habit is: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
-        }
-        prompt += `Write a short piece of advice or motivation for the user, addressing them by name (${userName}). The answer should positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs.`;
-      }
-
-      const response = await fetch(
-        'https://dooit-p7ffyo32ea-lm.a.run.app/api/agent/run',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({message: prompt}),
-        },
-      );
-      const data = await response.json();
-      const aiResponse =
-        data?.reply || data?.message || t('summary.no_response');
+      const aiResponse = await generateAIHints(summaryData.stats);
 
       // Add AI response to existing paragraphs
       const currentParagraphs = summaryData.paragraphs || [];
@@ -297,21 +262,6 @@ const EndCard = ({weekdayKey}) => {
       setLoadingHints(false);
       setShowHintsButton(false);
       setAiHintsGenerated(true);
-
-      // Save AI response to database
-      try {
-        const userId = getSettingValue('userId');
-        if (userId) {
-          await supabase
-            .from('Users')
-            .update({
-              ai_summary: aiResponse,
-            })
-            .eq('user_id', userId);
-        }
-      } catch (error) {
-        console.error('Database save error:', error);
-      }
     } catch (error) {
       setLoadingHints(false);
       setShowHintsButton(false);

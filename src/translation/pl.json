@@ -39,17 +39,6 @@
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
     "support": "Cześć! 👋\n\nJestem niezależnym twórcą, który stworzył tę aplikację z pasją i przy wielu kawusiach ☕.\n\nJeśli lubisz z niej korzystać i chcesz pomóc dalej ją rozwijać - możesz postawić mi kawę. To naprawdę wiele dla mnie znaczy!\n\n~ Mikołaj Bryksa"
   },
-  "summary": {
-    "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "total_actions": "Masz za sobą już {{count}} powtórzeń nawyków!",
-    "good_rate_high": "Aż {{rate}}% wszystkich Twoich wyborów to dobre decyzje.",
-    "bad_rate_high": "Jednak w aż {{rate}}% sytuacji wybierasz to co jest łatwiejsze.",
-    "best_habit": "Najlepiej Ci idzie nawyk {{habit}}.",
-    "best_habit_rate": "(aż {{rate}}% skuteczności)",
-    "worst_habit": "Nawyk {{habit}} wymaga większej uwagi.",
-    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)",
-    "no_response": "AI nie udzieliło odpowiedzi."
-  },
   "button": {
     "delete": "Usuń",
     "cancel": "Anuluj",
@@ -258,5 +247,23 @@
       "Co dziś wywołało Twój uśmiech?",
       "Co dziś nauczyło Cię czegoś nowego?"
     ]
+  },
+  "summary": {
+    "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
+    "total_actions": "Masz za sobą już {{count}} powtórzeń nawyków!",
+    "good_rate_high": "Aż {{rate}}% wszystkich Twoich wyborów to dobre decyzje.",
+    "bad_rate_high": "Jednak w aż {{rate}}% sytuacji wybierasz to co jest łatwiejsze.",
+    "best_habit": "Najlepiej Ci idzie nawyk {{habit}}.",
+    "best_habit_rate": "(aż {{rate}}% skuteczności)",
+    "worst_habit": "Nawyk {{habit}} wymaga większej uwagi.",
+    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)",
+    "no_response": "AI nie udzieliło odpowiedzi.",
+    "error": "Błąd podczas pobierania podpowiedzi"
+  },
+  "ai": {
+    "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",
+    "prompt_best_habit": "Najlepiej idzie użytkownikowi: {{habitName}} ze skutecznością na poziomie {{successRate}}%. ",
+    "prompt_worst_habit": "Najgorzej idzie użytkownikowi: {{habitName}} ({{successRate}}%). ",
+    "prompt_instructions_pl": "Napisz krótką poradę lub motywację dla użytkownika, zwracając się do niego po imieniu ({{userName}}). Odpowiedź powinna korzystnie wpłynąć na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity."
   }
 }

@@ -39,17 +39,6 @@
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hey there! 👋\n\nI'm an independent developer who built this app with love and many cups of coffee ☕.\n\nIf you enjoy using it and want to help me keep improving it, consider buying me a coffee. It really means a lot!\n\n~ Mikołaj Bryksa"
   },
-  "summary": {
-    "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
-    "total_actions": "You have {{count}} habit repetitions behind you!",
-    "good_rate_high": "As much as {{rate}}% of all your choices are good decisions.",
-    "bad_rate_high": "However, in as much as {{rate}}% of situations you choose what is easier.",
-    "best_habit": "Your best habit is {{habit}}.",
-    "best_habit_rate": "(as much as {{rate}}% effectiveness)",
-    "worst_habit": "Focus on the habit of {{habit}}.",
-    "worst_habit_rate": "(only {{rate}}% effectiveness)",
-    "no_response": "AI has not provided a response."
-  },
   "button": {
     "delete": "Delete",
     "cancel": "Cancel",
@@ -258,5 +247,23 @@
       "What brought a smile to your face today?",
       "What taught you something new today?"
     ]
+  },
+  "summary": {
+    "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
+    "total_actions": "You have {{count}} habit repetitions behind you!",
+    "good_rate_high": "As much as {{rate}}% of all your choices are good decisions.",
+    "bad_rate_high": "However, in as much as {{rate}}% of situations you choose what is easier.",
+    "best_habit": "Your best habit is {{habit}}.",
+    "best_habit_rate": "(as much as {{rate}}% effectiveness)",
+    "worst_habit": "Focus on the habit of {{habit}}.",
+    "worst_habit_rate": "(only {{rate}}% effectiveness)",
+    "no_response": "AI has not provided a response.",
+    "error": "Error fetching hints"
+  },
+  "ai": {
+    "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",
+    "prompt_best_habit": "The best performing habit is: {{habitName}} with a success rate of {{successRate}}%. ",
+    "prompt_worst_habit": "The weakest habit is: {{habitName}} ({{successRate}}%). ",
+    "prompt_instructions_en": "Write a short piece of advice or motivation for the user, addressing them by name ({{userName}}). The answer should positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs."
   }
 }
