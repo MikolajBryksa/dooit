@@ -101,7 +101,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
             <Text variant="bodyMedium">{t('addStep.habitName')}</Text>
             <TextInput
               mode="outlined"
-              label={t('card.habitName')}
+              placeholder={t('card.habitName')}
               value={habitName}
               onChangeText={setHabitName}
               maxLength={60}
@@ -114,7 +114,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
             <Text variant="bodyMedium">{t('addStep.habitEnemy')}</Text>
             <TextInput
               mode="outlined"
-              label={t('card.habitEnemy')}
+              placeholder={t('card.habitEnemy')}
               value={habitEnemy}
               onChangeText={setHabitEnemy}
               maxLength={60}

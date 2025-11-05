@@ -109,7 +109,7 @@ const ContactModal = ({visible, onDismiss}) => {
 
           <TextInput
             mode="outlined"
-            label={t('contact.email')}
+            placeholder={t('contact.email')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -121,13 +121,13 @@ const ContactModal = ({visible, onDismiss}) => {
 
           <TextInput
             mode="outlined"
-            label={t('contact.message')}
+            placeholder={t('contact.message')}
             value={message}
             onChangeText={setMessage}
             multiline
             numberOfLines={4}
             disabled={loading || success}
-            style={{marginBottom: 8}}
+            style={{marginBottom: 8, paddingTop: 8}}
             maxLength={2000}
           />
         </ScrollView>

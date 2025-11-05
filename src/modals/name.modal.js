@@ -50,7 +50,7 @@ const NameModal = ({visible, onDismiss}) => {
 
         <TextInput
           mode="outlined"
-          label={t('settings.user-name')}
+          placeholder={t('settings.user-name')}
           value={tempUserName}
           onChangeText={setTempUserName}
           autoFocus
