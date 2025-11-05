@@ -264,6 +264,6 @@
     "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",
     "prompt_best_habit": "Najlepiej idzie użytkownikowi: {{habitName}} ze skutecznością na poziomie {{successRate}}%. ",
     "prompt_worst_habit": "Najgorzej idzie użytkownikowi: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_pl": "Napisz krótką poradę lub motywację dla użytkownika, zwracając się do niego po imieniu ({{userName}}). Odpowiedź powinna korzystnie wpłynąć na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity."
+    "prompt_instructions_pl": "Kieruj swoją odpowiedź bezpośrednio do użytkownika, zwracając się do niego po imieniu ({{userName}}) i napisz ją w języku polskim."
   }
 }

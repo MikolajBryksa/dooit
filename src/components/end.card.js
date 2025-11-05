@@ -22,8 +22,9 @@ const EndCard = ({weekdayKey}) => {
   const [currentChar, setCurrentChar] = useState(0);
   const [showHintsButton, setShowHintsButton] = useState(false);
   const [loadingHints, setLoadingHints] = useState(false);
-  const [typingComplete, setTypingComplete] = useState(false);
   const [aiHintsGenerated, setAiHintsGenerated] = useState(false);
+  const [aiGenerationStarted, setAiGenerationStarted] = useState(false);
+  const [aiError, setAiError] = useState(false);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
@@ -63,6 +64,13 @@ const EndCard = ({weekdayKey}) => {
       const summary = generateSummary(habits);
       setSummaryData(summary);
       summary && saveSummaryToSupabase(summary.stats);
+
+      // Start AI generation automatically in background
+      if (isConnected && !aiGenerationStarted) {
+        setAiGenerationStarted(true);
+        setLoadingHints(true);
+        generateAIHintsInBackground(summary.stats);
+      }
     }, 500);
     return () => clearTimeout(timer);
   }, [habits]);
@@ -191,6 +199,27 @@ const EndCard = ({weekdayKey}) => {
     }
   };
 
+  const generateAIHintsInBackground = async stats => {
+    try {
+      const aiResponse = await generateAIHints(stats);
+
+      // Add AI response as the 4th paragraph
+      setSummaryData(prevData => ({
+        paragraphs: [...prevData.paragraphs, aiResponse],
+        stats: prevData.stats,
+      }));
+
+      setLoadingHints(false);
+      setAiHintsGenerated(true);
+    } catch (error) {
+      console.error('AI request error:', error);
+      setLoadingHints(false);
+      setAiError(true);
+      // Show button to retry if AI failed
+      setShowHintsButton(true);
+    }
+  };
+
   // Typewriter effect
   useEffect(() => {
     if (!summaryData.paragraphs || summaryData.paragraphs.length === 0) {
@@ -224,58 +253,68 @@ const EndCard = ({weekdayKey}) => {
       }, 300); // Pause between paragraphs
 
       return () => clearTimeout(timer);
-    } else if (!typingComplete) {
-      // Last paragraph finished typing
-      const timer = setTimeout(() => {
-        setTypingComplete(true);
-      }, 400);
-
-      return () => clearTimeout(timer);
     }
-  }, [summaryData, currentParagraph, currentChar, typingComplete]);
+  }, [summaryData, currentParagraph, currentChar]);
 
-  // Show hints button after typing is complete
+  // Show hints button logic
   useEffect(() => {
-    if (typingComplete && !aiHintsGenerated) {
+    // Show button only if:
+    // 1. No internet when component mounted (AI never started)
+    // 2. AI generation failed with error
+    if (!isConnected && !aiGenerationStarted) {
       setShowHintsButton(true);
-    } else {
+    } else if (aiError && !aiHintsGenerated) {
+      setShowHintsButton(true);
+    } else if (loadingHints && currentParagraph >= 2) {
+      // Show "generating" button if AI is still loading after 3rd paragraph
+      setShowHintsButton(true);
+    } else if (aiHintsGenerated) {
       setShowHintsButton(false);
     }
-  }, [typingComplete, aiHintsGenerated]);
+  }, [
+    isConnected,
+    aiGenerationStarted,
+    aiError,
+    aiHintsGenerated,
+    loadingHints,
+    currentParagraph,
+  ]);
 
   const handleHintsRequest = async () => {
+    if (!isConnected) {
+      return;
+    }
+
     setLoadingHints(true);
+    setAiError(false);
+    setShowHintsButton(false);
+
+    if (!aiGenerationStarted) {
+      setAiGenerationStarted(true);
+    }
 
     try {
       const aiResponse = await generateAIHints(summaryData.stats);
 
       // Add AI response to existing paragraphs
-      const currentParagraphs = summaryData.paragraphs || [];
-      setSummaryData({
-        paragraphs: [...currentParagraphs, aiResponse],
-        stats: summaryData.stats,
-      });
-      // Continue typewriter from where it was
-      setCurrentParagraph(currentParagraphs.length);
-      setCurrentChar(0);
-      setTypingComplete(false);
+      setSummaryData(prevData => ({
+        paragraphs: [...prevData.paragraphs, aiResponse],
+        stats: prevData.stats,
+      }));
+
       setLoadingHints(false);
-      setShowHintsButton(false);
       setAiHintsGenerated(true);
     } catch (error) {
-      setLoadingHints(false);
-      setShowHintsButton(false);
-      setAiHintsGenerated(true);
       console.error('AI request error:', error);
+      setLoadingHints(false);
+      setAiError(true);
+      setShowHintsButton(true);
+
       const errorMessage = t('summary.error') || 'Error fetching hints';
-      const currentParagraphs = summaryData.paragraphs || [];
-      setSummaryData({
-        paragraphs: [...currentParagraphs, errorMessage],
-        stats: summaryData.stats,
-      });
-      setCurrentParagraph(currentParagraphs.length);
-      setCurrentChar(0);
-      setTypingComplete(false);
+      setSummaryData(prevData => ({
+        paragraphs: [...prevData.paragraphs, errorMessage],
+        stats: prevData.stats,
+      }));
     }
   };
 

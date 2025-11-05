@@ -263,7 +263,7 @@
   "ai": {
     "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",
     "prompt_best_habit": "The best performing habit is: {{habitName}} with a success rate of {{successRate}}%. ",
-    "prompt_worst_habit": "The weakest habit is: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_en": "Write a short piece of advice or motivation for the user, addressing them by name ({{userName}}). The answer should positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs."
+    "prompt_worst_habit": "The worst habit is: {{habitName}} ({{successRate}}%). ",
+    "prompt_instructions_en": "Address your response directly to the user by name ({{userName}}) and write it in English."
   }
 }
