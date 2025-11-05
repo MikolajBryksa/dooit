@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
-import {Chip, SegmentedButtons} from 'react-native-paper';
+import {Chip, SegmentedButtons, useTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -8,6 +8,7 @@ import {useStyles} from '@/styles';
 const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const theme = useTheme();
   const clockFormat = useSelector(state => state.settings.clockFormat);
 
   // 'morning' | 'afternoon' | 'evening'
@@ -92,8 +93,15 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
           return (
             <Chip
               key={hour24}
-              style={{margin: 4}}
-              selected={selected}
+              style={{
+                margin: 4,
+                borderWidth: 1,
+                borderColor: selected
+                  ? theme.colors.outline
+                  : theme.colors.secondaryContainer,
+              }}
+              mode={selected ? 'outlined' : 'flat'}
+              selected={false}
               onPress={() => handleToggleHour(display)}>
               {display}
             </Chip>

@@ -140,7 +140,9 @@ const HabitCard = ({
                 <View style={{flex: 1}}>
                   <Text
                     variant="bodyMedium"
-                    style={{maxWidth: '100%', flexShrink: 1}}>
+                    style={{maxWidth: '100%', flexShrink: 1}}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
                     {repeatHours && repeatHours.length > 0
                       ? repeatHours
                           .map(h => formatHourString(h, clockFormat))

@@ -18,7 +18,6 @@ import HoursSelector from '@/selectors/hours.selector';
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const hoursResetRef = useRef(null);
 
   const [step, setStep] = useState(1);
   const [progressBarValue, setProgressBarValue] = useState(0);
@@ -56,12 +55,6 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
       }, 500);
     } catch (error) {
       console.error('Error adding habit:', error.message);
-    }
-  };
-
-  const handleReset = () => {
-    if (hoursResetRef.current) {
-      hoursResetRef.current();
     }
   };
 
@@ -145,7 +138,6 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
             <HoursSelector
               repeatHours={repeatHours}
               setRepeatHours={setRepeatHours}
-              onResetRef={hoursResetRef}
             />
           </>
         )}
@@ -156,12 +148,6 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
           {step > 1 && (
             <Button mode="outlined" onPress={handlePrevStep} icon="arrow-left">
               {t('button.back')}
-            </Button>
-          )}
-
-          {step === 4 && (
-            <Button mode="outlined" onPress={handleReset} icon="refresh">
-              {t('button.reset')}
             </Button>
           )}
 

@@ -136,7 +136,7 @@ const EditModal = ({
           <Button
             mode="contained"
             onPress={handleSave}
-            icon={!inputValue ? 'lock' : 'check'}
+            icon={!inputValue || inputValue.length === 0 ? 'lock' : 'check'}
             disabled={!inputValue || inputValue.length === 0}>
             {t('button.save')}
           </Button>
