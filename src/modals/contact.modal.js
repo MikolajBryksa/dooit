@@ -47,10 +47,12 @@ const ContactModal = ({visible, onDismiss}) => {
 
     try {
       const userId = getSettingValue('userId');
+      const userName = getSettingValue('userName');
 
       const {error} = await supabase.from('Contact').insert([
         {
           user_id: userId,
+          user_name: userName,
           email: email.trim(),
           message: message.trim(),
         },

@@ -153,9 +153,11 @@ const EndCard = ({weekdayKey}) => {
 
     try {
       const userId = getSettingValue('userId');
+      const userName = getSettingValue('userName');
 
       const dataToSave = {
         user_id: userId,
+        user_name: userName,
         updated_at: new Date().toISOString(),
         total_actions: stats.totalActions,
         good_actions: stats.goodActions,
@@ -241,26 +243,27 @@ const EndCard = ({weekdayKey}) => {
 
     try {
       const language = getSettingValue('language');
+      const userName = getSettingValue('userName');
       const stats = summaryData.stats;
       let prompt = '';
       if (language === 'pl') {
-        prompt += `Użytkownik do tej pory wykonał ${stats.totalActions} powtórzeń wszystkich nawyków. `;
+        prompt += `Użytkownik o imieniu ${userName} do tej pory wykonał ${stats.totalActions} powtórzeń wszystkich nawyków. `;
         if (stats.bestHabit) {
           prompt += `Najlepiej idzie użytkownikowi: ${stats.bestHabit.habitName} ze skutecznością na poziomie ${stats.maxSuccessRate}%. `;
         }
         if (stats.worstHabit) {
           prompt += `Najgorzej idzie użytkownikowi: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
         }
-        prompt += `Napisz krótką poradę lub motywację dla użytkownika, która korzystnie wpłynie na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity.`;
+        prompt += `Napisz krótką poradę lub motywację dla użytkownika, zwracając się do niego po imieniu (${userName}). Odpowiedź powinna korzystnie wpłynąć na zdrowie i samopoczucie. Odpowiedź powinna mieć około 150 słów i być napisana w języku polskim. Nie używaj stylów tekstu takich jak pogrubienie (bold) czy kursywa (italic). Możesz podzielić tekst na akapity.`;
       } else {
-        prompt += `The user has completed ${stats.totalActions} repetitions of all habits so far. `;
+        prompt += `The user named ${userName} has completed ${stats.totalActions} repetitions of all habits so far. `;
         if (stats.bestHabit) {
           prompt += `The best performing habit is: ${stats.bestHabit.habitName} with a success rate of ${stats.maxSuccessRate}%. `;
         }
         if (stats.worstHabit) {
           prompt += `The weakest habit is: ${stats.worstHabit.habitName} (${stats.minSuccessRate}%). `;
         }
-        prompt += `Write a short piece of advice or motivation for the user that will positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs.`;
+        prompt += `Write a short piece of advice or motivation for the user, addressing them by name (${userName}). The answer should positively impact their health and well-being. The answer should be about 150 words and written in English. Do not use any text styles such as bold or italic. You may split the text into paragraphs.`;
       }
 
       const response = await fetch(

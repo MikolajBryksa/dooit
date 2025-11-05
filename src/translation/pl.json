@@ -16,6 +16,7 @@
   },
   "settings": {
     "version": "Wersja",
+    "user-name": "Twoje imię",
     "language": "Język",
     "en": "Angielski",
     "pl": "Polski",
@@ -129,27 +130,34 @@
       "to-app": "w aplikacji Dooit",
       "option1": {
         "title": "Wyrabiaj nawyki",
-        "subtitle": "Wybierz czynności, które chcesz powtarzać regularnie."
+        "subtitle": "Zdecyduj, co i kiedy robić regularnie, aby stało się to rutyną."
       },
       "option2": {
-        "title": "Dokonuj wyborów",
-        "subtitle": "Każdego dnia wybieraj między tym, co dobre, a tym, co łatwe."
+        "title": "Zaznaczaj wybory",
+        "subtitle": "Stawiaj na to co dobre i zyskuj codziennie personalizowane porady."
       },
       "option3": {
         "title": "Monitoruj postępy",
         "subtitle": "Śledź swoją podróż licznikiem powtórzeń i zobacz ile osiągasz."
       },
-      "choose-habits": "Wybierz nawyki"
+      "accept": "Zaczynajmy"
     },
     "step2": {
       "choose": "Wybierz",
       "which-habits": "jakie nawyki chcesz wyrobić",
-      "select-time": "Wybierz czas"
+      "accept": "Zapisz nawyki"
     },
     "step3": {
       "select-repetition": "Wybierz czas powtórzeń",
       "accept-default": "lub zaakceptuj domyślne dni i godziny",
-      "start": "Start"
+      "accept": "Zapisz powiadomienia"
+    },
+    "step4": {
+      "congratulations": "Zaczynajmy!",
+      "ready-to-start": "Czas rozpocząć podróż z nawykami.",
+      "have-fun": "Baw się dobrze i zmieniaj się na lepsze.",
+      "accept": "Rozpocznij",
+      "name-placeholder": "Podaj swoje imię"
     }
   },
   "default-habits": {

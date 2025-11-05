@@ -33,6 +33,7 @@ Settings.schema = {
   properties: {
     id: 'int',
     userId: 'string',
+    userName: 'string?',
     language: 'string',
     clockFormat: 'string',
     firstDay: 'string',

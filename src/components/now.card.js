@@ -4,7 +4,7 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateHabit} from '@/services/habits.service';
-import {addHour, pickRandomMotivation} from '@/utils';
+import {pickRandomMotivation} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from './pie.circle';
 import MainCard from './main.card';
@@ -147,6 +147,10 @@ const NowCard = ({
   const handleUnlock = () => {
     setIsManuallyUnlocked(true);
   };
+
+  function addHour(list, hour) {
+    return Array.from(new Set([...(list || []), hour]));
+  }
 
   const handleChoice = useCallback(
     choice => {

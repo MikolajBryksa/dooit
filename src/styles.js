@@ -42,6 +42,12 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.gap * 3,
       marginTop: theme.dimensions.gap * 3,
     },
+    onboarding__input: {
+      marginBottom: theme.dimensions.gap * 2,
+      marginTop: theme.dimensions.gap * 2,
+      height: theme.dimensions.gap * 5,
+      width: '80%',
+    },
     // buttons
     button: {
       alignSelf: 'center',

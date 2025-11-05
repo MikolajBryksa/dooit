@@ -11,6 +11,7 @@ import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
+import NameModal from '@/modals/name.modal';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
@@ -24,6 +25,7 @@ const SettingsView = () => {
 
   const [visibleContactModal, setVisibleContactModal] = useState(false);
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
+  const [visibleNameModal, setVisibleNameModal] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
@@ -39,6 +41,10 @@ const SettingsView = () => {
 
   const handleSupportDialog = () => {
     setVisibleSupportDialog(!visibleSupportDialog);
+  };
+
+  const handleNameModal = () => {
+    setVisibleNameModal(!visibleNameModal);
   };
 
   function handleVersion() {
@@ -140,6 +146,19 @@ const SettingsView = () => {
 
         <Card style={styles.card}>
           <Card.Content style={styles.card__header}>
+            <Text variant="titleMedium">{t('settings.user-name')}</Text>
+            <Chip
+              icon="account-outline"
+              mode="outlined"
+              onPress={handleNameModal}
+              style={styles.chip}>
+              {settings.userName}
+            </Chip>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.card}>
+          <Card.Content style={styles.card__header}>
             <Text variant="titleMedium">{t('settings.language')}</Text>
             <Chip
               icon="translate"
@@ -235,6 +254,8 @@ const SettingsView = () => {
           handleSupportDialog();
         }}
       />
+
+      <NameModal visible={visibleNameModal} onDismiss={handleNameModal} />
     </>
   );
 };

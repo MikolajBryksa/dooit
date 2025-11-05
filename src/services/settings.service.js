@@ -7,6 +7,7 @@ export const getSettings = () => {
   return {
     id: settings.id,
     userId: settings.userId,
+    userName: settings.userName,
     language: settings.language,
     clockFormat: settings.clockFormat,
     firstDay: settings.firstDay,
@@ -36,6 +37,7 @@ export const updateSettings = updates => {
   return {
     id: updatedSettings.id,
     userId: updatedSettings.userId,
+    userName: updatedSettings.userName,
     language: updatedSettings.language,
     clockFormat: updatedSettings.clockFormat,
     firstDay: updatedSettings.firstDay,

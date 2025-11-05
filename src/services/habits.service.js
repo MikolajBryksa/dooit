@@ -256,9 +256,9 @@ export const autoSkipPastHabits = weekdayKey => {
         const [h, m] = hour.split(':').map(Number);
         const habitMinutes = h * 60 + (m || 0);
 
-        // If habit time is more than 45 minutes in the past and not yet completed
+        // If habit time is more than 90 minutes in the past and not yet completed
         const minutesDiff = currentMinutes - habitMinutes;
-        if (minutesDiff > 45 && !completedHours.includes(hour)) {
+        if (minutesDiff > 90 && !completedHours.includes(hour)) {
           completedHours.push(hour);
           hasChanges = true;
 

@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView} from 'react-native';
-import {Text, Button, Card, Avatar, Checkbox} from 'react-native-paper';
+import {
+  Text,
+  Button,
+  Card,
+  Avatar,
+  Checkbox,
+  TextInput,
+} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
 import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
@@ -25,6 +32,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [step, setStep] = useState(1);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  const [name, setName] = useState('');
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -80,12 +88,22 @@ const OnboardingView = ({setShowOnboarding}) => {
   }
 
   function handleStep3() {
+    requestNotificationPermission(settings, dispatch, setSettings);
+    setStep(4);
+  }
+
+  function handleStep4() {
+    let updatedSettings = {...settings, firstLaunch: false};
+
+    if (name.trim()) {
+      updateSettingValue('userName', name.trim());
+      updatedSettings = {...updatedSettings, userName: name.trim()};
+    }
+
     updateSettingValue('firstLaunch', false);
-    const updatedSettings = {...settings, firstLaunch: false};
     dispatch(setSettings(updatedSettings));
 
     setShowOnboarding(false);
-    requestNotificationPermission(settings, dispatch, setSettings);
   }
 
   const fetchAllHabits = () => {
@@ -142,7 +160,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep1();
             }}>
-            {t('onboarding.step1.choose-habits')}
+            {t('onboarding.step1.accept')}
           </Button>
         </View>
       </View>
@@ -201,7 +219,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep2();
             }}>
-            {t('onboarding.step2.select-time')}
+            {t('onboarding.step2.accept')}
           </Button>
         </View>
       </View>
@@ -245,7 +263,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             mode="contained"
             onPress={handleStep3}
             icon="check">
-            {t('onboarding.step3.start')}
+            {t('onboarding.step3.accept')}
           </Button>
         </View>
 
@@ -258,6 +276,38 @@ const OnboardingView = ({setShowOnboarding}) => {
           habitId={editModalData?.habitId}
           fetchAllHabits={fetchAllHabits}
         />
+      </View>
+    );
+  } else if (step === 4) {
+    return (
+      <View style={styles.container__center}>
+        <View style={styles.onboarding__bar}>
+          <Text variant="headlineMedium">
+            {t('onboarding.step4.congratulations')}
+          </Text>
+          <Text variant="bodyLarge">
+            {t('onboarding.step4.ready-to-start')}
+          </Text>
+          <Text variant="bodyLarge">{t('onboarding.step4.have-fun')}</Text>
+        </View>
+
+        <TextInput
+          mode="outlined"
+          style={styles.onboarding__input}
+          placeholder={t('onboarding.step4.name-placeholder')}
+          value={name}
+          onChangeText={setName}
+          maxLength={30}
+        />
+
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={handleStep4}
+          disabled={!name.trim()}
+          icon={!name.trim() ? 'lock' : 'rocket-launch'}>
+          {t('onboarding.step4.accept')}
+        </Button>
       </View>
     );
   }

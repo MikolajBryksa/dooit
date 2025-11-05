@@ -16,6 +16,7 @@
   },
   "settings": {
     "version": "Version",
+    "user-name": "Your name",
     "language": "Language",
     "en": "English",
     "pl": "Polish",
@@ -129,27 +130,34 @@
       "to-app": "to the Dooit app",
       "option1": {
         "title": "Create habits",
-        "subtitle": "Select the activities you want to repeat regularly."
+        "subtitle": "Choose what and when to repeat so it becomes a routine."
       },
       "option2": {
         "title": "Make choices",
-        "subtitle": "Every day, choose between what is right and what is easy."
+        "subtitle": "Go for what’s good and get personalized advice every day."
       },
       "option3": {
         "title": "Monitor progress",
         "subtitle": "Track your journey with the rep counter and see how far you've come."
       },
-      "choose-habits": "Choose habits"
+      "accept": "Start"
     },
     "step2": {
       "choose": "Choose",
       "which-habits": "which habits do you want to create",
-      "select-time": "Select time"
+      "accept": "Save habits"
     },
     "step3": {
       "select-repetition": "Select the repetition time",
       "accept-default": "or accept the default days and hours",
-      "start": "Start"
+      "accept": "Save reminders"
+    },
+    "step4": {
+      "congratulations": "Let's get started!",
+      "ready-to-start": "It's time to begin your habit journey.",
+      "have-fun": "Have fun and become your better self.",
+      "accept": "Start",
+      "name-placeholder": "Enter your name"
     }
   },
   "default-habits": {
