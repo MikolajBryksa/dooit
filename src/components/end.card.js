@@ -107,13 +107,17 @@ const EndCard = ({weekdayKey}) => {
     const paragraphs = [];
 
     const para1 = [];
-    para1.push(t('summary.total_actions', {count: totalActions}));
-    if (parseFloat(goodRate) >= parseFloat(badRate)) {
-      para1.push(t('summary.good_rate_high', {rate: goodRate}));
+    if (totalActions === 0) {
+      para1.push(t('summary.no_actions'));
     } else {
-      para1.push(t('summary.bad_rate_high', {rate: badRate}));
+      para1.push(t('summary.total_actions', {count: totalActions}));
+      if (parseFloat(goodRate) >= parseFloat(badRate)) {
+        para1.push(t('summary.good_rate_high', {rate: goodRate}));
+      } else {
+        para1.push(t('summary.bad_rate_high', {rate: badRate}));
+      }
+      paragraphs.push(para1.join(' '));
     }
-    paragraphs.push(para1.join(' '));
 
     if (bestHabit && maxSuccessRate >= 50) {
       const para2 = [];
