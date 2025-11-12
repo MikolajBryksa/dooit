@@ -210,6 +210,7 @@ const HomeView = () => {
         name: 'Dooit Channel',
       });
 
+      // Cancel all existing notifications to prevent duplicates
       await notifee.cancelAllNotifications();
 
       const now = new Date();
@@ -244,13 +245,23 @@ const HomeView = () => {
 
             // Only schedule if time is in the future
             if (triggerDate > now) {
+              // Create unique ID for each notification to prevent duplicates
+              const notificationId = `${habit.id}-${targetDate.getFullYear()}-${
+                targetDate.getMonth() + 1
+              }-${targetDate.getDate()}-${hour}`;
+
               notifee.createTriggerNotification(
                 {
+                  id: notificationId,
                   title: `${hour} ${habit.habitName}`,
                   body: pickRandomMotivation(t, 'notification'),
                   android: {
                     channelId: 'default',
                     smallIcon: 'ic_notification',
+                    pressAction: {
+                      id: 'default',
+                      launchActivity: 'default',
+                    },
                   },
                 },
                 {
@@ -263,7 +274,7 @@ const HomeView = () => {
         });
       }
     })();
-  }, [habits]);
+  }, [habits, t]);
 
   return (
     <>
