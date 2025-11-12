@@ -46,9 +46,29 @@ Settings.schema = {
   },
 };
 
+class DailySummary extends Realm.Object {}
+DailySummary.schema = {
+  name: 'DailySummary',
+  primaryKey: 'date',
+  properties: {
+    date: 'string',
+    aiSummary: 'string?',
+    totalActions: 'int',
+    goodActions: 'int',
+    badActions: 'int',
+    skipActions: 'int',
+    goodRate: 'string',
+    badRate: 'string',
+    bestHabitName: 'string?',
+    maxSuccessRate: 'string?',
+    worstHabitName: 'string?',
+    minSuccessRate: 'string?',
+  },
+};
+
 const realmConfig = {
-  schema: [Habit, Settings],
-  schemaVersion: 11,
+  schema: [Habit, Settings, DailySummary],
+  schemaVersion: 12,
   deleteRealmIfMigrationNeeded: true,
 };
 

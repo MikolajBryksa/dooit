@@ -57,7 +57,8 @@
     "sent": "Sent",
     "offline": "Offline",
     "hints": "Hints",
-    "generating": "Generating"
+    "generating": "Generating",
+    "finish": "Finish"
   },
   "contact": {
     "email": "Your e-mail",
@@ -75,8 +76,7 @@
     "badCounter": "Easy choices",
     "skipCounter": "Skipped choices",
     "done": "All done today!",
-    "start": "Start",
-    "finish": "Next"
+    "start": "Start"
   },
   "date": {
     "daily": "Daily",
@@ -254,6 +254,7 @@
     "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",
     "prompt_best_habit": "The best performing habit is: {{habitName}} with a success rate of {{successRate}}%. ",
     "prompt_worst_habit": "The worst habit is: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_en": "Address your response directly to the user by name ({{userName}}) and write it in English."
+    "prompt_instructions_en": "Address your response directly to the user by name ({{userName}}) and write it in English. ",
+    "prompt_last_answer": "Your previous answer was: '''{{lastAnswer}}'''. Refer to it but do not repeat it in your new response. "
   }
 }

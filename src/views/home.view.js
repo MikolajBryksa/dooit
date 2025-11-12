@@ -144,22 +144,10 @@ const HomeView = () => {
     return todayHabits.find(habit => habit.key === activeKey) || null;
   }, [todayHabits, activeKey]);
 
-  const nextHabit = useMemo(() => {
-    // Get the next incomplete habit for preview
-    if (!activeKey) return null;
-
-    let foundActive = false;
-    for (const habit of todayHabits) {
-      if (foundActive) {
-        const done = habit.completedHours.includes(habit.selectedHour);
-        if (!done) return habit;
-      }
-      if (habit.key === activeKey) {
-        foundActive = true;
-      }
-    }
-    return null;
-  }, [todayHabits, activeKey]);
+  const isLastHabit = useMemo(() => {
+    // Check if current habit is the last incomplete one
+    return firstActiveKeyCandidate === null;
+  }, [firstActiveKeyCandidate]);
 
   useEffect(() => {
     // Manages habit completion state and active card
@@ -179,9 +167,6 @@ const HomeView = () => {
 
     if (activeKey !== null && !activeKeyExists) {
       setActiveKey(firstActiveKeyCandidate);
-      setAllCompleted(
-        firstActiveKeyCandidate === null && todayHabits.length > 0,
-      );
       return;
     }
 
@@ -192,19 +177,17 @@ const HomeView = () => {
       return;
     }
 
-    // Update allCompleted state
-    if (!hasIncompleteHabits) {
-      setAllCompleted(true);
-    } else {
-      setAllCompleted(false);
-    }
+    // Don't auto-complete - wait for user to click Finish button
   }, [todayHabits, firstActiveKeyCandidate, activeKey]);
 
-  // Handler for moving to next card - called by Next button
+  // Handler for moving to next card - called by Next/Finish button
   const handleNextCard = useCallback(() => {
-    setActiveKey(firstActiveKeyCandidate);
     if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
+      // No more incomplete habits - show EndCard
       setAllCompleted(true);
+    } else {
+      // Move to next habit
+      setActiveKey(firstActiveKeyCandidate);
     }
   }, [firstActiveKeyCandidate, todayHabits]);
 
@@ -320,10 +303,10 @@ const HomeView = () => {
               selectedHour={activeHabit.selectedHour}
               icon={activeHabit.icon}
               isNext={true}
+              isLastHabit={isLastHabit}
               onUpdated={refreshHabits}
               onNext={handleNextCard}
               globalProgressValue={globalProgressValue}
-              nextHabit={nextHabit}
             />
           </>
         ) : null}

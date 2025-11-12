@@ -57,7 +57,8 @@
     "sent": "Wysłano",
     "offline": "Offline",
     "hints": "Podpowiedzi",
-    "generating": "Generowanie"
+    "generating": "Generowanie",
+    "finish": "Zakończ"
   },
   "contact": {
     "email": "Twój e-mail",
@@ -75,8 +76,7 @@
     "badCounter": "Łatwe wybory",
     "skipCounter": "Pominięte wybory",
     "done": "Wszystko dziś zrobione!",
-    "start": "Zacznij",
-    "finish": "Dalej"
+    "start": "Zacznij"
   },
   "date": {
     "daily": "Codziennie",
@@ -254,6 +254,7 @@
     "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",
     "prompt_best_habit": "Najlepiej idzie użytkownikowi: {{habitName}} ze skutecznością na poziomie {{successRate}}%. ",
     "prompt_worst_habit": "Najgorzej idzie użytkownikowi: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_pl": "Kieruj swoją odpowiedź bezpośrednio do użytkownika, zwracając się do niego po imieniu ({{userName}}) i napisz ją w języku polskim."
+    "prompt_instructions_pl": "Kieruj swoją odpowiedź bezpośrednio do użytkownika, zwracając się do niego po imieniu ({{userName}}) i napisz ją w języku polskim. ",
+    "prompt_last_answer": "Twoja poprzednia odpowiedź brzmiała: '''{{lastAnswer}}'''. Nawiąż do niej, ale nie powtarzaj jej w swojej nowej odpowiedzi. "
   }
 }

@@ -22,10 +22,10 @@ const NowCard = ({
   selectedHour,
   icon,
   isNext = false,
+  isLastHabit = false,
   onUpdated,
   onNext,
   globalProgressValue = 0,
-  nextHabit = null,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -346,9 +346,9 @@ const NowCard = ({
               <Button
                 style={styles.button}
                 mode="contained"
-                icon="arrow-right"
+                icon={isLastHabit ? 'check' : 'arrow-right'}
                 onPress={handleNext}>
-                {t('button.next')}
+                {isLastHabit ? t('button.finish') : t('button.next')}
               </Button>
             </View>
           </Animated.View>

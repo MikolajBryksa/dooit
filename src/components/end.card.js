@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, ActivityIndicator, Button} from 'react-native-paper';
-import {Animated, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
@@ -8,8 +8,10 @@ import {
   generateStats,
   generateAiSummary,
   saveSummaryToSupabase,
+  getDailySummary,
 } from '@/services/summary.service';
 import {useNetworkStatus} from '@/hooks';
+import {useTodayKey} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 
@@ -17,6 +19,7 @@ const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const habits = useSelector(state => state.habits);
+  const todayKey = useTodayKey();
 
   const {isConnected} = useNetworkStatus(true);
   const [showButton, setShowButton] = useState(true);
@@ -26,49 +29,58 @@ const EndCard = ({weekdayKey}) => {
 
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
-
-  const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.8)).current;
-  const buttonOpacity = useRef(new Animated.Value(0)).current;
+  const [typewriterComplete, setTypewriterComplete] = useState(false);
 
   useEffect(() => {
-    Animated.sequence([
-      Animated.parallel([
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scale, {
-          toValue: 1,
-          tension: 50,
-          friction: 7,
-          useNativeDriver: true,
-        }),
-        Animated.timing(buttonOpacity, {
-          toValue: 1,
-          duration: 600,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]).start();
-  }, [habits]);
+    // Check if summary already exists for today
+    const existingSummary = getDailySummary(todayKey);
+
+    if (existingSummary) {
+      // Load existing summary
+      setStats({
+        totalActions: existingSummary.totalActions,
+        goodActions: existingSummary.goodActions,
+        badActions: existingSummary.badActions,
+        skipActions: existingSummary.skipActions,
+        goodRate: existingSummary.goodRate,
+        badRate: existingSummary.badRate,
+        bestHabit: existingSummary.bestHabitName
+          ? {
+              habitName: existingSummary.bestHabitName,
+            }
+          : null,
+        maxSuccessRate: existingSummary.maxSuccessRate
+          ? parseFloat(existingSummary.maxSuccessRate)
+          : -1,
+        worstHabit: existingSummary.worstHabitName
+          ? {
+              habitName: existingSummary.worstHabitName,
+            }
+          : null,
+        minSuccessRate: existingSummary.minSuccessRate
+          ? parseFloat(existingSummary.minSuccessRate)
+          : 101,
+      });
+      setAiSummary(existingSummary.aiSummary || t('summary.no_actions'));
+      setTypewriterComplete(true);
+      setShowButton(false);
+    } else {
+      // Generate new stats
+      const timer = setTimeout(() => {
+        const newStats = generateStats(habits, weekdayKey);
+        setStats(newStats);
+
+        if (newStats.totalActions === 0) {
+          setAiSummary(t('summary.no_actions'));
+          setTypewriterComplete(true);
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [todayKey, weekdayKey]);
 
   useEffect(() => {
-    // Generate stats
-    const timer = setTimeout(() => {
-      const stats = generateStats(habits, weekdayKey);
-      setStats(stats);
-
-      if (stats.totalActions === 0) {
-        setAiSummary(t('summary.no_actions'));
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [habits]);
-
-  useEffect(() => {
-    // Generate AI summary
+    // Generate AI summary only if not already generated
     if (
       isConnected &&
       stats &&
@@ -81,71 +93,59 @@ const EndCard = ({weekdayKey}) => {
         .then(response => {
           setAiSummary(response);
           setLoadingAI(false);
-          saveSummaryToSupabase(stats, response);
+          saveSummaryToSupabase(todayKey, stats, response);
         })
         .catch(error => {
           console.error('AI request error:', error);
           setLoadingAI(false);
-          saveSummaryToSupabase(stats, null);
+          saveSummaryToSupabase(todayKey, stats, null);
         });
     }
-  }, [isConnected, stats, aiSummary, loadingAI]);
+  }, [isConnected, stats, aiSummary, loadingAI, todayKey]);
 
   useEffect(() => {
-    // Typewriter effect
-    if (!aiSummary) return;
+    // Typewriter effect - only if not already complete
+    if (!aiSummary || typewriterComplete) return;
+
     if (showButton) {
       setShowButton(false);
     }
+
     if (currentChar < aiSummary.length) {
       const timer = setTimeout(() => {
         setDisplayedText(aiSummary.substring(0, currentChar + 1));
         setCurrentChar(currentChar + 1);
       }, 20);
       return () => clearTimeout(timer);
+    } else {
+      setTypewriterComplete(true);
     }
-  }, [aiSummary, currentChar]);
+  }, [aiSummary, currentChar, showButton, typewriterComplete]);
 
   return (
     <MainCard
       outline={true}
-      iconContent={
-        <Animated.View style={{opacity, transform: [{scale}]}}>
-          <StatusIconCircle end />
-        </Animated.View>
-      }
-      titleContent={
-        <Animated.View style={{opacity, transform: [{scale}]}}>
-          <Text variant="titleLarge">{t('card.done')}</Text>
-        </Animated.View>
-      }
+      iconContent={<StatusIconCircle end />}
+      titleContent={<Text variant="titleLarge">{t('card.done')}</Text>}
       textContent={
         <ScrollView style={styles.summary_container}>
           <Text variant="bodyMedium" style={styles.summary__text}>
-            {displayedText}
+            {typewriterComplete ? aiSummary : displayedText}
           </Text>
         </ScrollView>
       }
       buttonsContent={
         showButton ? (
-          <Animated.View
-            style={{
-              opacity: buttonOpacity,
-              transform: [{scale}],
-            }}>
-            <Button
-              style={styles.button}
-              mode="contained"
-              onPress={() => {}}
-              disabled={true}
-              icon={
-                !isConnected
-                  ? 'wifi-off'
-                  : () => <ActivityIndicator size={16} />
-              }>
-              {!isConnected ? t('button.offline') : t('button.generating')}
-            </Button>
-          </Animated.View>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {}}
+            disabled={true}
+            icon={
+              !isConnected ? 'wifi-off' : () => <ActivityIndicator size={16} />
+            }>
+            {!isConnected ? t('button.offline') : t('button.generating')}
+          </Button>
         ) : null
       }
     />
