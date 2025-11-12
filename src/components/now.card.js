@@ -23,6 +23,7 @@ const NowCard = ({
   icon,
   isNext = false,
   onUpdated,
+  onNext,
   globalProgressValue = 0,
 }) => {
   const {t} = useTranslation();
@@ -32,7 +33,6 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
-  const [contentHeight, setContentHeight] = useState(0);
 
   const currentTime = useCurrentTime();
   const isSelectedHourLater = useMemo(() => {
@@ -51,37 +51,32 @@ const NowCard = ({
     setStep(1);
     setIsManuallyUnlocked(false);
     setMotivation(pickRandomMotivation(t, 'notification'));
+  }, [id, selectedHour, t]);
 
-    // Animate container height from 0 to full when card appears
-    if (isNext) {
-      habitContainerHeight.setValue(0);
-      Animated.timing(habitContainerHeight, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [isNext, t]);
-
-  const opacity = useRef(new Animated.Value(1)).current;
   const goodHabitOpacity = useRef(new Animated.Value(1)).current;
   const badHabitOpacity = useRef(new Animated.Value(0)).current;
-  const habitContainerHeight = useRef(new Animated.Value(1)).current;
+  const nextButtonOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Animates opacity for the current card
-    Animated.timing(opacity, {
-      toValue: isNext ? 1 : 0.5,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  }, [isNext, opacity]);
-
-  useEffect(() => {
-    // Animates transition between good and bad habit
+    // Animates transition between good habit, bad habit, and next button
     if (step === 1) {
-      goodHabitOpacity.setValue(1);
-      badHabitOpacity.setValue(0);
+      Animated.parallel([
+        Animated.timing(goodHabitOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(badHabitOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(nextButtonOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
     } else if (step === 2) {
       Animated.parallel([
         Animated.timing(goodHabitOpacity, {
@@ -93,6 +88,11 @@ const NowCard = ({
           toValue: 1,
           duration: 300,
           delay: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(nextButtonOpacity, {
+          toValue: 0,
+          duration: 300,
           useNativeDriver: true,
         }),
       ]).start();
@@ -108,15 +108,15 @@ const NowCard = ({
           duration: 300,
           useNativeDriver: true,
         }),
-        Animated.timing(habitContainerHeight, {
-          toValue: 0,
-          duration: 600,
-          delay: 100,
-          useNativeDriver: false,
+        Animated.timing(nextButtonOpacity, {
+          toValue: 1,
+          duration: 300,
+          delay: 150,
+          useNativeDriver: true,
         }),
       ]).start();
     }
-  }, [step, goodHabitOpacity, badHabitOpacity, habitContainerHeight]);
+  }, [step, goodHabitOpacity, badHabitOpacity, nextButtonOpacity]);
 
   const isCompleted = useMemo(() => {
     return completedHours.includes(selectedHour);
@@ -146,6 +146,10 @@ const NowCard = ({
 
   const handleUnlock = () => {
     setIsManuallyUnlocked(true);
+  };
+
+  const handleNext = () => {
+    onNext?.();
   };
 
   function addHour(list, hour) {
@@ -198,7 +202,7 @@ const NowCard = ({
 
   return (
     <MainCard
-      animatedStyle={{opacity}}
+      animatedStyle={{}}
       iconContent={
         <PieCircle
           size={120}
@@ -226,112 +230,114 @@ const NowCard = ({
         </>
       }
       buttonsContent={
-        <Animated.View
-          style={{
-            width: '100%',
-            overflow: 'hidden',
-            height: habitContainerHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, contentHeight],
-            }),
-          }}>
-          <View style={{position: 'relative', width: '100%'}}>
-            {/* Good Habit - Step 1 */}
-            <Animated.View
-              style={[
-                styles.card__choices,
-                {
-                  opacity: goodHabitOpacity,
-                  position: 'absolute',
-                  width: '100%',
-                  top: 0,
-                  left: 0,
-                },
-              ]}
-              pointerEvents={step === 1 ? 'auto' : 'none'}
-              onLayout={event => {
-                const {height} = event.nativeEvent.layout;
-                if (height > 0 && height !== contentHeight) {
-                  setContentHeight(height);
-                }
-              }}>
-              <Text variant="titleLarge">{habitName}</Text>
-              {isLocked ? (
-                <View style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    icon="lock-open-variant"
-                    onPress={() => {
-                      handleUnlock();
-                    }}>
-                    {t('button.unlock')}
-                  </Button>
-                </View>
-              ) : (
-                <View style={styles.card__buttons}>
-                  <Button
-                    style={styles.button}
-                    mode="outlined"
-                    icon="close"
-                    disabled={step !== 1}
-                    onPress={() => {
-                      skipGoodChoice();
-                    }}>
-                    {t('button.skip')}
-                  </Button>
-                  <Button
-                    style={styles.button}
-                    mode="contained"
-                    icon="check"
-                    disabled={step !== 1}
-                    onPress={() => {
-                      addGoodChoice();
-                    }}>
-                    {t('button.done')}
-                  </Button>
-                </View>
-              )}
-            </Animated.View>
-
-            {/* Bad Habit - Step 2 */}
-            <Animated.View
-              style={[
-                styles.card__choices,
-                {
-                  opacity: badHabitOpacity,
-                  position: 'absolute',
-                  width: '100%',
-                  top: 0,
-                  left: 0,
-                },
-              ]}
-              pointerEvents={step === 2 ? 'auto' : 'none'}>
-              <Text variant="titleLarge">{habitEnemy}</Text>
-
+        <View style={{width: '100%', position: 'relative'}}>
+          {/* Good Habit - Step 1 */}
+          <Animated.View
+            style={[
+              styles.card__choices,
+              {
+                opacity: goodHabitOpacity,
+                position: step === 1 ? 'relative' : 'absolute',
+                width: '100%',
+                top: 0,
+                left: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}
+            pointerEvents={step === 1 ? 'auto' : 'none'}>
+            <Text variant="titleLarge">{habitName}</Text>
+            {isLocked ? (
+              <View style={styles.card__buttons}>
+                <Button
+                  style={styles.button}
+                  mode="contained"
+                  icon="lock-open-variant"
+                  onPress={handleUnlock}>
+                  {t('button.unlock')}
+                </Button>
+              </View>
+            ) : (
               <View style={styles.card__buttons}>
                 <Button
                   style={styles.button}
                   mode="outlined"
                   icon="close"
-                  onPress={() => {
-                    skipBadChoice();
-                  }}>
+                  onPress={skipGoodChoice}>
                   {t('button.skip')}
                 </Button>
                 <Button
-                  style={styles.button__bad}
+                  style={styles.button}
                   mode="contained"
                   icon="check"
-                  onPress={() => {
-                    addBadChoice();
-                  }}>
+                  onPress={addGoodChoice}>
                   {t('button.done')}
                 </Button>
               </View>
-            </Animated.View>
-          </View>
-        </Animated.View>
+            )}
+          </Animated.View>
+
+          {/* Bad Habit - Step 2 */}
+          <Animated.View
+            style={[
+              styles.card__choices,
+              {
+                opacity: badHabitOpacity,
+                position: step === 2 ? 'relative' : 'absolute',
+                width: '100%',
+                top: 0,
+                left: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}
+            pointerEvents={step === 2 ? 'auto' : 'none'}>
+            <Text variant="titleLarge">{habitEnemy}</Text>
+            <View style={styles.card__buttons}>
+              <Button
+                style={styles.button}
+                mode="outlined"
+                icon="close"
+                onPress={skipBadChoice}>
+                {t('button.skip')}
+              </Button>
+              <Button
+                style={styles.button__bad}
+                mode="contained"
+                icon="check"
+                onPress={addBadChoice}>
+                {t('button.done')}
+              </Button>
+            </View>
+          </Animated.View>
+
+          {/* Next Button - Step 3 */}
+          <Animated.View
+            style={[
+              styles.card__choices,
+              {
+                opacity: nextButtonOpacity,
+                position: step === 3 ? 'relative' : 'absolute',
+                width: '100%',
+                top: 0,
+                left: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}
+            pointerEvents={step === 3 ? 'auto' : 'none'}>
+            <Text variant="titleLarge">{t('button.next')}</Text>
+            <View style={styles.card__buttons}>
+              <Button
+                style={styles.button}
+                mode="contained"
+                icon="arrow-right"
+                onPress={handleNext}>
+                {t('button.next')}
+              </Button>
+            </View>
+          </Animated.View>
+        </View>
       }
     />
   );

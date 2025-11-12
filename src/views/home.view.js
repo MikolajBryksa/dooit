@@ -26,7 +26,6 @@ const HomeView = () => {
   const habits = useSelector(state => state.habits);
   const habitsLoading = useSelector(state => state.habitsLoading);
   const debugMode = useSelector(state => state.settings.debugMode);
-  const cardDuration = useSelector(state => state.settings.cardDuration);
   const [activeKey, setActiveKey] = useState(null);
   const [allCompleted, setAllCompleted] = useState(false);
 
@@ -43,21 +42,24 @@ const HomeView = () => {
   const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
 
   useEffect(() => {
-    // On mount, auto-skip past habits and trigger loading
+    // On mount, auto-skip past habits and load habits immediately
     autoSkipPastHabits(weekdayKey);
     dispatch(setHabitsLoading(true));
+
+    // Quick load - just show loading briefly on first load
+    const timer = setTimeout(() => {
+      dispatch(setHabitsLoading(false));
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [dispatch, weekdayKey]);
 
   useEffect(() => {
+    // Refresh habits when loading state changes
     if (habitsLoading) {
       refreshHabits();
-      const timer = setTimeout(() => {
-        dispatch(setHabitsLoading(false));
-      }, cardDuration * 1100);
-
-      return () => clearTimeout(timer);
     }
-  }, [habitsLoading, refreshHabits, cardDuration, dispatch]);
+  }, [habitsLoading, refreshHabits]);
 
   useEffect(() => {
     // Updates the list of habits after changing the date
@@ -137,9 +139,10 @@ const HomeView = () => {
   }, [todayHabits]);
 
   useEffect(() => {
-    // Manages habit completion state and active card switching
+    // Manages habit completion state and active card
     if (todayHabits.length === 0) {
       setAllCompleted(false);
+      setActiveKey(null);
       return;
     }
 
@@ -147,60 +150,40 @@ const HomeView = () => {
       habit => !habit.completedHours.includes(habit.selectedHour),
     );
 
-    // If activeKey doesn't exist anymore (habit was removed/changed) - reset immediately
+    // If activeKey doesn't exist anymore (habit was removed/changed) - reset to first incomplete
     const activeKeyExists =
       activeKey !== null && todayHabits.some(habit => habit.key === activeKey);
 
     if (activeKey !== null && !activeKeyExists) {
       setActiveKey(firstActiveKeyCandidate);
-      if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
-        setAllCompleted(true);
-      }
+      setAllCompleted(
+        firstActiveKeyCandidate === null && todayHabits.length > 0,
+      );
       return;
     }
 
-    // Only set allCompleted immediately if we're not transitioning from an active card
-    if (!hasIncompleteHabits && activeKey === null) {
-      setAllCompleted(true);
-      return;
-    } else if (hasIncompleteHabits) {
-      setAllCompleted(false);
-    }
-
-    // If coming back from allCompleted state and we have a new habit to show, show it immediately
-    if (
-      activeKey === null &&
-      firstActiveKeyCandidate !== null &&
-      allCompleted
-    ) {
-      setActiveKey(firstActiveKeyCandidate);
-      return;
-    }
-
+    // Set initial activeKey if none is set
     if (activeKey === null && firstActiveKeyCandidate !== null) {
       setActiveKey(firstActiveKeyCandidate);
+      setAllCompleted(false);
       return;
     }
 
-    if (firstActiveKeyCandidate !== activeKey) {
-      const id = setTimeout(() => {
-        setActiveKey(firstActiveKeyCandidate);
-        // If no more active habits, mark as completed after animation
-        if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
-          setAllCompleted(true);
-        } else if (firstActiveKeyCandidate !== null) {
-          setAllCompleted(false);
-        }
-      }, cardDuration * 1000);
-      return () => clearTimeout(id);
+    // Update allCompleted state
+    if (!hasIncompleteHabits) {
+      setAllCompleted(true);
+    } else {
+      setAllCompleted(false);
     }
-  }, [
-    todayHabits,
-    firstActiveKeyCandidate,
-    activeKey,
-    cardDuration,
-    allCompleted,
-  ]);
+  }, [todayHabits, firstActiveKeyCandidate, activeKey]);
+
+  // Handler for moving to next card - called by Next button
+  const handleNextCard = useCallback(() => {
+    setActiveKey(firstActiveKeyCandidate);
+    if (firstActiveKeyCandidate === null && todayHabits.length > 0) {
+      setAllCompleted(true);
+    }
+  }, [firstActiveKeyCandidate, todayHabits]);
 
   useEffect(() => {
     // Creates notifications for next 3 days to ensure they work even if app isn't opened daily
@@ -315,6 +298,7 @@ const HomeView = () => {
               icon={habit.icon}
               isNext={habit.key === activeKey}
               onUpdated={refreshHabits}
+              onNext={handleNextCard}
               globalProgressValue={globalProgressValue}
             />
           ))
