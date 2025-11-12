@@ -25,6 +25,7 @@ const NowCard = ({
   onUpdated,
   onNext,
   globalProgressValue = 0,
+  nextHabit = null,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -33,6 +34,9 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
+
+  // Card fade-in animation
+  const cardOpacity = useRef(new Animated.Value(0)).current;
 
   const currentTime = useCurrentTime();
   const isSelectedHourLater = useMemo(() => {
@@ -51,7 +55,15 @@ const NowCard = ({
     setStep(1);
     setIsManuallyUnlocked(false);
     setMotivation(pickRandomMotivation(t, 'notification'));
-  }, [id, selectedHour, t]);
+
+    // Fade in the new card
+    cardOpacity.setValue(0);
+    Animated.timing(cardOpacity, {
+      toValue: 1,
+      duration: 400,
+      useNativeDriver: true,
+    }).start();
+  }, [id, selectedHour, t, cardOpacity]);
 
   const goodHabitOpacity = useRef(new Animated.Value(1)).current;
   const badHabitOpacity = useRef(new Animated.Value(0)).current;
@@ -202,7 +214,7 @@ const NowCard = ({
 
   return (
     <MainCard
-      animatedStyle={{}}
+      animatedStyle={{opacity: cardOpacity}}
       iconContent={
         <PieCircle
           size={120}
@@ -224,9 +236,6 @@ const NowCard = ({
               indeterminate={isLocked}
             />
           </View>
-          <Text variant="bodyLarge" style={styles.motivation__message}>
-            {motivation}
-          </Text>
         </>
       }
       buttonsContent={
@@ -246,7 +255,9 @@ const NowCard = ({
               },
             ]}
             pointerEvents={step === 1 ? 'auto' : 'none'}>
-            <Text variant="titleLarge">{habitName}</Text>
+            <View style={styles.card__choicesTitleContainer}>
+              <Text variant="titleLarge">{habitName}</Text>
+            </View>
             {isLocked ? (
               <View style={styles.card__buttons}>
                 <Button
@@ -292,7 +303,9 @@ const NowCard = ({
               },
             ]}
             pointerEvents={step === 2 ? 'auto' : 'none'}>
-            <Text variant="titleLarge">{habitEnemy}</Text>
+            <View style={styles.card__choicesTitleContainer}>
+              <Text variant="titleLarge">{habitEnemy}</Text>
+            </View>
             <View style={styles.card__buttons}>
               <Button
                 style={styles.button}
@@ -326,7 +339,9 @@ const NowCard = ({
               },
             ]}
             pointerEvents={step === 3 ? 'auto' : 'none'}>
-            <Text variant="titleLarge">{t('button.next')}</Text>
+            <View style={styles.card__choicesTitleContainer}>
+              <Text variant="titleMedium">{motivation}</Text>
+            </View>
             <View style={styles.card__buttons}>
               <Button
                 style={styles.button}

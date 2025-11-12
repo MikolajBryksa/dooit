@@ -112,12 +112,17 @@ export const useStyles = () => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    card__choicesTitleContainer: {
+      height: theme.dimensions.height / 2,
+      justifyContent: 'center',
+    },
     card__buttons: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       paddingTop: theme.dimensions.gap,
       gap: theme.dimensions.gap,
       alignItems: 'center',
+      minHeight: theme.dimensions.height,
     },
     progress__container: {
       width: '50%',

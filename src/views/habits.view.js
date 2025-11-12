@@ -45,7 +45,6 @@ const HabitsView = () => {
 
     const habits = getHabits() || [];
     dispatch(setHabits(habits));
-    dispatch(setHabitsLoading(true));
   };
 
   const sortedHabits = React.useMemo(() => {

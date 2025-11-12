@@ -76,9 +76,7 @@
     "skipCounter": "Skipped choices",
     "done": "All done today!",
     "start": "Start",
-    "finish": "Next",
-    "remaining": "Remaining",
-    "remaining-new-day": "Time until new day"
+    "finish": "Next"
   },
   "date": {
     "daily": "Daily",

@@ -76,9 +76,7 @@
     "skipCounter": "Pominięte wybory",
     "done": "Wszystko dziś zrobione!",
     "start": "Zacznij",
-    "finish": "Dalej",
-    "remaining": "Pozostało",
-    "remaining-new-day": "Do nowego dnia zostało"
+    "finish": "Dalej"
   },
   "date": {
     "daily": "Codziennie",

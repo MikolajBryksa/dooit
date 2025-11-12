@@ -44,22 +44,23 @@ const HomeView = () => {
   useEffect(() => {
     // On mount, auto-skip past habits and load habits immediately
     autoSkipPastHabits(weekdayKey);
-    dispatch(setHabitsLoading(true));
+    refreshHabits();
+  }, []);
 
-    // Quick load - just show loading briefly on first load
+  useEffect(() => {
+    // Show loading briefly only on first render
+    dispatch(setHabitsLoading(true));
     const timer = setTimeout(() => {
       dispatch(setHabitsLoading(false));
     }, 500);
 
-    return () => clearTimeout(timer);
-  }, [dispatch, weekdayKey]);
-
-  useEffect(() => {
-    // Refresh habits when loading state changes
-    if (habitsLoading) {
-      refreshHabits();
-    }
-  }, [habitsLoading, refreshHabits]);
+    return () => {
+      clearTimeout(timer);
+      // Ensure loading is cleared when component unmounts
+      dispatch(setHabitsLoading(false));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty array - run only on mount
 
   useEffect(() => {
     // Updates the list of habits after changing the date
@@ -137,6 +138,28 @@ const HomeView = () => {
     }
     return null;
   }, [todayHabits]);
+
+  const activeHabit = useMemo(() => {
+    // Get the currently active habit object
+    return todayHabits.find(habit => habit.key === activeKey) || null;
+  }, [todayHabits, activeKey]);
+
+  const nextHabit = useMemo(() => {
+    // Get the next incomplete habit for preview
+    if (!activeKey) return null;
+
+    let foundActive = false;
+    for (const habit of todayHabits) {
+      if (foundActive) {
+        const done = habit.completedHours.includes(habit.selectedHour);
+        if (!done) return habit;
+      }
+      if (habit.key === activeKey) {
+        foundActive = true;
+      }
+    }
+    return null;
+  }, [todayHabits, activeKey]);
 
   useEffect(() => {
     // Manages habit completion state and active card
@@ -281,28 +304,29 @@ const HomeView = () => {
           <NoHabitsCard />
         ) : allCompleted ? (
           <EndCard weekdayKey={weekdayKey} />
-        ) : (
-          todayHabits.map(habit => (
+        ) : activeHabit ? (
+          <>
             <NowCard
-              key={habit.key}
-              id={habit.id}
-              habitName={habit.habitName}
-              habitEnemy={habit.habitEnemy}
-              goodCounter={habit.goodCounter}
-              badCounter={habit.badCounter}
-              skipCounter={habit.skipCounter}
-              repeatDays={habit.repeatDays}
-              repeatHours={habit.repeatHours}
-              completedHours={habit.completedHours}
-              selectedHour={habit.selectedHour}
-              icon={habit.icon}
-              isNext={habit.key === activeKey}
+              key={activeHabit.key}
+              id={activeHabit.id}
+              habitName={activeHabit.habitName}
+              habitEnemy={activeHabit.habitEnemy}
+              goodCounter={activeHabit.goodCounter}
+              badCounter={activeHabit.badCounter}
+              skipCounter={activeHabit.skipCounter}
+              repeatDays={activeHabit.repeatDays}
+              repeatHours={activeHabit.repeatHours}
+              completedHours={activeHabit.completedHours}
+              selectedHour={activeHabit.selectedHour}
+              icon={activeHabit.icon}
+              isNext={true}
               onUpdated={refreshHabits}
               onNext={handleNextCard}
               globalProgressValue={globalProgressValue}
+              nextHabit={nextHabit}
             />
-          ))
-        )}
+          </>
+        ) : null}
       </ScrollView>
     </>
   );
