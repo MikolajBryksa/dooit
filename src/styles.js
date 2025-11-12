@@ -54,7 +54,7 @@ export const useStyles = () => {
     },
     button__good: {
       alignSelf: 'center',
-      backgroundColor: theme.colors.success,
+      backgroundColor: theme.colors.primary,
     },
     button__bad: {
       alignSelf: 'center',

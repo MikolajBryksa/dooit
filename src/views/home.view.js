@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, {TriggerType} from '@notifee/react-native';
 import {useStyles} from '@/styles';
 import {hourToSec, dateToWeekday, pickRandomMotivation} from '@/utils';
-import {useTodayKey} from '@/hooks';
+import {useTodayKey, useCurrentTime} from '@/hooks';
 import {
   getHabits,
   resetCompletedHoursForAllHabits,
@@ -28,6 +28,14 @@ const HomeView = () => {
   const debugMode = useSelector(state => state.settings.debugMode);
   const [activeKey, setActiveKey] = useState(null);
   const [allCompleted, setAllCompleted] = useState(false);
+
+  // Auto-show EndCard after 23:50
+  const currentTime = useCurrentTime();
+  const isEndDay = useMemo(() => {
+    const hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    return hours === 23 && minutes >= 50;
+  }, [currentTime]);
 
   const refreshHabits = useCallback(() => {
     // Updates the list of habits after changing one
@@ -157,10 +165,6 @@ const HomeView = () => {
       return;
     }
 
-    const hasIncompleteHabits = todayHabits.some(
-      habit => !habit.completedHours.includes(habit.selectedHour),
-    );
-
     // If activeKey doesn't exist anymore (habit was removed/changed) - reset to first incomplete
     const activeKeyExists =
       activeKey !== null && todayHabits.some(habit => habit.key === activeKey);
@@ -177,7 +181,15 @@ const HomeView = () => {
       return;
     }
 
-    // Don't auto-complete - wait for user to click Finish button
+    // If no active key and no incomplete habits - show EndCard
+    if (
+      activeKey === null &&
+      firstActiveKeyCandidate === null &&
+      todayHabits.length > 0
+    ) {
+      setAllCompleted(true);
+      return;
+    }
   }, [todayHabits, firstActiveKeyCandidate, activeKey]);
 
   // Handler for moving to next card - called by Next/Finish button
@@ -285,7 +297,7 @@ const HomeView = () => {
           <LoadingHabitsCard />
         ) : todayHabits.length === 0 ? (
           <NoHabitsCard />
-        ) : allCompleted ? (
+        ) : allCompleted || isEndDay ? (
           <EndCard weekdayKey={weekdayKey} />
         ) : activeHabit ? (
           <>

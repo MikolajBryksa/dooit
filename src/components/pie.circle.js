@@ -33,8 +33,8 @@ const PieCircle = ({
     tickArcLen = 1;
   }
 
-  const _iconColor = theme?.colors?.onPrimaryContainer;
-  const _goodColor = theme?.colors?.success;
+  const _iconColor = theme?.colors?.primary;
+  const _goodColor = theme?.colors?.primary;
   const _badColor = theme?.colors?.error;
   const _skipColor = theme?.colors?.background;
   const _trackColor = theme?.colors?.surfaceVariant;
