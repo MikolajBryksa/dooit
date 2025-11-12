@@ -2,7 +2,6 @@ import Realm from 'realm';
 import * as RNLocalize from 'react-native-localize';
 import {dayMap} from '@/constants';
 import uuid from 'react-native-uuid';
-import {de} from 'react-native-paper-dates';
 
 // Enable debug mode
 const debugMode = true;

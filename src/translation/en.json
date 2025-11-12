@@ -250,15 +250,7 @@
   },
   "summary": {
     "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
-    "total_actions": "You have {{count}} habit repetitions behind you!",
-    "good_rate_high": "As much as {{rate}}% of all your choices are good decisions.",
-    "bad_rate_high": "However, in as much as {{rate}}% of situations you choose what is easier.",
-    "best_habit": "Your best habit is {{habit}}.",
-    "best_habit_rate": "(as much as {{rate}}% effectiveness)",
-    "worst_habit": "Focus on the habit of {{habit}}.",
-    "worst_habit_rate": "(only {{rate}}% effectiveness)",
-    "no_response": "AI has not provided a response.",
-    "error": "Error fetching hints"
+    "no_response": "AI has not provided a response."
   },
   "ai": {
     "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",

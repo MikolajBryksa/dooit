@@ -250,15 +250,7 @@
   },
   "summary": {
     "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "total_actions": "Masz za sobą już {{count}} powtórzeń nawyków!",
-    "good_rate_high": "Aż {{rate}}% wszystkich Twoich wyborów to dobre decyzje.",
-    "bad_rate_high": "Jednak w aż {{rate}}% sytuacji wybierasz to co jest łatwiejsze.",
-    "best_habit": "Najlepiej Ci idzie nawyk {{habit}}.",
-    "best_habit_rate": "(aż {{rate}}% skuteczności)",
-    "worst_habit": "Nawyk {{habit}} wymaga większej uwagi.",
-    "worst_habit_rate": "(jedynie {{rate}}% skuteczności)",
-    "no_response": "AI nie udzieliło odpowiedzi.",
-    "error": "Błąd podczas pobierania podpowiedzi"
+    "no_response": "AI nie udzieliło odpowiedzi."
   },
   "ai": {
     "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",
