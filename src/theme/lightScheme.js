@@ -5,6 +5,7 @@ const boardColor = '#c1d2e8';
 const buttonColor = '#135d9a';
 const textColor = '#172a38';
 const errorColor = '#b00020';
+const successColor = '#2e7d32';
 
 export const lightScheme = {
   primary: buttonColor, // buttons
@@ -23,6 +24,7 @@ export const lightScheme = {
   onSurfaceDisabled: buttonColor, // text on disabled button
   backdrop: hexToRgba(textColor, 0.5), // background under modal
   error: errorColor,
+  success: successColor,
   elevation: {
     level0: 'transparent',
     level1: boardColor,

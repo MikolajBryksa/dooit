@@ -33,7 +33,8 @@ const PieCircle = ({
     tickArcLen = 1;
   }
 
-  const _goodColor = theme?.colors?.primary;
+  const _iconColor = theme?.colors?.primary;
+  const _goodColor = theme?.colors?.success;
   const _badColor = theme?.colors?.error;
   const _skipColor = theme?.colors?.background;
   const _trackColor = theme?.colors?.surfaceVariant;
@@ -334,7 +335,7 @@ const PieCircle = ({
             icon={icon}
             size={iconSize}
             style={{backgroundColor: 'transparent'}}
-            color={_goodColor}
+            color={_iconColor}
           />
         )}
       </View>
