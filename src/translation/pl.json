@@ -248,7 +248,7 @@
   },
   "summary": {
     "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "no_response": "AI nie udzieliło odpowiedzi."
+    "no_response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi. Spróbuj ponownie jutro."
   },
   "ai": {
     "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",

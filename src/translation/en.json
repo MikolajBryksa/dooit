@@ -248,7 +248,7 @@
   },
   "summary": {
     "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
-    "no_response": "AI has not provided a response."
+    "no_response": "Failed to generate summary. AI has not provided a response. Please try again tomorrow."
   },
   "ai": {
     "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",

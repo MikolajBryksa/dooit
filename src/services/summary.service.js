@@ -86,7 +86,7 @@ export const generateStats = (habits, weekdayKey) => {
   };
 };
 
-export const generateAiSummary = async stats => {
+export const generateAiSummary = async (stats, maxRetries = 3) => {
   const language = getSettingValue('language');
   const userName = getSettingValue('userName');
 
@@ -121,23 +121,31 @@ export const generateAiSummary = async stats => {
     });
   }
 
-  try {
-    const response = await fetch(HINT_GENERATOR_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({message: prompt}),
-    });
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(HINT_GENERATOR_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({message: prompt}),
+      });
 
-    const data = await response.json();
-    const aiResponse =
-      data?.reply || data?.message || i18n.t('summary.no_response');
+      const data = await response.json();
+      const aiResponse =
+        data?.reply || data?.message || i18n.t('summary.no_response');
 
-    return aiResponse;
-  } catch (error) {
-    console.error('AI request error:', error);
-    throw error;
+      return aiResponse;
+    } catch (error) {
+      console.error(`AI request error (attempt ${attempt}/${maxRetries}):`, error);
+      
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Optional: add a small delay between retries (e.g., 1 second)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
   }
 };
 
