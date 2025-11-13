@@ -1,7 +1,7 @@
 import i18n from '@/i18next';
 import {getSettingValue} from './settings.service.js';
 import {supabase} from './supabase.service.js';
-import {HINT_GENERATOR_API_URL} from '../../dooit.config.js';
+import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
 
@@ -123,7 +123,7 @@ export const generateAiSummary = async (stats, maxRetries = 3) => {
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const response = await fetch(HINT_GENERATOR_API_URL, {
+      const response = await fetch(Config.HINT_GENERATOR_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,12 +137,15 @@ export const generateAiSummary = async (stats, maxRetries = 3) => {
 
       return aiResponse;
     } catch (error) {
-      console.error(`AI request error (attempt ${attempt}/${maxRetries}):`, error);
-      
+      console.error(
+        `AI request error (attempt ${attempt}/${maxRetries}):`,
+        error,
+      );
+
       if (attempt === maxRetries) {
         throw error;
       }
-      
+
       // Optional: add a small delay between retries (e.g., 1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
     }

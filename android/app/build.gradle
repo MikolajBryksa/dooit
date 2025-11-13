@@ -2,14 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-import groovy.json.JsonSlurper
-
-def loadSecrets() {
-    def secretsFile = file('./secrets.json')
-    def secrets = new JsonSlurper().parse(secretsFile)
-    return secrets
-}
-def secrets = loadSecrets()
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -103,9 +96,9 @@ android {
         }
         release {
             storeFile file('./dooit-release-key.keystore')
-            storePassword secrets.DOOIT_STORE_PASSWORD
-            keyAlias secrets.DOOIT_KEY_ALIAS
-            keyPassword secrets.DOOIT_KEY_PASSWORD
+            storePassword project.env.get("DOOIT_STORE_PASSWORD")
+            keyAlias project.env.get("DOOIT_KEY_ALIAS")
+            keyPassword project.env.get("DOOIT_KEY_PASSWORD")
         }
     }
     buildTypes {
@@ -123,6 +116,7 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation project(':react-native-config')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
