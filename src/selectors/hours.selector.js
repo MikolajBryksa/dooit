@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Chip, SegmentedButtons, useTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -12,10 +12,10 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
   const clockFormat = useSelector(state => state.settings.clockFormat);
 
   // 'morning' | 'afternoon' | 'evening'
-  const [partOfDay, setPartOfDay] = React.useState('morning');
+  const [partOfDay, setPartOfDay] = useState('morning');
 
-  // Expose reset method via ref
   useEffect(() => {
+    // Expose reset method via ref
     if (onResetRef) {
       onResetRef.current = () => {
         setRepeatHours([]);

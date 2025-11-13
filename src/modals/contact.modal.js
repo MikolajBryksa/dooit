@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {View, ScrollView} from 'react-native';
 import {
   Card,
@@ -30,7 +30,7 @@ const ContactModal = ({visible, onDismiss}) => {
     setSuccess(false);
   };
 
-  const isFormValid = React.useMemo(() => {
+  const isFormValid = useMemo(() => {
     if (!email.trim() || !message.trim()) {
       return false;
     }

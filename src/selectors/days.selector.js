@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {SegmentedButtons, Checkbox} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -30,7 +30,7 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
   const isSameSet = (a, b) =>
     a.length === b.length && a.every(x => b.includes(x));
 
-  const segmentValue = React.useMemo(() => {
+  const segmentValue = useMemo(() => {
     if (repeatDays.length === 0) return '';
     if (isSameSet(repeatDays, daily)) return 'daily';
     if (isSameSet(repeatDays, workdays)) return 'workdays';

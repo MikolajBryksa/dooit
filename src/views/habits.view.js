@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, ScrollView} from 'react-native';
 import {Appbar} from 'react-native-paper';
@@ -6,9 +6,10 @@ import HabitCard from '@/components/habit.card';
 import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
+import FilterDialog from '@/dialogs/filter.dialog';
 import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {getHabits, autoSkipPastHabits} from '@/services/habits.service';
-import {setHabits, setHabitsLoading} from '@/redux/actions';
+import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {dateToWeekday, getLocalDateKey} from '@/utils';
@@ -20,8 +21,10 @@ const HabitsView = () => {
   const habits = useSelector(state => state.habits);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
+  const [visibleFilterModal, setVisibleFilterModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
+  const [filterDay, setFilterDay] = useState(''); // '' means show all
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -47,15 +50,20 @@ const HabitsView = () => {
     dispatch(setHabits(habits));
   };
 
-  const sortedHabits = React.useMemo(() => {
+  const sortedHabits = useMemo(() => {
     if (!habits || habits.length === 0) return [];
 
-    return [...habits].sort((a, b) => {
+    let filtered = habits;
+    if (filterDay) {
+      filtered = habits.filter(habit => habit.repeatDays.includes(filterDay));
+    }
+
+    return [...filtered].sort((a, b) => {
       const aFirstHour = a.repeatHours[0];
       const bFirstHour = b.repeatHours[0];
       return aFirstHour.localeCompare(bFirstHour);
     });
-  }, [habits]);
+  }, [habits, filterDay]);
 
   useEffect(() => {
     fetchAllHabits();
@@ -65,6 +73,11 @@ const HabitsView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.habits')} />
+
+        <Appbar.Action
+          icon={filterDay ? 'filter-check' : 'filter'}
+          onPress={() => setVisibleFilterModal(true)}
+        />
 
         <Appbar.Action
           icon="refresh"
@@ -117,6 +130,13 @@ const HabitsView = () => {
         label={editModalData?.label}
         habitId={editModalData?.habitId}
         fetchAllHabits={fetchAllHabits}
+      />
+
+      <FilterDialog
+        visible={visibleFilterModal}
+        onDismiss={() => setVisibleFilterModal(false)}
+        filterDay={filterDay}
+        setFilterDay={setFilterDay}
       />
 
       <EqualizeDialog
