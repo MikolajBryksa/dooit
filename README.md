@@ -120,7 +120,6 @@ Before you begin, ensure you have met the following requirements:
   ```
       Change version in package.json
       Change versionCode and versionName in android/app/build.gradle
-      Change debugMode to false in src/storage/schemas.js
   ```
 
 - **Build the Android App Bundle**:

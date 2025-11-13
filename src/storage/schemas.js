@@ -3,9 +3,6 @@ import * as RNLocalize from 'react-native-localize';
 import {dayMap} from '@/constants';
 import uuid from 'react-native-uuid';
 
-// Enable debug mode
-const debugMode = true;
-
 class Habit extends Realm.Object {}
 Habit.schema = {
   name: 'Habit',
@@ -84,7 +81,7 @@ realm.write(() => {
 
     realm.create('Settings', {
       id: 1,
-      userId: debugMode ? 'root' : uuid.v4(),
+      userId: __DEV__ ? 'root' : uuid.v4(),
       language: deviceLanguage,
       clockFormat: '24 h',
       firstDay: 'mon',
@@ -92,7 +89,7 @@ realm.write(() => {
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
-      debugMode: debugMode,
+      debugMode: __DEV__,
     });
   }
 });
