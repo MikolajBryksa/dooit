@@ -8,16 +8,17 @@ https://play.google.com/store/apps/details?id=com.dooit.bryksa
 - **React Native** for building the mobile application
 - **Realm** for local database management
 - **Java** for Android-specific development
+- **Supabase** for collecting analytics data
+- **Google Cloud** for generating AI-powered messages
 
 ## Features
 
-- Full functionality without network access
+- No network or account login required
 - Creating and managing a habit system
 - Tracking progress toward daily goals
 - English and Polish languages
 - Customizable clock and calendar
 - Light and dark theme
-- Layout based on Material Design
 
 ## Setup
 
@@ -87,12 +88,6 @@ Before you begin, ensure you have met the following requirements:
   ```
 
 ### Development
-
-- **Run tests**:
-
-  ```
-      npm run test
-  ```
 
 - **Change the app icon**:
 
