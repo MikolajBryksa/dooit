@@ -23,6 +23,10 @@ import {useStyles} from './src/styles';
 import {setupNotificationSync} from './src/services/notifications.service';
 import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
+import ErrorBoundary from '@/dialogs/error.dialog';
+import {setupErrorTracking} from '@/services/error-tracking.service';
+
+setupErrorTracking();
 
 const Tab = createBottomTabNavigator();
 
@@ -184,7 +188,9 @@ function App(): React.JSX.Element {
 
 const Root = () => (
   <Provider store={store}>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </Provider>
 );
 

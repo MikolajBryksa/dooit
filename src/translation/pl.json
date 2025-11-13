@@ -256,5 +256,10 @@
     "prompt_worst_habit": "Najgorzej idzie użytkownikowi: {{habitName}} ({{successRate}}%). ",
     "prompt_instructions_pl": "Kieruj swoją odpowiedź bezpośrednio do użytkownika, zwracając się do niego po imieniu ({{userName}}) i napisz ją w języku polskim. ",
     "prompt_last_answer": "Twoja poprzednia odpowiedź brzmiała: '''{{lastAnswer}}'''. Nawiąż do niej, ale nie powtarzaj jej w swojej nowej odpowiedzi. "
+  },
+  "error": {
+    "title": "Coś poszło nie tak",
+    "message": "Wystąpił nieoczekiwany błąd.\n\nBłąd został zgłoszony. Proszę, uruchom ponownie aplikację lub spróbuj ponownie.",
+    "restart": "Spróbuj ponownie"
   }
 }

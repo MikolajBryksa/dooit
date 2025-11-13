@@ -256,5 +256,10 @@
     "prompt_worst_habit": "The worst habit is: {{habitName}} ({{successRate}}%). ",
     "prompt_instructions_en": "Address your response directly to the user by name ({{userName}}) and write it in English. ",
     "prompt_last_answer": "Your previous answer was: '''{{lastAnswer}}'''. Refer to it but do not repeat it in your new response. "
+  },
+  "error": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred.\n\nThe error has been reported. Please restart the app or try again.",
+    "restart": "Try Again"
   }
 }
