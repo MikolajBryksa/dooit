@@ -30,7 +30,6 @@ const SettingsView = () => {
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
-  const [cardDuration, setCardDuration] = useState(settings.cardDuration);
   const [currentTheme, setCurrentTheme] = useState(
     settings.currentTheme || systemTheme,
   );
@@ -89,17 +88,6 @@ const SettingsView = () => {
     setFirstDay(newFirstDay);
     updateSettingValue('firstDay', newFirstDay);
     const updatedSettings = {...settings, firstDay: newFirstDay};
-    dispatch(setSettings(updatedSettings));
-  }
-
-  function handleCardDuration() {
-    const options = [3, 4, 5, 2];
-    const currentIdx = options.indexOf(cardDuration);
-    const nextIdx = (currentIdx + 1) % options.length;
-    const newDuration = options[nextIdx];
-    setCardDuration(newDuration);
-    updateSettingValue('cardDuration', newDuration);
-    const updatedSettings = {...settings, cardDuration: newDuration};
     dispatch(setSettings(updatedSettings));
   }
 
@@ -209,19 +197,6 @@ const SettingsView = () => {
               onPress={handleFirstDay}
               style={styles.chip}>
               {t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
-            </Chip>
-          </Card.Content>
-        </Card>
-
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__header}>
-            <Text variant="titleMedium">{t('settings.card-duration')}</Text>
-            <Chip
-              icon="clock-outline"
-              mode="outlined"
-              onPress={handleCardDuration}
-              style={styles.chip}>
-              {cardDuration} s
             </Chip>
           </Card.Content>
         </Card>

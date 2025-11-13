@@ -42,7 +42,6 @@ Settings.schema = {
     currentDay: 'string?',
     notifications: 'bool',
     debugMode: 'bool',
-    cardDuration: 'int',
   },
 };
 
@@ -94,7 +93,6 @@ realm.write(() => {
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
       debugMode: debugMode,
-      cardDuration: 4,
     });
   }
 });
