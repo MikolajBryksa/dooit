@@ -30,4 +30,18 @@ export const setupErrorTracking = () => {
   global.onunhandledrejection = event => {
     logError(event.reason, 'unhandled_promise');
   };
+
+  if (!__DEV__) {
+    // @ts-ignore
+    const ErrorUtils = global.ErrorUtils;
+    if (ErrorUtils) {
+      const originalHandler = ErrorUtils.getGlobalHandler();
+      ErrorUtils.setGlobalHandler((error, isFatal) => {
+        logError(error, 'global_error');
+        if (originalHandler) {
+          originalHandler(error, isFatal);
+        }
+      });
+    }
+  }
 };
