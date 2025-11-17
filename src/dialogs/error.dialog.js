@@ -13,9 +13,9 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    const screen =
+    const context =
       errorInfo?.componentStack?.split('\n')[1]?.trim() || 'unknown';
-    logError(error, screen);
+    logError(error, context);
   }
 
   handleRestart = () => {

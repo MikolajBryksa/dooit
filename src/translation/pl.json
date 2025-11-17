@@ -248,14 +248,7 @@
   },
   "summary": {
     "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "no_response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi. Spróbuj ponownie jutro."
-  },
-  "ai": {
-    "prompt_intro": "Użytkownik o imieniu {{userName}} do tej pory wykonał {{totalActions}} powtórzeń wszystkich nawyków. ",
-    "prompt_best_habit": "Najlepiej idzie użytkownikowi: {{habitName}} ze skutecznością na poziomie {{successRate}}%. ",
-    "prompt_worst_habit": "Najgorzej idzie użytkownikowi: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_pl": "Kieruj swoją odpowiedź bezpośrednio do użytkownika, zwracając się do niego po imieniu ({{userName}}) i napisz ją w języku polskim. ",
-    "prompt_last_answer": "Twoja poprzednia odpowiedź brzmiała: '''{{lastAnswer}}'''. Nawiąż do niej, ale nie powtarzaj jej w swojej nowej odpowiedzi. "
+    "no_response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi."
   },
   "error": {
     "title": "Coś poszło nie tak",

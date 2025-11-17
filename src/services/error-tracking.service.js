@@ -3,12 +3,12 @@ import {getSettingValue} from './settings.service';
 
 const APP_VERSION = require('../../package.json').version;
 
-export const logError = async (error, screen = 'unknown') => {
+export const logError = async (error, context = 'unknown') => {
   try {
     const errorData = {
       error_message: error?.message || String(error),
       error_stack: error?.stack || null,
-      screen: screen,
+      context: context,
       app_version: APP_VERSION,
       user_id: getSettingValue('userId') || 'unknown',
       user_name: getSettingValue('userName') || 'unknown',

@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {Text, ActivityIndicator, Button} from 'react-native-paper';
 import {ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {
-  generateStats,
   generateAiSummary,
-  saveSummaryToSupabase,
+  saveSummary,
   getDailySummary,
 } from '@/services/summary.service';
 import {useNetworkStatus} from '@/hooks';
@@ -20,90 +19,71 @@ const EndCard = ({weekdayKey}) => {
   const styles = useStyles();
   const habits = useSelector(state => state.habits);
   const todayKey = useTodayKey();
-
   const {isConnected} = useNetworkStatus(true);
   const [showButton, setShowButton] = useState(true);
-  const [stats, setStats] = useState(null);
   const [aiSummary, setAiSummary] = useState('');
   const [loadingAI, setLoadingAI] = useState(false);
-
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
   const [typewriterComplete, setTypewriterComplete] = useState(false);
 
+  const simplifiedHabits = useMemo(
+    () =>
+      habits
+        .filter(
+          habit => habit.available && habit.repeatDays.includes(weekdayKey),
+        )
+        .map(habit => ({
+          habitName: habit.habitName,
+          habitEnemy: habit.habitEnemy,
+          goodCounter: habit.goodCounter,
+          badCounter: habit.badCounter,
+          skipCounter: habit.skipCounter,
+          repeatHours: habit.repeatHours,
+        })),
+    [habits, weekdayKey],
+  );
+
   useEffect(() => {
-    // Check if summary already exists for today
     const existingSummary = getDailySummary(todayKey);
 
     if (existingSummary) {
-      // Load existing summary
-      setStats({
-        totalActions: existingSummary.totalActions,
-        goodActions: existingSummary.goodActions,
-        badActions: existingSummary.badActions,
-        skipActions: existingSummary.skipActions,
-        goodRate: existingSummary.goodRate,
-        badRate: existingSummary.badRate,
-        bestHabit: existingSummary.bestHabitName
-          ? {
-              habitName: existingSummary.bestHabitName,
-            }
-          : null,
-        maxSuccessRate: existingSummary.maxSuccessRate
-          ? parseFloat(existingSummary.maxSuccessRate)
-          : -1,
-        worstHabit: existingSummary.worstHabitName
-          ? {
-              habitName: existingSummary.worstHabitName,
-            }
-          : null,
-        minSuccessRate: existingSummary.minSuccessRate
-          ? parseFloat(existingSummary.minSuccessRate)
-          : 101,
-      });
-      setAiSummary(existingSummary.aiSummary || t('summary.no_actions'));
+      setAiSummary(existingSummary.aiSummary);
       setTypewriterComplete(true);
       setShowButton(false);
     } else {
-      // Generate new stats
-      const timer = setTimeout(() => {
-        const newStats = generateStats(habits, weekdayKey);
-        setStats(newStats);
-
-        if (newStats.totalActions === 0) {
-          setAiSummary(t('summary.no_actions'));
-          setTypewriterComplete(true);
-        }
-      }, 500);
-      return () => clearTimeout(timer);
+      if (simplifiedHabits.length === 0) {
+        setAiSummary(t('summary.no_actions'));
+        setTypewriterComplete(true);
+      }
     }
-  }, [todayKey, weekdayKey]);
+  }, [todayKey]);
 
   useEffect(() => {
     // Generate AI summary only if not already generated
     if (
       isConnected &&
-      stats &&
-      stats.totalActions > 0 &&
+      simplifiedHabits &&
+      simplifiedHabits.length > 0 &&
       !aiSummary &&
       !loadingAI
     ) {
       setLoadingAI(true);
-      generateAiSummary(stats)
+      generateAiSummary(simplifiedHabits)
         .then(response => {
           setAiSummary(response);
           setLoadingAI(false);
-          saveSummaryToSupabase(todayKey, stats, response);
+          saveSummary(todayKey, simplifiedHabits, response);
         })
         .catch(error => {
           console.error('AI request error after 3 attempts:', error);
           setAiSummary(t('summary.no_response'));
           setLoadingAI(false);
           setTypewriterComplete(true);
-          saveSummaryToSupabase(todayKey, stats, null);
+          saveSummary(todayKey, simplifiedHabits, null);
         });
     }
-  }, [isConnected, stats, aiSummary, loadingAI, todayKey]);
+  }, [isConnected, habits, aiSummary, loadingAI, todayKey]);
 
   useEffect(() => {
     // Typewriter effect - only if not already complete

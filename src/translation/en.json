@@ -248,14 +248,7 @@
   },
   "summary": {
     "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
-    "no_response": "Failed to generate summary. AI has not provided a response. Please try again tomorrow."
-  },
-  "ai": {
-    "prompt_intro": "The user named {{userName}} has completed {{totalActions}} repetitions of all habits so far. ",
-    "prompt_best_habit": "The best performing habit is: {{habitName}} with a success rate of {{successRate}}%. ",
-    "prompt_worst_habit": "The worst habit is: {{habitName}} ({{successRate}}%). ",
-    "prompt_instructions_en": "Address your response directly to the user by name ({{userName}}) and write it in English. ",
-    "prompt_last_answer": "Your previous answer was: '''{{lastAnswer}}'''. Refer to it but do not repeat it in your new response. "
+    "no_response": "Failed to generate summary. AI has not provided a response."
   },
   "error": {
     "title": "Something went wrong",

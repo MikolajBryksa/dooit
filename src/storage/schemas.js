@@ -45,26 +45,17 @@ Settings.schema = {
 class DailySummary extends Realm.Object {}
 DailySummary.schema = {
   name: 'DailySummary',
-  primaryKey: 'date',
+  primaryKey: 'updatedAt',
   properties: {
-    date: 'string',
+    updatedAt: 'string',
+    habitsJson: 'string?',
     aiSummary: 'string?',
-    totalActions: 'int',
-    goodActions: 'int',
-    badActions: 'int',
-    skipActions: 'int',
-    goodRate: 'string',
-    badRate: 'string',
-    bestHabitName: 'string?',
-    maxSuccessRate: 'string?',
-    worstHabitName: 'string?',
-    minSuccessRate: 'string?',
   },
 };
 
 const realmConfig = {
   schema: [Habit, Settings, DailySummary],
-  schemaVersion: 12,
+  schemaVersion: 13,
   deleteRealmIfMigrationNeeded: true,
 };
 
