@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {Text, ActivityIndicator, Button} from 'react-native-paper';
-import {ScrollView} from 'react-native';
+import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
@@ -39,6 +39,7 @@ const EndCard = ({weekdayKey}) => {
           goodCounter: habit.goodCounter,
           badCounter: habit.badCounter,
           skipCounter: habit.skipCounter,
+          repeatDays: habit.repeatDays,
           repeatHours: habit.repeatHours,
         })),
     [habits, weekdayKey],
@@ -105,15 +106,16 @@ const EndCard = ({weekdayKey}) => {
 
   return (
     <MainCard
+      style={styles.summary__card}
       outline={true}
       iconContent={<StatusIconCircle end />}
       titleContent={<Text variant="titleLarge">{t('card.done')}</Text>}
       textContent={
-        <ScrollView style={styles.summary_container}>
+        <View style={styles.summary_container}>
           <Text variant="bodyMedium" style={styles.summary__text}>
             {typewriterComplete ? aiSummary : displayedText}
           </Text>
-        </ScrollView>
+        </View>
       }
       buttonsContent={
         showButton ? (

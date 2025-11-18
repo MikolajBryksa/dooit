@@ -136,8 +136,8 @@ export const useStyles = () => {
       height: theme.dimensions.margin,
       borderRadius: theme.dimensions.margin / 2,
     },
-    motivation__message: {
-      textAlign: 'center',
+    summary__card: {
+      marginBottom: theme.dimensions.gap * 2,
     },
     summary_container: {
       flex: 1,
