@@ -14,6 +14,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
+import {logError} from '@/services/error-tracking.service.js';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();
@@ -54,7 +55,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
         resetInputs();
       }, 500);
     } catch (error) {
-      console.error('Error adding habit:', error.message);
+      logError(error, 'handleSave');
     }
   };
 

@@ -25,6 +25,7 @@ import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import ErrorBoundary from '@/dialogs/error.dialog';
 import {setupErrorTracking} from '@/services/error-tracking.service';
+import {logError} from '@/services/error-tracking.service';
 
 setupErrorTracking();
 
@@ -45,7 +46,7 @@ function AppContent() {
         const settings = getSettings();
 
         if (!settings) {
-          console.error('Settings not found in database');
+          logError(new Error('Settings not found in database'), 'loadData');
           return;
         }
 
@@ -64,7 +65,7 @@ function AppContent() {
         const habits = getHabits() || [];
         dispatch(setHabits(habits));
       } catch (error) {
-        console.error('Error loading settings:', error);
+        logError(error, 'loadData');
       } finally {
         const elapsed = Date.now() - start;
         const remainingTime = Math.max(0, 800 - elapsed);

@@ -76,7 +76,6 @@ const EndCard = ({weekdayKey}) => {
           saveSummary(todayKey, simplifiedHabits, response);
         })
         .catch(error => {
-          console.error('AI request error after 3 attempts:', error);
           setAiSummary(t('summary.no_response'));
           setLoadingAI(false);
           setTypewriterComplete(true);

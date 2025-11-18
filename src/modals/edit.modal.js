@@ -14,6 +14,7 @@ import {updateHabitValue} from '@/services/habits.service';
 import {hourToSec} from '@/utils';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
+import {logError} from '@/services/error-tracking.service.js';
 
 const EditModal = ({
   visible,
@@ -70,7 +71,7 @@ const EditModal = ({
         onDismiss();
       }, 100);
     } catch (error) {
-      console.error('Error updating habit:', error);
+      logError(error, 'handleSave');
       onDismiss();
     }
   };

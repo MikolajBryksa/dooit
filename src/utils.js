@@ -91,3 +91,11 @@ export function pickRandomMotivation(translationFunction, category) {
   lastPickedMessages[category] = selectedMessage;
   return selectedMessage;
 }
+
+export function stripMarkdown(text) {
+  // Remove markdown formatting from text
+  if (!text) return '';
+  let plain = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/__(.*?)__/g, '$1');
+  plain = plain.replace(/\*(.*?)\*/g, '$1').replace(/_(.*?)_/g, '$1');
+  return plain;
+}

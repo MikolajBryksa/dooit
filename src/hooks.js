@@ -1,5 +1,6 @@
 import {getLocalDateKey} from '@/utils';
 import {useState, useEffect, useCallback} from 'react';
+import {logError} from '@/services/error-tracking.service';
 import NetInfo from '@react-native-community/netinfo';
 
 export function useTodayKey() {
@@ -48,7 +49,7 @@ export const useNetworkStatus = (enableMonitoring = false) => {
       setIsConnected(connected);
       return connected;
     } catch (error) {
-      console.error(error);
+      logError(error, 'checkConnection');
       setIsConnected(false);
       return false;
     } finally {

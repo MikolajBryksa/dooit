@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
 import {logError} from './error-tracking.service.js';
+import {stripMarkdown} from '@/utils.js';
 
 export const getDailySummary = date => {
   const summary = realm.objectForPrimaryKey('DailySummary', date);
@@ -32,15 +33,20 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
       });
 
       const data = await response.json();
-      const aiResponse =
-        data?.reply || data?.message || i18n.t('summary.no_response');
+      let aiResponse = data?.reply || i18n.t('summary.no_response');
 
-      if (aiResponse === i18n.t('summary.no_response')) {
+      if (aiResponse !== i18n.t('summary.no_response')) {
+        aiResponse = stripMarkdown(aiResponse);
+      }
+
+      if (
+        attempt === maxRetries &&
+        aiResponse === i18n.t('summary.no_response')
+      ) {
         logError(
           new Error('AI did not provide a response'),
           'generateAiSummary',
         );
-        console.error('AI response:', data);
       }
 
       return aiResponse;
@@ -81,10 +87,10 @@ export const saveSummary = async (date, simplifiedHabits, aiSummary) => {
     });
 
     if (error) {
-      console.error(error);
+      logError(error, 'saveSummary');
       return;
     }
   } catch (error) {
-    console.error(error);
+    logError(error, 'saveSummary');
   }
 };

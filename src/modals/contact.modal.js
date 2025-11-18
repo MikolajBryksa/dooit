@@ -13,6 +13,7 @@ import {useStyles} from '@/styles';
 import {supabase} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks';
+import {logError} from '@/services/error-tracking.service.js';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -59,7 +60,7 @@ const ContactModal = ({visible, onDismiss}) => {
       ]);
 
       if (error) {
-        console.error(error);
+        logError(error, 'handleSubmit');
         return;
       }
 
@@ -71,7 +72,7 @@ const ContactModal = ({visible, onDismiss}) => {
         }, 500);
       }, 2000);
     } catch (error) {
-      console.error(error);
+      logError(error, 'handleSubmit');
     } finally {
       setLoading(false);
     }

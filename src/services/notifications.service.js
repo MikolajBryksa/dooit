@@ -1,6 +1,7 @@
 import notifee from '@notifee/react-native';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
+import {logError} from './error-tracking.service.js';
 
 export async function syncNotificationStatus(settings, dispatch, setSettings) {
   // Checks system notification permissions and updates app settings to match
@@ -16,7 +17,7 @@ export async function syncNotificationStatus(settings, dispatch, setSettings) {
       dispatch(setSettings(updatedSettings));
     }
   } catch (error) {
-    console.error('Error syncing notification status:', error);
+    logError(error, 'syncNotificationStatus');
   }
 }
 
@@ -39,7 +40,7 @@ export async function requestNotificationPermission(
 
     return granted;
   } catch (error) {
-    console.error('Error requesting notification permission:', error);
+    logError(error, 'requestNotificationPermission');
     return false;
   }
 }

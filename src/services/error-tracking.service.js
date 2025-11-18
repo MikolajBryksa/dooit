@@ -4,6 +4,8 @@ import {getSettingValue} from './settings.service';
 const APP_VERSION = require('../../package.json').version;
 
 export const logError = async (error, context = 'unknown') => {
+  console.error(`Logging error in context: ${context}`, error);
+
   try {
     const errorData = {
       error_message: error?.message || String(error),
@@ -19,10 +21,10 @@ export const logError = async (error, context = 'unknown') => {
       .insert([errorData]);
 
     if (supabaseError) {
-      console.error('Failed to log error:', supabaseError);
+      console.error('Failed to save error in Supabase:', supabaseError);
     }
   } catch (logError) {
-    console.error('Error in logError:', logError);
+    console.error('Failed to log error:', logError);
   }
 };
 
