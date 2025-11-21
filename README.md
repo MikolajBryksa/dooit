@@ -61,6 +61,13 @@ Before you begin, ensure you have met the following requirements:
       npm install
   ```
 
+- **Copy the required files**:
+
+  ```
+      Paste dooit-release-key.keystore to android/app
+      Paste .env to main directory
+  ```
+
 ### Launch
 
 - **Build the APK file**:
@@ -81,12 +88,6 @@ Before you begin, ensure you have met the following requirements:
       npm run android
   ```
 
-- **Uninstall the app from Android Simulator**:
-
-  ```
-      Settings > Apps > All apps > Dooit > Uninstall
-  ```
-
 ### Development
 
 - **Change the app icon**:
@@ -105,15 +106,13 @@ Before you begin, ensure you have met the following requirements:
       Update fontConfig.js
   ```
 
-- **Prepare to publish**:
+- **Uninstall the app from Android Simulator**:
 
   ```
-      Paste 1 file to android/app:
-      - dooit-release-key.keystore
-
-      Paste 1 file to main directory:
-      - .env
+      Settings > Apps > All apps > Dooit > Uninstall
   ```
+
+### Publishing
 
 - **Update version**:
 
@@ -134,15 +133,13 @@ Before you begin, ensure you have met the following requirements:
       android/app/build/outputs/bundle/release/app-release.aab
   ```
 
-### Publishing
+- **Submit new version to Google Play**:
+
+  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/bundle-explorer-selector
 
 - **Update the app info**:
 
   https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/main-store-listing
-
-- **Submit new version to Google Play**:
-
-  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/bundle-explorer-selector
 
 - **Create new version for testers**:
 

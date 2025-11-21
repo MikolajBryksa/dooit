@@ -55,7 +55,7 @@ DailySummary.schema = {
 
 const realmConfig = {
   schema: [Habit, Settings, DailySummary],
-  schemaVersion: 13,
+  schemaVersion: 14,
   deleteRealmIfMigrationNeeded: true,
 };
 
