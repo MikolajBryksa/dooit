@@ -9,8 +9,7 @@ import {
   saveSummary,
   getDailySummary,
 } from '@/services/summary.service';
-import {useNetworkStatus} from '@/hooks';
-import {useTodayKey} from '@/hooks';
+import {useNetworkStatus, useTodayKey} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 
@@ -20,12 +19,13 @@ const EndCard = ({weekdayKey}) => {
   const habits = useSelector(state => state.habits);
   const todayKey = useTodayKey();
   const {isConnected} = useNetworkStatus(true);
-  const [showButton, setShowButton] = useState(true);
+
   const [aiSummary, setAiSummary] = useState('');
   const [loadingAI, setLoadingAI] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
   const [typewriterComplete, setTypewriterComplete] = useState(false);
+  const [hasExistingSummary, setHasExistingSummary] = useState(false);
 
   const simplifiedHabits = useMemo(
     () =>
@@ -46,52 +46,66 @@ const EndCard = ({weekdayKey}) => {
   );
 
   useEffect(() => {
-    const existingSummary = getDailySummary(todayKey);
+    try {
+      const existingSummary = getDailySummary(todayKey);
 
-    if (existingSummary) {
-      setAiSummary(existingSummary.aiSummary);
-      setTypewriterComplete(true);
-      setShowButton(false);
-    } else {
-      if (simplifiedHabits.length === 0) {
-        setAiSummary(t('summary.no_actions'));
+      if (existingSummary && existingSummary.aiSummary) {
+        setAiSummary(existingSummary.aiSummary);
+        setDisplayedText(existingSummary.aiSummary);
+        setCurrentChar(existingSummary.aiSummary.length);
+        setTypewriterComplete(true);
+        setHasExistingSummary(true);
+      } else if (simplifiedHabits.length === 0) {
+        const msg = t('summary.no_actions');
+        setAiSummary(msg);
+        setDisplayedText(msg);
+        setCurrentChar(msg.length);
         setTypewriterComplete(true);
       }
+    } catch (e) {
+      const msg = t('summary.no_response');
+      setAiSummary(msg);
+      setDisplayedText(msg);
+      setCurrentChar(msg.length);
+      setTypewriterComplete(true);
     }
-  }, [todayKey]);
+  }, [todayKey, simplifiedHabits.length, t]);
+
+  const handleGenerate = async () => {
+    if (loadingAI || !simplifiedHabits.length || !isConnected) {
+      return;
+    }
+
+    setLoadingAI(true);
+    setTypewriterComplete(false);
+    setDisplayedText('');
+    setCurrentChar(0);
+
+    try {
+      const response = await generateAiSummary(simplifiedHabits);
+      setAiSummary(response);
+
+      try {
+        await saveSummary(todayKey, simplifiedHabits, response);
+        setHasExistingSummary(true);
+      } catch (saveError) {}
+    } catch (error) {
+      const msg = t('summary.no_response');
+      setAiSummary(msg);
+      setDisplayedText(msg);
+      setCurrentChar(msg.length);
+      setTypewriterComplete(true);
+
+      try {
+        await saveSummary(todayKey, simplifiedHabits, null);
+      } catch (saveError) {}
+    } finally {
+      setLoadingAI(false);
+    }
+  };
 
   useEffect(() => {
-    // Generate AI summary only if not already generated
-    if (
-      isConnected &&
-      simplifiedHabits &&
-      simplifiedHabits.length > 0 &&
-      !aiSummary &&
-      !loadingAI
-    ) {
-      setLoadingAI(true);
-      generateAiSummary(simplifiedHabits)
-        .then(response => {
-          setAiSummary(response);
-          setLoadingAI(false);
-          saveSummary(todayKey, simplifiedHabits, response);
-        })
-        .catch(error => {
-          setAiSummary(t('summary.no_response'));
-          setLoadingAI(false);
-          setTypewriterComplete(true);
-          saveSummary(todayKey, simplifiedHabits, null);
-        });
-    }
-  }, [isConnected, habits, aiSummary, loadingAI, todayKey]);
-
-  useEffect(() => {
-    // Typewriter effect - only if not already complete
-    if (!aiSummary || typewriterComplete) return;
-
-    if (showButton) {
-      setShowButton(false);
-    }
+    if (!aiSummary || typewriterComplete || loadingAI) return;
 
     if (currentChar < aiSummary.length) {
       const timer = setTimeout(() => {
@@ -102,7 +116,55 @@ const EndCard = ({weekdayKey}) => {
     } else {
       setTypewriterComplete(true);
     }
-  }, [aiSummary, currentChar, showButton, typewriterComplete]);
+  }, [aiSummary, currentChar, typewriterComplete, loadingAI]);
+
+  const textToShow = aiSummary ? displayedText || aiSummary : '';
+
+  const hasHabitsToday = simplifiedHabits.length > 0;
+
+  const renderButton = () => {
+    if (!hasHabitsToday) {
+      return null;
+    }
+
+    if (!isConnected) {
+      return (
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => {}}
+          disabled={true}
+          icon="wifi-off">
+          {t('button.offline')}
+        </Button>
+      );
+    }
+
+    if (loadingAI) {
+      return (
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => {}}
+          disabled={true}
+          icon={() => <ActivityIndicator size={16} />}>
+          {t('button.generating')}
+        </Button>
+      );
+    }
+
+    return (
+      <Button
+        style={styles.button}
+        mode="contained"
+        icon="creation"
+        onPress={handleGenerate}>
+        {hasExistingSummary
+          ? t('button.try-again')
+          : t('button.generate-summary')}
+      </Button>
+    );
+  };
 
   return (
     <MainCard
@@ -113,24 +175,11 @@ const EndCard = ({weekdayKey}) => {
       textContent={
         <View style={styles.summary_container}>
           <Text variant="bodyMedium" style={styles.summary__text}>
-            {typewriterComplete ? aiSummary : displayedText}
+            {textToShow}
           </Text>
         </View>
       }
-      buttonsContent={
-        showButton ? (
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={() => {}}
-            disabled={true}
-            icon={
-              !isConnected ? 'wifi-off' : () => <ActivityIndicator size={16} />
-            }>
-            {!isConnected ? t('button.offline') : t('button.generating')}
-          </Button>
-        ) : null
-      }
+      buttonsContent={renderButton()}
     />
   );
 };

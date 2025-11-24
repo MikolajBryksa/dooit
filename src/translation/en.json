@@ -57,6 +57,8 @@
     "sent": "Sent",
     "offline": "Offline",
     "hints": "Hints",
+    "generate-summary": "Generate summary",
+    "try-again": "Try again",
     "generating": "Generating",
     "finish": "Finish"
   },

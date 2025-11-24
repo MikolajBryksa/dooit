@@ -29,6 +29,31 @@
 -dontwarn kotlin.**
 -dontwarn kotlinx.**
 
+-keep class kotlin.** { *; }
+-keep class kotlinx.coroutines.** { *; }
+-keep class kotlinx.serialization.** { *; }
+-keepclasseswithmembers class * {
+    @kotlinx.serialization.Serializable *;
+}
+
+-keep class io.supabase.** { *; }
+-dontwarn io.supabase.**
+
+-keep class io.ktor.** { *; }
+-dontwarn io.ktor.**
+
+########################################
+# OKHTTP / OKIO / RETROFIT
+########################################
+-keep class okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+-keep class okio.** { *; }
+-dontwarn okio.**
+
+-keep class retrofit2.** { *; }
+-dontwarn retrofit2.**
+
 ########################################
 # GSON
 ########################################
@@ -55,4 +80,3 @@
 # CUSTOM CLASSES
 ########################################
 -keep class com.dooit.bryksa.model.** { *; }
-
