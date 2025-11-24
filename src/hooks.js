@@ -1,7 +1,8 @@
 import {getLocalDateKey} from '@/utils';
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useMemo, useCallback} from 'react';
 import {logError} from '@/services/error-tracking.service';
 import NetInfo from '@react-native-community/netinfo';
+import {selectActiveHabitKey} from '@/services/habits.service';
 
 export function useTodayKey() {
   const [todayKey, setTodayKey] = useState(getLocalDateKey());
@@ -79,3 +80,69 @@ export const useNetworkStatus = (enableMonitoring = false) => {
     isChecking,
   };
 };
+
+export function useActiveHabit(todayHabits, currentTime) {
+  const [activeKey, setActiveKey] = useState(null);
+  const [allCompleted, setAllCompleted] = useState(false);
+
+  const activeHabit = useMemo(() => {
+    return todayHabits.find(habit => habit.key === activeKey) || null;
+  }, [todayHabits, activeKey]);
+
+  const isLastHabit = useMemo(() => {
+    if (!todayHabits || todayHabits.length === 0 || !activeHabit) return false;
+
+    const incomplete = todayHabits.filter(
+      habit => !habit.completedHours?.includes(habit.selectedHour),
+    );
+
+    return incomplete.length === 1 && incomplete[0].key === activeHabit.key;
+  }, [todayHabits, activeHabit]);
+
+  const activeKeyCandidate = useMemo(
+    () => selectActiveHabitKey(todayHabits, currentTime),
+    [todayHabits, currentTime],
+  );
+
+  useEffect(() => {
+    if (todayHabits.length === 0) {
+      setActiveKey(null);
+      setAllCompleted(false);
+      return;
+    }
+
+    const activeExists =
+      activeKey !== null && todayHabits.some(habit => habit.key === activeKey);
+
+    if (!activeExists) {
+      const nextKey = activeKeyCandidate;
+
+      if (nextKey) {
+        setActiveKey(nextKey);
+        setAllCompleted(false);
+      } else {
+        setActiveKey(null);
+        setAllCompleted(true);
+      }
+    } else {
+      setAllCompleted(false);
+    }
+  }, [todayHabits, activeKeyCandidate, activeKey]);
+
+  const goToNextHabit = useCallback(() => {
+    if (activeKeyCandidate) {
+      setActiveKey(activeKeyCandidate);
+      setAllCompleted(false);
+    } else {
+      setActiveKey(null);
+      setAllCompleted(true);
+    }
+  }, [activeKeyCandidate]);
+
+  return {
+    activeHabit,
+    isLastHabit,
+    allCompleted,
+    goToNextHabit,
+  };
+}

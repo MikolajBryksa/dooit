@@ -1,7 +1,8 @@
 import realm from '@/storage/schemas';
-import {getNextId} from '@/utils';
+import {getNextId, hourToSec} from '@/utils';
 import i18next from 'i18next';
 import {habitIcons} from '@/constants';
+import {MINUTES_FOR_HABIT} from '@/constants';
 
 export const addHabit = (
   habitName,
@@ -119,6 +120,20 @@ export const getHabitById = id => {
   };
 };
 
+export const getHabitValue = (id, key) => {
+  const habit = getHabitById(id);
+  return habit ? habit[key] : null;
+};
+
+export const updateHabitValue = (id, key, value) => {
+  const updates = {[key]: value};
+  return updateHabit(id, updates);
+};
+
+export const updateHabitValues = (id, updates) => {
+  return updateHabit(id, updates);
+};
+
 export const createDefaultHabits = () => {
   const t = i18next.t;
   const defaultHabitsData = [
@@ -221,6 +236,81 @@ export const createDefaultHabits = () => {
   return createdHabits;
 };
 
+export const getTodayHabits = (habits, weekdayKey) => {
+  if (!habits || habits.length === 0) return [];
+
+  const filteredHabits = habits.filter(
+    habit => habit.available && habit.repeatDays.includes(weekdayKey),
+  );
+
+  const expandedHabits = filteredHabits.flatMap(habit =>
+    habit.repeatHours.map((hour, idx) => ({
+      key: `${habit.id}__${idx}__${hour}`,
+      id: habit.id,
+      habitName: habit.habitName,
+      habitEnemy: habit.habitEnemy,
+      goodCounter: habit.goodCounter,
+      badCounter: habit.badCounter,
+      skipCounter: habit.skipCounter,
+      repeatDays: habit.repeatDays,
+      repeatHours: habit.repeatHours,
+      completedHours: habit.completedHours || [],
+      selectedHour: hour,
+      icon: habit.icon,
+    })),
+  );
+
+  expandedHabits.sort(
+    (a, b) => hourToSec(a.selectedHour) - hourToSec(b.selectedHour),
+  );
+
+  return expandedHabits;
+};
+
+export function selectActiveHabitKey(todayHabits, currentTime) {
+  if (!todayHabits || todayHabits.length === 0) return null;
+
+  const currentSeconds =
+    currentTime.getHours() * 3600 +
+    currentTime.getMinutes() * 60 +
+    currentTime.getSeconds();
+
+  const windowSeconds = MINUTES_FOR_HABIT * 60;
+
+  const incomplete = todayHabits.filter(habit => {
+    return !habit.completedHours?.includes(habit.selectedHour);
+  });
+
+  if (incomplete.length === 0) return null;
+
+  const activeWindow = incomplete.filter(habit => {
+    const start = hourToSec(habit.selectedHour);
+    const diff = currentSeconds - start;
+    return diff >= 0 && diff <= windowSeconds;
+  });
+
+  if (activeWindow.length > 0) {
+    activeWindow.sort(
+      (a, b) => hourToSec(a.selectedHour) - hourToSec(b.selectedHour),
+    );
+    return activeWindow[0].key;
+  }
+
+  const future = incomplete.filter(habit => {
+    const start = hourToSec(habit.selectedHour);
+    return start > currentSeconds;
+  });
+
+  if (future.length > 0) {
+    future.sort(
+      (a, b) => hourToSec(a.selectedHour) - hourToSec(b.selectedHour),
+    );
+    return future[0].key;
+  }
+
+  return null;
+}
+
 export const resetCompletedHoursForAllHabits = () => {
   let affected = 0;
   realm.write(() => {
@@ -256,9 +346,9 @@ export const autoSkipPastHabits = weekdayKey => {
         const [h, m] = hour.split(':').map(Number);
         const habitMinutes = h * 60 + (m || 0);
 
-        // If habit time is more than 90 minutes in the past and not yet completed
+        // If habit time is more than MINUTES_FOR_HABIT in the past and not yet completed
         const minutesDiff = currentMinutes - habitMinutes;
-        if (minutesDiff > 90 && !completedHours.includes(hour)) {
+        if (minutesDiff > MINUTES_FOR_HABIT && !completedHours.includes(hour)) {
           completedHours.push(hour);
           hasChanges = true;
 
@@ -277,16 +367,14 @@ export const autoSkipPastHabits = weekdayKey => {
   return affected;
 };
 
-export const getHabitValue = (id, key) => {
-  const habit = getHabitById(id);
-  return habit ? habit[key] : null;
-};
+export const calculateGlobalProgress = todayHabits => {
+  if (!todayHabits || todayHabits.length === 0) return 0;
 
-export const updateHabitValue = (id, key, value) => {
-  const updates = {[key]: value};
-  return updateHabit(id, updates);
-};
+  const totalPlanned = todayHabits.length;
+  const totalCompleted = todayHabits.filter(habit =>
+    habit.completedHours.includes(habit.selectedHour),
+  ).length;
 
-export const updateHabitValues = (id, updates) => {
-  return updateHabit(id, updates);
+  const value = totalCompleted / totalPlanned;
+  return Math.max(0, Math.min(1, value));
 };

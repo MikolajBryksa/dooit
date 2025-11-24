@@ -1,4 +1,5 @@
-import notifee from '@notifee/react-native';
+import notifee, {TriggerType} from '@notifee/react-native';
+import {dateToWeekday, pickRandomMotivation} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
 import {logError} from './error-tracking.service.js';
@@ -68,5 +69,83 @@ export function setupNotificationSync(
     return () => {
       subscription.remove();
     };
+  }
+}
+
+export async function scheduleHabitNotifications(habits, t) {
+  // Schedules notifications for habits over the next 3 days
+  try {
+    if (!habits || habits.length === 0) {
+      await notifee.cancelAllNotifications();
+      return;
+    }
+
+    await notifee.createChannel({
+      id: 'default',
+      name: 'Dooit Channel',
+    });
+
+    // Clear old notifications to avoid duplicates
+    await notifee.cancelAllNotifications();
+
+    const now = new Date();
+
+    for (let daysAhead = 0; daysAhead < 3; daysAhead++) {
+      const targetDate = new Date(now);
+      targetDate.setDate(now.getDate() + daysAhead);
+
+      const weekdayKey = dateToWeekday(
+        `${targetDate.getFullYear()}-${String(
+          targetDate.getMonth() + 1,
+        ).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`,
+      );
+
+      const dayHabits = habits.filter(
+        habit => habit.available && habit.repeatDays.includes(weekdayKey),
+      );
+
+      dayHabits.forEach(habit => {
+        habit.repeatHours.forEach(hour => {
+          const [h, m] = hour.split(':').map(Number);
+          const triggerDate = new Date(
+            targetDate.getFullYear(),
+            targetDate.getMonth(),
+            targetDate.getDate(),
+            h,
+            m || 0,
+            0,
+            0,
+          );
+
+          if (triggerDate > now) {
+            const notificationId = `${habit.id}-${targetDate.getFullYear()}-${
+              targetDate.getMonth() + 1
+            }-${targetDate.getDate()}-${hour}`;
+
+            notifee.createTriggerNotification(
+              {
+                id: notificationId,
+                title: `${hour} ${habit.habitName}`,
+                body: pickRandomMotivation(t, 'notification'),
+                android: {
+                  channelId: 'default',
+                  smallIcon: 'ic_notification',
+                  pressAction: {
+                    id: 'default',
+                    launchActivity: 'default',
+                  },
+                },
+              },
+              {
+                type: TriggerType.TIMESTAMP,
+                timestamp: triggerDate.getTime(),
+              },
+            );
+          }
+        });
+      });
+    }
+  } catch (error) {
+    logError(error, 'scheduleHabitNotifications');
   }
 }
