@@ -46,7 +46,6 @@ export const getDailySummary = date => {
 };
 
 export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
-  const fallbackNoResponse = i18n.t('summary.no_response');
   const fallbackNoActions = i18n.t('summary.no_actions');
 
   if (!simplifiedHabits || simplifiedHabits.length === 0) {
@@ -58,24 +57,19 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
 
   try {
     const lang = getSettingValue('language');
-    if (lang) {
-      language = lang;
-    }
+    if (lang) language = lang;
   } catch (e) {
     await logError(e, 'generateAiSummary.language');
   }
 
   try {
     const name = getSettingValue('userName');
-    if (name) {
-      userName = name;
-    }
+    if (name) userName = name;
   } catch (e) {
     await logError(e, 'generateAiSummary.userName');
   }
 
   const selectedHabits = selectBestAndWorstHabits(simplifiedHabits);
-
   if (!selectedHabits || selectedHabits.length === 0) {
     return fallbackNoActions;
   }
@@ -83,7 +77,7 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
   const bestHabit = selectedHabits[0];
   const worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
 
-  let prompt =
+  const prompt =
     `You are an AI assistant. Respond in the language: ${language}. Address the user by name: ${userName}.\n` +
     `Praise the user's best habit, which is ${bestHabit.habitName} with an effectiveness of ${bestHabit.effectiveness}%. ` +
     `Such effectiveness indicates that the user is successfully resisting the bad habit: ${bestHabit.habitEnemy}. ` +
@@ -95,13 +89,13 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
       : '') +
     `Encourage the user by name to keep working on their habits.\n`;
 
+  let lastError = null;
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await fetch(Config.HINT_GENERATOR_API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({message: prompt}),
       });
 
@@ -116,29 +110,27 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
         data = await response.json();
       } catch (jsonError) {
         await logError(jsonError, 'generateAiSummary.parseJson');
+        throw jsonError;
       }
 
-      let aiResponse = data?.reply || fallbackNoResponse;
-
-      if (aiResponse !== fallbackNoResponse) {
-        aiResponse = stripMarkdown(aiResponse);
+      const rawReply = data?.reply;
+      if (!rawReply || typeof rawReply !== 'string') {
+        throw new Error('AI did not provide a valid reply');
       }
 
-      if (attempt === maxRetries && aiResponse === fallbackNoResponse) {
-        await logError(
-          new Error('AI did not provide a response'),
-          'generateAiSummary',
-        );
-      }
-
-      return aiResponse;
+      return stripMarkdown(rawReply);
     } catch (error) {
+      lastError = error;
       await logError(error, 'generateAiSummary.fetch');
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
 
-  return fallbackNoResponse;
+  await logError(
+    lastError || new Error('AI did not provide a response'),
+    'generateAiSummary.maxRetries',
+  );
+  throw lastError || new Error('AI did not provide a response');
 };
 
 export const saveSummary = async (date, simplifiedHabits, aiSummary) => {

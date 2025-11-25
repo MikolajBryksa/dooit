@@ -91,28 +91,51 @@ const EndCard = ({weekdayKey}) => {
       return;
     }
 
-    setLoadingAI(true);
-    setTypewriterComplete(false);
-    setDisplayedText('');
-    setCurrentChar(0);
-    setHadError(false);
-
     try {
-      const response = await generateAiSummary(simplifiedHabits);
-      setAiSummary(response);
+      setLoadingAI(true);
+      setTypewriterComplete(false);
+      setDisplayedText('');
+      setCurrentChar(0);
+      setHadError(false);
 
       try {
-        await saveSummary(todayKey, simplifiedHabits, response);
-        // Successfully saved summary
-        setHasExistingSummary(true);
-        setHadError(false);
-      } catch (saveError) {
-        // Error saving to database
+        const response = await generateAiSummary(simplifiedHabits);
+        setAiSummary(response);
+
+        try {
+          await saveSummary(todayKey, simplifiedHabits, response);
+          setHasExistingSummary(true);
+          setHadError(false);
+        } catch (saveError) {
+          await logError(saveError, 'EndCard.saveSummary');
+          setHasExistingSummary(false);
+          setHadError(true);
+        }
+      } catch (error) {
+        await logError(error, 'EndCard.generateAiSummary');
+
+        const msg = t('summary.no_response');
+        setAiSummary(msg);
+        setDisplayedText(msg);
+        setCurrentChar(msg.length);
+        setTypewriterComplete(true);
         setHasExistingSummary(false);
         setHadError(true);
+
+        try {
+          await saveSummary(todayKey, simplifiedHabits, null);
+        } catch (saveError) {
+          await logError(saveError, 'EndCard.saveSummary.null');
+        }
+      } finally {
+        setLoadingAI(false);
       }
-    } catch (error) {
-      // AI error
+    } catch (fatalError) {
+      console.error('[EndCard.handleGenerate] Fatal error:', fatalError);
+      await logError(fatalError, 'EndCard.handleGenerate.fatal');
+
+      setLoadingAI(false);
+
       const msg = t('summary.no_response');
       setAiSummary(msg);
       setDisplayedText(msg);
@@ -120,12 +143,6 @@ const EndCard = ({weekdayKey}) => {
       setTypewriterComplete(true);
       setHasExistingSummary(false);
       setHadError(true);
-
-      try {
-        await saveSummary(todayKey, simplifiedHabits, null);
-      } catch (saveError) {}
-    } finally {
-      setLoadingAI(false);
     }
   };
 
@@ -143,7 +160,8 @@ const EndCard = ({weekdayKey}) => {
     }
   }, [aiSummary, currentChar, typewriterComplete, loadingAI]);
 
-  const textToShow = aiSummary ? displayedText || aiSummary : '';
+  const textToShow = typewriterComplete ? aiSummary : displayedText;
+
   const hasHabitsToday = simplifiedHabits.length > 0;
 
   const renderButton = () => {

@@ -84,12 +84,13 @@ export const setupErrorTracking = () => {
       // @ts-ignore
       const ErrorUtils = global.ErrorUtils;
 
-      if (ErrorUtils && typeof ErrorUtils.getGlobalHandler === 'function') {
-        const originalHandler = ErrorUtils.getGlobalHandler();
-
+      if (ErrorUtils && typeof ErrorUtils.setGlobalHandler === 'function') {
         ErrorUtils.setGlobalHandler((error, isFatal) => {
           try {
-            logError(error, 'global_error');
+            logError(
+              error,
+              isFatal ? 'global_error_fatal' : 'global_error_nonfatal',
+            );
           } catch (e) {
             console.error(
               '[setupErrorTracking] Failed to log global error:',
@@ -97,16 +98,11 @@ export const setupErrorTracking = () => {
             );
           }
 
-          if (originalHandler) {
-            try {
-              originalHandler(error, isFatal);
-            } catch (e) {
-              console.error(
-                '[setupErrorTracking] Original global error handler threw:',
-                e,
-              );
-            }
-          }
+          console.error(
+            '[GlobalErrorHandler] Caught error',
+            isFatal ? '(fatal)' : '',
+            error,
+          );
         });
       }
     } catch (e) {
