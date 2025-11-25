@@ -34,6 +34,30 @@ const SettingsView = () => {
     settings.currentTheme || systemTheme,
   );
 
+  // Test Connection
+  const [testResult, setTestResult] = useState(null);
+  const [testVisible, setTestVisible] = useState(false);
+
+  async function handleTestConnection() {
+    setTestResult(null);
+    setTestVisible(false);
+    try {
+      const res = await fetch('https://jsonplaceholder.typicode.com/todos/1');
+      if (res.status === 200) {
+        setTestResult('ok');
+      } else {
+        setTestResult('fail');
+      }
+    } catch (e) {
+      setTestResult('fail');
+    }
+    setTestVisible(true);
+    setTimeout(() => {
+      setTestVisible(false);
+      setTestResult(null);
+    }, 3000);
+  }
+
   const handleContactModal = () => {
     setVisibleContactModal(!visibleContactModal);
   };
@@ -213,6 +237,32 @@ const SettingsView = () => {
             </Chip>
           </Card.Content>
         </Card>
+
+        {__DEV__ && (
+          <Card style={styles.card}>
+            <Card.Content style={styles.card__header}>
+              <Text variant="titleMedium">{t('settings.test-connection')}</Text>
+              <Chip
+                icon={
+                  testResult === 'ok'
+                    ? 'check'
+                    : testResult === 'fail'
+                    ? 'close'
+                    : 'wifi'
+                }
+                mode="outlined"
+                onPress={handleTestConnection}
+                style={styles.chip}
+                disabled={testVisible}>
+                {testVisible
+                  ? testResult === 'ok'
+                    ? t('settings.connection-ok')
+                    : t('settings.connection-fail')
+                  : t('settings.test')}
+              </Chip>
+            </Card.Content>
+          </Card>
+        )}
 
         <View style={styles.gap} />
       </ScrollView>

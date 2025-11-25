@@ -19,6 +19,7 @@ const HabitsView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
+  const debugMode = useSelector(state => state.settings.debugMode);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [visibleFilterModal, setVisibleFilterModal] = useState(false);
@@ -79,10 +80,12 @@ const HabitsView = () => {
           onPress={() => setVisibleFilterModal(true)}
         />
 
-        <Appbar.Action
-          icon="refresh"
-          onPress={() => setEqualizeDialogVisible(true)}
-        />
+        {debugMode && (
+          <Appbar.Action
+            icon="refresh"
+            onPress={() => setEqualizeDialogVisible(true)}
+          />
+        )}
 
         <Appbar.Action
           icon="plus"

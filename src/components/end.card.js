@@ -25,7 +25,9 @@ const EndCard = ({weekdayKey}) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
   const [typewriterComplete, setTypewriterComplete] = useState(false);
+
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
+  const [hadError, setHadError] = useState(false);
 
   const simplifiedHabits = useMemo(
     () =>
@@ -46,28 +48,41 @@ const EndCard = ({weekdayKey}) => {
   );
 
   useEffect(() => {
+    // Check if we have an existing summary for today
     try {
       const existingSummary = getDailySummary(todayKey);
 
       if (existingSummary && existingSummary.aiSummary) {
+        // We have a valid summary saved in the database
         setAiSummary(existingSummary.aiSummary);
         setDisplayedText(existingSummary.aiSummary);
         setCurrentChar(existingSummary.aiSummary.length);
         setTypewriterComplete(true);
         setHasExistingSummary(true);
+        setHadError(false);
       } else if (simplifiedHabits.length === 0) {
+        // No habits today
         const msg = t('summary.no_actions');
         setAiSummary(msg);
         setDisplayedText(msg);
         setCurrentChar(msg.length);
         setTypewriterComplete(true);
+        setHasExistingSummary(false);
+        setHadError(false);
+      } else {
+        // We can generate a new summary
+        setHasExistingSummary(false);
+        setHadError(false);
       }
     } catch (e) {
-      const msg = t('summary.no_response');
+      // Error reading local database
+      const msg = t('summary.error_reading');
       setAiSummary(msg);
       setDisplayedText(msg);
       setCurrentChar(msg.length);
       setTypewriterComplete(true);
+      setHasExistingSummary(false);
+      setHadError(true);
     }
   }, [todayKey, simplifiedHabits.length, t]);
 
@@ -80,6 +95,7 @@ const EndCard = ({weekdayKey}) => {
     setTypewriterComplete(false);
     setDisplayedText('');
     setCurrentChar(0);
+    setHadError(false);
 
     try {
       const response = await generateAiSummary(simplifiedHabits);
@@ -87,14 +103,23 @@ const EndCard = ({weekdayKey}) => {
 
       try {
         await saveSummary(todayKey, simplifiedHabits, response);
+        // Successfully saved summary
         setHasExistingSummary(true);
-      } catch (saveError) {}
+        setHadError(false);
+      } catch (saveError) {
+        // Error saving to database
+        setHasExistingSummary(false);
+        setHadError(true);
+      }
     } catch (error) {
+      // AI error
       const msg = t('summary.no_response');
       setAiSummary(msg);
       setDisplayedText(msg);
       setCurrentChar(msg.length);
       setTypewriterComplete(true);
+      setHasExistingSummary(false);
+      setHadError(true);
 
       try {
         await saveSummary(todayKey, simplifiedHabits, null);
@@ -119,11 +144,10 @@ const EndCard = ({weekdayKey}) => {
   }, [aiSummary, currentChar, typewriterComplete, loadingAI]);
 
   const textToShow = aiSummary ? displayedText || aiSummary : '';
-
   const hasHabitsToday = simplifiedHabits.length > 0;
 
   const renderButton = () => {
-    if (!hasHabitsToday) {
+    if (!hasHabitsToday || hasExistingSummary) {
       return null;
     }
 
@@ -159,9 +183,7 @@ const EndCard = ({weekdayKey}) => {
         mode="contained"
         icon="creation"
         onPress={handleGenerate}>
-        {hasExistingSummary
-          ? t('button.try-again')
-          : t('button.generate-summary')}
+        {hadError ? t('button.try-again') : t('button.generate-summary')}
       </Button>
     );
   };

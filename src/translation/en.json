@@ -31,7 +31,11 @@
     "light": "Light",
     "notifications": "Notifications",
     "enabled": "Enabled",
-    "disabled": "Disabled"
+    "disabled": "Disabled",
+    "test-connection": "Test connection",
+    "test": "Test",
+    "connection-ok": "Connected",
+    "connection-fail": "Disconnected"
   },
   "message": {
     "delete": "Are you sure to remove the habit:\n\n",
@@ -249,6 +253,7 @@
     ]
   },
   "summary": {
+    "error_reading": "Error reading generated summary.",
     "no_actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
     "no_response": "Failed to generate summary. AI has not provided a response."
   },
