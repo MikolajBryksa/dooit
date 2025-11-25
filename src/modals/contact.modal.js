@@ -40,7 +40,7 @@ const ContactModal = ({visible, onDismiss}) => {
   }, [email, message]);
 
   const handleSubmit = async () => {
-    if (!isFormValid || !isConnected) {
+    if (!isFormValid || !isConnected || loading || success) {
       return;
     }
 
@@ -60,7 +60,7 @@ const ContactModal = ({visible, onDismiss}) => {
       ]);
 
       if (error) {
-        logError(error, 'handleSubmit');
+        await logError(error, 'contact.handleSubmit');
         return;
       }
 
@@ -72,7 +72,7 @@ const ContactModal = ({visible, onDismiss}) => {
         }, 500);
       }, 2000);
     } catch (error) {
-      logError(error, 'handleSubmit');
+      await logError(error, 'contact.handleSubmit');
     } finally {
       setLoading(false);
     }

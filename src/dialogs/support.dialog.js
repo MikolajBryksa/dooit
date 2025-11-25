@@ -20,7 +20,7 @@ const SupportDialog = ({visible, onDismiss, onDone}) => {
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={onDismiss}>{t('button.cancel')}</Button>
-          <Button onPress={handleSupport}>{t('button.support')}</Button>
+          <Button onPress={handleSupport}>{t('button.buy')}</Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

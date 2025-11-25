@@ -41,14 +41,14 @@
     "delete": "Czy na pewno chcesz usunąć nawyk:\n\n",
     "equalize": "Czy chcesz od dobrych wyborów odjąć łatwe wybory?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
-    "support": "Cześć! 👋\n\nJestem niezależnym twórcą, który stworzył tę aplikację z pasją i przy wielu kawusiach ☕.\n\nJeśli lubisz z niej korzystać i chcesz pomóc dalej ją rozwijać - możesz postawić mi kawę. To naprawdę wiele dla mnie znaczy!\n\n~ Mikołaj Bryksa"
+    "support": "Cześć 👋\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Usuń",
     "cancel": "Anuluj",
     "close": "Zamknij",
     "contact": "Kontakt",
-    "support": "Kup",
+    "buy": "Kup",
     "save": "Zapisz",
     "back": "Wstecz",
     "next": "Dalej",

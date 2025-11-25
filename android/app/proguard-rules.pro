@@ -9,12 +9,12 @@
 -dontwarn com.facebook.jni.**
 
 ########################################
-# REACT NATIVE CONFIG
+# REACT NATIVE CONFIG (react-native-config)
 ########################################
 -keep class com.lugg.RNCConfig.** { *; }
 
 ########################################
-# REALM
+# REALM (wg dokumentacji)
 ########################################
 -keep class io.realm.annotations.RealmModule
 -keep @io.realm.annotations.RealmModule class *
@@ -24,18 +24,20 @@
 -dontwarn io.realm.**
 
 ########################################
-# KOTLIN / SUPABASE
+# KOTLIN / COROUTINES / SERIALIZATION
 ########################################
--dontwarn kotlin.**
--dontwarn kotlinx.**
-
+# Ogólnie lepiej nie obfuskować standardowych klas Kotlina
 -keep class kotlin.** { *; }
 -keep class kotlinx.coroutines.** { *; }
 -keep class kotlinx.serialization.** { *; }
+
 -keepclasseswithmembers class * {
     @kotlinx.serialization.Serializable *;
 }
 
+########################################
+# SUPABASE KOTLIN / KTOR
+########################################
 -keep class io.supabase.** { *; }
 -dontwarn io.supabase.**
 
@@ -59,18 +61,21 @@
 ########################################
 -keep class com.google.gson.** { *; }
 -dontwarn com.google.gson.**
+
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
 ########################################
-# JSON SERIALIZATION
+# JSON SERIALIZATION / METADANE
 ########################################
 -keepattributes Signature
 -keepattributes *Annotation*
+-keepattributes InnerClasses
+-keepattributes EnclosingMethod
 
 ########################################
-# KEEP NATIVE METHODS
+# NATIVE METHODS
 ########################################
 -keepclasseswithmembernames class * {
     native <methods>;

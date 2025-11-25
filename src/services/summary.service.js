@@ -46,12 +46,42 @@ export const getDailySummary = date => {
 };
 
 export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
-  const language = getSettingValue('language');
-  const userName = getSettingValue('userName');
+  const fallbackNoResponse = i18n.t('summary.no_response');
+  const fallbackNoActions = i18n.t('summary.no_actions');
+
+  if (!simplifiedHabits || simplifiedHabits.length === 0) {
+    return fallbackNoActions;
+  }
+
+  let language = 'en';
+  let userName = 'Friend';
+
+  try {
+    const lang = getSettingValue('language');
+    if (lang) {
+      language = lang;
+    }
+  } catch (e) {
+    await logError(e, 'generateAiSummary.language');
+  }
+
+  try {
+    const name = getSettingValue('userName');
+    if (name) {
+      userName = name;
+    }
+  } catch (e) {
+    await logError(e, 'generateAiSummary.userName');
+  }
+
   const selectedHabits = selectBestAndWorstHabits(simplifiedHabits);
 
-  let bestHabit = selectedHabits[0] || null;
-  let worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
+  if (!selectedHabits || selectedHabits.length === 0) {
+    return fallbackNoActions;
+  }
+
+  const bestHabit = selectedHabits[0];
+  const worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
 
   let prompt =
     `You are an AI assistant. Respond in the language: ${language}. Address the user by name: ${userName}.\n` +
@@ -75,18 +105,27 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
         body: JSON.stringify({message: prompt}),
       });
 
-      const data = await response.json();
-      let aiResponse = data?.reply || i18n.t('summary.no_response');
+      if (!response.ok) {
+        throw new Error(
+          `AI summary request failed with status ${response.status}`,
+        );
+      }
 
-      if (aiResponse !== i18n.t('summary.no_response')) {
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        await logError(jsonError, 'generateAiSummary.parseJson');
+      }
+
+      let aiResponse = data?.reply || fallbackNoResponse;
+
+      if (aiResponse !== fallbackNoResponse) {
         aiResponse = stripMarkdown(aiResponse);
       }
 
-      if (
-        attempt === maxRetries &&
-        aiResponse === i18n.t('summary.no_response')
-      ) {
-        logError(
+      if (attempt === maxRetries && aiResponse === fallbackNoResponse) {
+        await logError(
           new Error('AI did not provide a response'),
           'generateAiSummary',
         );
@@ -94,10 +133,12 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
 
       return aiResponse;
     } catch (error) {
-      logError(error, 'generateAiSummary');
+      await logError(error, 'generateAiSummary.fetch');
       await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
+
+  return fallbackNoResponse;
 };
 
 export const saveSummary = async (date, simplifiedHabits, aiSummary) => {
