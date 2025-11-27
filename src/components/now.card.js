@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState, useMemo, useCallback} from 'react';
 import {Text, Button, ProgressBar} from 'react-native-paper';
-import {View, Animated} from 'react-native';
+import {View, ScrollView, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateHabit} from '@/services/habits.service';
@@ -233,7 +233,7 @@ const NowCard = ({
             <ProgressBar
               style={styles.progress__bar}
               progress={progressBarValue}
-              indeterminate={isLocked}
+              indeterminate={!isLocked && step !== 3}
             />
           </View>
         </>
@@ -340,7 +340,11 @@ const NowCard = ({
             ]}
             pointerEvents={step === 3 ? 'auto' : 'none'}>
             <View style={styles.card__choicesTitleContainer}>
-              <Text variant="titleMedium">{motivation}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <Text variant="titleMedium" style={{minWidth: '100%'}}>
+                  {motivation}
+                </Text>
+              </ScrollView>
             </View>
             <View style={styles.card__buttons}>
               <Button

@@ -123,6 +123,7 @@ export const useStyles = () => {
     card__choicesTitleContainer: {
       height: theme.dimensions.height / 2,
       justifyContent: 'center',
+      alignItems: 'center',
     },
     card__buttons: {
       flexDirection: 'row',
@@ -148,6 +149,7 @@ export const useStyles = () => {
       width: '100%',
       paddingHorizontal: theme.dimensions.gap,
       paddingBottom: theme.dimensions.margin,
+      paddingTop: theme.dimensions.gap,
     },
     summary__text: {
       textAlign: 'center',
@@ -194,6 +196,9 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: theme.dimensions.height / 2,
+      marginBottom: theme.dimensions.margin,
+    },
+    modal__label: {
       marginBottom: theme.dimensions.margin,
     },
     segmentButtons: {

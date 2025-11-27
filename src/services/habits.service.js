@@ -209,14 +209,6 @@ export const createDefaultHabits = () => {
       repeatHours: ['21:00'],
       icon: habitIcons[8],
     },
-    {
-      id: 10,
-      habitName: t('default-habits.10.habitName'),
-      habitEnemy: t('default-habits.10.habitEnemy'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['22:30'],
-      icon: habitIcons[9],
-    },
   ];
 
   const createdHabits = [];

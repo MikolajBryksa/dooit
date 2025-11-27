@@ -182,7 +182,7 @@
     },
     "7": {
       "habitName": "Nauka języka",
-      "habitEnemy": "Tylko język ojczysty"
+      "habitEnemy": "Unikanie języka obcego"
     },
     "8": {
       "habitName": "Odstresowanie",
@@ -200,38 +200,37 @@
   "motivation": {
     "notification": [
       "Mały krok, wielki postęp.",
-      "Twoje nawyki kształtują twoją przyszłość.",
+      "Nawyki kształtują Twoją przyszłość.",
       "Tylko jeden nawyk naraz.",
       "Dyscyplina wygrywa z motywacją.",
       "Zrób to teraz, poczuj dumę później.",
       "Postęp, nie perfekcja.",
       "Małe nawyki dają wielki efekt.",
       "Konsekwencja daje rezultaty.",
-      "Dzisiejszy wysiłek to jutrzejsza nagroda.",
       "Mały wysiłek daje trwałą zmianę."
     ],
     "good": [
-      "Jeden dobry nawyk pociąga za sobą kolejne.",
+      "Jeden nawyk pociąga za sobą kolejne.",
       "Udowadniasz swoją determinację.",
-      "Z każdym wykonanym krokiem się zmieniasz",
+      "Z każdym krokiem się zmieniasz",
       "Tak trzymaj, robisz postępy.",
       "Twoja dyscyplina się opłaca.",
       "Kolejna cegiełka w murze sukcesu.",
-      "Każde działanie kształtuje to, kim się stajesz.",
+      "Każde działanie Cię kształtuje.",
       "Budujesz najlepszą wersję siebie.",
-      "Piszesz swoją własną historię sukcesu.",
-      "Świetny wybór — Twoja rutyna działa."
+      "Piszesz własną historię sukcesu.",
+      "Świetny wybór, Twoja rutyna działa."
     ],
     "bad": [
-      "Jedno potknięcie nie kasuje całego postępu.",
+      "Potknięcie nie kasuje całego postępu.",
       "Jutro to nowa szansa.",
       "Wyciągnij wniosek i idź dalej.",
-      "Twoja droga jest większa niż jeden wybór.",
-      "Nie rezygnuj — popraw kurs i idź dalej.",
+      "Droga jest większa niż jeden wybór.",
+      "Nie rezygnuj, popraw kurs i idź dalej.",
       "To potknięcie, nie porażka.",
       "Skup się na postępie, nie na perfekcji.",
-      "Twój nawyk jest silniejszy niż ta chwila.",
-      "Najważniejszy jest Twój następny wybór.",
+      "Nawyk jest silniejszy niż ta chwila.",
+      "Najważniejszy jest następny wybór.",
       "Nawet mistrzowie się potykają."
     ],
     "skip": [
@@ -240,11 +239,11 @@
       "Przerwa nie kasuje całego postępu.",
       "Wciąż jesteś na właściwej drodze.",
       "To tylko przerwa, nie krok wstecz.",
-      "Pominięcia się zdarzają — idź dalej.",
+      "Pominięcia się zdarzają, idź dalej.",
       "Seria to coś więcej niż jeden dzień.",
-      "Pominięty nawyk nie kasuje Twojego wysiłku.",
+      "Pominięty nawyk nie kasuje wysiłku.",
       "Nawet przerwy mogą napędzać postęp.",
-      "To tylko pauza — Twoja podróż trwa dalej."
+      "To tylko pauza, podróż trwa dalej."
     ],
     "end": [
       "Co dziś wzbudziło Twoją wdzięczność?",

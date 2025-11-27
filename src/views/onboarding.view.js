@@ -46,7 +46,6 @@ const OnboardingView = ({setShowOnboarding}) => {
     7: false,
     8: false,
     9: false,
-    10: false,
   });
 
   function handleStep1() {
@@ -176,7 +175,7 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(habitId => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(habitId => (
             <Card
               key={habitId}
               style={[

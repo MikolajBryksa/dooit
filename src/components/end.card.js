@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {Text, ActivityIndicator, Button} from 'react-native-paper';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
@@ -12,6 +12,8 @@ import {
 import {useNetworkStatus, useTodayKey} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
+import {logError} from '@/services/error-tracking.service';
+import {pickRandomMotivation} from '@/utils';
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
@@ -28,6 +30,8 @@ const EndCard = ({weekdayKey}) => {
 
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
   const [hadError, setHadError] = useState(false);
+
+  const [motivation, setMotivation] = useState(pickRandomMotivation(t, 'end'));
 
   const simplifiedHabits = useMemo(
     () =>
@@ -49,6 +53,7 @@ const EndCard = ({weekdayKey}) => {
 
   useEffect(() => {
     // Check if we have an existing summary for today
+    setMotivation(pickRandomMotivation(t, 'end'));
     try {
       const existingSummary = getDailySummary(todayKey);
 
@@ -213,11 +218,20 @@ const EndCard = ({weekdayKey}) => {
       iconContent={<StatusIconCircle end />}
       titleContent={<Text variant="titleLarge">{t('card.done')}</Text>}
       textContent={
-        <View style={styles.summary_container}>
-          <Text variant="bodyMedium" style={styles.summary__text}>
-            {textToShow}
-          </Text>
-        </View>
+        <>
+          <View style={styles.card__choicesTitleContainer}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Text variant="titleMedium" style={{minWidth: '100%'}}>
+                {motivation}
+              </Text>
+            </ScrollView>
+          </View>
+          <View style={styles.summary_container}>
+            <Text variant="bodyMedium" style={styles.summary__text}>
+              {textToShow}
+            </Text>
+          </View>
+        </>
       }
       buttonsContent={renderButton()}
     />

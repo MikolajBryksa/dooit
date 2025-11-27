@@ -182,7 +182,7 @@
     },
     "7": {
       "habitName": "Language learning",
-      "habitEnemy": "Only native language"
+      "habitEnemy": "Avoiding language learning"
     },
     "8": {
       "habitName": "Stress relief",
@@ -244,7 +244,7 @@
       "The streak is more than one repeat.",
       "A missed habit doesn’t erase your effort.",
       "Even breaks can fuel progress.",
-      "It’s just a pause — your journey continues."
+      "It’s just a pause, your journey continues."
     ],
     "end": [
       "What made you feel grateful today?",

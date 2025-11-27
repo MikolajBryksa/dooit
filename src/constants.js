@@ -22,5 +22,4 @@ export const habitIcons = [
   'translate',
   'meditation',
   'broom',
-  'shower',
 ];

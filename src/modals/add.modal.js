@@ -99,7 +99,9 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
         {step === 1 && (
           <>
-            <Text variant="bodyMedium">{t('addStep.habitName')}</Text>
+            <Text variant="bodyMedium" style={styles.modal__label}>
+              {t('addStep.habitName')}
+            </Text>
             <TextInput
               mode="outlined"
               placeholder={t('card.habitName')}
@@ -112,7 +114,9 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
         {step === 2 && (
           <>
-            <Text variant="bodyMedium">{t('addStep.habitEnemy')}</Text>
+            <Text variant="bodyMedium" style={styles.modal__label}>
+              {t('addStep.habitEnemy')}
+            </Text>
             <TextInput
               mode="outlined"
               placeholder={t('card.habitEnemy')}
