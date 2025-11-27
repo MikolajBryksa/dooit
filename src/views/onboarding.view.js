@@ -22,6 +22,7 @@ import {
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
 import {habitIcons} from '@/constants';
+import AddModal from '@/modals/add.modal';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -33,6 +34,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [name, setName] = useState('');
+  const [visibleAddModal, setVisibleAddModal] = useState(false);
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -258,13 +260,22 @@ const OnboardingView = ({setShowOnboarding}) => {
         </ScrollView>
 
         <View style={styles.onboarding__bar}>
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={handleStep3}
-            icon="check">
-            {t('onboarding.step3.accept')}
-          </Button>
+          <View style={styles.onboarding__buttons}>
+            <Button
+              mode="outlined"
+              style={styles.button}
+              icon="plus"
+              onPress={() => setVisibleAddModal(true)}>
+              {t('onboarding.step3.add-custom-habit')}
+            </Button>
+            <Button
+              style={styles.button}
+              mode="contained"
+              onPress={handleStep3}
+              icon="check">
+              {t('onboarding.step3.accept')}
+            </Button>
+          </View>
         </View>
 
         <EditModal
@@ -274,6 +285,12 @@ const OnboardingView = ({setShowOnboarding}) => {
           value={editModalData?.value}
           label={editModalData?.label}
           habitId={editModalData?.habitId}
+          fetchAllHabits={fetchAllHabits}
+        />
+
+        <AddModal
+          visible={visibleAddModal}
+          onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
         />
       </View>

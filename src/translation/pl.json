@@ -144,6 +144,7 @@
     "step3": {
       "select-repetition": "Wybierz czas powtórzeń",
       "accept-default": "lub zaakceptuj domyślne dni i godziny",
+      "add-custom-habit": "Dodaj nawyk",
       "accept": "Zapisz powiadomienia"
     },
     "step4": {

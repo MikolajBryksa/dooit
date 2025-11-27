@@ -42,6 +42,10 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.gap * 3,
       marginTop: theme.dimensions.gap * 3,
     },
+    onboarding__buttons: {
+      flexDirection: 'row',
+      gap: theme.dimensions.gap,
+    },
     onboarding__input: {
       marginBottom: theme.dimensions.gap * 2,
       marginTop: theme.dimensions.gap * 2,

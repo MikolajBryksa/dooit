@@ -144,6 +144,7 @@
     "step3": {
       "select-repetition": "Select the repetition time",
       "accept-default": "or accept the default days and hours",
+      "add-custom-habit": "Add habit",
       "accept": "Save reminders"
     },
     "step4": {
