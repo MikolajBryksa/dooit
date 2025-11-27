@@ -1,7 +1,8 @@
 import React from 'react';
-import {Dialog, Portal, List} from 'react-native-paper';
+import {Dialog, Portal, Button, List} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import {getLocalDateKey, dateToWeekday} from '@/utils';
 
 const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   const {t} = useTranslation();
@@ -32,13 +33,6 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title>{t('title.filter')}</Dialog.Title>
         <Dialog.Content>
-          <List.Item
-            title={t('date.daily')}
-            onPress={() => handleSelectDay('')}
-            right={props =>
-              filterDay === '' ? <List.Icon {...props} icon="check" /> : null
-            }
-          />
           {daily.map(day => (
             <List.Item
               key={day}
@@ -50,6 +44,18 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
             />
           ))}
         </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={() => handleSelectDay('')}>
+            {t('button.reset')}
+          </Button>
+          <Button
+            onPress={() => {
+              const weekdayKey = dateToWeekday(getLocalDateKey());
+              handleSelectDay(weekdayKey);
+            }}>
+            {t('button.today')}
+          </Button>
+        </Dialog.Actions>
       </Dialog>
     </Portal>
   );
