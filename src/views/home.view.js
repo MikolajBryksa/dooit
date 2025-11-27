@@ -30,6 +30,7 @@ const HomeView = () => {
   const habits = useSelector(state => state.habits);
   const habitsLoading = useSelector(state => state.habitsLoading);
   const debugMode = useSelector(state => state.settings.debugMode);
+
   const [visibleAddModal, setVisibleAddModal] = useState(false);
 
   const handleAddModal = () => {
@@ -44,21 +45,30 @@ const HomeView = () => {
     return hours === 23 && minutes >= 50;
   }, [currentTime]);
 
+  // Current date key and weekday key
+  const todayKey = useTodayKey();
+  const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
+
   const refreshHabits = useCallback(() => {
     const newHabits = getHabits() || [];
     dispatch(setHabits(newHabits));
   }, [dispatch]);
 
-  // Current date key and weekday key
-  const todayKey = useTodayKey();
-  const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
+  const rebuildTodayHabits = useCallback(async () => {
+    dispatch(setHabitsLoading(true));
+
+    autoSkipPastHabits(weekdayKey);
+    refreshHabits();
+
+    setTimeout(() => {
+      dispatch(setHabitsLoading(false));
+    }, 500);
+  }, [weekdayKey, refreshHabits, dispatch]);
 
   useEffect(() => {
     // On mount: auto-skip past habits and load habits immediately
-    autoSkipPastHabits(weekdayKey);
-    refreshHabits();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    rebuildTodayHabits();
+  }, [rebuildTodayHabits]);
 
   useEffect(() => {
     // Show a short loading indicator when opening the screen
@@ -71,8 +81,7 @@ const HomeView = () => {
       clearTimeout(timer);
       dispatch(setHabitsLoading(false));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     // Reset completedHours when the date changes (new day)
@@ -89,10 +98,10 @@ const HomeView = () => {
       if (lastDate !== todayKey) {
         resetCompletedHoursForAllHabits();
         await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
-        refreshHabits();
+        rebuildTodayHabits();
       }
     })();
-  }, [todayKey, refreshHabits]);
+  }, [todayKey, rebuildTodayHabits]);
 
   const todayHabits = useMemo(
     () => getTodayHabits(habits, weekdayKey),
@@ -116,15 +125,13 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
-        {debugMode && (
-          <Appbar.Action
-            icon="refresh"
-            onPress={() => {
-              resetCompletedHoursForAllHabits();
-              refreshHabits();
-            }}
-          />
-        )}
+
+        <Appbar.Action
+          icon="refresh"
+          onPress={() => {
+            rebuildTodayHabits();
+          }}
+        />
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
@@ -160,7 +167,7 @@ const HomeView = () => {
       <AddModal
         visible={visibleAddModal}
         onDismiss={handleAddModal}
-        fetchAllHabits={refreshHabits}
+        fetchAllHabits={rebuildTodayHabits}
       />
     </>
   );
