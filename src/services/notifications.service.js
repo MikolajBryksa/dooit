@@ -85,28 +85,44 @@ export async function scheduleHabitNotifications(habits, t) {
       name: 'Dooit Channel',
     });
 
-    // Clear old notifications to avoid duplicates
     await notifee.cancelAllNotifications();
 
     const now = new Date();
+
+    const makeDateKey = date =>
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        '0',
+      )}-${String(date.getDate()).padStart(2, '0')}`;
+
+    const todayDateKey = makeDateKey(now);
 
     for (let daysAhead = 0; daysAhead < 3; daysAhead++) {
       const targetDate = new Date(now);
       targetDate.setDate(now.getDate() + daysAhead);
 
-      const weekdayKey = dateToWeekday(
-        `${targetDate.getFullYear()}-${String(
-          targetDate.getMonth() + 1,
-        ).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`,
-      );
+      const targetDateKey = makeDateKey(targetDate);
+      const weekdayKey = dateToWeekday(targetDateKey);
 
       const dayHabits = habits.filter(
         habit => habit.available && habit.repeatDays.includes(weekdayKey),
       );
 
       dayHabits.forEach(habit => {
+        const completedHours = habit.completedHours || [];
+
         habit.repeatHours.forEach(hour => {
           const [h, m] = hour.split(':').map(Number);
+
+          const isCompletedToday =
+            targetDateKey === todayDateKey &&
+            Array.isArray(completedHours) &&
+            completedHours.includes(hour);
+
+          if (isCompletedToday) {
+            return;
+          }
+
           const triggerDate = new Date(
             targetDate.getFullYear(),
             targetDate.getMonth(),
