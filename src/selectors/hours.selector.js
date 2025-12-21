@@ -57,7 +57,7 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
     }
   }
 
-  const inMorning = ({h}) => h >= 5 && h < 12; // 05:00–11:45
+  const inMorning = ({h}) => h >= 6 && h < 12; // 06:00–11:45
   const inAfternoon = ({h}) => h >= 12 && h < 18; // 12:00–17:45
   const inEvening = ({h}) => h >= 18 && h <= 23; // 18:00–23:45
 
