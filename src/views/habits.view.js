@@ -7,7 +7,6 @@ import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
 import FilterDialog from '@/dialogs/filter.dialog';
-import EqualizeDialog from '@/dialogs/equalize.dialog';
 import {getHabits, autoSkipPastHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
@@ -19,12 +18,10 @@ const HabitsView = () => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const habits = useSelector(state => state.habits);
-  const debugMode = useSelector(state => state.settings.debugMode);
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [visibleEditModal, setVisibleEditModal] = useState(false);
   const [visibleFilterModal, setVisibleFilterModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
-  const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
   const [filterDay, setFilterDay] = useState('');
 
   const handleAddModal = () => {
@@ -60,6 +57,9 @@ const HabitsView = () => {
     }
 
     return [...filtered].sort((a, b) => {
+      if (a.available !== b.available) {
+        return a.available ? -1 : 1;
+      }
       const aFirstHour = a.repeatHours[0];
       const bFirstHour = b.repeatHours[0];
       return aFirstHour.localeCompare(bFirstHour);
@@ -79,13 +79,6 @@ const HabitsView = () => {
           icon={filterDay ? 'filter-check' : 'filter'}
           onPress={() => setVisibleFilterModal(true)}
         />
-
-        {debugMode && (
-          <Appbar.Action
-            icon="refresh"
-            onPress={() => setEqualizeDialogVisible(true)}
-          />
-        )}
 
         <Appbar.Action
           icon="plus"
@@ -137,15 +130,6 @@ const HabitsView = () => {
         onDismiss={() => setVisibleFilterModal(false)}
         filterDay={filterDay}
         setFilterDay={setFilterDay}
-      />
-
-      <EqualizeDialog
-        visible={equalizeDialogVisible}
-        onDismiss={() => setEqualizeDialogVisible(false)}
-        onDone={() => {
-          setEqualizeDialogVisible(false);
-          fetchAllHabits();
-        }}
       />
     </>
   );

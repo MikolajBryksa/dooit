@@ -132,7 +132,7 @@ const HabitCard = ({
                 onPress={() => openEditModal('habitEnemy', habitEnemy)}>
                 <View style={styles.card__row}>
                   <IconButton
-                    icon="alert-circle-outline"
+                    icon="sword-cross"
                     size={18}
                     style={{margin: 0, marginRight: 4}}
                   />

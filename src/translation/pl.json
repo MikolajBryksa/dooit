@@ -11,7 +11,6 @@
     "no-habits": "Brak nawyków",
     "contact": "Kontakt",
     "support": "Kawusia",
-    "equalize": "Wyrównaj liczniki",
     "filter": "Filtruj nawyki",
     "loading-habits": "Ładowanie nawyków",
     "history": "Historia"
@@ -40,7 +39,6 @@
   },
   "message": {
     "delete": "Czy na pewno chcesz usunąć nawyk:\n\n",
-    "equalize": "Czy chcesz od dobrych wyborów odjąć łatwe wybory?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
     "support": "Cześć 👋\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },
@@ -56,7 +54,6 @@
     "skip": "Pomiń",
     "fail": "Nieudane",
     "done": "Zrobione",
-    "equalize": "Wyrównaj",
     "reset": "Reset",
     "today": "Dzisiaj",
     "yesterday": "Wczoraj",
