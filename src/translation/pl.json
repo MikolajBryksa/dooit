@@ -86,7 +86,7 @@
     "badCounter": "Łatwe wybory",
     "skipCounter": "Pominięte wybory",
     "effectiveness": "Efektywność",
-    "no_planned_repetitions": "Brak zaplanowanych powtórzeń",
+    "noRepetitions": "Brak powtórzeń",
     "done": "Wszystko dziś zrobione!",
     "start": "Zacznij"
   },
@@ -259,9 +259,9 @@
     ]
   },
   "summary": {
-    "error_reading": "Błąd odczytu wygenerowanego podsumowania.",
-    "no_actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "no_response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi."
+    "error-reading": "Błąd odczytu wygenerowanego podsumowania.",
+    "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
+    "no-response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi."
   },
   "error": {
     "title": "Coś poszło nie tak",

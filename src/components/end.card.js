@@ -40,11 +40,9 @@ const EndCard = ({weekdayKey}) => {
           habit => habit.available && habit.repeatDays.includes(weekdayKey),
         )
         .map(habit => ({
+          id: habit.id,
           habitName: habit.habitName,
           habitEnemy: habit.habitEnemy,
-          goodCounter: habit.goodCounter,
-          badCounter: habit.badCounter,
-          skipCounter: habit.skipCounter,
           repeatDays: habit.repeatDays,
           repeatHours: habit.repeatHours,
         })),
@@ -67,7 +65,7 @@ const EndCard = ({weekdayKey}) => {
         setHadError(false);
       } else if (simplifiedHabits.length === 0) {
         // No habits today
-        const msg = t('summary.no_actions');
+        const msg = t('summary.no-actions');
         setAiSummary(msg);
         setDisplayedText(msg);
         setCurrentChar(msg.length);
@@ -81,7 +79,7 @@ const EndCard = ({weekdayKey}) => {
       }
     } catch (e) {
       // Error reading local database
-      const msg = t('summary.error_reading');
+      const msg = t('summary.error-reading');
       setAiSummary(msg);
       setDisplayedText(msg);
       setCurrentChar(msg.length);
@@ -119,7 +117,7 @@ const EndCard = ({weekdayKey}) => {
       } catch (error) {
         await logError(error, 'EndCard.generateAiSummary');
 
-        const msg = t('summary.no_response');
+        const msg = t('summary.no-response');
         setAiSummary(msg);
         setDisplayedText(msg);
         setCurrentChar(msg.length);
@@ -141,7 +139,7 @@ const EndCard = ({weekdayKey}) => {
 
       setLoadingAI(false);
 
-      const msg = t('summary.no_response');
+      const msg = t('summary.no-response');
       setAiSummary(msg);
       setDisplayedText(msg);
       setCurrentChar(msg.length);

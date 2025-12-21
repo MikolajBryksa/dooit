@@ -233,7 +233,7 @@ const HabitCard = ({
                     <Text variant="bodyMedium">
                       {weeklyStats.effectiveness !== null
                         ? `${weeklyStats.effectiveness}% (${weeklyStats.goodCount}/${weeklyStats.totalExpected})`
-                        : t('card.no_planned_repetitions')}
+                        : t('card.noRepetitions')}
                     </Text>
                   </View>
                 </TouchableRipple>

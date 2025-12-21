@@ -112,6 +112,10 @@ Before you begin, ensure you have met the following requirements:
   Settings > Apps > All apps > Dooit > Uninstall
   ```
 
+- **The current prompt version used by the Agent**:
+
+  https://console.cloud.google.com/run/detail/europe-central2/dooit/yaml/view?project=amiable-nova-476814-u1
+
 ## Publishing
 
 - **Update version**:

@@ -6,25 +6,31 @@ import realm from '@/storage/schemas';
 import Realm from 'realm';
 import {logError} from './error-tracking.service.js';
 import {stripMarkdown} from '@/utils.js';
+import {calculateWeeklyEffectiveness} from './effectiveness.service.js';
 
 function selectBestAndWorstHabits(habits) {
-  // Skip habits never performed (both counters zero)
-  const filtered = habits.filter(
-    h => !(h.goodCounter === 0 && h.badCounter === 0),
-  );
-  if (filtered.length === 0) return [];
+  // Calculate weekly effectiveness for each habit
+  const habitsWithEffectiveness = habits
+    .map(habit => {
+      const stats = calculateWeeklyEffectiveness(habit.id, {
+        id: habit.id,
+        repeatDays: habit.repeatDays,
+        repeatHours: habit.repeatHours,
+      });
 
-  // Add effectiveness (percentage) to each habit
-  const habitsWithEffectiveness = filtered.map(habit => {
-    let effectiveness;
-    const total = habit.goodCounter + habit.badCounter;
-    if (total === 0) {
-      effectiveness = 0;
-    } else {
-      effectiveness = Math.round((habit.goodCounter / total) * 1000) / 10;
-    }
-    return {...habit, effectiveness};
-  });
+      // Skip habits with no data or null effectiveness
+      if (stats.effectiveness === null || stats.totalExpected === 0) {
+        return null;
+      }
+
+      return {
+        ...habit,
+        effectiveness: stats.effectiveness,
+      };
+    })
+    .filter(h => h !== null);
+
+  if (habitsWithEffectiveness.length === 0) return [];
 
   const sorted = habitsWithEffectiveness.sort(
     (a, b) => b.effectiveness - a.effectiveness,
@@ -46,7 +52,7 @@ export const getDailySummary = date => {
 };
 
 export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
-  const fallbackNoActions = i18n.t('summary.no_actions');
+  const fallbackNoActions = i18n.t('summary.no-actions');
 
   if (!simplifiedHabits || simplifiedHabits.length === 0) {
     return fallbackNoActions;
@@ -79,13 +85,11 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
 
   const prompt =
     `You are an AI assistant. Respond in the language: ${language}. Address the user by name: ${userName}.\n` +
-    `Praise the user's best habit, which is ${bestHabit.habitName} with an effectiveness of ${bestHabit.effectiveness}%. ` +
-    `Such effectiveness indicates that the user is successfully resisting the bad habit: ${bestHabit.habitEnemy}. ` +
-    `Throughout all days so far, the user has performed this habit ${bestHabit.goodCounter} times and succumbed to the bad habit only ${bestHabit.badCounter} times.\n` +
+    `Praise the user's best habit: ${bestHabit.habitName} with ${bestHabit.effectiveness}% effectiveness. ` +
+    `This means the user successfully performed this habit at the expected times, resisting the bad habit: ${bestHabit.habitEnemy}.\n` +
     (worstHabit
-      ? `Emphasize why it is worth developing the habit that is going the worst for the user, which is ${worstHabit.habitName} with an effectiveness of ${worstHabit.effectiveness}%. ` +
-        `Such effectiveness indicates that the user is having difficulty overcoming the bad habit: ${worstHabit.habitEnemy}. ` +
-        `Throughout all days so far, the user has performed this habit only ${worstHabit.goodCounter} times and succumbed to the bad habit as many as ${worstHabit.badCounter} times.\n`
+      ? `Encourage the user to improve their habit ${worstHabit.habitName}, which has ${worstHabit.effectiveness}% effectiveness. ` +
+        `This habit needs more attention to overcome the bad habit: ${worstHabit.habitEnemy}.\n`
       : '') +
     `Encourage the user by name to keep working on their habits.\n`;
 
