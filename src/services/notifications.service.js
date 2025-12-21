@@ -1,8 +1,9 @@
 import notifee, {TriggerType} from '@notifee/react-native';
-import {dateToWeekday, pickRandomMotivation} from '@/utils';
+import {dateToWeekday, pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
 import {logError} from './error-tracking.service.js';
+import {hasExecution} from './effectiveness.service';
 
 export async function syncNotificationStatus(settings, dispatch, setSettings) {
   // Checks system notification permissions and updates app settings to match
@@ -74,6 +75,7 @@ export function setupNotificationSync(
 
 export async function scheduleHabitNotifications(habits, t) {
   // Schedules notifications for habits over the next 3 days
+  // Skips notifications for already completed executions today
   try {
     if (!habits || habits.length === 0) {
       await notifee.cancelAllNotifications();
@@ -88,39 +90,31 @@ export async function scheduleHabitNotifications(habits, t) {
     await notifee.cancelAllNotifications();
 
     const now = new Date();
-
-    const makeDateKey = date =>
-      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-        2,
-        '0',
-      )}-${String(date.getDate()).padStart(2, '0')}`;
-
-    const todayDateKey = makeDateKey(now);
+    const todayDateKey = getLocalDateKey();
+    let scheduledCount = 0;
 
     for (let daysAhead = 0; daysAhead < 3; daysAhead++) {
       const targetDate = new Date(now);
       targetDate.setDate(now.getDate() + daysAhead);
 
-      const targetDateKey = makeDateKey(targetDate);
+      const targetDateKey = getLocalDateKey(targetDate);
       const weekdayKey = dateToWeekday(targetDateKey);
 
       const dayHabits = habits.filter(
         habit => habit.available && habit.repeatDays.includes(weekdayKey),
       );
 
-      dayHabits.forEach(habit => {
-        const completedHours = habit.completedHours || [];
-
-        habit.repeatHours.forEach(hour => {
+      for (const habit of dayHabits) {
+        for (const hour of habit.repeatHours) {
           const [h, m] = hour.split(':').map(Number);
 
-          const isCompletedToday =
+          // For today only: skip notification if already completed
+          const isAlreadyCompleted =
             targetDateKey === todayDateKey &&
-            Array.isArray(completedHours) &&
-            completedHours.includes(hour);
+            hasExecution(habit.id, targetDateKey, hour);
 
-          if (isCompletedToday) {
-            return;
+          if (isAlreadyCompleted) {
+            continue;
           }
 
           const triggerDate = new Date(
@@ -133,12 +127,11 @@ export async function scheduleHabitNotifications(habits, t) {
             0,
           );
 
+          // Only schedule future notifications
           if (triggerDate > now) {
-            const notificationId = `${habit.id}-${targetDate.getFullYear()}-${
-              targetDate.getMonth() + 1
-            }-${targetDate.getDate()}-${hour}`;
+            const notificationId = `${habit.id}-${targetDateKey}-${hour}`;
 
-            notifee.createTriggerNotification(
+            await notifee.createTriggerNotification(
               {
                 id: notificationId,
                 title: `${hour} ${habit.habitName}`,
@@ -157,9 +150,10 @@ export async function scheduleHabitNotifications(habits, t) {
                 timestamp: triggerDate.getTime(),
               },
             );
+            scheduledCount++;
           }
-        });
-      });
+        }
+      }
     }
   } catch (error) {
     logError(error, 'scheduleHabitNotifications');

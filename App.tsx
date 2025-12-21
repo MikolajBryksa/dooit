@@ -26,6 +26,7 @@ import {setHabits} from '@/redux/actions';
 import ErrorBoundary from '@/dialogs/error.dialog';
 import {setupErrorTracking} from '@/services/error-tracking.service';
 import {logError} from '@/services/error-tracking.service';
+import {cleanOldExecutions} from '@/services/effectiveness.service';
 
 setupErrorTracking();
 
@@ -64,6 +65,8 @@ function AppContent() {
 
         const habits = getHabits() || [];
         dispatch(setHabits(habits));
+
+        cleanOldExecutions(14);
       } catch (error) {
         logError(error, 'loadData');
       } finally {

@@ -3,6 +3,7 @@ import {useState, useEffect, useMemo, useCallback} from 'react';
 import {logError} from '@/services/error-tracking.service';
 import NetInfo from '@react-native-community/netinfo';
 import {selectActiveHabitKey} from '@/services/habits.service';
+import {hasExecution} from '@/services/effectiveness.service';
 
 export function useTodayKey() {
   const [todayKey, setTodayKey] = useState(getLocalDateKey());
@@ -92,8 +93,9 @@ export function useActiveHabit(todayHabits, currentTime) {
   const isLastHabit = useMemo(() => {
     if (!todayHabits || todayHabits.length === 0 || !activeHabit) return false;
 
+    const today = getLocalDateKey();
     const incomplete = todayHabits.filter(
-      habit => !habit.completedHours?.includes(habit.selectedHour),
+      habit => !hasExecution(habit.id, today, habit.selectedHour),
     );
 
     return incomplete.length === 1 && incomplete[0].key === activeHabit.key;

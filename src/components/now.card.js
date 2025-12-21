@@ -4,10 +4,15 @@ import {View, ScrollView, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateHabit} from '@/services/habits.service';
-import {pickRandomMotivation} from '@/utils';
+import {pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from './pie.circle';
 import MainCard from './main.card';
+import {
+  recordHabitExecution,
+  hasExecution,
+  calculateWeeklyEffectiveness,
+} from '@/services/effectiveness.service';
 
 const NowCard = ({
   id,
@@ -18,7 +23,6 @@ const NowCard = ({
   skipCounter,
   repeatDays,
   repeatHours,
-  completedHours = [],
   selectedHour,
   icon,
   isNext = false,
@@ -131,8 +135,17 @@ const NowCard = ({
   }, [step, goodHabitOpacity, badHabitOpacity, nextButtonOpacity]);
 
   const isCompleted = useMemo(() => {
-    return completedHours.includes(selectedHour);
-  }, [completedHours, selectedHour]);
+    const today = getLocalDateKey();
+    return hasExecution(id, today, selectedHour);
+  }, [id, selectedHour]);
+
+  const weeklyStats = useMemo(() => {
+    return calculateWeeklyEffectiveness(id, {
+      id,
+      repeatDays,
+      repeatHours,
+    });
+  }, [id, repeatDays, repeatHours]);
 
   const addGoodChoice = () => {
     setMotivation(pickRandomMotivation(t, 'good'));
@@ -164,21 +177,21 @@ const NowCard = ({
     onNext?.();
   };
 
-  function addHour(list, hour) {
-    return Array.from(new Set([...(list || []), hour]));
-  }
-
   const handleChoice = useCallback(
     choice => {
       if (isCompleted) return;
 
-      const nextCompleted = addHour(completedHours, selectedHour);
+      const today = getLocalDateKey();
+
+      if (!hasExecution(id, today, selectedHour)) {
+        recordHabitExecution(id, today, selectedHour, choice);
+      }
+
       const patch = {
         habitName,
         habitEnemy,
         repeatDays,
         repeatHours,
-        completedHours: nextCompleted,
       };
 
       if (choice === 'good') patch.goodCounter = (goodCounter || 0) + 1;
@@ -190,7 +203,6 @@ const NowCard = ({
     },
     [
       isCompleted,
-      completedHours,
       selectedHour,
       habitName,
       habitEnemy,
@@ -220,9 +232,11 @@ const NowCard = ({
           size={120}
           strokeWidth={12}
           icon={icon}
-          good={goodCounter}
-          bad={badCounter}
-          skip={skipCounter}
+          effectiveness={weeklyStats.effectiveness}
+          goodCount={weeklyStats.goodCount}
+          totalExpected={weeklyStats.totalExpected}
+          missedCount={weeklyStats.missedCount}
+          badCount={weeklyStats.badCount}
           opacity={isLocked ? 0.5 : 1}
         />
       }

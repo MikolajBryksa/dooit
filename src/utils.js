@@ -99,3 +99,30 @@ export function stripMarkdown(text) {
   plain = plain.replace(/\*(.*?)\*/g, '$1').replace(/_(.*?)_/g, '$1');
   return plain;
 }
+
+export function subtractDays(dateKey, days) {
+  // Subtract days from a date key (YYYY-MM-DD) and return new date key
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  date.setDate(date.getDate() - days);
+  return getLocalDateKey(date);
+}
+
+export function addDays(dateKey, days) {
+  // Add days to a date key (YYYY-MM-DD) and return new date key
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  date.setDate(date.getDate() + days);
+  return getLocalDateKey(date);
+}
+
+export function getDaysBetween(startDateKey, endDateKey) {
+  // Calculate number of days between two date keys
+  const [y1, m1, d1] = startDateKey.split('-').map(Number);
+  const [y2, m2, d2] = endDateKey.split('-').map(Number);
+  const date1 = new Date(y1, m1 - 1, d1);
+  const date2 = new Date(y2, m2 - 1, d2);
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}

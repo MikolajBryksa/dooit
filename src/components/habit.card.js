@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useMemo} from 'react';
 import {
   Card,
   Text,
@@ -9,17 +9,17 @@ import {
 import {View, Animated} from 'react-native';
 import {updateHabitValue} from '@/services/habits.service';
 import DeleteDialog from '@/dialogs/delete.dialog';
+import HistoryModal from '@/modals/history.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {formatHourString} from '@/utils';
+import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
 
 const HabitCard = ({
   id,
   habitName,
   habitEnemy,
-  goodCounter = 0,
-  badCounter = 0,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -33,6 +33,26 @@ const HabitCard = ({
   const firstDay = useSelector(state => state.settings.firstDay);
   const [isAvailable, setIsAvailable] = useState(available);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [historyModalVisible, setHistoryModalVisible] = useState(false);
+
+  const weeklyStats = useMemo(() => {
+    try {
+      return calculateWeeklyEffectiveness(id, {
+        id,
+        repeatDays,
+        repeatHours,
+      });
+    } catch (error) {
+      console.error('Error calculating effectiveness:', error);
+      return {
+        effectiveness: null,
+        goodCount: 0,
+        totalExpected: 0,
+        missedCount: 0,
+        badCount: 0,
+      };
+    }
+  }, [id, repeatDays, repeatHours]);
 
   const contentHeight = useRef(new Animated.Value(available ? 1 : 0)).current;
   const cardOpacity = useRef(new Animated.Value(available ? 1 : 0.5)).current;
@@ -101,7 +121,7 @@ const HabitCard = ({
               ? 'auto'
               : contentHeight.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 200],
+                  outputRange: [0, 150],
                 }),
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,
@@ -199,32 +219,21 @@ const HabitCard = ({
 
             {!onboardingMode && (
               <>
-                <View style={styles.gap} />
-
                 <TouchableRipple
-                  onPress={() => openEditModal('goodCounter', goodCounter)}>
+                  onPress={() =>
+                    weeklyStats.effectiveness !== null &&
+                    setHistoryModalVisible(true)
+                  }>
                   <View style={styles.card__row}>
                     <IconButton
-                      icon="plus-thick"
+                      icon="chart-arc"
                       size={18}
                       style={{margin: 0, marginRight: 4}}
                     />
                     <Text variant="bodyMedium">
-                      {t('card.goodCounter')}: {goodCounter}
-                    </Text>
-                  </View>
-                </TouchableRipple>
-
-                <TouchableRipple
-                  onPress={() => openEditModal('badCounter', badCounter)}>
-                  <View style={styles.card__row}>
-                    <IconButton
-                      icon="minus-thick"
-                      size={18}
-                      style={{margin: 0, marginRight: 4}}
-                    />
-                    <Text variant="bodyMedium">
-                      {t('card.badCounter')}: {badCounter}
+                      {weeklyStats.effectiveness !== null
+                        ? `${weeklyStats.effectiveness}% (${weeklyStats.goodCount}/${weeklyStats.totalExpected})`
+                        : t('card.no_planned_repetitions')}
                     </Text>
                   </View>
                 </TouchableRipple>
@@ -239,6 +248,16 @@ const HabitCard = ({
         onDismiss={() => setDeleteDialogVisible(false)}
         onDone={() => {
           setDeleteDialogVisible(false);
+          fetchAllHabits();
+        }}
+        habitId={id}
+        habitName={habitName}
+      />
+
+      <HistoryModal
+        visible={historyModalVisible}
+        onDismiss={() => {
+          setHistoryModalVisible(false);
           fetchAllHabits();
         }}
         habitId={id}

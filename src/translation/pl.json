@@ -13,7 +13,8 @@
     "support": "Kawusia",
     "equalize": "Wyrównaj liczniki",
     "filter": "Filtruj nawyki",
-    "loading-habits": "Ładowanie nawyków"
+    "loading-habits": "Ładowanie nawyków",
+    "history": "Historia"
   },
   "settings": {
     "version": "Wersja",
@@ -53,10 +54,12 @@
     "back": "Wstecz",
     "next": "Dalej",
     "skip": "Pomiń",
+    "fail": "Nieudane",
     "done": "Zrobione",
     "equalize": "Wyrównaj",
     "reset": "Reset",
     "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
     "unlock": "Odblokuj",
     "send": "Wyślij",
     "sent": "Wysłano",
@@ -82,6 +85,8 @@
     "goodCounter": "Dobre wybory",
     "badCounter": "Łatwe wybory",
     "skipCounter": "Pominięte wybory",
+    "effectiveness": "Efektywność",
+    "no_planned_repetitions": "Brak zaplanowanych powtórzeń",
     "done": "Wszystko dziś zrobione!",
     "start": "Zacznij"
   },
@@ -129,11 +134,11 @@
       },
       "option2": {
         "title": "Zaznaczaj wybory",
-        "subtitle": "Stawiaj na to co dobre i zyskuj codziennie personalizowane porady."
+        "subtitle": "Stawiaj na to co dobre i wytrwale powtarzaj zaplanowane działania."
       },
       "option3": {
         "title": "Monitoruj postępy",
-        "subtitle": "Śledź swoją podróż licznikiem powtórzeń i zobacz ile osiągasz."
+        "subtitle": "Utrzymuj wysoką efektywność i zacznij dostrzegać swoje postępy."
       },
       "accept": "Zaczynajmy"
     },

@@ -1,8 +1,13 @@
 import realm from '@/storage/schemas';
-import {getNextId, hourToSec} from '@/utils';
+import {getNextId, hourToSec, getLocalDateKey} from '@/utils';
 import i18next from 'i18next';
 import {habitIcons} from '@/constants';
 import {MINUTES_FOR_HABIT} from '@/constants';
+import {
+  deleteHabitExecutions,
+  hasExecution,
+  recordHabitExecutionInTransaction,
+} from '@/services/effectiveness.service';
 
 export const addHabit = (
   habitName,
@@ -25,7 +30,6 @@ export const addHabit = (
       skipCounter: 0,
       repeatDays,
       repeatHours,
-      completedHours: [],
       available: true,
       icon: icon || 'infinity',
     });
@@ -50,8 +54,6 @@ export const updateHabit = (id, updates) => {
         skipCounter: updates.skipCounter ?? habit.skipCounter,
         repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
         repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
-        completedHours:
-          updates.completedHours ?? Array.from(habit.completedHours || []),
         available: updates.available ?? habit.available,
         icon: updates.icon ?? habit.icon,
       },
@@ -70,6 +72,11 @@ export const deleteHabit = id => {
       realm.delete(habitToDelete);
     }
   });
+
+  if (deletedHabit) {
+    deleteHabitExecutions(id);
+  }
+
   return deletedHabit;
 };
 
@@ -85,7 +92,6 @@ export const getHabits = () => {
     skipCounter: habit.skipCounter,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
-    completedHours: Array.from(habit.completedHours || []),
     available: habit.available,
     icon: habit.icon,
   }));
@@ -246,7 +252,6 @@ export const getTodayHabits = (habits, weekdayKey) => {
       skipCounter: habit.skipCounter,
       repeatDays: habit.repeatDays,
       repeatHours: habit.repeatHours,
-      completedHours: habit.completedHours || [],
       selectedHour: hour,
       icon: habit.icon,
     })),
@@ -268,9 +273,10 @@ export function selectActiveHabitKey(todayHabits, currentTime) {
     currentTime.getSeconds();
 
   const windowSeconds = MINUTES_FOR_HABIT * 60;
+  const today = getLocalDateKey();
 
   const incomplete = todayHabits.filter(habit => {
-    return !habit.completedHours?.includes(habit.selectedHour);
+    return !hasExecution(habit.id, today, habit.selectedHour);
   });
 
   if (incomplete.length === 0) return null;
@@ -303,25 +309,12 @@ export function selectActiveHabitKey(todayHabits, currentTime) {
   return null;
 }
 
-export const resetCompletedHoursForAllHabits = () => {
-  let affected = 0;
-  realm.write(() => {
-    const habits = realm.objects('Habit');
-    habits.forEach(habit => {
-      if (habit.completedHours && habit.completedHours.length > 0) {
-        habit.completedHours.splice(0, habit.completedHours.length);
-        affected += 1;
-      }
-    });
-  });
-  return affected;
-};
-
 export const autoSkipPastHabits = weekdayKey => {
   // Automatically marks past habits as skipped for today
   // This prevents users from feeling overwhelmed when starting mid-day
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const today = getLocalDateKey();
   let affected = 0;
 
   realm.write(() => {
@@ -331,7 +324,6 @@ export const autoSkipPastHabits = weekdayKey => {
         return;
       }
 
-      const completedHours = Array.from(habit.completedHours || []);
       let hasChanges = false;
 
       habit.repeatHours.forEach(hour => {
@@ -340,17 +332,17 @@ export const autoSkipPastHabits = weekdayKey => {
 
         // If habit time is more than MINUTES_FOR_HABIT in the past and not yet completed
         const minutesDiff = currentMinutes - habitMinutes;
-        if (minutesDiff > MINUTES_FOR_HABIT && !completedHours.includes(hour)) {
-          completedHours.push(hour);
-          hasChanges = true;
-
+        if (
+          minutesDiff > MINUTES_FOR_HABIT &&
+          !hasExecution(habit.id, today, hour)
+        ) {
+          recordHabitExecutionInTransaction(habit.id, today, hour, 'skip');
           habit.skipCounter = (habit.skipCounter || 0) + 1;
+          hasChanges = true;
         }
       });
 
       if (hasChanges) {
-        habit.completedHours.splice(0, habit.completedHours.length);
-        completedHours.forEach(hour => habit.completedHours.push(hour));
         affected += 1;
       }
     });
@@ -362,9 +354,10 @@ export const autoSkipPastHabits = weekdayKey => {
 export const calculateGlobalProgress = todayHabits => {
   if (!todayHabits || todayHabits.length === 0) return 0;
 
+  const today = getLocalDateKey();
   const totalPlanned = todayHabits.length;
   const totalCompleted = todayHabits.filter(habit =>
-    habit.completedHours.includes(habit.selectedHour),
+    hasExecution(habit.id, today, habit.selectedHour),
   ).length;
 
   const value = totalCompleted / totalPlanned;

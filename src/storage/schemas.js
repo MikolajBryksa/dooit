@@ -16,9 +16,22 @@ Habit.schema = {
     skipCounter: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
-    completedHours: 'string[]',
     available: 'bool',
     icon: 'string',
+  },
+};
+
+class HabitExecution extends Realm.Object {}
+HabitExecution.schema = {
+  name: 'HabitExecution',
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    habitId: 'int',
+    date: 'string',
+    hour: 'string',
+    status: 'string',
+    timestamp: 'date',
   },
 };
 
@@ -54,8 +67,8 @@ DailySummary.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Settings, DailySummary],
-  schemaVersion: 14,
+  schema: [Habit, Settings, DailySummary, HabitExecution],
+  schemaVersion: 16,
   deleteRealmIfMigrationNeeded: true,
 };
 

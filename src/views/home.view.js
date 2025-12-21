@@ -9,7 +9,6 @@ import {dateToWeekday} from '@/utils';
 import {useTodayKey, useCurrentTime, useActiveHabit} from '@/hooks';
 import {
   getHabits,
-  resetCompletedHoursForAllHabits,
   autoSkipPastHabits,
   getTodayHabits,
   calculateGlobalProgress,
@@ -84,19 +83,19 @@ const HomeView = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Reset completedHours when the date changes (new day)
+    // Check if date changed and rebuild habits for new day
     (async () => {
       const LAST_RESET_DATE = 'habits:lastResetDate';
       const lastDate = await AsyncStorage.getItem(LAST_RESET_DATE);
 
       if (lastDate === null) {
-        // First run: save today's date, do not reset
+        // First run: save today's date
         await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
         return;
       }
 
       if (lastDate !== todayKey) {
-        resetCompletedHoursForAllHabits();
+        // New day: rebuild habits
         await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
         rebuildTodayHabits();
       }
@@ -125,13 +124,6 @@ const HomeView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.home')} />
-
-        <Appbar.Action
-          icon="refresh"
-          onPress={() => {
-            rebuildTodayHabits();
-          }}
-        />
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
@@ -152,7 +144,6 @@ const HomeView = () => {
             skipCounter={activeHabit.skipCounter}
             repeatDays={activeHabit.repeatDays}
             repeatHours={activeHabit.repeatHours}
-            completedHours={activeHabit.completedHours}
             selectedHour={activeHabit.selectedHour}
             icon={activeHabit.icon}
             isNext={true}

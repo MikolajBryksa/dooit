@@ -4,9 +4,11 @@ import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 
 const PieCircle = ({
-  good = 0,
-  bad = 0,
-  skip = 0,
+  effectiveness = null,
+  goodCount = 0,
+  totalExpected = 0,
+  missedCount = 0,
+  badCount = 0,
   icon,
   size = 120,
   strokeWidth = 10,
@@ -23,20 +25,20 @@ const PieCircle = ({
 }) => {
   const theme = useTheme();
 
-  if (good + bad >= 200) {
+  if (totalExpected >= 200) {
     tickArcLen = 0;
-  } else if (good + bad >= 150) {
+  } else if (totalExpected >= 150) {
     tickArcLen = 0.4;
-  } else if (good + bad >= 100) {
+  } else if (totalExpected >= 100) {
     tickArcLen = 0.7;
-  } else if (good + bad >= 50) {
+  } else if (totalExpected >= 50) {
     tickArcLen = 1;
   }
 
   const _iconColor = theme?.colors?.primary;
   const _goodColor = theme?.colors?.primary;
   const _badColor = theme?.colors?.error;
-  const _skipColor = theme?.colors?.background;
+  const _missedColor = theme?.colors?.surfaceVariant;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
 
@@ -49,20 +51,22 @@ const PieCircle = ({
   const C = 2 * Math.PI * radius;
   const EPS = 1e-3;
 
-  const totalShown = Math.max(0, good + bad);
-  const fG = totalShown > 0 ? good / totalShown : 0;
-  const fB = totalShown > 0 ? bad / totalShown : 0;
+  const totalShown = Math.max(0, totalExpected);
+  const fG = totalShown > 0 ? goodCount / totalShown : 0;
+  const fB = totalShown > 0 ? badCount / totalShown : 0;
+  const fM = totalShown > 0 ? missedCount / totalShown : 0;
 
   const target = useMemo(
     () => ({
       g: C * fG,
       b: C * fB,
+      m: C * fM,
     }),
-    [C, fG, fB],
+    [C, fG, fB, fM],
   );
 
   const mountedRef = useRef(false);
-  const prevRef = useRef({g: 0, b: 0});
+  const prevRef = useRef({g: 0, b: 0, m: 0});
   const t = useRef(new Animated.Value(1)).current;
   const [animT, setAnimT] = useState(1);
 
@@ -90,92 +94,63 @@ const PieCircle = ({
         prevRef.current = target;
       }
     });
-  }, [target.g, target.b, animateDuration, t]);
+  }, [target.g, target.b, target.m, animateDuration, t]);
 
   const lerp = (a, b, k) => a + (b - a) * k;
 
   const lenG = lerp(prevRef.current.g, target.g, animT);
   const lenB = lerp(prevRef.current.b, target.b, animT);
+  const lenM = lerp(prevRef.current.m, target.m, animT);
 
   const startG = 0;
   const startB = lenG;
+  const startM = lenG + lenB;
 
-  const hasAny = lenG > EPS || lenB > EPS;
+  const hasAny = lenG > EPS || lenB > EPS || lenM > EPS;
 
   const isFullG = lenG > C - EPS;
   const isFullB = lenB > C - EPS;
+  const isFullM = lenM > C - EPS;
 
-  const unitG = good > 0 ? lenG / good : 0;
-  const unitB = bad > 0 ? lenB / bad : 0;
+  const unitG = goodCount > 0 ? lenG / goodCount : 0;
+  const unitB = badCount > 0 ? lenB / badCount : 0;
+  const unitM = missedCount > 0 ? lenM / missedCount : 0;
 
-  const prevVals = useRef({good, bad, skip});
-  const [flash, setFlash] = useState({
-    text: '',
-    color: '#000',
-    visible: false,
-    showValue: null,
-  });
-  const flashScale = useRef(new Animated.Value(0.9)).current;
-  const flashOpacity = useRef(new Animated.Value(0)).current;
+  const prevEffectiveness = useRef(effectiveness ?? 0);
+  const effectivenessAnim = useRef(
+    new Animated.Value(effectiveness ?? 0),
+  ).current;
+  const [displayedEffectiveness, setDisplayedEffectiveness] = useState(
+    effectiveness ?? 0,
+  );
 
   useEffect(() => {
-    const dg = good - prevVals.current.good;
-    const db = bad - prevVals.current.bad;
-    const ds = skip - prevVals.current.skip;
-    prevVals.current = {good, bad, skip};
-    let show = null;
-    let showValue = null | 'good' | 'bad';
+    const listener = effectivenessAnim.addListener(({value}) => {
+      setDisplayedEffectiveness(Math.round(value));
+    });
+    return () => effectivenessAnim.removeListener(listener);
+  }, [effectivenessAnim]);
 
-    if (dg === 1) {
-      show = {icon: 'plus-thick', color: _goodColor};
-      showValue = 'good';
-    } else if (db === 1) {
-      show = {icon: 'minus-thick', color: _badColor};
-      showValue = 'bad';
-    } else if (ds === 1) {
-      show = {icon: 'close-thick', color: _skipColor};
-      showValue = null;
+  useEffect(() => {
+    if (effectiveness === null) {
+      prevEffectiveness.current = 0;
+      effectivenessAnim.setValue(0);
+      setDisplayedEffectiveness(0);
+      return;
     }
 
-    if (show) {
-      setFlash({...show, visible: true, showValue: null});
-      flashScale.setValue(0.9);
-      flashOpacity.setValue(0);
-      Animated.parallel([
-        Animated.spring(flashScale, {toValue: 1, useNativeDriver: true}),
-        Animated.timing(flashOpacity, {
-          toValue: 1,
-          duration: 160,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ]).start();
-      const timer = setTimeout(() => {
-        Animated.timing(flashOpacity, {
-          toValue: 0,
-          duration: 150,
-          useNativeDriver: true,
-        }).start(() =>
-          setFlash(f => ({
-            ...f,
-            visible: false,
-            showValue,
-          })),
-        );
-      }, flashDuration);
-      return () => clearTimeout(timer);
+    const dEff = effectiveness - prevEffectiveness.current;
+
+    if (Math.abs(dEff) > 0.1) {
+      Animated.timing(effectivenessAnim, {
+        toValue: effectiveness,
+        duration: 600,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: false,
+      }).start();
+      prevEffectiveness.current = effectiveness;
     }
-  }, [
-    good,
-    bad,
-    skip,
-    _goodColor,
-    _badColor,
-    theme?.colors,
-    flashDuration,
-    flashOpacity,
-    flashScale,
-  ]);
+  }, [effectiveness, effectivenessAnim]);
 
   const iconSize = Math.max(24, size - (strokeWidth + 8) * 2);
 
@@ -240,57 +215,100 @@ const PieCircle = ({
             />
           )}
 
+          {hasAny && lenM > EPS && (
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={radius}
+              stroke={_missedColor}
+              strokeWidth={strokeWidth}
+              fill="none"
+              strokeDasharray={`${lenM} ${Math.max(0, C - lenM)}`}
+              strokeDashoffset={-startM}
+              strokeLinecap="butt"
+            />
+          )}
+
           {showTicks &&
             lenG > EPS &&
-            good > 0 &&
+            goodCount > 0 &&
             unitG > 0 &&
-            Array.from({length: isFullG ? good : Math.max(0, good - 1)}).map(
-              (_, i) => {
-                const m = (isFullG ? 0 : 1) + i;
-                const pos = startG + m * unitG;
-                return (
-                  <TinyArc
-                    key={`tick-g-${i}`}
-                    at={pos}
-                    length={tickArcLen}
-                    stroke={_tickColor}
-                  />
-                );
-              },
-            )}
+            Array.from({
+              length: isFullG ? goodCount : Math.max(0, goodCount - 1),
+            }).map((_, i) => {
+              const m = (isFullG ? 0 : 1) + i;
+              const pos = startG + m * unitG;
+              return (
+                <TinyArc
+                  key={`tick-g-${i}`}
+                  at={pos}
+                  length={tickArcLen}
+                  stroke={_tickColor}
+                />
+              );
+            })}
 
           {showTicks &&
             lenB > EPS &&
-            bad > 0 &&
+            badCount > 0 &&
             unitB > 0 &&
-            Array.from({length: isFullB ? bad : Math.max(0, bad - 1)}).map(
-              (_, i) => {
-                const m = (isFullB ? 0 : 1) + i;
-                const pos = startB + m * unitB;
-                return (
-                  <TinyArc
-                    key={`tick-b-${i}`}
-                    at={pos}
-                    length={tickArcLen}
-                    stroke={_tickColor}
-                  />
-                );
-              },
-            )}
+            Array.from({
+              length: isFullB ? badCount : Math.max(0, badCount - 1),
+            }).map((_, i) => {
+              const m = (isFullB ? 0 : 1) + i;
+              const pos = startB + m * unitB;
+              return (
+                <TinyArc
+                  key={`tick-b-${i}`}
+                  at={pos}
+                  length={tickArcLen}
+                  stroke={_tickColor}
+                />
+              );
+            })}
+
+          {showTicks &&
+            lenM > EPS &&
+            missedCount > 0 &&
+            unitM > 0 &&
+            Array.from({
+              length: isFullM ? missedCount : Math.max(0, missedCount - 1),
+            }).map((_, i) => {
+              const m = (isFullM ? 0 : 1) + i;
+              const pos = startM + m * unitM;
+              return (
+                <TinyArc
+                  key={`tick-m-${i}`}
+                  at={pos}
+                  length={tickArcLen}
+                  stroke={_tickColor}
+                />
+              );
+            })}
 
           {showSeparators &&
             _separatorArcLen > 0 &&
             lenG > EPS &&
-            lenB > EPS && (
+            (lenB > EPS || lenM > EPS) && (
               <>
+                {lenB > EPS && (
+                  <TinyArc
+                    key="sep-g-b"
+                    at={startB}
+                    length={_separatorArcLen}
+                    stroke={_separatorColor}
+                  />
+                )}
+                {lenM > EPS && (
+                  <TinyArc
+                    key="sep-end-m"
+                    at={startM}
+                    length={_separatorArcLen}
+                    stroke={_separatorColor}
+                  />
+                )}
                 <TinyArc
-                  key="sep-g-b-main"
-                  at={startB}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
-                />
-                <TinyArc
-                  key="sep-g-b-wrap"
+                  key="sep-wrap"
                   at={startG}
                   length={_separatorArcLen}
                   stroke={_separatorColor}
@@ -301,34 +319,13 @@ const PieCircle = ({
       </Svg>
 
       <View pointerEvents="none" style={styles.centerContent}>
-        {flash.visible ? (
-          <Animated.View
-            style={{
-              transform: [{scale: flashScale}],
-              opacity: flashOpacity,
-            }}>
-            <Avatar.Icon
-              icon={flash.icon}
-              size={Math.min(60, size * 0.5)}
-              style={{backgroundColor: 'transparent'}}
-              color={flash.color}
-            />
-          </Animated.View>
-        ) : flash.showValue === 'good' ? (
+        {effectiveness !== null ? (
           <Text
             style={[
               styles.flashText,
-              {color: _goodColor, fontSize: Math.min(40, size * 0.28)},
+              {color: _goodColor, fontSize: Math.min(40, size * 0.25)},
             ]}>
-            {good}
-          </Text>
-        ) : flash.showValue === 'bad' ? (
-          <Text
-            style={[
-              styles.flashText,
-              {color: _badColor, fontSize: Math.min(40, size * 0.28)},
-            ]}>
-            {bad}
+            {displayedEffectiveness}%
           </Text>
         ) : (
           <Avatar.Icon

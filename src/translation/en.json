@@ -13,7 +13,8 @@
     "support": "Coffee",
     "equalize": "Equalize counters",
     "filter": "Filter habits",
-    "loading-habits": "Loading habits"
+    "loading-habits": "Loading habits",
+    "history": "History"
   },
   "settings": {
     "version": "Version",
@@ -53,10 +54,12 @@
     "back": "Back",
     "next": "Next",
     "skip": "Skip",
+    "fail": "Fail",
     "done": "Done",
     "equalize": "Equalize",
     "reset": "Reset",
     "today": "Today",
+    "yesterday": "Yesterday",
     "unlock": "Unlock",
     "send": "Send",
     "sent": "Sent",
@@ -82,6 +85,8 @@
     "goodCounter": "Right choices",
     "badCounter": "Easy choices",
     "skipCounter": "Skipped choices",
+    "effectiveness": "Effectiveness",
+    "no_planned_repetitions": "No repetitions planned",
     "done": "All done today!",
     "start": "Start"
   },
@@ -129,11 +134,11 @@
       },
       "option2": {
         "title": "Make choices",
-        "subtitle": "Go for what’s good and get personalized advice every day."
+        "subtitle": "Go for what’s good and steadily repeat planned actions."
       },
       "option3": {
         "title": "Monitor progress",
-        "subtitle": "Track your journey with the rep counter and see how far you've come."
+        "subtitle": "Maintain high effectiveness and start seeing your progress."
       },
       "accept": "Start"
     },

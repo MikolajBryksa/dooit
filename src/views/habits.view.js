@@ -25,7 +25,7 @@ const HabitsView = () => {
   const [visibleFilterModal, setVisibleFilterModal] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [equalizeDialogVisible, setEqualizeDialogVisible] = useState(false);
-  const [filterDay, setFilterDay] = useState(''); // '' means show all
+  const [filterDay, setFilterDay] = useState('');
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -103,9 +103,6 @@ const HabitsView = () => {
               id={habit.id}
               habitName={habit.habitName}
               habitEnemy={habit.habitEnemy}
-              goodCounter={habit.goodCounter}
-              badCounter={habit.badCounter}
-              skipCounter={habit.skipCounter}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}
