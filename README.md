@@ -29,19 +29,19 @@ Before you begin, ensure you have met the following requirements:
 - **Node.js**: 18.20.4
 
   ```
-      node -v
+  node -v
   ```
 
 - **npm**: 10.7.0
 
   ```
-      npm -v
+  npm -v
   ```
 
 - **Java Development Kit (JDK)**: 17.0.6
 
   ```
-      java --version
+  java --version
   ```
 
 - **Android Studio** with the Android SDK.
@@ -51,21 +51,21 @@ Before you begin, ensure you have met the following requirements:
 - **Clone the repository**:
 
   ```
-      git clone https://github.com/MikolajBryksa/dooit.git
+  git clone https://github.com/MikolajBryksa/dooit.git
   ```
 
-- **Install dependencies:**:
+- **Install dependencies**:
 
   ```
-      cd dooit
-      npm install
+  cd dooit
+  npm install
   ```
 
 - **Copy the required files**:
 
   ```
-      Paste dooit-release-key.keystore to android/app
-      Paste .env to main directory
+  Paste dooit-release-key.keystore to android/app
+  Paste .env to main directory
   ```
 
 ### Launch
@@ -73,19 +73,19 @@ Before you begin, ensure you have met the following requirements:
 - **Build the APK file**:
 
   ```
-      npm run build
+  npm run build
   ```
 
 - **Find the APK file**:
 
   ```
-      android/app/build/outputs/apk/release/app-release.apk
+  android/app/build/outputs/apk/release/app-release.apk
   ```
 
 - **Run the app in Android Studio**:
 
   ```
-      npm run android
+  npm run android
   ```
 
 ## Development
@@ -93,23 +93,23 @@ Before you begin, ensure you have met the following requirements:
 - **Change the app icon**:
 
   ```
-      https://icon.kitchen/
-      Paste folders to:
-      /android/app/src/main/res
+  https://icon.kitchen/
+  Paste folders to:
+  /android/app/src/main/res
   ```
 
 - **Change the app font**:
 
   ```
-      Paste fonts to:
-      /assets/fonts
-      Update fontConfig.js
+  Paste fonts to:
+  /assets/fonts
+  Update fontConfig.js
   ```
 
 - **Uninstall the app from Android Simulator**:
 
   ```
-      Settings > Apps > All apps > Dooit > Uninstall
+  Settings > Apps > All apps > Dooit > Uninstall
   ```
 
 ## Publishing
@@ -117,20 +117,20 @@ Before you begin, ensure you have met the following requirements:
 - **Update version**:
 
   ```
-      Change version in package.json
-      Change versionCode and versionName in android/app/build.gradle
+  Change version in package.json
+  Change versionCode and versionName in android/app/build.gradle
   ```
 
 - **Build the Android App Bundle**:
 
   ```
-      npm run build-bundle
+  npm run build-bundle
   ```
 
 - **Find the Android App Bundle**:
 
   ```
-      android/app/build/outputs/bundle/release/app-release.aab
+  android/app/build/outputs/bundle/release/app-release.aab
   ```
 
 - **Submit new version to Google Play**:
