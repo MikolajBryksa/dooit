@@ -1,6 +1,6 @@
 # Dooit
 
-Dooit is a **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
+A **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
 https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
 ## Tech Stack
@@ -88,7 +88,7 @@ Before you begin, ensure you have met the following requirements:
       npm run android
   ```
 
-### Development
+## Development
 
 - **Change the app icon**:
 
@@ -112,7 +112,7 @@ Before you begin, ensure you have met the following requirements:
       Settings > Apps > All apps > Dooit > Uninstall
   ```
 
-### Publishing
+## Publishing
 
 - **Update version**:
 
