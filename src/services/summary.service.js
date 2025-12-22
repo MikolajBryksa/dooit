@@ -179,8 +179,6 @@ export const saveSummary = async (date, habits, aiSummary) => {
       logError(error, 'saveSummary.users');
       return;
     }
-
-    console.log('[saveSummary] Data synced to Supabase users table');
   } catch (error) {
     logError(error, 'saveSummary');
   }

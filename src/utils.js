@@ -126,3 +126,21 @@ export function getDaysBetween(startDateKey, endDateKey) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 }
+
+export function isNetworkishError(e) {
+  // Determine if an error is likely related to network issues
+  const msg = String(e?.message ?? e).toLowerCase();
+  return (
+    msg.includes('network') ||
+    msg.includes('failed to fetch') ||
+    msg.includes('fetch') ||
+    msg.includes('timeout') ||
+    msg.includes('timed out') ||
+    msg.includes('offline') ||
+    msg.includes('internet') ||
+    msg.includes('connection') ||
+    msg.includes('enotfound') ||
+    msg.includes('econnrefused') ||
+    msg.includes('econnreset')
+  );
+}

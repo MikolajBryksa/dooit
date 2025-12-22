@@ -7,7 +7,6 @@ export const logError = async (error, context = 'unknown') => {
   console.error(`Logging error in context: ${context}`, error);
 
   try {
-    // Get anonymous Supabase user ID (secured by JWT)
     let supabaseUserId = 'unknown';
     let userName = 'unknown';
 

@@ -152,7 +152,6 @@ const EndCard = ({weekdayKey}) => {
         setLoadingAI(false);
       }
     } catch (fatalError) {
-      console.error('[EndCard.handleGenerate] Fatal error:', fatalError);
       await logError(fatalError, 'EndCard.handleGenerate.fatal');
 
       setLoadingAI(false);

@@ -15,6 +15,7 @@ import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {formatHourString} from '@/utils';
 import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
+import {logError} from '@/services/error-tracking.service';
 
 const HabitCard = ({
   id,
@@ -43,7 +44,7 @@ const HabitCard = ({
         repeatHours,
       });
     } catch (error) {
-      console.error('Error calculating effectiveness:', error);
+      logError(error, 'HabitCard - calculateWeeklyEffectiveness');
       return {
         effectiveness: null,
         goodCount: 0,

@@ -1,6 +1,7 @@
 import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {logError} from './error-tracking.service';
 
 export const supabase = createClient(
   Config.SUPABASE_URL,
@@ -22,7 +23,6 @@ export const initializeAnonymousAuth = async () => {
     } = await supabase.auth.getSession();
 
     if (session?.user) {
-      console.log('[Supabase Auth] Existing session found:', session.user.id);
       return {
         success: true,
         userId: session.user.id,
@@ -33,7 +33,7 @@ export const initializeAnonymousAuth = async () => {
     const {data, error} = await supabase.auth.signInAnonymously();
 
     if (error) {
-      console.error('[Supabase Auth] Failed to sign in anonymously:', error);
+      logError(error, 'initializeAnonymousAuth');
       return {
         success: false,
         userId: null,
@@ -41,14 +41,13 @@ export const initializeAnonymousAuth = async () => {
       };
     }
 
-    console.log('[Supabase Auth] Anonymous session created:', data.user.id);
     return {
       success: true,
       userId: data.user.id,
       error: null,
     };
   } catch (error) {
-    console.error('[Supabase Auth] Error initializing auth:', error);
+    logError(error, 'initializeAnonymousAuth');
     return {
       success: false,
       userId: null,
@@ -64,7 +63,7 @@ export const getCurrentUserToken = async () => {
     } = await supabase.auth.getSession();
     return session?.access_token || null;
   } catch (error) {
-    console.error('[Supabase Auth] Error getting user token:', error);
+    logError(error, 'getCurrentUserToken');
     return null;
   }
 };
@@ -76,7 +75,7 @@ export const getSupabaseUserId = async () => {
     } = await supabase.auth.getSession();
     return session?.user?.id || null;
   } catch (error) {
-    console.error('[Supabase Auth] Error getting user ID:', error);
+    logError(error, 'getSupabaseUserId');
     return null;
   }
 };
