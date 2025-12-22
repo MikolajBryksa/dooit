@@ -13,6 +13,7 @@ import {useNetworkStatus, useTodayKey} from '@/hooks';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 import {logError} from '@/services/error-tracking.service';
+import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
@@ -30,18 +31,39 @@ const EndCard = ({weekdayKey}) => {
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
   const [hadError, setHadError] = useState(false);
 
-  const simplifiedHabits = useMemo(
+  const allAvailableHabits = useMemo(
     () =>
       habits
-        .filter(
-          habit => habit.available && habit.repeatDays.includes(weekdayKey),
-        )
-        .map(habit => ({
-          id: habit.id,
-          habitName: habit.habitName,
-          habitEnemy: habit.habitEnemy,
-          repeatDays: habit.repeatDays,
-          repeatHours: habit.repeatHours,
+        .filter(h => h.available)
+        .map(h => {
+          const stats = calculateWeeklyEffectiveness(h.id, {
+            id: h.id,
+            repeatDays: h.repeatDays,
+            repeatHours: h.repeatHours,
+          });
+
+          return {
+            id: h.id,
+            habitName: h.habitName,
+            habitEnemy: h.habitEnemy,
+            repeatDays: h.repeatDays,
+            repeatHours: h.repeatHours,
+            effectiveness: stats.effectiveness,
+          };
+        }),
+    [habits],
+  );
+
+  const todayHabits = useMemo(
+    () =>
+      habits
+        .filter(h => h.available && h.repeatDays.includes(weekdayKey))
+        .map(h => ({
+          id: h.id,
+          habitName: h.habitName,
+          habitEnemy: h.habitEnemy,
+          repeatDays: h.repeatDays,
+          repeatHours: h.repeatHours,
         })),
     [habits, weekdayKey],
   );
@@ -59,7 +81,7 @@ const EndCard = ({weekdayKey}) => {
         setTypewriterComplete(true);
         setHasExistingSummary(true);
         setHadError(false);
-      } else if (simplifiedHabits.length === 0) {
+      } else if (todayHabits.length === 0) {
         // No habits today
         const msg = t('summary.no-actions');
         setAiSummary(msg);
@@ -83,10 +105,10 @@ const EndCard = ({weekdayKey}) => {
       setHasExistingSummary(false);
       setHadError(true);
     }
-  }, [todayKey, simplifiedHabits.length, t]);
+  }, [todayKey, todayHabits.length, t]);
 
   const handleGenerate = async () => {
-    if (loadingAI || !simplifiedHabits.length || !isConnected) {
+    if (loadingAI || !todayHabits.length || !isConnected) {
       return;
     }
 
@@ -98,11 +120,11 @@ const EndCard = ({weekdayKey}) => {
       setHadError(false);
 
       try {
-        const response = await generateAiSummary(simplifiedHabits);
+        const response = await generateAiSummary(todayHabits);
         setAiSummary(response);
 
         try {
-          await saveSummary(todayKey, simplifiedHabits, response);
+          await saveSummary(todayKey, allAvailableHabits, response);
           setHasExistingSummary(true);
           setHadError(false);
         } catch (saveError) {
@@ -122,7 +144,7 @@ const EndCard = ({weekdayKey}) => {
         setHadError(true);
 
         try {
-          await saveSummary(todayKey, simplifiedHabits, null);
+          await saveSummary(todayKey, allAvailableHabits, null);
         } catch (saveError) {
           await logError(saveError, 'EndCard.saveSummary.null');
         }
@@ -161,7 +183,7 @@ const EndCard = ({weekdayKey}) => {
 
   const textToShow = typewriterComplete ? aiSummary : displayedText;
 
-  const hasHabitsToday = simplifiedHabits.length > 0;
+  const hasHabitsToday = todayHabits.length > 0;
 
   const renderButton = () => {
     if (!hasHabitsToday || hasExistingSummary) {

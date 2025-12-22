@@ -1,4 +1,4 @@
-import {supabase} from './supabase.service';
+import {supabase, getSupabaseUserId} from './supabase.service';
 import {getSettingValue} from './settings.service';
 
 const APP_VERSION = require('../../package.json').version;
@@ -7,16 +7,17 @@ export const logError = async (error, context = 'unknown') => {
   console.error(`Logging error in context: ${context}`, error);
 
   try {
-    let userId = 'unknown';
+    // Get anonymous Supabase user ID (secured by JWT)
+    let supabaseUserId = 'unknown';
     let userName = 'unknown';
 
     try {
-      const id = getSettingValue('userId');
+      const id = await getSupabaseUserId();
       if (id) {
-        userId = id;
+        supabaseUserId = id;
       }
     } catch (e) {
-      console.error('[logError] Failed to read userId from settings:', e);
+      console.error('[logError] Failed to get Supabase user ID:', e);
     }
 
     try {
@@ -33,7 +34,7 @@ export const logError = async (error, context = 'unknown') => {
       error_stack: error?.stack || null,
       context,
       app_version: APP_VERSION,
-      user_id: userId,
+      user_id: supabaseUserId,
       user_name: userName,
       created_at: new Date().toISOString(),
     };
@@ -46,7 +47,7 @@ export const logError = async (error, context = 'unknown') => {
     }
 
     const {error: supabaseError} = await supabase
-      .from('Errors')
+      .from('errors')
       .insert([errorData]);
 
     if (supabaseError) {

@@ -27,6 +27,7 @@ import ErrorBoundary from '@/dialogs/error.dialog';
 import {setupErrorTracking} from '@/services/error-tracking.service';
 import {logError} from '@/services/error-tracking.service';
 import {cleanOldExecutions} from '@/services/effectiveness.service';
+import {initializeAnonymousAuth} from '@/services/supabase.service';
 
 setupErrorTracking();
 
@@ -44,6 +45,18 @@ function AppContent() {
     const start = Date.now();
     async function loadData() {
       try {
+        const authResult = await initializeAnonymousAuth();
+        if (authResult.success) {
+          console.log(
+            '[App] Supabase auth initialized with user:',
+            authResult.userId,
+          );
+        } else {
+          console.warn(
+            '[App] Supabase auth failed - analytics will be disabled',
+          );
+        }
+
         const settings = getSettings();
 
         if (!settings) {

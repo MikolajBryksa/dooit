@@ -1,7 +1,6 @@
 import Realm from 'realm';
 import * as RNLocalize from 'react-native-localize';
 import {dayMap} from '@/constants';
-import uuid from 'react-native-uuid';
 
 class Habit extends Realm.Object {}
 Habit.schema = {
@@ -41,7 +40,6 @@ Settings.schema = {
   primaryKey: 'id',
   properties: {
     id: 'int',
-    userId: 'string',
     userName: 'string?',
     language: 'string',
     clockFormat: 'string',
@@ -68,7 +66,7 @@ DailySummary.schema = {
 
 const realmConfig = {
   schema: [Habit, Settings, DailySummary, HabitExecution],
-  schemaVersion: 16,
+  schemaVersion: 17,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -85,7 +83,6 @@ realm.write(() => {
 
     realm.create('Settings', {
       id: 1,
-      userId: __DEV__ ? 'root' : uuid.v4(),
       language: deviceLanguage,
       clockFormat: '24 h',
       firstDay: 'mon',

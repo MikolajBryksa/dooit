@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {supabase} from '@/services/supabase.service';
+import {supabase, getSupabaseUserId} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks';
 import {logError} from '@/services/error-tracking.service.js';
@@ -47,17 +47,15 @@ const ContactModal = ({visible, onDismiss}) => {
     setLoading(true);
 
     try {
-      const userId = getSettingValue('userId');
+      const supabaseUserId = await getSupabaseUserId();
       const userName = getSettingValue('userName');
 
-      const {error} = await supabase.from('Contact').insert([
-        {
-          user_id: userId,
-          user_name: userName,
-          email: email.trim(),
-          message: message.trim(),
-        },
-      ]);
+      const {error} = await supabase.from('contact').insert({
+        user_id: supabaseUserId,
+        user_name: userName,
+        email: email.trim(),
+        message: message.trim(),
+      });
 
       if (error) {
         await logError(error, 'contact.handleSubmit');

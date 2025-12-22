@@ -1,6 +1,6 @@
 import i18n from '@/i18next';
 import {getSettingValue} from './settings.service.js';
-import {supabase} from './supabase.service.js';
+import {supabase, getSupabaseUserId} from './supabase.service.js';
 import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
@@ -51,10 +51,10 @@ export const getDailySummary = date => {
   return summary;
 };
 
-export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
+export const generateAiSummary = async (habits, maxRetries = 3) => {
   const fallbackNoActions = i18n.t('summary.no-actions');
 
-  if (!simplifiedHabits || simplifiedHabits.length === 0) {
+  if (!habits || habits.length === 0) {
     return fallbackNoActions;
   }
 
@@ -75,7 +75,7 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
     await logError(e, 'generateAiSummary.userName');
   }
 
-  const selectedHabits = selectBestAndWorstHabits(simplifiedHabits);
+  const selectedHabits = selectBestAndWorstHabits(habits);
   if (!selectedHabits || selectedHabits.length === 0) {
     return fallbackNoActions;
   }
@@ -137,13 +137,13 @@ export const generateAiSummary = async (simplifiedHabits, maxRetries = 3) => {
   throw lastError || new Error('AI did not provide a response');
 };
 
-export const saveSummary = async (date, simplifiedHabits, aiSummary) => {
+export const saveSummary = async (date, habits, aiSummary) => {
   realm.write(() => {
     realm.create(
       'DailySummary',
       {
         updatedAt: date,
-        habitsJson: JSON.stringify(simplifiedHabits),
+        habitsJson: JSON.stringify(habits),
         aiSummary: aiSummary,
       },
       Realm.UpdateMode.Modified,
@@ -151,25 +151,36 @@ export const saveSummary = async (date, simplifiedHabits, aiSummary) => {
   });
 
   try {
-    const userId = getSettingValue('userId');
-    const userName = getSettingValue('userName');
+    // Get anonymous Supabase user ID (secured by JWT)
+    const supabaseUserId = await getSupabaseUserId();
 
+    if (!supabaseUserId) {
+      console.warn('[saveSummary] No Supabase user ID - skipping cloud sync');
+      return;
+    }
+
+    const userName = getSettingValue('userName') || 'Anonymous';
+
+    // Save to Users table
     const dataToSave = {
-      user_id: userId,
+      user_id: supabaseUserId,
       user_name: userName,
       updated_at: new Date().toISOString(),
-      habits_json: simplifiedHabits,
+      habits_json: habits,
       ai_summary: aiSummary || null,
     };
 
-    const {error} = await supabase.from('Users').upsert(dataToSave, {
+    // Upsert - update existing or create new
+    const {error} = await supabase.from('users').upsert(dataToSave, {
       onConflict: 'user_id',
     });
 
     if (error) {
-      logError(error, 'saveSummary');
+      logError(error, 'saveSummary.users');
       return;
     }
+
+    console.log('[saveSummary] Data synced to Supabase users table');
   } catch (error) {
     logError(error, 'saveSummary');
   }
