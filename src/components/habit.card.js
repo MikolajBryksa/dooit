@@ -127,27 +127,25 @@ const HabitCard = ({
             opacity: onboardingMode ? 1 : cardOpacity,
           }}>
           <Card.Content style={styles.card__list}>
-            {!onboardingMode && (
-              <TouchableRipple
-                onPress={() => openEditModal('habitEnemy', habitEnemy)}>
-                <View style={styles.card__row}>
-                  <IconButton
-                    icon="sword-cross"
-                    size={18}
-                    style={{margin: 0, marginRight: 4}}
-                  />
-                  <View style={{flex: 1}}>
-                    <Text
-                      variant="bodyMedium"
-                      style={{maxWidth: '100%', flexShrink: 1}}
-                      numberOfLines={1}
-                      ellipsizeMode="tail">
-                      {habitEnemy}
-                    </Text>
-                  </View>
+            <TouchableRipple
+              onPress={() => openEditModal('habitEnemy', habitEnemy)}>
+              <View style={styles.card__row}>
+                <IconButton
+                  icon="sword-cross"
+                  size={18}
+                  style={{margin: 0, marginRight: 4}}
+                />
+                <View style={{flex: 1}}>
+                  <Text
+                    variant="bodyMedium"
+                    style={{maxWidth: '100%', flexShrink: 1}}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {habitEnemy}
+                  </Text>
                 </View>
-              </TouchableRipple>
-            )}
+              </View>
+            </TouchableRipple>
 
             <TouchableRipple
               onPress={() => openEditModal('repeatHours', repeatHours)}>

@@ -48,6 +48,8 @@
     "close": "Close",
     "contact": "Contact",
     "buy": "Buy",
+    "add": "Add",
+    "start": "Start",
     "save": "Save",
     "back": "Back",
     "next": "Next",
@@ -84,8 +86,7 @@
     "skipCounter": "Skipped choices",
     "effectiveness": "Effectiveness",
     "noRepetitions": "No repetitions",
-    "done": "All done today!",
-    "start": "Start"
+    "done": "All done today!"
   },
   "date": {
     "daily": "Daily",
@@ -136,68 +137,47 @@
       "option3": {
         "title": "Monitor progress",
         "subtitle": "Maintain high effectiveness and start seeing your progress."
-      },
-      "accept": "Start"
+      }
     },
     "step2": {
       "choose": "Choose",
-      "which-habits": "which habits do you want to create",
-      "accept": "Save habits"
+      "which-habits": "which habits do you want to create"
     },
     "step3": {
       "select-repetition": "Select the repetition time",
-      "accept-default": "or accept the default days and hours",
-      "add-custom-habit": "Add habit",
-      "accept": "Save reminders"
+      "accept-default": "or accept the default days and hours"
     },
     "step4": {
       "congratulations": "Let's get started!",
       "ready-to-start": "It's time to begin your habit journey.",
       "have-fun": "Have fun and become your better self.",
-      "accept": "Start",
       "name-placeholder": "Enter your name"
     }
   },
   "default-habits": {
     "1": {
-      "habitName": "Early wake up",
-      "habitEnemy": "Snooze"
-    },
-    "2": {
       "habitName": "Drinking water",
       "habitEnemy": "Drinking soda"
     },
-    "3": {
-      "habitName": "Physical exercise",
+    "2": {
+      "habitName": "Sports activity",
       "habitEnemy": "Just sitting"
     },
-    "4": {
+    "3": {
       "habitName": "Healthy eating",
       "habitEnemy": "Unhealthy snacks"
     },
-    "5": {
+    "4": {
       "habitName": "Reading books",
       "habitEnemy": "Social media"
     },
+    "5": {
+      "habitName": "Skill development",
+      "habitEnemy": "Stagnation"
+    },
     "6": {
-      "habitName": "Career development",
-      "habitEnemy": "Routine work"
-    },
-    "7": {
-      "habitName": "Language learning",
-      "habitEnemy": "Avoiding language learning"
-    },
-    "8": {
       "habitName": "Stress relief",
       "habitEnemy": "Short videos"
-    },
-    "9": {
-      "habitName": "Cleaning",
-      "habitEnemy": "Leaving mess"
-    },
-    "10": {
-      "habitName": "Cold shower",
-      "habitEnemy": "Long shower"
     }
   },
   "motivation": {

@@ -48,6 +48,8 @@
     "close": "Zamknij",
     "contact": "Kontakt",
     "buy": "Kup",
+    "add": "Dodaj",
+    "start": "Start",
     "save": "Zapisz",
     "back": "Wstecz",
     "next": "Dalej",
@@ -84,8 +86,7 @@
     "skipCounter": "Pominięte wybory",
     "effectiveness": "Efektywność",
     "noRepetitions": "Brak powtórzeń",
-    "done": "Wszystko dziś zrobione!",
-    "start": "Zacznij"
+    "done": "Wszystko dziś zrobione!"
   },
   "date": {
     "daily": "Codziennie",
@@ -136,68 +137,47 @@
       "option3": {
         "title": "Monitoruj postępy",
         "subtitle": "Utrzymuj wysoką efektywność i zacznij dostrzegać swoje postępy."
-      },
-      "accept": "Zaczynajmy"
+      }
     },
     "step2": {
       "choose": "Wybierz",
-      "which-habits": "jakie nawyki chcesz wyrobić",
-      "accept": "Zapisz nawyki"
+      "which-habits": "jakie nawyki chcesz wyrobić"
     },
     "step3": {
       "select-repetition": "Wybierz czas powtórzeń",
-      "accept-default": "lub zaakceptuj domyślne dni i godziny",
-      "add-custom-habit": "Dodaj nawyk",
-      "accept": "Zapisz powiadomienia"
+      "accept-default": "lub zaakceptuj domyślne dni i godziny"
     },
     "step4": {
       "congratulations": "Zaczynajmy!",
       "ready-to-start": "Czas rozpocząć podróż z nawykami.",
       "have-fun": "Baw się dobrze i zmieniaj się na lepsze.",
-      "accept": "Rozpocznij",
       "name-placeholder": "Podaj swoje imię"
     }
   },
   "default-habits": {
     "1": {
-      "habitName": "Wczesne wstawanie",
-      "habitEnemy": "Drzemka"
-    },
-    "2": {
       "habitName": "Picie wody",
       "habitEnemy": "Picie napojów"
     },
-    "3": {
-      "habitName": "Ćwiczenia fizyczne",
+    "2": {
+      "habitName": "Aktywność fizyczna",
       "habitEnemy": "Tylko siedzenie"
     },
-    "4": {
+    "3": {
       "habitName": "Zdrowe jedzenie",
       "habitEnemy": "Niezdrowa przekąska"
     },
-    "5": {
+    "4": {
       "habitName": "Czytanie książek",
       "habitEnemy": "Media społecznościowe"
     },
+    "5": {
+      "habitName": "Rozwój umiejętności",
+      "habitEnemy": "Stanie w miejscu"
+    },
     "6": {
-      "habitName": "Rozwój zawodowy",
-      "habitEnemy": "Rutynowa praca"
-    },
-    "7": {
-      "habitName": "Nauka języka",
-      "habitEnemy": "Unikanie języka obcego"
-    },
-    "8": {
       "habitName": "Odstresowanie",
       "habitEnemy": "Krótkie filmiki"
-    },
-    "9": {
-      "habitName": "Sprzątanie",
-      "habitEnemy": "Zostawienie bałaganu"
-    },
-    "10": {
-      "habitName": "Zimny prysznic",
-      "habitEnemy": "Długi prysznic"
     }
   },
   "motivation": {

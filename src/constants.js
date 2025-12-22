@@ -13,13 +13,10 @@ export const dayFullMap = {
 };
 
 export const habitIcons = [
-  'alarm',
   'water',
   'dumbbell',
   'food-apple',
   'book-open',
   'school',
-  'translate',
   'meditation',
-  'broom',
 ];

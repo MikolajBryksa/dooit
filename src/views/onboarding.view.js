@@ -35,6 +35,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [editModalData, setEditModalData] = useState(null);
   const [name, setName] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
+  const [habitsCreated, setHabitsCreated] = useState(false);
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -43,9 +44,6 @@ const OnboardingView = ({setShowOnboarding}) => {
     4: false,
     5: false,
     6: false,
-    7: false,
-    8: false,
-    9: false,
   });
 
   function handleStep1() {
@@ -71,16 +69,21 @@ const OnboardingView = ({setShowOnboarding}) => {
   };
 
   function handleStep2() {
-    createDefaultHabits();
+    if (!habitsCreated) {
+      createDefaultHabits();
+      setHabitsCreated(true);
+    }
 
     const allHabits = getHabits();
     allHabits.forEach(habit => {
       const habitId = habit.id;
-      const isSelected = selectedHabits[habitId];
 
-      updateHabit(habit.id, {
-        available: isSelected,
-      });
+      if (habitId >= 1 && habitId <= 6) {
+        const isSelected = selectedHabits[habitId];
+        updateHabit(habit.id, {
+          available: isSelected,
+        });
+      }
     });
 
     const habits = getHabits() || [];
@@ -161,7 +164,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             onPress={() => {
               handleStep1();
             }}>
-            {t('onboarding.step1.accept')}
+            {t('button.start')}
           </Button>
         </View>
       </View>
@@ -175,7 +178,7 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(habitId => (
+          {[1, 2, 3, 4, 5, 6].map(habitId => (
             <Card
               key={habitId}
               style={[
@@ -212,16 +215,27 @@ const OnboardingView = ({setShowOnboarding}) => {
         </ScrollView>
 
         <View style={styles.onboarding__bar}>
-          <Button
-            style={styles.button}
-            mode="contained"
-            icon={!hasSelectedHabits ? 'lock' : 'check'}
-            disabled={!hasSelectedHabits}
-            onPress={() => {
-              handleStep2();
-            }}>
-            {t('onboarding.step2.accept')}
-          </Button>
+          <View style={styles.onboarding__buttons}>
+            <Button
+              style={styles.button}
+              mode="outlined"
+              icon="arrow-left"
+              onPress={() => {
+                setStep(1);
+              }}>
+              {t('button.back')}
+            </Button>
+            <Button
+              style={styles.button}
+              mode="contained"
+              icon={!hasSelectedHabits ? 'lock' : 'check'}
+              disabled={!hasSelectedHabits}
+              onPress={() => {
+                handleStep2();
+              }}>
+              {t('button.save')}
+            </Button>
+          </View>
         </View>
       </View>
     );
@@ -261,18 +275,38 @@ const OnboardingView = ({setShowOnboarding}) => {
         <View style={styles.onboarding__bar}>
           <View style={styles.onboarding__buttons}>
             <Button
+              style={styles.button}
+              mode="outlined"
+              icon="arrow-left"
+              onPress={() => {
+                const currentHabits = getHabits() || [];
+                const updatedSelectedHabits = {};
+
+                currentHabits.forEach(habit => {
+                  if (habit.id >= 1 && habit.id <= 6) {
+                    updatedSelectedHabits[habit.id] = habit.available;
+                  }
+                });
+
+                setSelectedHabits(updatedSelectedHabits);
+                dispatch(setHabits(currentHabits));
+                setStep(2);
+              }}>
+              {t('button.back')}
+            </Button>
+            <Button
               mode="outlined"
               style={styles.button}
               icon="plus"
               onPress={() => setVisibleAddModal(true)}>
-              {t('onboarding.step3.add-custom-habit')}
+              {t('button.add')}
             </Button>
             <Button
               style={styles.button}
               mode="contained"
               onPress={handleStep3}
               icon="check">
-              {t('onboarding.step3.accept')}
+              {t('button.save')}
             </Button>
           </View>
         </View>
@@ -316,14 +350,27 @@ const OnboardingView = ({setShowOnboarding}) => {
           maxLength={30}
         />
 
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={handleStep4}
-          disabled={!name.trim()}
-          icon={!name.trim() ? 'lock' : 'rocket-launch'}>
-          {t('onboarding.step4.accept')}
-        </Button>
+        <View style={styles.onboarding__buttons}>
+          <Button
+            style={styles.button}
+            mode="outlined"
+            icon="arrow-left"
+            onPress={() => {
+              const habits = getHabits() || [];
+              dispatch(setHabits(habits));
+              setStep(3);
+            }}>
+            {t('button.back')}
+          </Button>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={handleStep4}
+            disabled={!name.trim()}
+            icon={!name.trim() ? 'lock' : 'rocket-launch'}>
+            {t('button.start')}
+          </Button>
+        </View>
       </View>
     );
   }
