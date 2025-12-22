@@ -210,6 +210,80 @@ export const createDefaultHabits = () => {
   return createdHabits;
 };
 
+export const translateDefaultHabits = (oldLanguage, newLanguage) => {
+  const defaultHabitIds = [1, 2, 3, 4, 5, 6];
+
+  const oldTranslations = {};
+  const newTranslations = {};
+
+  defaultHabitIds.forEach(id => {
+    oldTranslations[id] = {
+      habitName: i18next.t(`default-habits.${id}.habitName`, {
+        lng: oldLanguage,
+      }),
+      habitEnemy: i18next.t(`default-habits.${id}.habitEnemy`, {
+        lng: oldLanguage,
+      }),
+    };
+    newTranslations[id] = {
+      habitName: i18next.t(`default-habits.${id}.habitName`, {
+        lng: newLanguage,
+      }),
+      habitEnemy: i18next.t(`default-habits.${id}.habitEnemy`, {
+        lng: newLanguage,
+      }),
+    };
+  });
+
+  let updatedCount = 0;
+
+  realm.write(() => {
+    const habits = realm.objects('Habit');
+
+    habits.forEach(habit => {
+      let needsUpdate = false;
+      let newHabitName = habit.habitName;
+      let newHabitEnemy = habit.habitEnemy;
+
+      for (const id of defaultHabitIds) {
+        const oldHabit = oldTranslations[id];
+
+        if (
+          habit.habitName === oldHabit.habitName &&
+          habit.habitEnemy === oldHabit.habitEnemy
+        ) {
+          newHabitName = newTranslations[id].habitName;
+          newHabitEnemy = newTranslations[id].habitEnemy;
+          needsUpdate = true;
+          break;
+        }
+      }
+
+      if (needsUpdate) {
+        realm.create(
+          'Habit',
+          {
+            id: habit.id,
+            habitName: newHabitName,
+            habitEnemy: newHabitEnemy,
+            goodCounter: habit.goodCounter,
+            badCounter: habit.badCounter,
+            skipCounter: habit.skipCounter,
+            repeatDays: Array.from(habit.repeatDays),
+            repeatHours: Array.from(habit.repeatHours),
+            available: habit.available,
+            icon: habit.icon,
+          },
+          'modified',
+        );
+        updatedCount++;
+      }
+    });
+  });
+
+  return updatedCount;
+};
+
 export const getTodayHabits = (habits, weekdayKey) => {
   if (!habits || habits.length === 0) return [];
 

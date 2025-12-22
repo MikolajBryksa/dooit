@@ -8,7 +8,8 @@ import i18next from 'i18next';
 import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
 import {updateSettingValue} from '@/services/settings.service';
-import {setSettings} from '@/redux/actions';
+import {setSettings, setHabits} from '@/redux/actions';
+import {translateDefaultHabits, getHabits} from '@/services/habits.service';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
 import NameModal from '@/modals/name.modal';
@@ -77,6 +78,7 @@ const SettingsView = () => {
   }
 
   function handleLanguage() {
+    const oldLanguage = language;
     const newLanguage = language === 'en' ? 'pl' : 'en';
     const newLocale = newLanguage === 'en' ? 'en' : 'pl';
 
@@ -87,6 +89,12 @@ const SettingsView = () => {
       registerTranslation('en', en);
     } else if (newLocale === 'pl') {
       registerTranslation('pl', pl);
+    }
+
+    const updatedCount = translateDefaultHabits(oldLanguage, newLanguage);
+    if (updatedCount > 0) {
+      const habits = getHabits();
+      dispatch(setHabits(habits));
     }
 
     setLanguage(newLanguage);
