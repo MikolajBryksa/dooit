@@ -14,6 +14,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
+import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/error-tracking.service.js';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
@@ -27,6 +28,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const [habitEnemy, setHabitEnemy] = useState('');
   const [repeatDays, setRepeatDays] = useState([]);
   const [repeatHours, setRepeatHours] = useState([]);
+  const [selectedIcon, setSelectedIcon] = useState('infinity');
 
   const maxSteps = 4;
 
@@ -35,6 +37,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
     setHabitEnemy('');
     setRepeatDays([]);
     setRepeatHours([]);
+    setSelectedIcon('infinity');
     setStep(1);
   };
 
@@ -48,7 +51,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
   const handleSave = async () => {
     try {
-      addHabit(habitName, habitEnemy, repeatDays, repeatHours);
+      addHabit(habitName, habitEnemy, repeatDays, repeatHours, selectedIcon);
       fetchAllHabits();
       onDismiss();
       setTimeout(() => {
@@ -108,6 +111,11 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
               value={habitName}
               onChangeText={setHabitName}
               maxLength={60}
+              style={{marginBottom: 16}}
+            />
+            <IconSelector
+              selectedIcon={selectedIcon}
+              setSelectedIcon={setSelectedIcon}
             />
           </>
         )}

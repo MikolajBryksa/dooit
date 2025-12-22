@@ -35,6 +35,7 @@ const NowCard = ({
   const styles = useStyles();
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
+  const [hasUserMadeChoice, setHasUserMadeChoice] = useState(false);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
@@ -58,6 +59,7 @@ const NowCard = ({
     // Resets the step and motivation when the card changes
     setStep(1);
     setIsManuallyUnlocked(false);
+    setHasUserMadeChoice(false);
     setMotivation(pickRandomMotivation(t, 'notification'));
 
     // Fade in the new card
@@ -199,6 +201,7 @@ const NowCard = ({
       if (choice === 'skip') patch.skipCounter = (skipCounter || 0) + 1;
 
       updateHabit(id, patch);
+      setHasUserMadeChoice(true);
       onUpdated?.();
     },
     [
@@ -229,8 +232,6 @@ const NowCard = ({
       animatedStyle={{opacity: cardOpacity}}
       iconContent={
         <PieCircle
-          size={120}
-          strokeWidth={12}
           icon={icon}
           effectiveness={weeklyStats.effectiveness}
           goodCount={weeklyStats.goodCount}
@@ -238,6 +239,7 @@ const NowCard = ({
           missedCount={weeklyStats.missedCount}
           badCount={weeklyStats.badCount}
           opacity={isLocked ? 0.5 : 1}
+          showPercentage={isCompleted || hasUserMadeChoice}
         />
       }
       progressContent={

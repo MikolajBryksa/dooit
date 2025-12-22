@@ -38,7 +38,7 @@
     "connection-fail": "Disconnected"
   },
   "message": {
-    "delete": "Are you sure to remove the habit:\n\n",
+    "delete": "Are you sure to remove the habit:",
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hey there! 👋\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
   },

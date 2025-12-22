@@ -10,10 +10,11 @@ import {
 import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {updateHabitValue} from '@/services/habits.service';
+import {updateHabitValue, getHabitById} from '@/services/habits.service';
 import {hourToSec} from '@/utils';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
+import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/error-tracking.service.js';
 
 const EditModal = ({
@@ -41,6 +42,7 @@ const EditModal = ({
       ? normalizeArray(value)
       : value,
   );
+  const [selectedIcon, setSelectedIcon] = useState('infinity');
 
   useEffect(() => {
     if (field === 'repeatDays' || field === 'repeatHours') {
@@ -48,7 +50,14 @@ const EditModal = ({
     } else {
       setInputValue(value);
     }
-  }, [value, field]);
+
+    if (field === 'habitName' && habitId) {
+      const habit = getHabitById(habitId);
+      if (habit && habit.icon) {
+        setSelectedIcon(habit.icon);
+      }
+    }
+  }, [value, field, habitId]);
 
   const handleSave = async () => {
     let valueToSave = inputValue;
@@ -66,6 +75,11 @@ const EditModal = ({
 
     try {
       updateHabitValue(habitId, field, valueToSave);
+
+      if (field === 'habitName' && selectedIcon) {
+        updateHabitValue(habitId, 'icon', selectedIcon);
+      }
+
       fetchAllHabits();
       setTimeout(() => {
         onDismiss();
@@ -118,15 +132,23 @@ const EditModal = ({
         )}
 
         {['habitName', 'habitEnemy'].includes(field) && (
-          <TextInput
-            mode="outlined"
-            value={inputValue?.toString()}
-            onChangeText={setInputValue}
-            keyboardType={keyboardType}
-            autoFocus
-            style={{marginBottom: 16}}
-            maxLength={60}
-          />
+          <>
+            <TextInput
+              mode="outlined"
+              value={inputValue?.toString()}
+              onChangeText={setInputValue}
+              keyboardType={keyboardType}
+              autoFocus={field === 'habitEnemy'}
+              style={{marginBottom: 16}}
+              maxLength={60}
+            />
+            {field === 'habitName' && (
+              <IconSelector
+                selectedIcon={selectedIcon}
+                setSelectedIcon={setSelectedIcon}
+              />
+            )}
+          </>
         )}
         <Card.Actions>
           {field === 'repeatHours' && (

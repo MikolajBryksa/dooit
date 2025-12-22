@@ -14,7 +14,7 @@ export const dayFullMap = {
 
 export const habitIcons = [
   'water',
-  'dumbbell',
+  'run',
   'food-apple',
   'book-open',
   'school',

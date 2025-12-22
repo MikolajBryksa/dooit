@@ -10,21 +10,17 @@ const PieCircle = ({
   missedCount = 0,
   badCount = 0,
   icon,
-  size = 120,
-  strokeWidth = 10,
-
-  animateDuration = 550,
-  flashDuration = 700,
-  showTicks = true,
-  tickArcLen = 1.3,
-  opacity = 1,
-
-  showSeparators = true,
-  separatorArcLen,
-  separatorColor,
+  opacity: propOpacity = 1,
+  showPercentage = false,
 }) => {
   const theme = useTheme();
 
+  const size = 140;
+  const strokeWidth = 10;
+  const animateDuration = 550;
+  const opacity = propOpacity;
+
+  let tickArcLen = 1.2;
   if (totalExpected >= 200) {
     tickArcLen = 0;
   } else if (totalExpected >= 150) {
@@ -41,9 +37,6 @@ const PieCircle = ({
   const _missedColor = theme?.colors?.surfaceVariant;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
-
-  const _separatorColor = separatorColor ?? _tickColor;
-  const _separatorArcLen = separatorArcLen ?? tickArcLen;
 
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2,
@@ -152,7 +145,8 @@ const PieCircle = ({
     }
   }, [effectiveness, effectivenessAnim]);
 
-  const iconSize = Math.max(24, size - (strokeWidth + 8) * 2);
+  const availableSpace = size - (strokeWidth + 8) * 2;
+  const iconSize = Math.max(44, availableSpace);
 
   const TinyArc = ({at, length, stroke}) => {
     if (!hasAny || length <= 0) return null;
@@ -229,8 +223,7 @@ const PieCircle = ({
             />
           )}
 
-          {showTicks &&
-            lenG > EPS &&
+          {lenG > EPS &&
             goodCount > 0 &&
             unitG > 0 &&
             Array.from({
@@ -248,8 +241,7 @@ const PieCircle = ({
               );
             })}
 
-          {showTicks &&
-            lenB > EPS &&
+          {lenB > EPS &&
             badCount > 0 &&
             unitB > 0 &&
             Array.from({
@@ -267,8 +259,7 @@ const PieCircle = ({
               );
             })}
 
-          {showTicks &&
-            lenM > EPS &&
+          {lenM > EPS &&
             missedCount > 0 &&
             unitM > 0 &&
             Array.from({
@@ -286,44 +277,44 @@ const PieCircle = ({
               );
             })}
 
-          {showSeparators &&
-            _separatorArcLen > 0 &&
-            lenG > EPS &&
-            (lenB > EPS || lenM > EPS) && (
-              <>
-                {lenB > EPS && (
-                  <TinyArc
-                    key="sep-g-b"
-                    at={startB}
-                    length={_separatorArcLen}
-                    stroke={_separatorColor}
-                  />
-                )}
-                {lenM > EPS && (
-                  <TinyArc
-                    key="sep-end-m"
-                    at={startM}
-                    length={_separatorArcLen}
-                    stroke={_separatorColor}
-                  />
-                )}
+          {lenG > EPS && (lenB > EPS || lenM > EPS) && (
+            <>
+              {lenB > EPS && (
                 <TinyArc
-                  key="sep-wrap"
-                  at={startG}
-                  length={_separatorArcLen}
-                  stroke={_separatorColor}
+                  key="sep-g-b"
+                  at={startB}
+                  length={tickArcLen}
+                  stroke={_tickColor}
                 />
-              </>
-            )}
+              )}
+              {lenM > EPS && (
+                <TinyArc
+                  key="sep-end-m"
+                  at={startM}
+                  length={tickArcLen}
+                  stroke={_tickColor}
+                />
+              )}
+              <TinyArc
+                key="sep-wrap"
+                at={startG}
+                length={tickArcLen}
+                stroke={_tickColor}
+              />
+            </>
+          )}
         </G>
       </Svg>
 
       <View pointerEvents="none" style={styles.centerContent}>
-        {effectiveness !== null ? (
+        {showPercentage && effectiveness !== null ? (
           <Text
             style={[
               styles.flashText,
-              {color: _goodColor, fontSize: Math.min(40, size * 0.25)},
+              {
+                color: _goodColor,
+                fontSize: Math.min(32, size * 0.24),
+              },
             ]}>
             {displayedEffectiveness}%
           </Text>

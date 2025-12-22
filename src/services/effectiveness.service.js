@@ -97,12 +97,9 @@ export const calculateWeeklyEffectiveness = (
   }
 
   const today = getLocalDateKey();
-
-  // Get first execution date - only count expected executions from that date forward
   const firstExecDate = getFirstExecutionDate(habitId);
-  const startDate = firstExecDate || today; // If no executions yet, start from today
+  const startDate = firstExecDate || today;
 
-  // Calculate how many days to look back (from first execution to today)
   const [y1, m1, d1] = startDate.split('-').map(Number);
   const [y2, m2, d2] = today.split('-').map(Number);
   const date1 = new Date(y1, m1 - 1, d1);
@@ -111,40 +108,31 @@ export const calculateWeeklyEffectiveness = (
     Math.floor((date2 - date1) / (1000 * 60 * 60 * 24)) + 1;
   const effectiveDaysBack = Math.min(daysSinceStart, daysBack);
 
-  // Generate list of expected executions only from start date
+  const actualExecutions = getHabitExecutions(habitId, effectiveDaysBack);
   const expectedExecutions = generateExpectedExecutions(
     habit,
     effectiveDaysBack,
     today,
   );
 
-  // Fetch actual executions first (we need this for filtering)
-  const actualExecutions = getHabitExecutions(habitId, effectiveDaysBack);
-
-  // Filter expected executions: for today, include if:
-  // 1. Time has already passed, OR
-  // 2. User already executed it (good, bad, or skip)
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
   const filteredExpected = expectedExecutions.filter(exp => {
-    // For past dates, include all
     if (exp.date < today) return true;
+    if (exp.date > today) return false;
 
-    // For today, check if already executed
-    const hasBeenExecuted = actualExecutions.some(
-      actual => actual.date === exp.date && actual.hour === exp.hour,
-    );
-    if (hasBeenExecuted) return true;
-
-    // For today, only include if the time has passed
     if (exp.date === today) {
+      const hasBeenExecuted = actualExecutions.some(
+        actual => actual.date === exp.date && actual.hour === exp.hour,
+      );
+      if (hasBeenExecuted) return true;
+
       const [h, m] = exp.hour.split(':').map(Number);
       const expMinutes = h * 60 + (m || 0);
       return expMinutes <= currentMinutes;
     }
 
-    // Future dates shouldn't be in the list anyway
     return false;
   });
 
