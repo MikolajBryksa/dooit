@@ -85,17 +85,15 @@ const inclusiveDaysBetween = (startDate, endDate) => {
 };
 
 export const calculateEffectiveness = (habitId, habit = null) => {
-  // If habit not provided, fetch from database
   if (!habit) {
     const realmHabit = realm.objectForPrimaryKey('Habit', habitId);
     if (!realmHabit) {
       return {
         effectiveness: null,
         goodCount: 0,
-        totalExpected: 0,
-        missedCount: 0,
         badCount: 0,
-        skippedCount: 0,
+        skipCount: 0,
+        totalCount: 0,
       };
     }
 
@@ -108,102 +106,40 @@ export const calculateEffectiveness = (habitId, habit = null) => {
 
   const today = getLocalDateKey();
 
-  // Full history window: from first execution date to today (inclusive)
   const firstExecDate = getFirstExecutionDate(habitId);
   const startDate = firstExecDate || today;
   const daysBack = inclusiveDaysBetween(startDate, today);
 
   const actualExecutions = getHabitExecutions(habitId, daysBack);
-  const expectedExecutions = generateExpectedExecutions(habit, daysBack, today);
 
-  // Build quick lookup for executions by (date|hour)
-  const execByKey = new Map();
+  const repeatDaysSet = new Set(habit.repeatDays || []);
+  const repeatHoursSet = new Set((habit.repeatHours || []).map(String));
+
+  let goodCount = 0;
+  let badCount = 0;
+  let skipCount = 0;
+
   for (const e of actualExecutions) {
-    execByKey.set(`${e.date}|${e.hour}`, e.status); // last write wins if duplicates
+    const weekday = dateToWeekday(e.date);
+    if (!repeatDaysSet.has(weekday)) continue;
+
+    const hourKey = String(e.hour);
+    if (!repeatHoursSet.has(hourKey)) continue;
+
+    if (e.status === 'good') goodCount += 1;
+    else if (e.status === 'bad') badCount += 1;
+    else if (e.status === 'skip') skipCount += 1;
   }
 
-  // Only count expected executions up to the current time for today (unless already executed)
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-  const filteredExpected = expectedExecutions.filter(exp => {
-    if (exp.date < today) return true;
-    if (exp.date > today) return false;
-
-    // exp.date === today
-    const status = execByKey.get(`${exp.date}|${exp.hour}`);
-    if (status) return true; // was executed (good/bad/skip) -> keep in the consideration step
-
-    const [h, m] = exp.hour.split(':').map(Number);
-    const expMinutes = h * 60 + (m || 0);
-    return expMinutes <= currentMinutes;
-  });
-
-  if (filteredExpected.length === 0) {
-    return {
-      effectiveness: null,
-      goodCount: 0,
-      totalExpected: 0,
-      missedCount: 0,
-      badCount: 0,
-      skippedCount: 0,
-    };
-  }
-
-  // Exclude skipped expected occurrences from denominator
-  const expectedNonSkipped = [];
-  let skippedCount = 0;
-
-  for (const exp of filteredExpected) {
-    const status = execByKey.get(`${exp.date}|${exp.hour}`);
-    if (status === 'skip') {
-      skippedCount += 1;
-      continue;
-    }
-    expectedNonSkipped.push(exp);
-  }
-
-  const totalExpected = expectedNonSkipped.length;
-
-  // If everything ended up skipped, effectiveness is null (no basis)
-  if (totalExpected === 0) {
-    return {
-      effectiveness: null,
-      goodCount: 0,
-      totalExpected: 0,
-      missedCount: 0,
-      badCount: 0,
-      skippedCount,
-    };
-  }
-
-  // Count good/bad only within expectedNonSkipped
-  const expectedKeySet = new Set(
-    expectedNonSkipped.map(exp => `${exp.date}|${exp.hour}`),
-  );
-
-  const goodCount = actualExecutions.filter(
-    a => a.status === 'good' && expectedKeySet.has(`${a.date}|${a.hour}`),
-  ).length;
-
-  const badCountAtExpectedHours = actualExecutions.filter(
-    a => a.status === 'bad' && expectedKeySet.has(`${a.date}|${a.hour}`),
-  ).length;
-
-  // All bad executions (also outside expected hours) - for stats only
-  const badCount = actualExecutions.filter(a => a.status === 'bad').length;
-
-  const missedCount = totalExpected - goodCount - badCountAtExpectedHours;
-
-  const effectiveness = Math.round((goodCount / totalExpected) * 100);
+  const totalCount = goodCount + badCount;
 
   return {
-    effectiveness,
+    effectiveness:
+      totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : null,
     goodCount,
-    totalExpected,
-    missedCount,
     badCount,
-    skippedCount,
+    skipCount,
+    totalCount,
   };
 };
 

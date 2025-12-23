@@ -6,8 +6,6 @@ import Svg, {Circle, G} from 'react-native-svg';
 const PieCircle = ({
   effectiveness = null,
   goodCount = 0,
-  totalExpected = 0,
-  missedCount = 0,
   badCount = 0,
   icon,
   opacity: propOpacity = 1,
@@ -20,21 +18,23 @@ const PieCircle = ({
   const animateDuration = 550;
   const opacity = propOpacity;
 
+  const total = Math.max(0, (goodCount || 0) + (badCount || 0));
+
+  // Tick density based on total (good+bad)
   let tickArcLen = 1.2;
-  if (totalExpected >= 200) {
+  if (total >= 200) {
     tickArcLen = 0;
-  } else if (totalExpected >= 150) {
+  } else if (total >= 150) {
     tickArcLen = 0.4;
-  } else if (totalExpected >= 100) {
+  } else if (total >= 100) {
     tickArcLen = 0.7;
-  } else if (totalExpected >= 50) {
+  } else if (total >= 50) {
     tickArcLen = 1;
   }
 
   const _iconColor = theme?.colors?.primary;
   const _goodColor = theme?.colors?.primary;
   const _badColor = theme?.colors?.error;
-  const _missedColor = theme?.colors?.surfaceVariant;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
 
@@ -44,22 +44,20 @@ const PieCircle = ({
   const C = 2 * Math.PI * radius;
   const EPS = 1e-3;
 
-  const totalShown = Math.max(0, totalExpected);
-  const fG = totalShown > 0 ? goodCount / totalShown : 0;
-  const fB = totalShown > 0 ? badCount / totalShown : 0;
-  const fM = totalShown > 0 ? missedCount / totalShown : 0;
+  // Fractions only for good/bad
+  const fG = total > 0 ? goodCount / total : 0;
+  const fB = total > 0 ? badCount / total : 0;
 
   const target = useMemo(
     () => ({
       g: C * fG,
       b: C * fB,
-      m: C * fM,
     }),
-    [C, fG, fB, fM],
+    [C, fG, fB],
   );
 
   const mountedRef = useRef(false);
-  const prevRef = useRef({g: 0, b: 0, m: 0});
+  const prevRef = useRef({g: 0, b: 0});
   const t = useRef(new Animated.Value(1)).current;
   const [animT, setAnimT] = useState(1);
 
@@ -83,31 +81,25 @@ const PieCircle = ({
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
     }).start(({finished}) => {
-      if (finished) {
-        prevRef.current = target;
-      }
+      if (finished) prevRef.current = target;
     });
-  }, [target.g, target.b, target.m, animateDuration, t]);
+  }, [target.g, target.b, animateDuration, t]);
 
   const lerp = (a, b, k) => a + (b - a) * k;
 
   const lenG = lerp(prevRef.current.g, target.g, animT);
   const lenB = lerp(prevRef.current.b, target.b, animT);
-  const lenM = lerp(prevRef.current.m, target.m, animT);
 
   const startG = 0;
   const startB = lenG;
-  const startM = lenG + lenB;
 
-  const hasAny = lenG > EPS || lenB > EPS || lenM > EPS;
+  const hasAny = lenG > EPS || lenB > EPS;
 
   const isFullG = lenG > C - EPS;
   const isFullB = lenB > C - EPS;
-  const isFullM = lenM > C - EPS;
 
   const unitG = goodCount > 0 ? lenG / goodCount : 0;
   const unitB = badCount > 0 ? lenB / badCount : 0;
-  const unitM = missedCount > 0 ? lenM / missedCount : 0;
 
   const prevEffectiveness = useRef(effectiveness ?? 0);
   const effectivenessAnim = useRef(
@@ -133,7 +125,6 @@ const PieCircle = ({
     }
 
     const dEff = effectiveness - prevEffectiveness.current;
-
     if (Math.abs(dEff) > 0.1) {
       Animated.timing(effectivenessAnim, {
         toValue: effectiveness,
@@ -209,20 +200,6 @@ const PieCircle = ({
             />
           )}
 
-          {hasAny && lenM > EPS && (
-            <Circle
-              cx={cx}
-              cy={cy}
-              r={radius}
-              stroke={_missedColor}
-              strokeWidth={strokeWidth}
-              fill="none"
-              strokeDasharray={`${lenM} ${Math.max(0, C - lenM)}`}
-              strokeDashoffset={-startM}
-              strokeLinecap="butt"
-            />
-          )}
-
           {lenG > EPS &&
             goodCount > 0 &&
             unitG > 0 &&
@@ -259,42 +236,14 @@ const PieCircle = ({
               );
             })}
 
-          {lenM > EPS &&
-            missedCount > 0 &&
-            unitM > 0 &&
-            Array.from({
-              length: isFullM ? missedCount : Math.max(0, missedCount - 1),
-            }).map((_, i) => {
-              const m = (isFullM ? 0 : 1) + i;
-              const pos = startM + m * unitM;
-              return (
-                <TinyArc
-                  key={`tick-m-${i}`}
-                  at={pos}
-                  length={tickArcLen}
-                  stroke={_tickColor}
-                />
-              );
-            })}
-
-          {lenG > EPS && (lenB > EPS || lenM > EPS) && (
+          {lenG > EPS && lenB > EPS && (
             <>
-              {lenB > EPS && (
-                <TinyArc
-                  key="sep-g-b"
-                  at={startB}
-                  length={tickArcLen}
-                  stroke={_tickColor}
-                />
-              )}
-              {lenM > EPS && (
-                <TinyArc
-                  key="sep-end-m"
-                  at={startM}
-                  length={tickArcLen}
-                  stroke={_tickColor}
-                />
-              )}
+              <TinyArc
+                key="sep-g-b"
+                at={startB}
+                length={tickArcLen}
+                stroke={_tickColor}
+              />
               <TinyArc
                 key="sep-wrap"
                 at={startG}

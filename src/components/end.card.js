@@ -32,7 +32,7 @@ const withEffectiveness = habits =>
       repeatDays: h.repeatDays,
       repeatHours: h.repeatHours,
       effectiveness: stats.effectiveness,
-      totalExpected: stats.totalExpected,
+      totalCount: stats.totalCount,
     };
   });
 

@@ -43,9 +43,8 @@ const HabitCard = ({
       logError(error, 'calculateEffectiveness');
       return {
         effectiveness: null,
+        totalCount: 0,
         goodCount: 0,
-        totalExpected: 0,
-        missedCount: 0,
         badCount: 0,
       };
     }
@@ -225,7 +224,7 @@ const HabitCard = ({
                   />
                   <Text variant="bodyMedium">
                     {stats.effectiveness !== null
-                      ? `${stats.effectiveness}% (${stats.goodCount}/${stats.totalExpected})`
+                      ? `${stats.effectiveness}% (${stats.goodCount}/${stats.totalCount})`
                       : t('card.noRepetitions')}
                   </Text>
                 </View>

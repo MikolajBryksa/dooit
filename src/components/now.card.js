@@ -234,9 +234,8 @@ const NowCard = ({
         <PieCircle
           icon={icon}
           effectiveness={stats.effectiveness}
+          totalCount={stats.totalCount}
           goodCount={stats.goodCount}
-          totalExpected={stats.totalExpected}
-          missedCount={stats.missedCount}
           badCount={stats.badCount}
           opacity={isLocked ? 0.5 : 1}
           showPercentage={isCompleted || hasUserMadeChoice}
