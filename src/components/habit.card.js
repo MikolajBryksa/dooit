@@ -14,7 +14,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {formatHourString} from '@/utils';
-import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
+import {calculateEffectiveness} from '@/services/effectiveness.service';
 import {logError} from '@/services/error-tracking.service';
 
 const HabitCard = ({
@@ -36,15 +36,11 @@ const HabitCard = ({
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
 
-  const weeklyStats = useMemo(() => {
+  const stats = useMemo(() => {
     try {
-      return calculateWeeklyEffectiveness(id, {
-        id,
-        repeatDays,
-        repeatHours,
-      });
+      return calculateEffectiveness(id, {id, repeatDays, repeatHours});
     } catch (error) {
-      logError(error, 'HabitCard - calculateWeeklyEffectiveness');
+      logError(error, 'calculateEffectiveness');
       return {
         effectiveness: null,
         goodCount: 0,
@@ -217,26 +213,23 @@ const HabitCard = ({
             </TouchableRipple>
 
             {!onboardingMode && (
-              <>
-                <TouchableRipple
-                  onPress={() =>
-                    weeklyStats.effectiveness !== null &&
-                    setHistoryModalVisible(true)
-                  }>
-                  <View style={styles.card__row}>
-                    <IconButton
-                      icon="chart-arc"
-                      size={18}
-                      style={{margin: 0, marginRight: 4}}
-                    />
-                    <Text variant="bodyMedium">
-                      {weeklyStats.effectiveness !== null
-                        ? `${weeklyStats.effectiveness}% (${weeklyStats.goodCount}/${weeklyStats.totalExpected})`
-                        : t('card.noRepetitions')}
-                    </Text>
-                  </View>
-                </TouchableRipple>
-              </>
+              <TouchableRipple
+                onPress={() =>
+                  stats.effectiveness !== null && setHistoryModalVisible(true)
+                }>
+                <View style={styles.card__row}>
+                  <IconButton
+                    icon="chart-arc"
+                    size={18}
+                    style={{margin: 0, marginRight: 4}}
+                  />
+                  <Text variant="bodyMedium">
+                    {stats.effectiveness !== null
+                      ? `${stats.effectiveness}% (${stats.goodCount}/${stats.totalExpected})`
+                      : t('card.noRepetitions')}
+                  </Text>
+                </View>
+              </TouchableRipple>
             )}
           </Card.Content>
         </Animated.View>

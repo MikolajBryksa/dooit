@@ -11,7 +11,7 @@ import MainCard from './main.card';
 import {
   recordHabitExecution,
   hasExecution,
-  calculateWeeklyEffectiveness,
+  calculateEffectiveness,
 } from '@/services/effectiveness.service';
 
 const NowCard = ({
@@ -141,8 +141,8 @@ const NowCard = ({
     return hasExecution(id, today, selectedHour);
   }, [id, selectedHour]);
 
-  const weeklyStats = useMemo(() => {
-    return calculateWeeklyEffectiveness(id, {
+  const stats = useMemo(() => {
+    return calculateEffectiveness(id, {
       id,
       repeatDays,
       repeatHours,
@@ -233,11 +233,11 @@ const NowCard = ({
       iconContent={
         <PieCircle
           icon={icon}
-          effectiveness={weeklyStats.effectiveness}
-          goodCount={weeklyStats.goodCount}
-          totalExpected={weeklyStats.totalExpected}
-          missedCount={weeklyStats.missedCount}
-          badCount={weeklyStats.badCount}
+          effectiveness={stats.effectiveness}
+          goodCount={stats.goodCount}
+          totalExpected={stats.totalExpected}
+          missedCount={stats.missedCount}
+          badCount={stats.badCount}
           opacity={isLocked ? 0.5 : 1}
           showPercentage={isCompleted || hasUserMadeChoice}
         />

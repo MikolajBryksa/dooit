@@ -1,4 +1,3 @@
-// effectiveness.service.js
 import realm from '@/storage/schemas';
 import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
 import uuid from 'react-native-uuid';
@@ -85,12 +84,7 @@ const inclusiveDaysBetween = (startDate, endDate) => {
   return Math.max(1, diffDays + 1);
 };
 
-// Calculates weekly effectiveness for a habit (returns effectiveness %, goodCount, totalExpected, missedCount, badCount)
-export const calculateWeeklyEffectiveness = (
-  habitId,
-  habit = null,
-  daysBack = 7,
-) => {
+export const calculateEffectiveness = (habitId, habit = null) => {
   // If habit not provided, fetch from database
   if (!habit) {
     const realmHabit = realm.objectForPrimaryKey('Habit', habitId);
@@ -101,6 +95,7 @@ export const calculateWeeklyEffectiveness = (
         totalExpected: 0,
         missedCount: 0,
         badCount: 0,
+        skippedCount: 0,
       };
     }
 
@@ -113,22 +108,21 @@ export const calculateWeeklyEffectiveness = (
 
   const today = getLocalDateKey();
 
-  // Limit the window to either "daysBack" or since the first ever execution (whichever is smaller).
+  // Full history window: from first execution date to today (inclusive)
   const firstExecDate = getFirstExecutionDate(habitId);
   const startDate = firstExecDate || today;
-  const effectiveDaysBack = Math.min(
-    inclusiveDaysBetween(startDate, today),
-    daysBack,
-  );
+  const daysBack = inclusiveDaysBetween(startDate, today);
 
-  const actualExecutions = getHabitExecutions(habitId, effectiveDaysBack);
-  const expectedExecutions = generateExpectedExecutions(
-    habit,
-    effectiveDaysBack,
-    today,
-  );
+  const actualExecutions = getHabitExecutions(habitId, daysBack);
+  const expectedExecutions = generateExpectedExecutions(habit, daysBack, today);
 
-  // Only count expected executions up to the current time for today.
+  // Build quick lookup for executions by (date|hour)
+  const execByKey = new Map();
+  for (const e of actualExecutions) {
+    execByKey.set(`${e.date}|${e.hour}`, e.status); // last write wins if duplicates
+  }
+
+  // Only count expected executions up to the current time for today (unless already executed)
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -137,10 +131,8 @@ export const calculateWeeklyEffectiveness = (
     if (exp.date > today) return false;
 
     // exp.date === today
-    const wasExecuted = actualExecutions.some(
-      actual => actual.date === exp.date && actual.hour === exp.hour,
-    );
-    if (wasExecuted) return true;
+    const status = execByKey.get(`${exp.date}|${exp.hour}`);
+    if (status) return true; // was executed (good/bad/skip) -> keep in the consideration step
 
     const [h, m] = exp.hour.split(':').map(Number);
     const expMinutes = h * 60 + (m || 0);
@@ -154,36 +146,55 @@ export const calculateWeeklyEffectiveness = (
       totalExpected: 0,
       missedCount: 0,
       badCount: 0,
+      skippedCount: 0,
     };
   }
 
-  // Count "good" executions that match expected ones
+  // Exclude skipped expected occurrences from denominator
+  const expectedNonSkipped = [];
+  let skippedCount = 0;
+
+  for (const exp of filteredExpected) {
+    const status = execByKey.get(`${exp.date}|${exp.hour}`);
+    if (status === 'skip') {
+      skippedCount += 1;
+      continue;
+    }
+    expectedNonSkipped.push(exp);
+  }
+
+  const totalExpected = expectedNonSkipped.length;
+
+  // If everything ended up skipped, effectiveness is null (no basis)
+  if (totalExpected === 0) {
+    return {
+      effectiveness: null,
+      goodCount: 0,
+      totalExpected: 0,
+      missedCount: 0,
+      badCount: 0,
+      skippedCount,
+    };
+  }
+
+  // Count good/bad only within expectedNonSkipped
+  const expectedKeySet = new Set(
+    expectedNonSkipped.map(exp => `${exp.date}|${exp.hour}`),
+  );
+
   const goodCount = actualExecutions.filter(
-    actual =>
-      actual.status === 'good' &&
-      filteredExpected.some(
-        exp => exp.date === actual.date && exp.hour === actual.hour,
-      ),
+    a => a.status === 'good' && expectedKeySet.has(`${a.date}|${a.hour}`),
   ).length;
 
-  // Count "bad" executions that match expected hours (these replace "missed")
   const badCountAtExpectedHours = actualExecutions.filter(
-    actual =>
-      actual.status === 'bad' &&
-      filteredExpected.some(
-        exp => exp.date === actual.date && exp.hour === actual.hour,
-      ),
+    a => a.status === 'bad' && expectedKeySet.has(`${a.date}|${a.hour}`),
   ).length;
 
-  // Count all "bad" executions (including those outside expected hours)
-  const badCount = actualExecutions.filter(
-    actual => actual.status === 'bad',
-  ).length;
+  // All bad executions (also outside expected hours) - for stats only
+  const badCount = actualExecutions.filter(a => a.status === 'bad').length;
 
-  const totalExpected = filteredExpected.length;
   const missedCount = totalExpected - goodCount - badCountAtExpectedHours;
 
-  // Calculate effectiveness percentage (only good counts towards effectiveness)
   const effectiveness = Math.round((goodCount / totalExpected) * 100);
 
   return {
@@ -192,6 +203,7 @@ export const calculateWeeklyEffectiveness = (
     totalExpected,
     missedCount,
     badCount,
+    skippedCount,
   };
 };
 
@@ -208,7 +220,7 @@ export const recalculateEffectivenessAfterConfigChange = (
     repeatHours: newRepeatHours,
   };
 
-  return calculateWeeklyEffectiveness(habitId, habit);
+  return calculateEffectiveness(habitId, habit);
 };
 
 // Cleans old executions (older than N days) to prevent database bloat

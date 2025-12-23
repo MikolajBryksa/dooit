@@ -12,15 +12,14 @@ import {
   saveSummary,
 } from '@/services/summary.service';
 import {logError} from '@/services/error-tracking.service';
-import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
+import {calculateEffectiveness} from '@/services/effectiveness.service';
 
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 
-// Build a minimal habit payload with weekly effectiveness computed once
-const withWeeklyEffectiveness = habits =>
+const withEffectiveness = habits =>
   habits.map(h => {
-    const stats = calculateWeeklyEffectiveness(h.id, {
+    const stats = calculateEffectiveness(h.id, {
       id: h.id,
       repeatDays: h.repeatDays,
       repeatHours: h.repeatHours,
@@ -68,12 +67,12 @@ const EndCard = ({weekdayKey}) => {
 
   // Compute effectiveness once and reuse for both AI prompt and persistence
   const allAvailableHabitsWithEff = useMemo(
-    () => withWeeklyEffectiveness(availableHabits),
+    () => withEffectiveness(availableHabits),
     [availableHabits],
   );
 
   const todayHabitsWithEff = useMemo(
-    () => withWeeklyEffectiveness(todayHabits),
+    () => withEffectiveness(todayHabits),
     [todayHabits],
   );
 

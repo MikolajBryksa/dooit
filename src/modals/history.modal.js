@@ -127,7 +127,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   paddingVertical: 12,
                 }}>
                 <View style={{flex: 1}}>
-                  <Text variant="bodyMedium">
+                  <Text variant="bodySmall">
                     {formatDate(exec.date)} {exec.hour}
                   </Text>
                 </View>
