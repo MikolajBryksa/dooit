@@ -1,19 +1,41 @@
-import React, {useEffect, useState, useMemo} from 'react';
-import {Text, ActivityIndicator, Button} from 'react-native-paper';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
+import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
+
+import {useStyles} from '@/styles';
+import {useNetworkStatus, useTodayKey} from '@/hooks';
 import {
   generateAiSummary,
-  saveSummary,
   getDailySummary,
+  saveSummary,
 } from '@/services/summary.service';
-import {useNetworkStatus, useTodayKey} from '@/hooks';
-import MainCard from './main.card';
-import StatusIconCircle from './status-icon.circle';
 import {logError} from '@/services/error-tracking.service';
 import {calculateWeeklyEffectiveness} from '@/services/effectiveness.service';
+
+import MainCard from './main.card';
+import StatusIconCircle from './status-icon.circle';
+
+// Build a minimal habit payload with weekly effectiveness computed once
+const withWeeklyEffectiveness = habits =>
+  habits.map(h => {
+    const stats = calculateWeeklyEffectiveness(h.id, {
+      id: h.id,
+      repeatDays: h.repeatDays,
+      repeatHours: h.repeatHours,
+    });
+
+    return {
+      id: h.id,
+      habitName: h.habitName,
+      habitEnemy: h.habitEnemy,
+      repeatDays: h.repeatDays,
+      repeatHours: h.repeatHours,
+      effectiveness: stats.effectiveness,
+      totalExpected: stats.totalExpected,
+    };
+  });
 
 const EndCard = ({weekdayKey}) => {
   const {t} = useTranslation();
@@ -24,48 +46,35 @@ const EndCard = ({weekdayKey}) => {
 
   const [aiSummary, setAiSummary] = useState('');
   const [loadingAI, setLoadingAI] = useState(false);
+
+  // Typewriter state
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
   const [typewriterComplete, setTypewriterComplete] = useState(false);
 
+  // UI flags
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
   const [hadError, setHadError] = useState(false);
 
-  const allAvailableHabits = useMemo(
-    () =>
-      habits
-        .filter(h => h.available)
-        .map(h => {
-          const stats = calculateWeeklyEffectiveness(h.id, {
-            id: h.id,
-            repeatDays: h.repeatDays,
-            repeatHours: h.repeatHours,
-          });
-
-          return {
-            id: h.id,
-            habitName: h.habitName,
-            habitEnemy: h.habitEnemy,
-            repeatDays: h.repeatDays,
-            repeatHours: h.repeatHours,
-            effectiveness: stats.effectiveness,
-          };
-        }),
+  const availableHabits = useMemo(
+    () => habits.filter(h => h.available),
     [habits],
   );
 
   const todayHabits = useMemo(
-    () =>
-      habits
-        .filter(h => h.available && h.repeatDays.includes(weekdayKey))
-        .map(h => ({
-          id: h.id,
-          habitName: h.habitName,
-          habitEnemy: h.habitEnemy,
-          repeatDays: h.repeatDays,
-          repeatHours: h.repeatHours,
-        })),
+    () => habits.filter(h => h.available && h.repeatDays.includes(weekdayKey)),
     [habits, weekdayKey],
+  );
+
+  // Compute effectiveness once and reuse for both AI prompt and persistence
+  const allAvailableHabitsWithEff = useMemo(
+    () => withWeeklyEffectiveness(availableHabits),
+    [availableHabits],
+  );
+
+  const todayHabitsWithEff = useMemo(
+    () => withWeeklyEffectiveness(todayHabits),
+    [todayHabits],
   );
 
   useEffect(() => {
@@ -73,15 +82,19 @@ const EndCard = ({weekdayKey}) => {
     try {
       const existingSummary = getDailySummary(todayKey);
 
-      if (existingSummary && existingSummary.aiSummary) {
+      if (existingSummary?.aiSummary) {
         // We have a valid summary saved in the database
-        setAiSummary(existingSummary.aiSummary);
-        setDisplayedText(existingSummary.aiSummary);
-        setCurrentChar(existingSummary.aiSummary.length);
+        const text = existingSummary.aiSummary;
+        setAiSummary(text);
+        setDisplayedText(text);
+        setCurrentChar(text.length);
         setTypewriterComplete(true);
         setHasExistingSummary(true);
         setHadError(false);
-      } else if (todayHabits.length === 0) {
+        return;
+      }
+
+      if (todayHabits.length === 0) {
         // No habits today
         const msg = t('summary.no-actions');
         setAiSummary(msg);
@@ -90,11 +103,16 @@ const EndCard = ({weekdayKey}) => {
         setTypewriterComplete(true);
         setHasExistingSummary(false);
         setHadError(false);
-      } else {
-        // We can generate a new summary
-        setHasExistingSummary(false);
-        setHadError(false);
+        return;
       }
+
+      // We can generate a new summary
+      setAiSummary('');
+      setDisplayedText('');
+      setCurrentChar(0);
+      setTypewriterComplete(true);
+      setHasExistingSummary(false);
+      setHadError(false);
     } catch (e) {
       // Error reading local database
       const msg = t('summary.error-reading');
@@ -108,86 +126,76 @@ const EndCard = ({weekdayKey}) => {
   }, [todayKey, todayHabits.length, t]);
 
   const handleGenerate = async () => {
-    if (loadingAI || !todayHabits.length || !isConnected) {
-      return;
-    }
+    if (loadingAI || todayHabitsWithEff.length === 0 || !isConnected) return;
+
+    setLoadingAI(true);
+    setHadError(false);
+
+    // Reset typewriter
+    setTypewriterComplete(false);
+    setDisplayedText('');
+    setCurrentChar(0);
 
     try {
-      setLoadingAI(true);
-      setTypewriterComplete(false);
-      setDisplayedText('');
-      setCurrentChar(0);
-      setHadError(false);
+      // Generate summary from habits WITH effectiveness (computed once in UI)
+      const response = await generateAiSummary(todayHabitsWithEff);
+      setAiSummary(response);
 
       try {
-        const response = await generateAiSummary(todayHabits);
-        setAiSummary(response);
-
-        try {
-          await saveSummary(todayKey, allAvailableHabits, response);
-          setHasExistingSummary(true);
-          setHadError(false);
-        } catch (saveError) {
-          await logError(saveError, 'EndCard.saveSummary');
-          setHasExistingSummary(false);
-          setHadError(true);
-        }
-      } catch (error) {
-        await logError(error, 'EndCard.generateAiSummary');
-
-        const msg = t('summary.no-response');
-        setAiSummary(msg);
-        setDisplayedText(msg);
-        setCurrentChar(msg.length);
-        setTypewriterComplete(true);
+        // Persist full available habits WITH effectiveness + AI summary
+        await saveSummary(todayKey, allAvailableHabitsWithEff, response);
+        setHasExistingSummary(true);
+        setHadError(false);
+      } catch (saveError) {
+        await logError(saveError, 'EndCard.saveSummary');
         setHasExistingSummary(false);
         setHadError(true);
-
-        try {
-          await saveSummary(todayKey, allAvailableHabits, null);
-        } catch (saveError) {
-          await logError(saveError, 'EndCard.saveSummary.null');
-        }
-      } finally {
-        setLoadingAI(false);
       }
-    } catch (fatalError) {
-      await logError(fatalError, 'EndCard.handleGenerate.fatal');
-
-      setLoadingAI(false);
+    } catch (error) {
+      await logError(error, 'EndCard.generateAiSummary');
 
       const msg = t('summary.no-response');
       setAiSummary(msg);
       setDisplayedText(msg);
       setCurrentChar(msg.length);
       setTypewriterComplete(true);
+
       setHasExistingSummary(false);
       setHadError(true);
+
+      // Save a "null summary" to avoid repeated failing calls and keep a trace
+      try {
+        await saveSummary(todayKey, allAvailableHabitsWithEff, null);
+      } catch (saveError) {
+        await logError(saveError, 'EndCard.saveSummary.null');
+      }
+    } finally {
+      setLoadingAI(false);
     }
   };
 
   useEffect(() => {
+    // Typewriter effect
     if (!aiSummary || typewriterComplete || loadingAI) return;
 
     if (currentChar < aiSummary.length) {
       const timer = setTimeout(() => {
         setDisplayedText(aiSummary.substring(0, currentChar + 1));
-        setCurrentChar(currentChar + 1);
+        setCurrentChar(c => c + 1);
       }, 20);
+
       return () => clearTimeout(timer);
-    } else {
-      setTypewriterComplete(true);
     }
+
+    setTypewriterComplete(true);
   }, [aiSummary, currentChar, typewriterComplete, loadingAI]);
 
   const textToShow = typewriterComplete ? aiSummary : displayedText;
 
-  const hasHabitsToday = todayHabits.length > 0;
-
   const renderButton = () => {
-    if (!hasHabitsToday || hasExistingSummary) {
-      return null;
-    }
+    const hasHabitsToday = todayHabitsWithEff.length > 0;
+
+    if (!hasHabitsToday || hasExistingSummary) return null;
 
     if (!isConnected) {
       return (
@@ -195,7 +203,7 @@ const EndCard = ({weekdayKey}) => {
           style={styles.button}
           mode="contained"
           onPress={() => {}}
-          disabled={true}
+          disabled
           icon="wifi-off">
           {t('button.offline')}
         </Button>
@@ -208,7 +216,7 @@ const EndCard = ({weekdayKey}) => {
           style={styles.button}
           mode="contained"
           onPress={() => {}}
-          disabled={true}
+          disabled
           icon={() => <ActivityIndicator size={16} />}>
           {t('button.generating')}
         </Button>

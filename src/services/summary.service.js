@@ -6,43 +6,19 @@ import realm from '@/storage/schemas';
 import Realm from 'realm';
 import {logError} from './error-tracking.service.js';
 import {stripMarkdown} from '@/utils.js';
-import {calculateWeeklyEffectiveness} from './effectiveness.service.js';
 
-function selectBestAndWorstHabits(habits) {
-  // Calculate weekly effectiveness for each habit
-  const habitsWithEffectiveness = habits
-    .map(habit => {
-      const stats = calculateWeeklyEffectiveness(habit.id, {
-        id: habit.id,
-        repeatDays: habit.repeatDays,
-        repeatHours: habit.repeatHours,
-      });
-
-      // Skip habits with no data or null effectiveness
-      if (stats.effectiveness === null || stats.totalExpected === 0) {
-        return null;
-      }
-
-      return {
-        ...habit,
-        effectiveness: stats.effectiveness,
-      };
-    })
-    .filter(h => h !== null);
-
-  if (habitsWithEffectiveness.length === 0) return [];
-
-  const sorted = habitsWithEffectiveness.sort(
-    (a, b) => b.effectiveness - a.effectiveness,
+function selectBestAndWorstHabits(habitsWithEffectiveness) {
+  const valid = (habitsWithEffectiveness || []).filter(
+    h => typeof h?.effectiveness === 'number' && h.effectiveness >= 0,
   );
 
+  if (valid.length === 0) return [];
+
+  const sorted = [...valid].sort((a, b) => b.effectiveness - a.effectiveness);
   const bestHabit = sorted[0];
   const worstHabit = sorted[sorted.length - 1];
 
-  if (bestHabit === worstHabit) {
-    return [bestHabit];
-  }
-
+  if (bestHabit.id === worstHabit.id) return [bestHabit];
   return [bestHabit, worstHabit];
 }
 
@@ -51,10 +27,13 @@ export const getDailySummary = date => {
   return summary;
 };
 
-export const generateAiSummary = async (habits, maxRetries = 3) => {
+export const generateAiSummary = async (
+  habitsWithEffectiveness,
+  maxRetries = 3,
+) => {
   const fallbackNoActions = i18n.t('summary.no-actions');
 
-  if (!habits || habits.length === 0) {
+  if (!habitsWithEffectiveness || habitsWithEffectiveness.length === 0) {
     return fallbackNoActions;
   }
 
@@ -75,10 +54,8 @@ export const generateAiSummary = async (habits, maxRetries = 3) => {
     await logError(e, 'generateAiSummary.userName');
   }
 
-  const selectedHabits = selectBestAndWorstHabits(habits);
-  if (!selectedHabits || selectedHabits.length === 0) {
-    return fallbackNoActions;
-  }
+  const selectedHabits = selectBestAndWorstHabits(habitsWithEffectiveness);
+  if (selectedHabits.length === 0) return fallbackNoActions;
 
   const bestHabit = selectedHabits[0];
   const worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
@@ -151,7 +128,7 @@ export const saveSummary = async (date, habits, aiSummary) => {
   });
 
   try {
-    // Get anonymous Supabase user ID (secured by JWT)
+    // Get anonymous Supabase user ID
     const supabaseUserId = await getSupabaseUserId();
 
     if (!supabaseUserId) {

@@ -1,3 +1,4 @@
+// effectiveness.service.js
 import realm from '@/storage/schemas';
 import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
 import uuid from 'react-native-uuid';
@@ -71,6 +72,19 @@ export const generateExpectedExecutions = (
   return expected;
 };
 
+// Helper to compute inclusive day difference between two YYYY-MM-DD dates.
+// Returns number of days including both endpoints (min 1).
+const inclusiveDaysBetween = (startDate, endDate) => {
+  const [y1, m1, d1] = startDate.split('-').map(Number);
+  const [y2, m2, d2] = endDate.split('-').map(Number);
+
+  const date1 = new Date(y1, m1 - 1, d1);
+  const date2 = new Date(y2, m2 - 1, d2);
+
+  const diffDays = Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
+  return Math.max(1, diffDays + 1);
+};
+
 // Calculates weekly effectiveness for a habit (returns effectiveness %, goodCount, totalExpected, missedCount, badCount)
 export const calculateWeeklyEffectiveness = (
   habitId,
@@ -89,6 +103,7 @@ export const calculateWeeklyEffectiveness = (
         badCount: 0,
       };
     }
+
     habit = {
       id: realmHabit.id,
       repeatDays: Array.from(realmHabit.repeatDays),
@@ -97,16 +112,14 @@ export const calculateWeeklyEffectiveness = (
   }
 
   const today = getLocalDateKey();
+
+  // Limit the window to either "daysBack" or since the first ever execution (whichever is smaller).
   const firstExecDate = getFirstExecutionDate(habitId);
   const startDate = firstExecDate || today;
-
-  const [y1, m1, d1] = startDate.split('-').map(Number);
-  const [y2, m2, d2] = today.split('-').map(Number);
-  const date1 = new Date(y1, m1 - 1, d1);
-  const date2 = new Date(y2, m2 - 1, d2);
-  const daysSinceStart =
-    Math.floor((date2 - date1) / (1000 * 60 * 60 * 24)) + 1;
-  const effectiveDaysBack = Math.min(daysSinceStart, daysBack);
+  const effectiveDaysBack = Math.min(
+    inclusiveDaysBetween(startDate, today),
+    daysBack,
+  );
 
   const actualExecutions = getHabitExecutions(habitId, effectiveDaysBack);
   const expectedExecutions = generateExpectedExecutions(
@@ -115,6 +128,7 @@ export const calculateWeeklyEffectiveness = (
     today,
   );
 
+  // Only count expected executions up to the current time for today.
   const now = new Date();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -122,18 +136,15 @@ export const calculateWeeklyEffectiveness = (
     if (exp.date < today) return true;
     if (exp.date > today) return false;
 
-    if (exp.date === today) {
-      const hasBeenExecuted = actualExecutions.some(
-        actual => actual.date === exp.date && actual.hour === exp.hour,
-      );
-      if (hasBeenExecuted) return true;
+    // exp.date === today
+    const wasExecuted = actualExecutions.some(
+      actual => actual.date === exp.date && actual.hour === exp.hour,
+    );
+    if (wasExecuted) return true;
 
-      const [h, m] = exp.hour.split(':').map(Number);
-      const expMinutes = h * 60 + (m || 0);
-      return expMinutes <= currentMinutes;
-    }
-
-    return false;
+    const [h, m] = exp.hour.split(':').map(Number);
+    const expMinutes = h * 60 + (m || 0);
+    return expMinutes <= currentMinutes;
   });
 
   if (filteredExpected.length === 0) {
@@ -230,8 +241,7 @@ export const getFirstExecutionDate = habitId => {
     .sorted('date', false);
 
   if (executions.length === 0) return null;
-
-  return executions[executions.length - 1].date;
+  return executions[0].date;
 };
 
 // Checks if an execution already exists (prevents duplicates)
