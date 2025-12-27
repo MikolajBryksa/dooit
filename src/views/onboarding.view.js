@@ -44,6 +44,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     4: false,
     5: false,
     6: false,
+    7: false,
   });
 
   function handleStep1() {
@@ -78,7 +79,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     allHabits.forEach(habit => {
       const habitId = habit.id;
 
-      if (habitId >= 1 && habitId <= 6) {
+      if (habitId >= 1 && habitId <= 7) {
         const isSelected = selectedHabits[habitId];
         updateHabit(habit.id, {
           available: isSelected,
@@ -178,7 +179,7 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
-          {[1, 2, 3, 4, 5, 6].map(habitId => (
+          {[1, 2, 3, 4, 5, 6, 7].map(habitId => (
             <Card
               key={habitId}
               style={[
@@ -283,7 +284,7 @@ const OnboardingView = ({setShowOnboarding}) => {
                 const updatedSelectedHabits = {};
 
                 currentHabits.forEach(habit => {
-                  if (habit.id >= 1 && habit.id <= 6) {
+                  if (habit.id >= 1 && habit.id <= 7) {
                     updatedSelectedHabits[habit.id] = habit.available;
                   }
                 });

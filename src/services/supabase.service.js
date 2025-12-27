@@ -9,51 +9,36 @@ export const supabase = createClient(
   {
     auth: {
       storage: AsyncStorage,
-      autoRefreshToken: true,
+      autoRefreshToken: false,
       persistSession: true,
       detectSessionInUrl: false,
     },
   },
 );
 
-export const initializeAnonymousAuth = async () => {
-  try {
+let initAuthPromise = null;
+
+export const initializeAnonymousAuth = () => {
+  if (initAuthPromise) return initAuthPromise;
+
+  initAuthPromise = (async () => {
     const {
       data: {session},
     } = await supabase.auth.getSession();
-
-    if (session?.user) {
-      return {
-        success: true,
-        userId: session.user.id,
-        error: null,
-      };
-    }
+    if (session?.user)
+      return {success: true, userId: session.user.id, error: null};
 
     const {data, error} = await supabase.auth.signInAnonymously();
+    if (error) throw error;
 
-    if (error) {
-      logError(error, 'initializeAnonymousAuth');
-      return {
-        success: false,
-        userId: null,
-        error,
-      };
-    }
+    return {success: true, userId: data.user.id, error: null};
+  })().catch(e => {
+    logError(e, 'initializeAnonymousAuth');
+    initAuthPromise = null;
+    throw e;
+  });
 
-    return {
-      success: true,
-      userId: data.user.id,
-      error: null,
-    };
-  } catch (error) {
-    logError(error, 'initializeAnonymousAuth');
-    return {
-      success: false,
-      userId: null,
-      error,
-    };
-  }
+  return initAuthPromise;
 };
 
 export const getCurrentUserToken = async () => {

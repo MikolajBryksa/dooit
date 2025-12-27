@@ -157,11 +157,11 @@
   "default-habits": {
     "1": {
       "habitName": "Drinking water",
-      "habitEnemy": "Drinking soda"
+      "habitEnemy": "Sugary drinks"
     },
     "2": {
-      "habitName": "Sports activity",
-      "habitEnemy": "Just sitting"
+      "habitName": "Physical activity",
+      "habitEnemy": "Being inactive"
     },
     "3": {
       "habitName": "Healthy eating",
@@ -169,15 +169,19 @@
     },
     "4": {
       "habitName": "Reading books",
-      "habitEnemy": "Social media"
+      "habitEnemy": "Checking the news"
     },
     "5": {
       "habitName": "Skill development",
-      "habitEnemy": "Stagnation"
+      "habitEnemy": "Procrastination"
     },
     "6": {
       "habitName": "Stress relief",
-      "habitEnemy": "Short videos"
+      "habitEnemy": "Overstimulation"
+    },
+    "7": {
+      "habitName": "Consistent sleep",
+      "habitEnemy": "Late-night scrolling"
     }
   },
   "motivation": {

@@ -1,6 +1,10 @@
 import i18n from '@/i18next';
 import {getSettingValue} from './settings.service.js';
-import {supabase, getSupabaseUserId} from './supabase.service.js';
+import {
+  supabase,
+  getSupabaseUserId,
+  initializeAnonymousAuth,
+} from './supabase.service.js';
 import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
@@ -128,7 +132,7 @@ export const saveSummary = async (date, habits, aiSummary) => {
   });
 
   try {
-    // Get anonymous Supabase user ID
+    await initializeAnonymousAuth();
     const supabaseUserId = await getSupabaseUserId();
 
     if (!supabaseUserId) {

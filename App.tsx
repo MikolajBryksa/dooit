@@ -13,7 +13,7 @@ import {useTranslation} from 'react-i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {useColorScheme} from 'react-native';
 
-import {renderIcon, isNetworkishError} from './src/utils';
+import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
 import {getSettings} from './src/services/settings.service';
 import {setSettings, setHabits} from './src/redux/actions';
@@ -26,7 +26,6 @@ import ErrorBoundary from '@/dialogs/error.dialog';
 import {setupErrorTracking, logError} from '@/services/error-tracking.service';
 import {cleanOldExecutions} from '@/services/effectiveness.service';
 import {getHabits} from '@/services/habits.service';
-import {initializeAnonymousAuth} from '@/services/supabase.service';
 
 setupErrorTracking();
 
@@ -42,7 +41,6 @@ function AppContent() {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   const didInitRef = useRef(false);
-  const didAuthRef = useRef(false);
 
   useEffect(() => {
     if (didInitRef.current) return;
@@ -93,18 +91,6 @@ function AppContent() {
 
     loadLocalData();
   }, [dispatch]);
-
-  useEffect(() => {
-    if (loading) return;
-    if (didAuthRef.current) return;
-    didAuthRef.current = true;
-
-    initializeAnonymousAuth().catch(error => {
-      if (!isNetworkishError(error)) {
-        logError(error, 'initializeAnonymousAuth');
-      }
-    });
-  }, [loading]);
 
   useEffect(() => {
     return setupNotificationSync(settings, loading, dispatch, setSettings);

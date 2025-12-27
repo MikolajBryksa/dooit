@@ -191,6 +191,14 @@ export const createDefaultHabits = () => {
       repeatHours: ['21:30'],
       icon: habitIcons[5],
     },
+    {
+      id: 7,
+      habitName: t('default-habits.7.habitName'),
+      habitEnemy: t('default-habits.7.habitEnemy'),
+      repeatDays: ['mon', 'tue', 'wed', 'thu'],
+      repeatHours: ['22:30'],
+      icon: habitIcons[6],
+    },
   ];
 
   const createdHabits = [];
@@ -211,7 +219,7 @@ export const createDefaultHabits = () => {
 };
 
 export const translateDefaultHabits = (oldLanguage, newLanguage) => {
-  const defaultHabitIds = [1, 2, 3, 4, 5, 6];
+  const defaultHabitIds = [1, 2, 3, 4, 5, 6, 7];
 
   const oldTranslations = {};
   const newTranslations = {};

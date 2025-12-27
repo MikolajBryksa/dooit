@@ -157,27 +157,31 @@
   "default-habits": {
     "1": {
       "habitName": "Picie wody",
-      "habitEnemy": "Picie napojów"
+      "habitEnemy": "Słodkie napoje"
     },
     "2": {
       "habitName": "Aktywność fizyczna",
-      "habitEnemy": "Tylko siedzenie"
+      "habitEnemy": "Brak ruchu"
     },
     "3": {
       "habitName": "Zdrowe jedzenie",
-      "habitEnemy": "Niezdrowa przekąska"
+      "habitEnemy": "Niezdrowe przekąski"
     },
     "4": {
       "habitName": "Czytanie książek",
-      "habitEnemy": "Media społecznościowe"
+      "habitEnemy": "Przeglądanie newsów"
     },
     "5": {
       "habitName": "Rozwój umiejętności",
-      "habitEnemy": "Stanie w miejscu"
+      "habitEnemy": "Prokrastynacja"
     },
     "6": {
       "habitName": "Odstresowanie",
-      "habitEnemy": "Krótkie filmiki"
+      "habitEnemy": "Przebodźcowanie"
+    },
+    "7": {
+      "habitName": "Regularny sen",
+      "habitEnemy": "Scrollowanie do późna"
     }
   },
   "motivation": {

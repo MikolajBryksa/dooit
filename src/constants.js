@@ -19,4 +19,5 @@ export const habitIcons = [
   'book-open',
   'school',
   'meditation',
+  'power-sleep',
 ];
