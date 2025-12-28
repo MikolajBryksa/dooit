@@ -25,7 +25,7 @@ export const recordHabitExecution = (habitId, date, hour, status) => {
 export const recordHabitExecutionInTransaction = _createExecution;
 
 // Retrieves habit executions from the last N days
-export const getHabitExecutions = (habitId, daysBack = 7) => {
+export const getHabitExecutions = (habitId, daysBack = 14) => {
   const today = getLocalDateKey();
   const startDate = subtractDays(today, daysBack - 1);
 
@@ -51,7 +51,7 @@ export const getHabitExecutions = (habitId, daysBack = 7) => {
 // Generates a list of expected executions for a habit in the last N days
 export const generateExpectedExecutions = (
   habit,
-  daysBack = 7,
+  daysBack = 14,
   referenceDate = null,
 ) => {
   const today = referenceDate || getLocalDateKey();

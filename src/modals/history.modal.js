@@ -30,7 +30,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   }, [visible, habitId]);
 
   const loadHistory = () => {
-    const history = getHabitExecutions(habitId, 7);
+    const history = getHabitExecutions(habitId);
 
     history.sort((a, b) => {
       if (a.date !== b.date) {
@@ -93,7 +93,16 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     if (dateKey === yesterday) return t('button.yesterday');
 
     const date = new Date(dateKey + 'T00:00:00');
-    return t(`date.${dayMap[date.getDay()]}`);
+
+    const todayDate = new Date(today + 'T00:00:00');
+    const diffMs = todayDate.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
+
+    if (diffDays >= 2 && diffDays <= 7) {
+      return t(`date.${dayMap[date.getDay()]}`);
+    }
+
+    return dateKey;
   };
 
   const getCurrentStatus = exec => {
