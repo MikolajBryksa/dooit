@@ -16,6 +16,7 @@ import {calculateEffectiveness} from '@/services/effectiveness.service';
 
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
+import {TYPE_DELAY} from '@/constants';
 
 const withEffectiveness = habits =>
   habits.map(h => {
@@ -181,7 +182,7 @@ const EndCard = ({weekdayKey}) => {
       const timer = setTimeout(() => {
         setDisplayedText(aiSummary.substring(0, currentChar + 1));
         setCurrentChar(c => c + 1);
-      }, 20);
+      }, TYPE_DELAY);
 
       return () => clearTimeout(timer);
     }

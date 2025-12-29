@@ -124,34 +124,21 @@
   },
   "onboarding": {
     "step1": {
-      "welcome": "Witaj",
-      "to-app": "w aplikacji Dooit",
-      "option1": {
-        "title": "Wyrabiaj nawyki",
-        "subtitle": "Zdecyduj, co i kiedy robić regularnie, aby stało się to rutyną."
-      },
-      "option2": {
-        "title": "Zaznaczaj wybory",
-        "subtitle": "Stawiaj na to co dobre i wytrwale powtarzaj zaplanowane działania."
-      },
-      "option3": {
-        "title": "Monitoruj postępy",
-        "subtitle": "Utrzymuj wysoką efektywność i zacznij dostrzegać swoje postępy."
-      }
+      "title": "Witaj w Dooit",
+      "subtitle": "Tu powstają dobre nawyki",
+      "name": "Wpisz swoje imię"
     },
     "step2": {
       "choose": "Wybierz",
-      "which-habits": "jakie nawyki chcesz wyrobić"
+      "which-habits": "jakie nawyki chcesz budować"
     },
     "step3": {
-      "select-repetition": "Wybierz czas powtórzeń",
-      "accept-default": "lub zaakceptuj domyślne dni i godziny"
+      "select-repetition": "Dostosuj",
+      "accept-default": "lub pozostaw domyślne ustawienia powtórzeń"
     },
-    "step4": {
-      "congratulations": "Zaczynajmy!",
-      "ready-to-start": "Czas rozpocząć podróż z nawykami.",
-      "have-fun": "Baw się dobrze i zmieniaj się na lepsze.",
-      "name-placeholder": "Podaj swoje imię"
+    "start": {
+      "title": "Zaczynajmy!",
+      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać dobry nawyk, ulec jego złej wersji albo całkowicie go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia!"
     }
   },
   "default-habits": {

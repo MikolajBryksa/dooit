@@ -27,6 +27,8 @@ const StatusIconCircle = ({
 
   const isLoading = !!loading;
   const isEnd = !isLoading && !!end;
+  const isEmpty = !isLoading && !isEnd && !!empty;
+  const isStart = !isLoading && !isEnd && !isEmpty;
 
   const spin = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -113,7 +115,17 @@ const StatusIconCircle = ({
           size={iconSize}
           style={{backgroundColor: 'transparent'}}
           color={goodColor}
-          icon={isLoading ? 'timer' : isEnd ? 'star' : 'close-thick'}
+          icon={
+            isLoading
+              ? 'timer'
+              : isEnd
+              ? 'star'
+              : isEmpty
+              ? 'close-thick'
+              : isStart
+              ? 'information-variant'
+              : 'infinity'
+          }
         />
       </View>
     </View>

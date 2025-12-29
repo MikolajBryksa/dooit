@@ -136,6 +136,7 @@ const HabitCard = ({
             opacity: onboardingMode ? 1 : cardOpacity,
           }}>
           <Card.Content style={styles.card__list}>
+            <View style={styles.card__divider} />
             <TouchableRipple
               onPress={() => openEditModal('habitEnemy', habitEnemy)}>
               <View style={styles.card__row}>

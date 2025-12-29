@@ -48,8 +48,19 @@ const OnboardingView = ({setShowOnboarding}) => {
   });
 
   function handleStep1() {
+    let updatedSettings = {...settings};
+    if (name.trim()) {
+      updateSettingValue('userName', name.trim());
+      updatedSettings = {...updatedSettings, userName: name.trim()};
+    }
+    dispatch(setSettings(updatedSettings));
     setStep(2);
   }
+
+  const fetchAllHabits = () => {
+    const updatedHabits = getHabits() || [];
+    dispatch(setHabits(updatedHabits));
+  };
 
   function handleHabitToggle(habitId) {
     setSelectedHabits(prev => ({
@@ -94,27 +105,8 @@ const OnboardingView = ({setShowOnboarding}) => {
 
   function handleStep3() {
     requestNotificationPermission(settings, dispatch, setSettings);
-    setStep(4);
-  }
-
-  function handleStep4() {
-    let updatedSettings = {...settings, firstLaunch: false};
-
-    if (name.trim()) {
-      updateSettingValue('userName', name.trim());
-      updatedSettings = {...updatedSettings, userName: name.trim()};
-    }
-
-    updateSettingValue('firstLaunch', false);
-    dispatch(setSettings(updatedSettings));
-
     setShowOnboarding(false);
   }
-
-  const fetchAllHabits = () => {
-    const updatedHabits = getHabits() || [];
-    dispatch(setHabits(updatedHabits));
-  };
 
   // Filters only available habits
   const availableHabits = (habits || []).filter(habit => habit.available);
@@ -126,46 +118,27 @@ const OnboardingView = ({setShowOnboarding}) => {
     return (
       <View style={styles.container__center}>
         <View style={styles.onboarding__bar}>
-          <Text variant="headlineMedium">{t('onboarding.step1.welcome')}</Text>
-          <Text variant="bodyLarge">{t('onboarding.step1.to-app')}</Text>
+          <Text variant="headlineMedium">{t('onboarding.step1.title')}</Text>
+          <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
         </View>
 
-        <Card style={styles.onboarding__card}>
-          <Card.Title
-            title={t('onboarding.step1.option1.title')}
-            subtitle={t('onboarding.step1.option1.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="infinity" />}
-            subtitleNumberOfLines={2}
-          />
-        </Card>
-
-        <Card style={styles.onboarding__card}>
-          <Card.Title
-            title={t('onboarding.step1.option2.title')}
-            subtitle={t('onboarding.step1.option2.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="check" />}
-            subtitleNumberOfLines={2}
-          />
-        </Card>
-
-        <Card style={styles.onboarding__card}>
-          <Card.Title
-            title={t('onboarding.step1.option3.title')}
-            subtitle={t('onboarding.step1.option3.subtitle')}
-            left={props => <Avatar.Icon {...props} icon="chart-arc" />}
-            subtitleNumberOfLines={2}
-          />
-        </Card>
+        <TextInput
+          mode="outlined"
+          style={styles.onboarding__input}
+          placeholder={t('onboarding.step1.name')}
+          value={name}
+          onChangeText={setName}
+          maxLength={30}
+        />
 
         <View style={styles.onboarding__bar}>
           <Button
             style={styles.button}
             mode="contained"
-            icon="check"
-            onPress={() => {
-              handleStep1();
-            }}>
-            {t('button.start')}
+            onPress={handleStep1}
+            disabled={!name.trim()}
+            icon={!name.trim() ? 'lock' : 'check'}>
+            {t('button.save')}
           </Button>
         </View>
       </View>
@@ -328,51 +301,6 @@ const OnboardingView = ({setShowOnboarding}) => {
           onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
         />
-      </View>
-    );
-  } else if (step === 4) {
-    return (
-      <View style={styles.container__center}>
-        <View style={styles.onboarding__bar}>
-          <Text variant="headlineMedium">
-            {t('onboarding.step4.congratulations')}
-          </Text>
-          <Text variant="bodyLarge">
-            {t('onboarding.step4.ready-to-start')}
-          </Text>
-          <Text variant="bodyLarge">{t('onboarding.step4.have-fun')}</Text>
-        </View>
-
-        <TextInput
-          mode="outlined"
-          style={styles.onboarding__input}
-          placeholder={t('onboarding.step4.name-placeholder')}
-          value={name}
-          onChangeText={setName}
-          maxLength={30}
-        />
-
-        <View style={styles.onboarding__buttons}>
-          <Button
-            style={styles.button}
-            mode="outlined"
-            icon="arrow-left"
-            onPress={() => {
-              const habits = getHabits() || [];
-              dispatch(setHabits(habits));
-              setStep(3);
-            }}>
-            {t('button.back')}
-          </Button>
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={handleStep4}
-            disabled={!name.trim()}
-            icon={!name.trim() ? 'lock' : 'rocket-launch'}>
-            {t('button.start')}
-          </Button>
-        </View>
       </View>
     );
   }

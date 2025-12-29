@@ -51,6 +51,11 @@ export const useStyles = () => {
       height: theme.dimensions.gap * 5,
       width: '80%',
     },
+    onboarding__subtitle: {
+      textAlign: 'center',
+      marginTop: theme.dimensions.margin,
+      marginHorizontal: theme.dimensions.gap,
+    },
     // buttons
     button: {
       alignSelf: 'center',
@@ -173,6 +178,11 @@ export const useStyles = () => {
     card__row: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    card__divider: {
+      height: 1,
+      backgroundColor: theme.colors.background,
+      marginBottom: theme.dimensions.margin,
     },
     chip: {
       borderRadius: 12,

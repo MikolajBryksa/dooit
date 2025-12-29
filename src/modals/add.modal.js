@@ -148,6 +148,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
         {step === 4 && (
           <>
             <Text variant="bodyMedium">{t('addStep.repeatHours')}</Text>
+            <View style={styles.gap} />
             <HoursSelector
               repeatHours={repeatHours}
               setRepeatHours={setRepeatHours}

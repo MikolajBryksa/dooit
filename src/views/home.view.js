@@ -18,6 +18,7 @@ import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
 import NoHabitsCard from '@/components/no-habits.card';
 import LoadingHabitsCard from '@/components/loading-habits.card';
+import StartCard from '@/components/start.card';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
 import AddModal from '@/modals/add.modal';
 
@@ -28,7 +29,7 @@ const HomeView = () => {
 
   const habits = useSelector(state => state.habits);
   const habitsLoading = useSelector(state => state.habitsLoading);
-  const debugMode = useSelector(state => state.settings.debugMode);
+  const firstLaunch = useSelector(state => state.settings.firstLaunch);
 
   const [visibleAddModal, setVisibleAddModal] = useState(false);
 
@@ -127,7 +128,9 @@ const HomeView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        {habitsLoading ? (
+        {firstLaunch ? (
+          <StartCard />
+        ) : habitsLoading ? (
           <LoadingHabitsCard />
         ) : todayHabits.length === 0 ? (
           <NoHabitsCard onAddHabit={handleAddModal} />
