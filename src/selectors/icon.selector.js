@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, ScrollView} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
+import {useStyles} from '@/styles';
 
 const IconSelector = ({selectedIcon, setSelectedIcon}) => {
   const theme = useTheme();
+  const styles = useStyles();
 
   const availableIcons = [
     'infinity',
@@ -37,23 +39,20 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
     'chart-line',
     'currency-usd',
     'home',
+    'car',
     'bed',
     'shower',
     'gift',
     'email',
   ];
 
-  const handleSelectIcon = icon => {
-    setSelectedIcon(icon);
-  };
-
   return (
     <View style={{marginBottom: 16}}>
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        style={{maxHeight: 200}}>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        style={{maxHeight: 220}}>
+        <View style={styles.selector__grid}>
           {availableIcons.map(icon => {
             const isSelected = selectedIcon === icon;
             return (
@@ -66,12 +65,14 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
                   isSelected ? 'transparent' : theme.colors.primaryContainer
                 }
                 iconColor={theme.colors.primary}
-                style={{
-                  margin: 4,
-                  borderWidth: isSelected ? 1 : 0,
-                  borderColor: theme.colors.primary,
-                }}
-                onPress={() => handleSelectIcon(icon)}
+                style={[
+                  styles.selector__iconBtn,
+                  {
+                    borderWidth: isSelected ? 1 : 0,
+                    borderColor: theme.colors.primary,
+                  },
+                ]}
+                onPress={() => setSelectedIcon(icon)}
               />
             );
           })}

@@ -74,12 +74,10 @@ const HabitsView = () => {
     <>
       <Appbar.Header style={styles.topBar__shadow}>
         <Appbar.Content title={t('view.habits')} />
-
         <Appbar.Action
           icon={filterDay ? 'filter-check' : 'filter'}
           onPress={() => setVisibleFilterModal(true)}
         />
-
         <Appbar.Action
           icon="plus"
           onPress={() => {
@@ -99,6 +97,7 @@ const HabitsView = () => {
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}
+              icon={habit.icon}
               fetchAllHabits={fetchAllHabits}
               onEdit={handleEditModal}
             />

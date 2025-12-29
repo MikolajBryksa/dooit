@@ -5,7 +5,6 @@ export const useStyles = () => {
   const theme = useTheme();
 
   return StyleSheet.create({
-    // main elements
     container: {
       flex: 1,
       padding: theme.dimensions.gap,
@@ -203,6 +202,45 @@ export const useStyles = () => {
     },
     segmentButtons: {
       marginVertical: theme.dimensions.gap,
+    },
+    // selectors (chips grids)
+    selector__scroll: {
+      maxHeight: 400,
+    },
+    selector__grid: {
+      width: '100%',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      alignContent: 'stretch',
+    },
+    selector__chip: {
+      marginBottom: theme.dimensions.gap,
+      borderWidth: 1,
+    },
+    selector__iconBtn: {
+      marginBottom: theme.dimensions.gap,
+    },
+    card__headerLeft: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+    },
+    card__headerRight: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    card__headerTitle: {
+      flex: 1,
+      flexShrink: 1,
+    },
+    // settings
+    settings__row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   });
 };

@@ -265,6 +265,7 @@ const OnboardingView = ({setShowOnboarding}) => {
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}
+              icon={habit.icon}
               fetchAllHabits={fetchAllHabits}
               onEdit={handleEditModal}
               onboardingMode={true}

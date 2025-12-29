@@ -31,6 +31,18 @@ const EditModal = ({
   const styles = useStyles();
   const hoursResetRef = useRef(null);
 
+  const getDefaultValueForField = currentField => {
+    if (currentField === 'repeatDays' || currentField === 'repeatHours')
+      return [];
+    if (currentField === 'habitName' || currentField === 'habitEnemy')
+      return '';
+    if (['goodCounter', 'badCounter', 'skipCounter'].includes(currentField))
+      return '';
+    return '';
+  };
+
+  const getDefaultIcon = () => 'infinity';
+
   const normalizeArray = val => {
     if (Array.isArray(val)) return val;
     if (val == null || val === '') return [];
@@ -91,6 +103,12 @@ const EditModal = ({
   };
 
   const handleReset = () => {
+    setInputValue(getDefaultValueForField(field));
+
+    if (field === 'habitName') {
+      setSelectedIcon(getDefaultIcon());
+    }
+
     if (field === 'repeatHours' && hoursResetRef.current) {
       hoursResetRef.current();
     }
@@ -151,11 +169,9 @@ const EditModal = ({
           </>
         )}
         <Card.Actions>
-          {field === 'repeatHours' && (
-            <Button mode="outlined" onPress={handleReset} icon="refresh">
-              {t('button.reset')}
-            </Button>
-          )}
+          <Button mode="outlined" onPress={handleReset} icon="refresh">
+            {t('button.reset')}
+          </Button>
           <Button
             mode="contained"
             onPress={handleSave}

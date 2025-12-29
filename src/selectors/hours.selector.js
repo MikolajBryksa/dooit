@@ -11,9 +11,7 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
 
   useEffect(() => {
     if (onResetRef) {
-      onResetRef.current = () => {
-        setRepeatHours([]);
-      };
+      onResetRef.current = () => setRepeatHours([]);
     }
   }, [onResetRef, setRepeatHours]);
 
@@ -33,12 +31,7 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
         const hour24 = `${h.toString().padStart(2, '0')}:${m
           .toString()
           .padStart(2, '0')}`;
-        slots.push({
-          h,
-          m,
-          hour24,
-          display: toDisplay(h, m),
-        });
+        slots.push({hour24, display: toDisplay(h, m)});
       }
     }
     return slots;
@@ -58,20 +51,21 @@ const HoursSelector = ({repeatHours, setRepeatHours, onResetRef}) => {
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        style={{maxHeight: 400}}>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        style={styles.selector__scroll}>
+        <View style={styles.selector__grid}>
           {allSlots.map(({hour24, display}) => {
             const selected = repeatHours.includes(hour24);
             return (
               <Chip
                 key={hour24}
-                style={{
-                  margin: 4,
-                  borderWidth: 1,
-                  borderColor: selected
-                    ? theme.colors.primary
-                    : theme.colors.secondaryContainer,
-                }}
+                style={[
+                  styles.selector__chip,
+                  {
+                    borderColor: selected
+                      ? theme.colors.primary
+                      : theme.colors.secondaryContainer,
+                  },
+                ]}
                 mode={selected ? 'outlined' : 'flat'}
                 selected={false}
                 onPress={() => handleToggleHour(hour24)}>

@@ -24,6 +24,7 @@ const HabitCard = ({
   repeatDays = [],
   repeatHours = [],
   available,
+  icon,
   fetchAllHabits,
   onEdit,
   onboardingMode = false,
@@ -84,22 +85,34 @@ const HabitCard = ({
       <Card style={styles.card}>
         <Animated.View style={{opacity: cardOpacity}}>
           <Card.Content style={styles.card__header}>
-            <View style={styles.card__options}>
+            <View style={styles.card__headerLeft}>
               <TouchableRipple
+                style={{flex: 1}}
                 onPress={() => openEditModal('habitName', habitName)}>
-                <Text
-                  variant="titleMedium"
-                  numberOfLines={1}
-                  ellipsizeMode="tail">
-                  {habitName}
-                </Text>
+                <View style={styles.card__row}>
+                  <IconButton
+                    icon={icon || 'infinity'}
+                    size={18}
+                    style={{margin: 0, marginRight: 4}}
+                  />
+                  <Text
+                    variant="bodyMedium"
+                    style={styles.card__headerTitle}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {habitName}
+                  </Text>
+                </View>
               </TouchableRipple>
             </View>
+
             {!onboardingMode && (
-              <View style={styles.card__options}>
+              <View style={styles.card__headerRight}>
                 <IconButton
                   icon="trash-can"
                   onPress={() => setDeleteDialogVisible(true)}
+                  size={18}
+                  style={{margin: 0}}
                 />
                 <Switch
                   value={isAvailable}
@@ -117,7 +130,7 @@ const HabitCard = ({
               ? 'auto'
               : contentHeight.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 150],
+                  outputRange: [0, 140],
                 }),
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,
