@@ -57,9 +57,9 @@ const HabitsView = () => {
     }
 
     return [...filtered].sort((a, b) => {
-      if (a.available !== b.available) {
-        return a.available ? -1 : 1;
-      }
+      // if (a.available !== b.available) {
+      //   return a.available ? -1 : 1;
+      // }
       const aFirstHour = a.repeatHours[0];
       const bFirstHour = b.repeatHours[0];
       return aFirstHour.localeCompare(bFirstHour);

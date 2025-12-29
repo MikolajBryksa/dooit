@@ -130,7 +130,7 @@ const HabitCard = ({
               ? 'auto'
               : contentHeight.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 140],
+                  outputRange: [0, 150],
                 }),
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,

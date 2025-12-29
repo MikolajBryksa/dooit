@@ -125,7 +125,7 @@
   "onboarding": {
     "step1": {
       "title": "Witaj w Dooit",
-      "subtitle": "Tu powstają dobre nawyki",
+      "subtitle": "gdzie powstają dobre nawyki",
       "name": "Wpisz swoje imię"
     },
     "step2": {
@@ -138,7 +138,7 @@
     },
     "start": {
       "title": "Zaczynajmy!",
-      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać dobry nawyk, ulec jego złej wersji albo całkowicie go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia!"
+      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać dobry nawyk, ulec jego złej wersji albo całkowicie go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
     }
   },
   "default-habits": {
@@ -164,7 +164,7 @@
     },
     "6": {
       "habitName": "Odstresowanie",
-      "habitEnemy": "Przebodźcowanie"
+      "habitEnemy": "Krótkie filmiki"
     },
     "7": {
       "habitName": "Regularny sen",

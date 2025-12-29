@@ -125,7 +125,7 @@
   "onboarding": {
     "step1": {
       "title": "Welcome to Dooit",
-      "subtitle": "Where habits are built",
+      "subtitle": "where habits are built",
       "name": "Enter your name"
     },
     "step2": {
@@ -138,7 +138,7 @@
     },
     "start": {
       "title": "Let’s get started!",
-      "text": "This is the main screen of the app. You will always see the habit that is most relevant to complete right now.\n\nFor each habit, you make a simple choice: complete the good habit, fall back into the bad one, or skip it entirely.\n\nBased on these choices, Dooit tracks how well you are building your habits. Once you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck!"
+      "text": "This is the main screen of the app. You will always see the habit that is most relevant to complete right now.\n\nFor each habit, you make a simple choice: complete the good habit, fall back into the bad one, or skip it entirely.\n\nBased on these choices, Dooit tracks how well you are building your habits. Once you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck, {{userName}}!"
     }
   },
   "default-habits": {
@@ -164,7 +164,7 @@
     },
     "6": {
       "habitName": "Stress relief",
-      "habitEnemy": "Overstimulation"
+      "habitEnemy": "Short videos"
     },
     "7": {
       "habitName": "Consistent sleep",

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
+import {deleteUnavailableHabits} from '@/services/habits.service';
 import {setSettings} from '@/redux/actions';
 
 import MainCard from './main.card';
@@ -17,10 +18,7 @@ const StartCard = ({onStart}) => {
   const styles = useStyles();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
-
-  const startTitle = t('onboarding.start.title');
-  const fullText = t('onboarding.start.text');
-
+  const fullText = t('onboarding.start.text', {userName: settings.userName});
   const [displayedText, setDisplayedText] = useState('');
   const [currentChar, setCurrentChar] = useState(0);
   const [typewriterComplete, setTypewriterComplete] = useState(false);
@@ -47,6 +45,7 @@ const StartCard = ({onStart}) => {
   }, [fullText, currentChar, typewriterComplete]);
 
   const handleStart = useCallback(() => {
+    deleteUnavailableHabits();
     updateSettingValue('firstLaunch', false);
     dispatch(setSettings({...settings, firstLaunch: false}));
     if (onStart) onStart();
@@ -57,7 +56,9 @@ const StartCard = ({onStart}) => {
       style={styles.summary__card}
       outline
       iconContent={<StatusIconCircle start />}
-      titleContent={<Text variant="titleLarge">{startTitle}</Text>}
+      titleContent={
+        <Text variant="titleLarge">{t('onboarding.start.title')}</Text>
+      }
       textContent={
         <View style={styles.summary_container}>
           <Text variant="bodyMedium" style={styles.summary__text}>

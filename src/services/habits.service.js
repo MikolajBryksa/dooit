@@ -97,9 +97,6 @@ export const getHabits = () => {
   }));
 
   habitsArr.sort((a, b) => {
-    if (a.available !== b.available) {
-      return a.available ? -1 : 1;
-    }
     const aFirstHour = a.repeatHours.length > 0 && a.repeatHours[0];
     const bFirstHour = b.repeatHours.length > 0 && b.repeatHours[0];
     return aFirstHour.localeCompare(bFirstHour);
@@ -203,14 +200,14 @@ export const createDefaultHabits = () => {
 
   const createdHabits = [];
 
-  defaultHabitsData.forEach(habitData => {
+  defaultHabitsData.forEach(habit => {
     const newHabit = addHabit(
-      habitData.habitName,
-      habitData.habitEnemy,
-      habitData.repeatDays,
-      habitData.repeatHours,
-      habitData.icon,
-      habitData.id,
+      habit.habitName,
+      habit.habitEnemy,
+      habit.repeatDays,
+      habit.repeatHours,
+      habit.icon,
+      habit.id,
     );
     createdHabits.push(newHabit);
   });
@@ -290,6 +287,23 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
   });
 
   return updatedCount;
+};
+
+export const deleteUnavailableHabits = () => {
+  const toDelete = realm.objects('Habit').filtered('available == false');
+  const ids = Array.from(toDelete).map(h => h.id);
+
+  if (ids.length === 0) return 0;
+
+  realm.write(() => {
+    realm.delete(toDelete);
+  });
+
+  ids.forEach(id => {
+    deleteHabitExecutions(id);
+  });
+
+  return ids.length;
 };
 
 export const getTodayHabits = (habits, weekdayKey) => {
