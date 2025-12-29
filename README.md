@@ -3,6 +3,16 @@
 A **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
 https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/3e1475ca-df57-4fec-b0ba-64f6f268db57" width="13%" alt="01 Onboarding" />
+  <img src="https://github.com/user-attachments/assets/19ffa83f-aae9-40b2-912a-8be2646fb141" width="13%" alt="02 System" />
+  <img src="https://github.com/user-attachments/assets/2df1a511-b31d-4a9d-b633-ee18da96cd53" width="13%" alt="03 Day" />
+  <img src="https://github.com/user-attachments/assets/c9f134fb-287b-4190-a955-bd42c9fdc52b" width="13%" alt="04 Modify" />
+  <img src="https://github.com/user-attachments/assets/ae437162-1e8e-4ccd-b552-dc8a85668f41" width="13%" alt="05 Add" />
+  <img src="https://github.com/user-attachments/assets/20a81f4b-f342-4548-b3ec-d5c1b3b09e18" width="13%" alt="06 Time" />
+  <img src="https://github.com/user-attachments/assets/ee9e9075-d5f6-479f-b79a-ff22a6322b3a" width="13%" alt="07 Settings" />
+</div>
+
 ## Tech Stack
 
 - **React Native** for building the mobile application
