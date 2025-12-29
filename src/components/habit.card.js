@@ -127,7 +127,7 @@ const HabitCard = ({
               onPress={() => openEditModal('habitEnemy', habitEnemy)}>
               <View style={styles.card__row}>
                 <IconButton
-                  icon="fire"
+                  icon="cancel"
                   size={18}
                   style={{margin: 0, marginRight: 4}}
                 />

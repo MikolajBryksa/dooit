@@ -57,7 +57,6 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         onValueChange={handleSegmentChange}
         style={styles.segmentButtons}
         buttons={[
-          {value: 'daily', label: t('date.daily')},
           {value: 'workdays', label: t('date.workdays')},
           {value: 'weekend', label: t('date.weekend')},
         ]}
