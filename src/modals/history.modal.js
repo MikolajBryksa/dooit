@@ -15,27 +15,34 @@ import {getLocalDateKey, subtractDays} from '@/utils';
 import realm from '@/storage/schemas';
 import StatusSelector from '@/selectors/status.selector';
 import {dayMap} from '@/constants';
+import DeleteExecutionDialog from '@/dialogs/delete-execution.dialog';
 
 const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+
   const [executions, setExecutions] = useState([]);
   const [changes, setChanges] = useState({});
+
+  const [deleteExecutionDialogVisible, setDeleteExecutionDialogVisible] =
+    useState(false);
+  const [executionToDelete, setExecutionToDelete] = useState(null);
 
   useEffect(() => {
     if (visible && habitId) {
       loadHistory();
       setChanges({});
+      setDeleteExecutionDialogVisible(false);
+      setExecutionToDelete(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, habitId]);
 
   const loadHistory = () => {
     const history = getHabitExecutions(habitId);
 
     history.sort((a, b) => {
-      if (a.date !== b.date) {
-        return b.date.localeCompare(a.date);
-      }
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
       return b.hour.localeCompare(a.hour);
     });
 
@@ -56,28 +63,30 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           'HabitExecution',
           executionId,
         );
-        if (execution) {
-          const oldStatus = execution.status;
-          execution.status = newStatus;
+        if (!execution) return;
 
-          const habit = realm.objectForPrimaryKey('Habit', habitId);
-          if (habit) {
-            if (oldStatus === 'good') {
-              habit.goodCounter = Math.max(0, habit.goodCounter - 1);
-            } else if (oldStatus === 'bad') {
-              habit.badCounter = Math.max(0, habit.badCounter - 1);
-            } else if (oldStatus === 'skip') {
-              habit.skipCounter = Math.max(0, habit.skipCounter - 1);
-            }
+        const oldStatus = execution.status;
+        if (oldStatus === newStatus) return;
 
-            if (newStatus === 'good') {
-              habit.goodCounter = (habit.goodCounter || 0) + 1;
-            } else if (newStatus === 'bad') {
-              habit.badCounter = (habit.badCounter || 0) + 1;
-            } else if (newStatus === 'skip') {
-              habit.skipCounter = (habit.skipCounter || 0) + 1;
-            }
-          }
+        execution.status = newStatus;
+
+        const habit = realm.objectForPrimaryKey('Habit', habitId);
+        if (!habit) return;
+
+        if (oldStatus === 'good') {
+          habit.goodCounter = Math.max(0, (habit.goodCounter || 0) - 1);
+        } else if (oldStatus === 'bad') {
+          habit.badCounter = Math.max(0, (habit.badCounter || 0) - 1);
+        } else if (oldStatus === 'skip') {
+          habit.skipCounter = Math.max(0, (habit.skipCounter || 0) - 1);
+        }
+
+        if (newStatus === 'good') {
+          habit.goodCounter = (habit.goodCounter || 0) + 1;
+        } else if (newStatus === 'bad') {
+          habit.badCounter = (habit.badCounter || 0) + 1;
+        } else if (newStatus === 'skip') {
+          habit.skipCounter = (habit.skipCounter || 0) + 1;
         }
       });
     });
@@ -93,7 +102,6 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     if (dateKey === yesterday) return t('button.yesterday');
 
     const date = new Date(dateKey + 'T00:00:00');
-
     const todayDate = new Date(today + 'T00:00:00');
     const diffMs = todayDate.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
@@ -107,6 +115,11 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
   const getCurrentStatus = exec => {
     return changes[exec.id] !== undefined ? changes[exec.id] : exec.status;
+  };
+
+  const openDelete = exec => {
+    setExecutionToDelete(exec);
+    setDeleteExecutionDialogVisible(true);
   };
 
   return (
@@ -131,7 +144,6 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                 key={exec.id}
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
                   alignItems: 'center',
                   paddingVertical: 12,
                 }}>
@@ -140,6 +152,14 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                     {formatDate(exec.date)} {exec.hour}
                   </Text>
                 </View>
+
+                <IconButton
+                  icon="trash-can"
+                  size={18}
+                  style={{margin: 0, marginLeft: 6}}
+                  onPress={() => openDelete(exec)}
+                />
+
                 <View style={{width: 155}}>
                   <StatusSelector
                     value={getCurrentStatus(exec)}
@@ -163,6 +183,25 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           </Card.Actions>
         </Card.Content>
       </Modal>
+
+      <DeleteExecutionDialog
+        visible={deleteExecutionDialogVisible}
+        onDismiss={() => setDeleteExecutionDialogVisible(false)}
+        executionId={executionToDelete?.id}
+        habitId={habitId}
+        onDone={() => {
+          setDeleteExecutionDialogVisible(false);
+
+          setChanges(prev => {
+            const next = {...prev};
+            if (executionToDelete?.id) delete next[executionToDelete.id];
+            return next;
+          });
+
+          setExecutionToDelete(null);
+          loadHistory();
+        }}
+      />
     </Portal>
   );
 };

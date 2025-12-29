@@ -6,7 +6,8 @@
   },
   "title": {
     "add": "Dodaj nawyk",
-    "delete": "Usuń nawyk",
+    "delete-habit": "Usuń nawyk",
+    "delete-execution": "Usuń powtórzenie",
     "skip": "Pomiń nawyk",
     "no-habits": "Brak nawyków",
     "contact": "Kontakt",
@@ -38,7 +39,8 @@
     "connection-fail": "Rozłączony"
   },
   "message": {
-    "delete": "Czy na pewno chcesz usunąć nawyk:",
+    "delete-habit": "Czy na pewno chcesz usunąć nawyk:",
+    "delete-execution": "Czy na pewno chcesz usunąć to powtórzenie?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
     "support": "Cześć 👋\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },

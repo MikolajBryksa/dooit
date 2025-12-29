@@ -220,3 +220,38 @@ export const resetExecutionsForDate = date => {
   // This function keeps history and can be used for other purposes in the future
   return true;
 };
+
+// Deletes a specific habit execution and updates counters accordingly
+export const deleteExecution = (executionId, habitId) => {
+  realm.write(() => {
+    const exec = realm.objectForPrimaryKey('HabitExecution', executionId);
+    if (!exec) return;
+
+    const habit = realm.objectForPrimaryKey('Habit', habitId);
+    if (habit) {
+      if (exec.status === 'good')
+        habit.goodCounter = Math.max(0, habit.goodCounter - 1);
+      if (exec.status === 'bad')
+        habit.badCounter = Math.max(0, habit.badCounter - 1);
+      if (exec.status === 'skip')
+        habit.skipCounter = Math.max(0, habit.skipCounter - 1);
+    }
+
+    realm.delete(exec);
+  });
+};
+
+// Returns string: "Habit name - YYYY-MM-DD - HH:mm"
+export const getExecutionLabel = executionId => {
+  const execution = realm.objectForPrimaryKey('HabitExecution', executionId);
+  if (!execution) return null;
+
+  const habit = realm.objectForPrimaryKey('Habit', execution.habitId);
+  if (!habit) return null;
+
+  const habitName = habit.habitName;
+  const date = execution.date;
+  const hour = execution.hour;
+
+  return `${habitName} - ${date} - ${hour}`;
+};

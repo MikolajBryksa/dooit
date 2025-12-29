@@ -8,7 +8,7 @@ import {
 } from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {updateHabitValue} from '@/services/habits.service';
-import DeleteDialog from '@/dialogs/delete.dialog';
+import DeleteHabitDialog from '@/dialogs/delete-habit.dialog';
 import HistoryModal from '@/modals/history.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -34,7 +34,8 @@ const HabitCard = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const firstDay = useSelector(state => state.settings.firstDay);
   const [isAvailable, setIsAvailable] = useState(available);
-  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [deleteHabitDialogVisible, setDeleteHabitDialogVisible] =
+    useState(false);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
 
   const stats = useMemo(() => {
@@ -110,7 +111,7 @@ const HabitCard = ({
               <View style={styles.card__headerRight}>
                 <IconButton
                   icon="trash-can"
-                  onPress={() => setDeleteDialogVisible(true)}
+                  onPress={() => setDeleteHabitDialogVisible(true)}
                   size={18}
                   style={{margin: 0}}
                 />
@@ -248,11 +249,11 @@ const HabitCard = ({
         </Animated.View>
       </Card>
 
-      <DeleteDialog
-        visible={deleteDialogVisible}
-        onDismiss={() => setDeleteDialogVisible(false)}
+      <DeleteHabitDialog
+        visible={deleteHabitDialogVisible}
+        onDismiss={() => setDeleteHabitDialogVisible(false)}
         onDone={() => {
-          setDeleteDialogVisible(false);
+          setDeleteHabitDialogVisible(false);
           fetchAllHabits();
         }}
         habitId={id}
