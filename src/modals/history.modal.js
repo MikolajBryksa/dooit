@@ -47,6 +47,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     });
 
     setExecutions(history);
+    return history;
   };
 
   const handleStatusChange = (executionId, newStatus) => {
@@ -199,7 +200,11 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           });
 
           setExecutionToDelete(null);
-          loadHistory();
+          const updatedHistory = loadHistory();
+
+          if (updatedHistory.length === 0) {
+            onDismiss();
+          }
         }}
       />
     </Portal>
