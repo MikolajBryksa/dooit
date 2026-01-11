@@ -49,7 +49,6 @@ Settings.schema = {
     currentItem: 'int?',
     currentDay: 'string?',
     notifications: 'bool',
-    debugMode: 'bool',
   },
 };
 
@@ -80,9 +79,26 @@ ErrorLog.schema = {
   },
 };
 
+class ContactMessage extends Realm.Object {}
+ContactMessage.schema = {
+  name: 'ContactMessage',
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    sent_at: 'date',
+  },
+};
+
 const realmConfig = {
-  schema: [Habit, Settings, DailySummary, HabitExecution, ErrorLog],
-  schemaVersion: 20,
+  schema: [
+    Habit,
+    Settings,
+    DailySummary,
+    HabitExecution,
+    ErrorLog,
+    ContactMessage,
+  ],
+  schemaVersion: 21,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -106,7 +122,6 @@ realm.write(() => {
       currentItem: 0,
       currentDay: dayMap[new Date().getDay()],
       notifications: false,
-      debugMode: __DEV__,
     });
   }
 });

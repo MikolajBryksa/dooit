@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
 import {View, ScrollView} from 'react-native';
 import {
   Card,
@@ -14,6 +14,8 @@ import {supabase, getSupabaseUserId} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks';
 import {logError} from '@/services/error-tracking.service.js';
+import realm from '@/storage/schemas';
+import {initializeAnonymousAuth} from '@/services/supabase.service.js';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -24,11 +26,62 @@ const ContactModal = ({visible, onDismiss}) => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      checkRateLimit();
+
+      initializeAnonymousAuth().catch(e => {
+        logError(e, 'loadLocalData.initAuth');
+      });
+    }
+  }, [visible]);
 
   const resetInputs = () => {
     setEmail('');
     setMessage('');
     setSuccess(false);
+    setRateLimitError(false);
+  };
+
+  const checkRateLimit = () => {
+    try {
+      const now = new Date();
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      );
+
+      const sentMessages = realm
+        .objects('ContactMessage')
+        .filtered('sent_at >= $0', todayStart);
+
+      if (sentMessages.length >= 3) {
+        setRateLimitError(true);
+        return false;
+      }
+
+      setRateLimitError(false);
+      return true;
+    } catch (error) {
+      logError(error, 'contact.checkRateLimit');
+      return true;
+    }
+  };
+
+  const recordSentMessage = () => {
+    try {
+      realm.write(() => {
+        realm.create('ContactMessage', {
+          id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          sent_at: new Date(),
+        });
+      });
+    } catch (error) {
+      logError(error, 'contact.recordSentMessage');
+    }
   };
 
   const isFormValid = useMemo(() => {
@@ -41,6 +94,10 @@ const ContactModal = ({visible, onDismiss}) => {
 
   const handleSubmit = async () => {
     if (!isFormValid || !isConnected || loading || success) {
+      return;
+    }
+
+    if (!checkRateLimit()) {
       return;
     }
 
@@ -62,6 +119,7 @@ const ContactModal = ({visible, onDismiss}) => {
         return;
       }
 
+      recordSentMessage();
       setSuccess(true);
       setTimeout(() => {
         onDismiss();
@@ -103,32 +161,36 @@ const ContactModal = ({visible, onDismiss}) => {
 
         <ScrollView>
           <Text variant="bodyMedium" style={{marginBottom: 16}}>
-            {t('message.contact')}
+            {!rateLimitError ? t('message.contact') : t('contact.rate-limit')}
           </Text>
 
-          <TextInput
-            mode="outlined"
-            placeholder={t('contact.email')}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            disabled={loading || success}
-            style={{marginBottom: 12}}
-            maxLength={60}
-          />
+          {!rateLimitError && (
+            <>
+              <TextInput
+                mode="outlined"
+                placeholder={t('contact.email')}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                disabled={loading || success}
+                style={{marginBottom: 12}}
+                maxLength={60}
+              />
 
-          <TextInput
-            mode="outlined"
-            placeholder={t('contact.message')}
-            value={message}
-            onChangeText={setMessage}
-            multiline
-            numberOfLines={4}
-            disabled={loading || success}
-            style={{marginBottom: 8, paddingTop: 8}}
-            maxLength={2000}
-          />
+              <TextInput
+                mode="outlined"
+                placeholder={t('contact.message')}
+                value={message}
+                onChangeText={setMessage}
+                multiline
+                numberOfLines={4}
+                disabled={loading || success}
+                style={{marginBottom: 8, paddingTop: 8}}
+                maxLength={2000}
+              />
+            </>
+          )}
         </ScrollView>
 
         <View style={styles.gap} />
@@ -139,7 +201,7 @@ const ContactModal = ({visible, onDismiss}) => {
               mode="contained"
               onPress={handleSubmit}
               loading={loading}
-              disabled={!isFormValid || loading || success}
+              disabled={!isFormValid || loading || success || rateLimitError}
               icon={success ? 'check' : !isFormValid ? 'lock' : 'send'}>
               {success ? t('button.sent') : t('button.send')}
             </Button>

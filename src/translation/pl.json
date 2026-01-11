@@ -36,7 +36,10 @@
     "test-connection": "Test połączenia",
     "test": "Testuj",
     "connection-ok": "Połączony",
-    "connection-fail": "Rozłączony"
+    "connection-fail": "Rozłączony",
+    "test-error-logging": "Test błędu",
+    "error-logged": "Błąd zgłoszony",
+    "log-error": "Zgłoś błąd"
   },
   "message": {
     "delete-habit": "Czy na pewno chcesz usunąć nawyk:",
@@ -73,7 +76,8 @@
   },
   "contact": {
     "email": "Twój e-mail",
-    "message": "Wiadomość"
+    "message": "Wiadomość",
+    "rate-limit": "Osiągnięto dzienny limit (3 wiadomości)."
   },
   "card": {
     "habitName": "Nazwa nawyku",

@@ -17,6 +17,7 @@ import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
 import SettingCard from '@/components/setting.card';
+import {testErrorLogging} from '@/services/error-tracking.service';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -40,6 +41,9 @@ const SettingsView = () => {
   const [testResult, setTestResult] = useState(null);
   const [testVisible, setTestVisible] = useState(false);
 
+  // Test Error Logging
+  const [testErrorDone, setTestErrorDone] = useState(false);
+
   async function handleTestConnection() {
     setTestResult(null);
     setTestVisible(false);
@@ -53,6 +57,14 @@ const SettingsView = () => {
     setTimeout(() => {
       setTestVisible(false);
       setTestResult(null);
+    }, 3000);
+  }
+
+  async function handleTestError() {
+    await testErrorLogging();
+    setTestErrorDone(true);
+    setTimeout(() => {
+      setTestErrorDone(false);
     }, 3000);
   }
 
@@ -206,29 +218,47 @@ const SettingsView = () => {
         </Card>
 
         {__DEV__ && (
-          <Card style={styles.card}>
-            <Card.Content style={styles.card__list}>
-              <SettingCard
-                label={t('settings.test-connection')}
-                value={
-                  testVisible
-                    ? testResult === 'ok'
-                      ? t('settings.connection-ok')
-                      : t('settings.connection-fail')
-                    : t('settings.test')
-                }
-                icon={
-                  testResult === 'ok'
-                    ? 'check'
-                    : testResult === 'fail'
-                    ? 'close'
-                    : 'wifi'
-                }
-                onPress={handleTestConnection}
-                disabled={testVisible}
-              />
-            </Card.Content>
-          </Card>
+          <>
+            <Card style={styles.card}>
+              <Card.Content style={styles.card__list}>
+                <SettingCard
+                  label={t('settings.test-connection')}
+                  value={
+                    testVisible
+                      ? testResult === 'ok'
+                        ? t('settings.connection-ok')
+                        : t('settings.connection-fail')
+                      : t('settings.test')
+                  }
+                  icon={
+                    testResult === 'ok'
+                      ? 'check'
+                      : testResult === 'fail'
+                      ? 'close'
+                      : 'wifi'
+                  }
+                  onPress={handleTestConnection}
+                  disabled={testVisible}
+                />
+              </Card.Content>
+            </Card>
+
+            <Card style={styles.card}>
+              <Card.Content style={styles.card__list}>
+                <SettingCard
+                  label={t('settings.test-error-logging')}
+                  value={
+                    testErrorDone
+                      ? t('settings.error-logged')
+                      : t('settings.log-error')
+                  }
+                  icon={testErrorDone ? 'bug-check' : 'bug'}
+                  onPress={handleTestError}
+                  disabled={testErrorDone}
+                />
+              </Card.Content>
+            </Card>
+          </>
         )}
 
         <View style={styles.gap} />

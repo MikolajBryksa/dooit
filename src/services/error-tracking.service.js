@@ -5,11 +5,9 @@ import realm from '@/storage/schemas';
 const APP_VERSION = require('../../package.json').version;
 
 export const logError = async (error, context = 'unknown') => {
-  console.error(`Logging error in context: ${context}`, error);
-
   try {
-    let supabaseUserId = 'unknown';
-    let userName = 'unknown';
+    let supabaseUserId = null;
+    let userName = null;
 
     try {
       const id = await getSupabaseUserId();
@@ -33,9 +31,24 @@ export const logError = async (error, context = 'unknown') => {
 
     await queueErrorLocally(errorData);
 
-    if (__DEV__) {
-      console.log(`🐛 [${context}]:`, errorData.error_message);
+    const isFatal = context.includes('fatal');
+    console.error('═══════════════════════════════════════');
+    console.error(
+      '⚠️  ERROR',
+      isFatal ? '(FATAL - APP CRASH)' : '',
+      `[${context}]`,
+    );
+    console.error('Message:', errorData.error_message);
+    if (errorData.error_stack) {
+      console.error('Stack:', errorData.error_stack);
     }
+    console.error(
+      'User:',
+      errorData.user_name || 'Anonymous',
+      errorData.user_id ? `(${errorData.user_id})` : '(no user ID)',
+    );
+    console.error('Version:', errorData.app_version);
+    console.error('═══════════════════════════════════════');
   } catch (e) {
     console.error('Failed to queue error:', e);
   }
@@ -74,13 +87,28 @@ export const flushErrorQueue = async () => {
       return {success: false, sent: 0, error: 'Supabase not available'};
     }
 
+    let currentUserId = null;
+    let currentUserName = null;
+
+    try {
+      currentUserId = await getSupabaseUserId();
+    } catch (e) {
+      console.warn('Could not get user ID for error flush:', e);
+    }
+
+    try {
+      currentUserName = getSettingValue('userName');
+    } catch (e) {
+      console.warn('Could not get user name for error flush:', e);
+    }
+
     const errorsToSend = errors.map(e => ({
       error_message: e.error_message,
       error_stack: e.error_stack,
       context: e.context,
       app_version: e.app_version,
-      user_id: e.user_id,
-      user_name: e.user_name,
+      user_id: currentUserId || e.user_id,
+      user_name: currentUserName || e.user_name,
       created_at: e.created_at,
     }));
 
@@ -104,31 +132,26 @@ export const flushErrorQueue = async () => {
   }
 };
 
+export const testErrorLogging = async () => {
+  const testError = new Error(
+    'TEST ERROR - This is a test error for debugging',
+  );
+  testError.stack = 'Test Stack Trace\n  at testErrorLogging\n  at User Action';
+  await logError(testError, 'test_manual');
+};
+
 export const setupErrorTracking = () => {
   global.onunhandledrejection = event => {
     const reason = event?.reason || new Error('Unhandled promise rejection');
     logError(reason, 'unhandled_promise').catch(() => {});
   };
 
-  if (!__DEV__) {
-    const ErrorUtils = global.ErrorUtils;
-    if (ErrorUtils?.setGlobalHandler) {
-      ErrorUtils.setGlobalHandler((error, isFatal) => {
-        console.error('═══════════════════════════════════════');
-        console.error(
-          '⚠️ GLOBAL ERROR',
-          isFatal ? '(FATAL - APP CRASH)' : '(NON-FATAL)',
-        );
-        console.error('Message:', error?.message || error);
-        if (error?.stack) {
-          console.error('Stack:', error.stack);
-        }
-        console.error('═══════════════════════════════════════');
-
-        logError(error, isFatal ? 'global_fatal' : 'global_nonfatal').catch(
-          () => {},
-        );
-      });
-    }
+  const ErrorUtils = global.ErrorUtils;
+  if (ErrorUtils?.setGlobalHandler) {
+    ErrorUtils.setGlobalHandler((error, isFatal) => {
+      logError(error, isFatal ? 'global_fatal' : 'global_nonfatal').catch(
+        () => {},
+      );
+    });
   }
 };

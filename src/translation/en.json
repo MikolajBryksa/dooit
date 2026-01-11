@@ -36,7 +36,10 @@
     "test-connection": "Test connection",
     "test": "Test",
     "connection-ok": "Connected",
-    "connection-fail": "Disconnected"
+    "connection-fail": "Disconnected",
+    "test-error-logging": "Test error",
+    "error-logged": "Error logged",
+    "log-error": "Log error"
   },
   "message": {
     "delete-habit": "Are you sure to remove the habit:",
@@ -73,7 +76,8 @@
   },
   "contact": {
     "email": "Your e-mail",
-    "message": "Message"
+    "message": "Message",
+    "rate-limit": "You've reached the daily limit (3 messages)."
   },
   "card": {
     "habitName": "Habit name",

@@ -22,7 +22,6 @@ import OnboardingView from './src/views/onboarding.view';
 import {useStyles} from './src/styles';
 import {setupNotificationSync} from './src/services/notifications.service';
 
-import ErrorBoundary from '@/dialogs/error.dialog';
 import {setupErrorTracking, logError} from '@/services/error-tracking.service';
 import {cleanOldExecutions} from '@/services/effectiveness.service';
 import {getHabits} from '@/services/habits.service';
@@ -182,9 +181,7 @@ function App(): React.JSX.Element {
 
 const Root = () => (
   <Provider store={store}>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
+    <App />
   </Provider>
 );
 
