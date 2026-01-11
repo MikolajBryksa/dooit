@@ -64,9 +64,25 @@ DailySummary.schema = {
   },
 };
 
+class ErrorLog extends Realm.Object {}
+ErrorLog.schema = {
+  name: 'ErrorLog',
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    error_message: 'string',
+    error_stack: 'string?',
+    context: 'string?',
+    app_version: 'string?',
+    user_id: 'string?',
+    user_name: 'string?',
+    created_at: 'string',
+  },
+};
+
 const realmConfig = {
-  schema: [Habit, Settings, DailySummary, HabitExecution],
-  schemaVersion: 17,
+  schema: [Habit, Settings, DailySummary, HabitExecution, ErrorLog],
+  schemaVersion: 20,
   deleteRealmIfMigrationNeeded: true,
 };
 

@@ -8,7 +8,7 @@ import {
 import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
-import {logError} from './error-tracking.service.js';
+import {logError, flushErrorQueue} from './error-tracking.service.js';
 import {stripMarkdown} from '@/utils.js';
 
 function selectBestAndWorstHabits(habitsWithEffectiveness) {
@@ -136,11 +136,17 @@ export const saveSummary = async (date, habits, aiSummary) => {
     const supabaseUserId = await getSupabaseUserId();
 
     if (!supabaseUserId) {
-      console.warn('[saveSummary] No Supabase user ID - skipping cloud sync');
+      await logError(
+        new Error('No Supabase user ID - cannot sync to cloud'),
+        'saveSummary.noUserId',
+      );
       return;
     }
 
     const userName = getSettingValue('userName') || 'Anonymous';
+
+    // Flush queued errors to database
+    await flushErrorQueue();
 
     // Save to Users table
     const dataToSave = {

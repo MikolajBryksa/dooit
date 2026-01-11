@@ -253,5 +253,5 @@ export const getExecutionLabel = executionId => {
   const date = execution.date;
   const hour = execution.hour;
 
-  return `${habitName} - ${date} - ${hour}`;
+  return `${habitName} | ${date} | ${hour}`;
 };

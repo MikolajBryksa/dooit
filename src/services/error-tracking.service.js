@@ -1,5 +1,6 @@
 import {supabase, getSupabaseUserId} from './supabase.service';
 import {getSettingValue} from './settings.service';
+import realm from '@/storage/schemas';
 
 const APP_VERSION = require('../../package.json').version;
 
@@ -12,21 +13,13 @@ export const logError = async (error, context = 'unknown') => {
 
     try {
       const id = await getSupabaseUserId();
-      if (id) {
-        supabaseUserId = id;
-      }
-    } catch (e) {
-      console.error('[logError] Failed to get Supabase user ID:', e);
-    }
+      if (id) supabaseUserId = id;
+    } catch (e) {}
 
     try {
       const name = getSettingValue('userName');
-      if (name) {
-        userName = name;
-      }
-    } catch (e) {
-      console.error('[logError] Failed to read userName from settings:', e);
-    }
+      if (name) userName = name;
+    } catch (e) {}
 
     const errorData = {
       error_message: error?.message || String(error),
@@ -38,78 +31,104 @@ export const logError = async (error, context = 'unknown') => {
       created_at: new Date().toISOString(),
     };
 
-    if (!supabase || typeof supabase.from !== 'function') {
-      console.error(
-        '[logError] Supabase client not available, skipping remote log',
-      );
-      return;
+    await queueErrorLocally(errorData);
+
+    if (__DEV__) {
+      console.log(`🐛 [${context}]:`, errorData.error_message);
     }
+  } catch (e) {
+    console.error('Failed to queue error:', e);
+  }
+};
+
+const queueErrorLocally = async errorData => {
+  try {
+    const errorId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    realm.write(() => {
+      realm.create('ErrorLog', {
+        id: errorId,
+        ...errorData,
+      });
+
+      // Keep only last 3 errors
+      const allErrors = realm.objects('ErrorLog').sorted('created_at', false);
+      if (allErrors.length > 3) {
+        realm.delete(allErrors.slice(3));
+      }
+    });
+  } catch (e) {
+    console.error('Failed to queue error:', e);
+  }
+};
+
+export const flushErrorQueue = async () => {
+  try {
+    const errors = realm.objects('ErrorLog');
+
+    if (errors.length === 0) {
+      return {success: true, sent: 0};
+    }
+
+    if (!supabase?.from) {
+      return {success: false, sent: 0, error: 'Supabase not available'};
+    }
+
+    const errorsToSend = errors.map(e => ({
+      error_message: e.error_message,
+      error_stack: e.error_stack,
+      context: e.context,
+      app_version: e.app_version,
+      user_id: e.user_id,
+      user_name: e.user_name,
+      created_at: e.created_at,
+    }));
 
     const {error: supabaseError} = await supabase
       .from('errors')
-      .insert([errorData]);
+      .insert(errorsToSend);
 
     if (supabaseError) {
-      console.error('Failed to save error in Supabase:', supabaseError);
+      console.error('Failed to send errors:', supabaseError);
+      return {success: false, sent: 0, error: supabaseError.message};
     }
+
+    // Delete errors after successful send to prevent duplicates
+    realm.write(() => realm.delete(errors));
+
+    console.log(`Sent ${errorsToSend.length} errors to database`);
+    return {success: true, sent: errorsToSend.length};
   } catch (e) {
-    console.error('Failed to log error:', e);
+    console.error('Failed to flush errors:', e);
+    return {success: false, sent: 0, error: e.message};
   }
 };
 
 export const setupErrorTracking = () => {
-  try {
-    global.onunhandledrejection = event => {
-      try {
-        const reason =
-          event?.reason ||
-          new Error('Unhandled promise rejection with no reason');
-        logError(reason, 'unhandled_promise');
-      } catch (e) {
-        console.error(
-          '[setupErrorTracking] Failed to log unhandled promise rejection:',
-          e,
-        );
-      }
-    };
-  } catch (e) {
-    console.error(
-      '[setupErrorTracking] Failed to attach onunhandledrejection handler:',
-      e,
-    );
-  }
+  global.onunhandledrejection = event => {
+    const reason = event?.reason || new Error('Unhandled promise rejection');
+    logError(reason, 'unhandled_promise').catch(() => {});
+  };
 
   if (!__DEV__) {
-    try {
-      // @ts-ignore
-      const ErrorUtils = global.ErrorUtils;
+    const ErrorUtils = global.ErrorUtils;
+    if (ErrorUtils?.setGlobalHandler) {
+      ErrorUtils.setGlobalHandler((error, isFatal) => {
+        console.error('═══════════════════════════════════════');
+        console.error(
+          '⚠️ GLOBAL ERROR',
+          isFatal ? '(FATAL - APP CRASH)' : '(NON-FATAL)',
+        );
+        console.error('Message:', error?.message || error);
+        if (error?.stack) {
+          console.error('Stack:', error.stack);
+        }
+        console.error('═══════════════════════════════════════');
 
-      if (ErrorUtils && typeof ErrorUtils.setGlobalHandler === 'function') {
-        ErrorUtils.setGlobalHandler((error, isFatal) => {
-          try {
-            logError(
-              error,
-              isFatal ? 'global_error_fatal' : 'global_error_nonfatal',
-            );
-          } catch (e) {
-            console.error(
-              '[setupErrorTracking] Failed to log global error:',
-              e,
-            );
-          }
-
-          console.error(
-            '[GlobalErrorHandler] Caught error',
-            isFatal ? '(fatal)' : '',
-            error,
-          );
-        });
-      }
-    } catch (e) {
-      console.error(
-        '[setupErrorTracking] Failed to setup global ErrorUtils handler:',
-        e,
-      );
+        logError(error, isFatal ? 'global_fatal' : 'global_nonfatal').catch(
+          () => {},
+        );
+      });
     }
   }
 };

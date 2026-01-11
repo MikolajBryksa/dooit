@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView} from 'react-native';
 import {
@@ -46,6 +46,35 @@ const OnboardingView = ({setShowOnboarding}) => {
     6: false,
     7: false,
   });
+
+  // Initialize state from existing habits if user returns to onboarding
+  useEffect(() => {
+    if (settings?.userName) {
+      setName(settings.userName);
+    }
+
+    const existingHabits = getHabits() || [];
+
+    const defaultHabitsExist = existingHabits.some(
+      habit => habit.id >= 1 && habit.id <= 7,
+    );
+
+    if (defaultHabitsExist) {
+      setHabitsCreated(true);
+
+      const restoredSelection = {};
+      existingHabits.forEach(habit => {
+        if (habit.id >= 1 && habit.id <= 7) {
+          restoredSelection[habit.id] = habit.available;
+        }
+      });
+
+      setSelectedHabits(prev => ({
+        ...prev,
+        ...restoredSelection,
+      }));
+    }
+  }, [settings]);
 
   function handleStep1() {
     let updatedSettings = {...settings};
