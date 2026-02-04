@@ -1,54 +1,77 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {View, Animated, Easing} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {deleteUnavailableHabits} from '@/services/habits.service';
 import {setSettings} from '@/redux/actions';
-
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
-import {TYPE_DELAY} from '@/constants';
+import {EXPAND_DELAY, EXPAND_DURATION, HEIGHT_FUDGE} from '@/constants';
 
 const StartCard = ({onStart}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
-  const fullText = t('onboarding.start.text', {userName: settings.userName});
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentChar, setCurrentChar] = useState(0);
-  const [typewriterComplete, setTypewriterComplete] = useState(false);
+
+  const fullText = useMemo(
+    () => t('onboarding.start.text', {userName: settings.userName}),
+    [t, settings.userName],
+  );
+
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const [expandComplete, setExpandComplete] = useState(false);
+
+  const heightAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const translateAnim = useRef(new Animated.Value(10)).current;
 
   useEffect(() => {
-    setDisplayedText('');
-    setCurrentChar(0);
-    setTypewriterComplete(false);
-  }, [fullText]);
+    setExpandComplete(false);
+    setMeasuredHeight(0);
+    heightAnim.setValue(0);
+    opacityAnim.setValue(0);
+    translateAnim.setValue(10);
+  }, [fullText, heightAnim, opacityAnim, translateAnim]);
 
   useEffect(() => {
-    if (!fullText || typewriterComplete) return;
+    if (!measuredHeight) return;
 
-    if (currentChar < fullText.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText(fullText.substring(0, currentChar + 1));
-        setCurrentChar(c => c + 1);
-      }, TYPE_DELAY);
-
-      return () => clearTimeout(timer);
-    }
-
-    setTypewriterComplete(true);
-  }, [fullText, currentChar, typewriterComplete]);
+    Animated.parallel([
+      Animated.timing(heightAnim, {
+        toValue: measuredHeight + HEIGHT_FUDGE,
+        duration: EXPAND_DURATION,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: false,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 450,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateAnim, {
+        toValue: 0,
+        duration: 650,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start(({finished}) => {
+      if (finished) setExpandComplete(true);
+    });
+  }, [measuredHeight, heightAnim, opacityAnim, translateAnim]);
 
   const handleStart = useCallback(() => {
     deleteUnavailableHabits();
     updateSettingValue('firstLaunch', false);
     dispatch(setSettings({...settings, firstLaunch: false}));
-    if (onStart) onStart();
+    onStart?.();
   }, [dispatch, onStart, settings]);
 
   return (
@@ -61,18 +84,46 @@ const StartCard = ({onStart}) => {
       }
       textContent={
         <View style={styles.summary_container}>
-          <Text variant="bodyMedium" style={styles.summary__text}>
-            {typewriterComplete ? fullText : displayedText}
-          </Text>
+          {/* ukryty pomiar wysokości */}
+          {measuredHeight === 0 && (
+            <View
+              pointerEvents="none"
+              collapsable={false}
+              style={{position: 'absolute', left: 0, right: 0, opacity: 0}}>
+              <View
+                collapsable={false}
+                onLayout={e => setMeasuredHeight(e.nativeEvent.layout.height)}>
+                <Text variant="bodyMedium" style={styles.summary__text}>
+                  {fullText}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          <Animated.View
+            style={{
+              height: heightAnim,
+              overflow: 'hidden',
+            }}>
+            <Animated.View
+              style={{
+                opacity: opacityAnim,
+                transform: [{translateY: translateAnim}],
+              }}>
+              <Text variant="bodyMedium" style={styles.summary__text}>
+                {fullText}
+              </Text>
+            </Animated.View>
+          </Animated.View>
         </View>
       }
       buttonsContent={
         <Button
           style={styles.button}
           mode="contained"
-          icon={!typewriterComplete ? 'lock' : 'rocket-launch'}
+          icon={!expandComplete ? 'lock' : 'rocket-launch'}
           onPress={handleStart}
-          disabled={!typewriterComplete}>
+          disabled={!expandComplete}>
           {t('button.start')}
         </Button>
       }

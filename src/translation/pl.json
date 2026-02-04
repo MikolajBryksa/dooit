@@ -141,7 +141,7 @@
     },
     "start": {
       "title": "Zaczynajmy!",
-      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać nawyk albo go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
+      "text": "Na tym ekranie zobaczysz nawyk, który warto teraz wykonać. Przy każdym nawyku podejmujesz prostą decyzję: wykonać nawyk albo go pominąć.\n\nGdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
     }
   },
   "default-habits": {
@@ -172,8 +172,6 @@
       "Mały krok, wielki postęp.",
       "Nawyki kształtują Twoją przyszłość.",
       "Tylko jeden nawyk naraz.",
-      "Dyscyplina wygrywa z motywacją.",
-      "Zrób to teraz, poczuj dumę później.",
       "Postęp, nie perfekcja.",
       "Małe nawyki dają wielki efekt.",
       "Konsekwencja daje rezultaty.",
@@ -193,23 +191,17 @@
     ],
     "bad": [
       "Potknięcie nie kasuje całego postępu.",
-      "Jutro to nowa szansa.",
       "Wyciągnij wniosek i idź dalej.",
-      "Droga jest większa niż jeden wybór.",
       "Nie rezygnuj, popraw kurs i idź dalej.",
       "To potknięcie, nie porażka.",
       "Skup się na postępie, nie na perfekcji.",
       "Nawyk jest silniejszy niż ta chwila.",
-      "Najważniejszy jest następny wybór.",
       "Nawet mistrzowie się potykają.",
       "Jedno pominięcie to nie koniec.",
-      "Odpoczynek jest częścią procesu.",
       "Przerwa nie kasuje całego postępu.",
       "Wciąż jesteś na właściwej drodze.",
       "To tylko przerwa, nie krok wstecz.",
       "Pominięcia się zdarzają, idź dalej.",
-      "Seria to coś więcej niż jeden dzień.",
-      "Pominięty nawyk nie kasuje wysiłku.",
       "Nawet przerwy mogą napędzać postęp.",
       "To tylko pauza, podróż trwa dalej."
     ]

@@ -28,7 +28,6 @@ export const useStyles = () => {
     gap: {
       height: theme.dimensions.margin * 3,
     },
-    // onboarding
     onboarding__card: {
       height: theme.dimensions.height * 2,
       justifyContent: 'center',
@@ -143,6 +142,44 @@ export const useStyles = () => {
       alignItems: 'center',
       minHeight: theme.dimensions.height,
     },
+    card__list: {
+      flex: 1,
+    },
+    card__header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      minHeight: theme.dimensions.height * 0.8,
+    },
+    card__options: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: theme.dimensions.margin,
+    },
+    card__row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    card__divider: {
+      height: 1,
+      backgroundColor: theme.colors.background,
+      marginBottom: theme.dimensions.margin,
+    },
+    card__headerLeft: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+    },
+    card__headerRight: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    card__headerTitle: {
+      flex: 1,
+      flexShrink: 1,
+    },
     progress__container: {
       width: '50%',
     },
@@ -172,30 +209,6 @@ export const useStyles = () => {
     text__center: {
       textAlign: 'center',
     },
-    // habit & settings card
-    card__list: {
-      flex: 1,
-    },
-    card__header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      minHeight: theme.dimensions.height * 0.8,
-    },
-    card__options: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: theme.dimensions.margin,
-    },
-    card__row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    card__divider: {
-      height: 1,
-      backgroundColor: theme.colors.background,
-      marginBottom: theme.dimensions.margin,
-    },
     chip: {
       borderRadius: 12,
     },
@@ -203,7 +216,6 @@ export const useStyles = () => {
       borderRadius: 12,
       marginBottom: theme.dimensions.margin,
     },
-    // modal
     modal: {
       backgroundColor: theme.colors.surface,
       margin: theme.dimensions.gap * 2,
@@ -225,7 +237,6 @@ export const useStyles = () => {
     segmentButtons: {
       marginVertical: theme.dimensions.gap,
     },
-    // selectors (chips grids)
     selector__scroll: {
       maxHeight: 400,
     },
@@ -243,22 +254,6 @@ export const useStyles = () => {
     selector__iconBtn: {
       marginBottom: theme.dimensions.gap,
     },
-    card__headerLeft: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-    },
-    card__headerRight: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    card__headerTitle: {
-      flex: 1,
-      flexShrink: 1,
-    },
-    // settings
     settings__row: {
       flexDirection: 'row',
       alignItems: 'center',

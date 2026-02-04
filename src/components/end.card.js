@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {View, Animated, Easing} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
@@ -14,7 +14,7 @@ import {logError} from '@/services/error-tracking.service';
 import {calculateEffectiveness} from '@/services/effectiveness.service';
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
-import {TYPE_DELAY} from '@/constants';
+import {EXPAND_DELAY, EXPAND_DURATION, HEIGHT_FUDGE} from '@/constants';
 
 const withEffectiveness = habits =>
   habits.map(h => {
@@ -44,14 +44,17 @@ const EndCard = ({weekdayKey}) => {
   const [aiSummary, setAiSummary] = useState('');
   const [loadingAI, setLoadingAI] = useState(false);
 
-  // Typewriter state
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentChar, setCurrentChar] = useState(0);
-  const [typewriterComplete, setTypewriterComplete] = useState(false);
+  // Expand state
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const [expandComplete, setExpandComplete] = useState(false);
 
   // UI flags
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
   const [hadError, setHadError] = useState(false);
+
+  const heightAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const translateAnim = useRef(new Animated.Value(10)).current;
 
   const availableHabits = useMemo(
     () => habits.filter(h => h.available),
@@ -63,7 +66,6 @@ const EndCard = ({weekdayKey}) => {
     [habits, weekdayKey],
   );
 
-  // Compute effectiveness once and reuse for both AI prompt and persistence
   const allAvailableHabitsWithEff = useMemo(
     () => withEffectiveness(availableHabits),
     [availableHabits],
@@ -74,53 +76,83 @@ const EndCard = ({weekdayKey}) => {
     [todayHabits],
   );
 
+  const resetExpand = useMemo(
+    () => () => {
+      setExpandComplete(false);
+      setMeasuredHeight(0);
+      heightAnim.setValue(0);
+      opacityAnim.setValue(0);
+      translateAnim.setValue(10);
+    },
+    [heightAnim, opacityAnim, translateAnim],
+  );
+
   useEffect(() => {
     // Check if we have an existing summary for today
     try {
       const existingSummary = getDailySummary(todayKey);
 
       if (existingSummary?.aiSummary) {
-        // We have a valid summary saved in the database
         const text = existingSummary.aiSummary;
         setAiSummary(text);
-        setDisplayedText(text);
-        setCurrentChar(text.length);
-        setTypewriterComplete(true);
         setHasExistingSummary(true);
         setHadError(false);
+        resetExpand();
         return;
       }
 
       if (todayHabits.length === 0) {
-        // No habits today
         const msg = t('summary.no-actions');
         setAiSummary(msg);
-        setDisplayedText(msg);
-        setCurrentChar(msg.length);
-        setTypewriterComplete(true);
         setHasExistingSummary(false);
         setHadError(false);
+        resetExpand();
         return;
       }
 
-      // We can generate a new summary
+      // We can generate a new summary, but don't auto-generate text
       setAiSummary('');
-      setDisplayedText('');
-      setCurrentChar(0);
-      setTypewriterComplete(true);
       setHasExistingSummary(false);
       setHadError(false);
+      resetExpand();
     } catch (e) {
-      // Error reading local database
       const msg = t('summary.error-reading');
       setAiSummary(msg);
-      setDisplayedText(msg);
-      setCurrentChar(msg.length);
-      setTypewriterComplete(true);
       setHasExistingSummary(false);
       setHadError(true);
+      resetExpand();
     }
-  }, [todayKey, todayHabits.length, t]);
+  }, [todayKey, todayHabits.length, t, resetExpand]);
+
+  useEffect(() => {
+    if (!measuredHeight) return;
+
+    Animated.parallel([
+      Animated.timing(heightAnim, {
+        toValue: measuredHeight + HEIGHT_FUDGE,
+        duration: EXPAND_DURATION,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: false,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 450,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateAnim, {
+        toValue: 0,
+        duration: 650,
+        delay: EXPAND_DELAY,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start(({finished}) => {
+      if (finished) setExpandComplete(true);
+    });
+  }, [measuredHeight, heightAnim, opacityAnim, translateAnim]);
 
   const handleGenerate = async () => {
     if (loadingAI || todayHabitsWithEff.length === 0 || !isConnected) return;
@@ -128,18 +160,16 @@ const EndCard = ({weekdayKey}) => {
     setLoadingAI(true);
     setHadError(false);
 
-    // Reset typewriter
-    setTypewriterComplete(false);
-    setDisplayedText('');
-    setCurrentChar(0);
+    setAiSummary('');
+    resetExpand();
 
     try {
-      // Generate summary from habits WITH effectiveness (computed once in UI)
       const response = await generateAiSummary(todayHabitsWithEff);
+
       setAiSummary(response);
+      resetExpand();
 
       try {
-        // Persist full available habits WITH effectiveness + AI summary
         await saveSummary(todayKey, allAvailableHabitsWithEff, response);
         setHasExistingSummary(true);
         setHadError(false);
@@ -153,14 +183,11 @@ const EndCard = ({weekdayKey}) => {
 
       const msg = t('summary.no-response');
       setAiSummary(msg);
-      setDisplayedText(msg);
-      setCurrentChar(msg.length);
-      setTypewriterComplete(true);
+      resetExpand();
 
       setHasExistingSummary(false);
       setHadError(true);
 
-      // Save a "null summary" to avoid repeated failing calls and keep a trace
       try {
         await saveSummary(todayKey, allAvailableHabitsWithEff, null);
       } catch (saveError) {
@@ -170,24 +197,6 @@ const EndCard = ({weekdayKey}) => {
       setLoadingAI(false);
     }
   };
-
-  useEffect(() => {
-    // Typewriter effect
-    if (!aiSummary || typewriterComplete || loadingAI) return;
-
-    if (currentChar < aiSummary.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText(aiSummary.substring(0, currentChar + 1));
-        setCurrentChar(c => c + 1);
-      }, TYPE_DELAY);
-
-      return () => clearTimeout(timer);
-    }
-
-    setTypewriterComplete(true);
-  }, [aiSummary, currentChar, typewriterComplete, loadingAI]);
-
-  const textToShow = typewriterComplete ? aiSummary : displayedText;
 
   const renderButton = () => {
     const hasHabitsToday = todayHabitsWithEff.length > 0;
@@ -231,6 +240,8 @@ const EndCard = ({weekdayKey}) => {
     );
   };
 
+  const hasText = !!aiSummary;
+
   return (
     <MainCard
       style={styles.summary__card}
@@ -239,9 +250,36 @@ const EndCard = ({weekdayKey}) => {
       titleContent={<Text variant="titleLarge">{t('card.done')}</Text>}
       textContent={
         <View style={styles.summary_container}>
-          <Text variant="bodyMedium" style={styles.summary__text}>
-            {textToShow}
-          </Text>
+          {hasText && measuredHeight === 0 && (
+            <View
+              pointerEvents="none"
+              collapsable={false}
+              style={{position: 'absolute', left: 0, right: 0, opacity: 0}}>
+              <View
+                collapsable={false}
+                onLayout={e => setMeasuredHeight(e.nativeEvent.layout.height)}>
+                <Text variant="bodyMedium" style={styles.summary__text}>
+                  {aiSummary}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          <Animated.View
+            style={{
+              height: hasText ? heightAnim : 0,
+              overflow: 'hidden',
+            }}>
+            <Animated.View
+              style={{
+                opacity: opacityAnim,
+                transform: [{translateY: translateAnim}],
+              }}>
+              <Text variant="bodyMedium" style={styles.summary__text}>
+                {aiSummary}
+              </Text>
+            </Animated.View>
+          </Animated.View>
         </View>
       }
       buttonsContent={renderButton()}

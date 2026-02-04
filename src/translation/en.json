@@ -141,7 +141,7 @@
     },
     "start": {
       "title": "Let’s get started!",
-      "text": "This is the main screen of the app. You will always see the habit that is most relevant to complete right now.\n\nFor each habit, you make a simple choice: complete the habit or skip it.\n\nBased on these choices, Dooit tracks how well you are building your habits. Once you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck, {{userName}}!"
+      "text": "This screen shows the habit that is worth doing right now. For each habit, you make a simple choice: complete the habit or skip it.\n\nOnce you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck, {{userName}}!"
     }
   },
   "default-habits": {
@@ -172,8 +172,6 @@
       "Small step, big progress.",
       "Your habits shape your future.",
       "One habit at a time.",
-      "Discipline beats motivation.",
-      "Do it now, feel proud later.",
       "Progress, not perfection.",
       "Tiny habits, huge impact.",
       "Consistency creates results.",
@@ -193,23 +191,17 @@
     ],
     "bad": [
       "One slip doesn’t erase your progress.",
-      "Tomorrow is another chance.",
       "Learn from it, then move forward.",
-      "Your journey is bigger than one choice.",
       "Don’t quit — adjust and continue.",
       "It’s a stumble, not a failure.",
       "Focus on progress, not perfection.",
       "Your habit is stronger than this moment.",
-      "What matters most is your next choice.",
       "Even champions stumble.",
       "One skip is not the end.",
-      "Rest is part of the process.",
       "A pause doesn’t erase progress.",
       "You’re still on track.",
       "It’s just a break, not a setback.",
       "Skips happen — keep moving forward.",
-      "The streak is more than one repeat.",
-      "A missed habit doesn’t erase your effort.",
       "Even breaks can fuel progress.",
       "It’s just a pause, your journey continues."
     ]
