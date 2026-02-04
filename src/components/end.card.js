@@ -258,7 +258,9 @@ const EndCard = ({weekdayKey}) => {
               <View
                 collapsable={false}
                 onLayout={e => setMeasuredHeight(e.nativeEvent.layout.height)}>
-                <Text variant="bodyMedium" style={styles.summary__text}>
+                <Text
+                  variant="bodyMedium"
+                  style={[styles.summary__text, {includeFontPadding: false}]}>
                   {aiSummary}
                 </Text>
               </View>

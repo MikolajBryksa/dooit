@@ -9,7 +9,7 @@ import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
 import {logError, flushErrorQueue} from './error-tracking.service.js';
-import {stripMarkdown} from '@/utils.js';
+import {stripMarkdown} from '@/utils';
 
 function selectBestAndWorstHabits(habitsWithEffectiveness) {
   const valid = (habitsWithEffectiveness || []).filter(
@@ -64,14 +64,14 @@ export const generateAiSummary = async (
   const bestHabit = selectedHabits[0];
   const worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
 
+  const bestName = String(bestHabit?.habitName || '').trim();
+  const worstName = String(worstHabit?.habitName || '').trim();
+
   const prompt =
-    `You are an AI assistant. Respond in the language: ${language}. Address the user by name: ${userName}.\n` +
-    `Praise the user's best habit: ${bestHabit.habitName} with ${bestHabit.effectiveness}% effectiveness. ` +
-    `This means the user successfully performed this habit at the expected times.\n` +
-    (worstHabit
-      ? `Encourage the user to improve their habit ${worstHabit.habitName}, which has ${worstHabit.effectiveness}% effectiveness.\n`
-      : '') +
-    `Encourage the user by name to keep working on their habits.\n`;
+    `Target language: ${language}\n` +
+    `User name: ${userName}\n` +
+    `Best habit: ${bestName}\n` +
+    (worstHabit ? `Habit to improve: ${worstName}\n` : '');
 
   let lastError = null;
 
@@ -144,10 +144,8 @@ export const saveSummary = async (date, habits, aiSummary) => {
 
     const userName = getSettingValue('userName') || 'Anonymous';
 
-    // Flush queued errors to database
     await flushErrorQueue();
 
-    // Save to Users table
     const dataToSave = {
       user_id: supabaseUserId,
       user_name: userName,
@@ -156,7 +154,6 @@ export const saveSummary = async (date, habits, aiSummary) => {
       ai_summary: aiSummary || null,
     };
 
-    // Upsert - update existing or create new
     const {error} = await supabase.from('users').upsert(dataToSave, {
       onConflict: 'user_id',
     });

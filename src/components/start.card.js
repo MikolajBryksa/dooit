@@ -84,7 +84,6 @@ const StartCard = ({onStart}) => {
       }
       textContent={
         <View style={styles.summary_container}>
-          {/* ukryty pomiar wysokości */}
           {measuredHeight === 0 && (
             <View
               pointerEvents="none"
@@ -93,7 +92,9 @@ const StartCard = ({onStart}) => {
               <View
                 collapsable={false}
                 onLayout={e => setMeasuredHeight(e.nativeEvent.layout.height)}>
-                <Text variant="bodyMedium" style={styles.summary__text}>
+                <Text
+                  variant="bodyMedium"
+                  style={[styles.summary__text, {includeFontPadding: false}]}>
                   {fullText}
                 </Text>
               </View>

@@ -4,16 +4,6 @@ export const HEIGHT_FUDGE = 25;
 
 export const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
-export const dayFullMap = {
-  mon: 'monday',
-  tue: 'tuesday',
-  wed: 'wednesday',
-  thu: 'thursday',
-  fri: 'friday',
-  sat: 'saturday',
-  sun: 'sunday',
-};
-
 export const habitIcons = [
   'water',
   'run',

@@ -195,8 +195,7 @@ export const useStyles = () => {
       flex: 1,
       width: '100%',
       paddingHorizontal: theme.dimensions.gap,
-      paddingBottom: theme.dimensions.margin,
-      paddingTop: theme.dimensions.gap,
+      marginBottom: theme.dimensions.margin,
     },
     summary__text: {
       textAlign: 'center',
