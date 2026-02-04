@@ -125,8 +125,14 @@ export const useStyles = () => {
       justifyContent: 'center',
     },
     card__choicesTitleContainer: {
-      height: theme.dimensions.height / 2,
+      height: theme.dimensions.height * 1.5,
       justifyContent: 'center',
+      alignItems: 'center',
+      gap: theme.dimensions.gap,
+    },
+    card__titleLargeContainer: {
+      height: theme.dimensions.height,
+      justifyContent: 'flex-start',
       alignItems: 'center',
     },
     card__buttons: {
@@ -159,6 +165,12 @@ export const useStyles = () => {
       textAlign: 'center',
       lineHeight: 22,
       marginBottom: theme.dimensions.gap,
+    },
+    text__highlighted: {
+      color: theme.colors.primary,
+    },
+    text__center: {
+      textAlign: 'center',
     },
     // habit & settings card
     card__list: {

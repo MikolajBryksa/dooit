@@ -9,7 +9,6 @@ const MainCard = ({
   animatedStyle = null,
   iconContent = null,
   titleContent = null,
-  progressContent = null,
   mainContent = null,
   textContent = null,
   buttonsContent = null,
@@ -36,12 +35,6 @@ const MainCard = ({
           {/* title container */}
           {titleContent && (
             <View style={styles.card__titleContainer}>{titleContent}</View>
-          )}
-          {/* progress container */}
-          {progressContent && (
-            <View style={styles.card__progressContainer}>
-              {progressContent}
-            </View>
           )}
           {/* main content container */}
           {mainContent && (

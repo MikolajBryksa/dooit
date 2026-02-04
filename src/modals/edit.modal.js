@@ -34,10 +34,8 @@ const EditModal = ({
   const getDefaultValueForField = currentField => {
     if (currentField === 'repeatDays' || currentField === 'repeatHours')
       return [];
-    if (currentField === 'habitName' || currentField === 'habitEnemy')
-      return '';
-    if (['goodCounter', 'badCounter', 'skipCounter'].includes(currentField))
-      return '';
+    if (currentField === 'habitName') return '';
+    if (['goodCounter', 'badCounter'].includes(currentField)) return '';
     return '';
   };
 
@@ -73,7 +71,7 @@ const EditModal = ({
 
   const handleSave = async () => {
     let valueToSave = inputValue;
-    const numericFields = ['goodCounter', 'badCounter', 'skipCounter'];
+    const numericFields = ['goodCounter', 'badCounter'];
     if (numericFields.includes(field)) {
       const parsed = parseInt(inputValue, 10);
       valueToSave = isNaN(parsed) ? 0 : parsed;
@@ -149,14 +147,14 @@ const EditModal = ({
           />
         )}
 
-        {['habitName', 'habitEnemy'].includes(field) && (
+        {['habitName'].includes(field) && (
           <>
             <TextInput
               mode="outlined"
               value={inputValue?.toString()}
               onChangeText={setInputValue}
               keyboardType={keyboardType}
-              autoFocus={field === 'habitEnemy'}
+              autoFocus={field === 'habitName'}
               style={{marginBottom: 16}}
               maxLength={60}
             />

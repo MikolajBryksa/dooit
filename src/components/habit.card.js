@@ -20,7 +20,6 @@ import {logError} from '@/services/error-tracking.service';
 const HabitCard = ({
   id,
   habitName,
-  habitEnemy,
   repeatDays = [],
   repeatHours = [],
   available,
@@ -131,33 +130,13 @@ const HabitCard = ({
               ? 'auto'
               : contentHeight.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 150],
+                  outputRange: [0, 115],
                 }),
             marginBottom: !onboardingMode ? 0 : 15,
             opacity: onboardingMode ? 1 : cardOpacity,
           }}>
           <Card.Content style={styles.card__list}>
             <View style={styles.card__divider} />
-            <TouchableRipple
-              onPress={() => openEditModal('habitEnemy', habitEnemy)}>
-              <View style={styles.card__row}>
-                <IconButton
-                  icon="cancel"
-                  size={18}
-                  style={{margin: 0, marginRight: 4}}
-                />
-                <View style={{flex: 1}}>
-                  <Text
-                    variant="bodyMedium"
-                    style={{maxWidth: '100%', flexShrink: 1}}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {habitEnemy}
-                  </Text>
-                </View>
-              </View>
-            </TouchableRipple>
-
             <TouchableRipple
               onPress={() => openEditModal('repeatHours', repeatHours)}>
               <View style={styles.card__row}>

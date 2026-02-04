@@ -75,7 +75,6 @@ let lastPickedMessages = {
   notification: '',
   good: '',
   bad: '',
-  skip: '',
 };
 
 export function pickRandomMotivation(translationFunction, category) {

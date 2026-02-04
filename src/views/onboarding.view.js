@@ -202,10 +202,6 @@ const OnboardingView = ({setShowOnboarding}) => {
                   <Text variant="titleMedium">
                     {t(`default-habits.${habitId}.habitName`)}
                   </Text>
-                  <Text variant="bodySmall" numberOfLines={2}>
-                    {t(`card.instead`)}{' '}
-                    {t(`default-habits.${habitId}.habitEnemy`)}
-                  </Text>
                 </View>
                 <Checkbox
                   status={selectedHabits[habitId] ? 'checked' : 'unchecked'}
@@ -260,10 +256,8 @@ const OnboardingView = ({setShowOnboarding}) => {
               key={habit.id}
               id={habit.id}
               habitName={habit.habitName}
-              habitEnemy={habit.habitEnemy}
               goodCounter={habit.goodCounter}
               badCounter={habit.badCounter}
-              skipCounter={habit.skipCounter}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}

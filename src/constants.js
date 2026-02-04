@@ -1,4 +1,3 @@
-export const MINUTES_FOR_HABIT = 90;
 export const TYPE_DELAY = 20;
 
 export const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];

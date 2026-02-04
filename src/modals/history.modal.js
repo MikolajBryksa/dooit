@@ -78,16 +78,12 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           habit.goodCounter = Math.max(0, (habit.goodCounter || 0) - 1);
         } else if (oldStatus === 'bad') {
           habit.badCounter = Math.max(0, (habit.badCounter || 0) - 1);
-        } else if (oldStatus === 'skip') {
-          habit.skipCounter = Math.max(0, (habit.skipCounter || 0) - 1);
         }
 
         if (newStatus === 'good') {
           habit.goodCounter = (habit.goodCounter || 0) + 1;
         } else if (newStatus === 'bad') {
           habit.badCounter = (habit.badCounter || 0) + 1;
-        } else if (newStatus === 'skip') {
-          habit.skipCounter = (habit.skipCounter || 0) + 1;
         }
       });
     });

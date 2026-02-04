@@ -17,10 +17,8 @@ import {
 const NowCard = ({
   id,
   habitName,
-  habitEnemy,
   goodCounter,
   badCounter,
-  skipCounter,
   repeatDays,
   repeatHours,
   selectedHour,
@@ -29,13 +27,13 @@ const NowCard = ({
   isLastHabit = false,
   onUpdated,
   onNext,
-  globalProgressValue = 0,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
   const [hasUserMadeChoice, setHasUserMadeChoice] = useState(false);
+  const [choice, setChoice] = useState(null);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
@@ -103,25 +101,6 @@ const NowCard = ({
           useNativeDriver: true,
         }),
         Animated.timing(badHabitOpacity, {
-          toValue: 1,
-          duration: 300,
-          delay: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(nextButtonOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    } else if (step === 3) {
-      Animated.parallel([
-        Animated.timing(goodHabitOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badHabitOpacity, {
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
@@ -136,10 +115,8 @@ const NowCard = ({
     }
   }, [step, goodHabitOpacity, badHabitOpacity, nextButtonOpacity]);
 
-  const isCompleted = useMemo(() => {
-    const today = getLocalDateKey();
-    return hasExecution(id, today, selectedHour);
-  }, [id, selectedHour]);
+  const today = getLocalDateKey();
+  const isCompleted = hasExecution(id, today, selectedHour);
 
   const stats = useMemo(() => {
     return calculateEffectiveness(id, {
@@ -149,26 +126,24 @@ const NowCard = ({
     });
   }, [id, repeatDays, repeatHours]);
 
+  const choiceLabel = useMemo(() => {
+    if (choice === 'good') return t('button.done');
+    if (choice === 'bad') return t('button.skipped');
+    return t('button.done');
+  }, [choice, t]);
+
   const addGoodChoice = () => {
+    setChoice('good');
     setMotivation(pickRandomMotivation(t, 'good'));
     handleChoice('good');
-    setStep(3);
-  };
-
-  const skipGoodChoice = () => {
     setStep(2);
   };
 
   const addBadChoice = () => {
+    setChoice('bad');
     setMotivation(pickRandomMotivation(t, 'bad'));
     handleChoice('bad');
-    setStep(3);
-  };
-
-  const skipBadChoice = () => {
-    setMotivation(pickRandomMotivation(t, 'skip'));
-    handleChoice('skip');
-    setStep(3);
+    setStep(2);
   };
 
   const handleUnlock = () => {
@@ -191,14 +166,12 @@ const NowCard = ({
 
       const patch = {
         habitName,
-        habitEnemy,
         repeatDays,
         repeatHours,
       };
 
       if (choice === 'good') patch.goodCounter = (goodCounter || 0) + 1;
       if (choice === 'bad') patch.badCounter = (badCounter || 0) + 1;
-      if (choice === 'skip') patch.skipCounter = (skipCounter || 0) + 1;
 
       updateHabit(id, patch);
       setHasUserMadeChoice(true);
@@ -208,20 +181,14 @@ const NowCard = ({
       isCompleted,
       selectedHour,
       habitName,
-      habitEnemy,
       repeatDays,
       repeatHours,
       goodCounter,
       badCounter,
-      skipCounter,
       id,
       onUpdated,
     ],
   );
-
-  const progressBarValue = useMemo(() => {
-    return Math.max(0, Math.min(1, globalProgressValue));
-  }, [globalProgressValue]);
 
   if (!isNext) {
     return null;
@@ -241,18 +208,6 @@ const NowCard = ({
           showPercentage={isCompleted || hasUserMadeChoice}
         />
       }
-      progressContent={
-        <>
-          <Text variant="titleLarge">{selectedHour}</Text>
-          <View style={styles.progress__container}>
-            <ProgressBar
-              style={styles.progress__bar}
-              progress={progressBarValue}
-              indeterminate={!isLocked && step !== 3}
-            />
-          </View>
-        </>
-      }
       buttonsContent={
         <View style={{width: '100%', position: 'relative'}}>
           {/* Good Habit - Step 1 */}
@@ -271,8 +226,21 @@ const NowCard = ({
             ]}
             pointerEvents={step === 1 ? 'auto' : 'none'}>
             <View style={styles.card__choicesTitleContainer}>
-              <Text variant="titleLarge">{habitName}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <Text variant="titleMedium" style={styles.text__highlighted}>
+                  {selectedHour}
+                </Text>
+              </ScrollView>
+              <View style={styles.card__titleLargeContainer}>
+                <Text
+                  variant="titleLarge"
+                  style={styles.text__center}
+                  numberOfLines={2}>
+                  {habitName}
+                </Text>
+              </View>
             </View>
+
             {isLocked ? (
               <View style={styles.card__buttons}>
                 <Button
@@ -289,7 +257,7 @@ const NowCard = ({
                   style={styles.button}
                   mode="outlined"
                   icon="close"
-                  onPress={skipGoodChoice}>
+                  onPress={addBadChoice}>
                   {t('button.skip')}
                 </Button>
                 <Button
@@ -303,12 +271,12 @@ const NowCard = ({
             )}
           </Animated.View>
 
-          {/* Bad Habit - Step 2 */}
+          {/* Next Button - Step 2 */}
           <Animated.View
             style={[
               styles.card__choices,
               {
-                opacity: badHabitOpacity,
+                opacity: nextButtonOpacity,
                 position: step === 2 ? 'relative' : 'absolute',
                 width: '100%',
                 top: 0,
@@ -319,47 +287,19 @@ const NowCard = ({
             ]}
             pointerEvents={step === 2 ? 'auto' : 'none'}>
             <View style={styles.card__choicesTitleContainer}>
-              <Text variant="titleLarge">{habitEnemy}</Text>
-            </View>
-            <View style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="outlined"
-                icon="close"
-                onPress={skipBadChoice}>
-                {t('button.skip')}
-              </Button>
-              <Button
-                style={styles.button__bad}
-                mode="contained"
-                icon="check"
-                onPress={addBadChoice}>
-                {t('button.done')}
-              </Button>
-            </View>
-          </Animated.View>
-
-          {/* Next Button - Step 3 */}
-          <Animated.View
-            style={[
-              styles.card__choices,
-              {
-                opacity: nextButtonOpacity,
-                position: step === 3 ? 'relative' : 'absolute',
-                width: '100%',
-                top: 0,
-                left: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-            ]}
-            pointerEvents={step === 3 ? 'auto' : 'none'}>
-            <View style={styles.card__choicesTitleContainer}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <Text variant="titleMedium" style={{minWidth: '100%'}}>
+                <Text variant="titleMedium" style={styles.text__highlighted}>
                   {motivation}
                 </Text>
               </ScrollView>
+              <View style={styles.card__titleLargeContainer}>
+                <Text
+                  variant="titleLarge"
+                  style={styles.text__center}
+                  numberOfLines={2}>
+                  {choiceLabel}
+                </Text>
+              </View>
             </View>
             <View style={styles.card__buttons}>
               <Button

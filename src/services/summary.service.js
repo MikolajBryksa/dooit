@@ -67,10 +67,9 @@ export const generateAiSummary = async (
   const prompt =
     `You are an AI assistant. Respond in the language: ${language}. Address the user by name: ${userName}.\n` +
     `Praise the user's best habit: ${bestHabit.habitName} with ${bestHabit.effectiveness}% effectiveness. ` +
-    `This means the user successfully performed this habit at the expected times, resisting the bad habit: ${bestHabit.habitEnemy}.\n` +
+    `This means the user successfully performed this habit at the expected times.\n` +
     (worstHabit
-      ? `Encourage the user to improve their habit ${worstHabit.habitName}, which has ${worstHabit.effectiveness}% effectiveness. ` +
-        `This habit needs more attention to overcome the bad habit: ${worstHabit.habitEnemy}.\n`
+      ? `Encourage the user to improve their habit ${worstHabit.habitName}, which has ${worstHabit.effectiveness}% effectiveness.\n`
       : '') +
     `Encourage the user by name to keep working on their habits.\n`;
 

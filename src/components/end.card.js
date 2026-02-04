@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-
 import {useStyles} from '@/styles';
 import {useNetworkStatus, useTodayKey} from '@/hooks';
 import {
@@ -13,7 +12,6 @@ import {
 } from '@/services/summary.service';
 import {logError} from '@/services/error-tracking.service';
 import {calculateEffectiveness} from '@/services/effectiveness.service';
-
 import MainCard from './main.card';
 import StatusIconCircle from './status-icon.circle';
 import {TYPE_DELAY} from '@/constants';
@@ -29,7 +27,6 @@ const withEffectiveness = habits =>
     return {
       id: h.id,
       habitName: h.habitName,
-      habitEnemy: h.habitEnemy,
       repeatDays: h.repeatDays,
       repeatHours: h.repeatHours,
       effectiveness: stats.effectiveness,

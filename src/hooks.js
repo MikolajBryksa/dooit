@@ -2,8 +2,8 @@ import {getLocalDateKey} from '@/utils';
 import {useState, useEffect, useMemo, useCallback} from 'react';
 import {logError} from '@/services/error-tracking.service';
 import NetInfo from '@react-native-community/netinfo';
-import {selectActiveHabitKey} from '@/services/habits.service';
 import {hasExecution} from '@/services/effectiveness.service';
+import {selectActiveHabitKey} from '@/services/habits.service';
 
 export function useTodayKey() {
   const [todayKey, setTodayKey] = useState(getLocalDateKey());
@@ -82,7 +82,7 @@ export const useNetworkStatus = (enableMonitoring = false) => {
   };
 };
 
-export function useActiveHabit(todayHabits, currentTime) {
+export function useActiveHabit(todayHabits, todayKey) {
   const [activeKey, setActiveKey] = useState(null);
   const [allCompleted, setAllCompleted] = useState(false);
 
@@ -90,37 +90,37 @@ export function useActiveHabit(todayHabits, currentTime) {
     return todayHabits.find(habit => habit.key === activeKey) || null;
   }, [todayHabits, activeKey]);
 
-  const isLastHabit = useMemo(() => {
-    if (!todayHabits || todayHabits.length === 0 || !activeHabit) return false;
-
-    const today = getLocalDateKey();
-    const incomplete = todayHabits.filter(
-      habit => !hasExecution(habit.id, today, habit.selectedHour),
+  const incomplete = useMemo(() => {
+    if (!todayHabits || todayHabits.length === 0) return [];
+    return todayHabits.filter(
+      habit => !hasExecution(habit.id, todayKey, habit.selectedHour),
     );
+  }, [todayHabits, todayKey]);
 
+  const isLastHabit = useMemo(() => {
+    if (!activeHabit) return false;
+    if (incomplete.length === 0) return true;
     return incomplete.length === 1 && incomplete[0].key === activeHabit.key;
-  }, [todayHabits, activeHabit]);
+  }, [activeHabit, incomplete]);
 
   const activeKeyCandidate = useMemo(
-    () => selectActiveHabitKey(todayHabits, currentTime),
-    [todayHabits, currentTime],
+    () => selectActiveHabitKey(todayHabits, todayKey),
+    [todayHabits, todayKey],
   );
 
   useEffect(() => {
-    if (todayHabits.length === 0) {
+    if (!todayHabits || todayHabits.length === 0) {
       setActiveKey(null);
       setAllCompleted(false);
       return;
     }
 
     const activeExists =
-      activeKey !== null && todayHabits.some(habit => habit.key === activeKey);
+      activeKey !== null && todayHabits.some(h => h.key === activeKey);
 
     if (!activeExists) {
-      const nextKey = activeKeyCandidate;
-
-      if (nextKey) {
-        setActiveKey(nextKey);
+      if (activeKeyCandidate) {
+        setActiveKey(activeKeyCandidate);
         setAllCompleted(false);
       } else {
         setActiveKey(null);
@@ -129,17 +129,37 @@ export function useActiveHabit(todayHabits, currentTime) {
     } else {
       setAllCompleted(false);
     }
-  }, [todayHabits, activeKeyCandidate, activeKey]);
+  }, [todayHabits, activeKey, activeKeyCandidate]);
 
   const goToNextHabit = useCallback(() => {
-    if (activeKeyCandidate) {
-      setActiveKey(activeKeyCandidate);
+    if (!todayHabits || todayHabits.length === 0) {
+      setActiveKey(null);
+      setAllCompleted(true);
+      return;
+    }
+
+    const fromIndex = activeHabit
+      ? todayHabits.findIndex(h => h.key === activeHabit.key)
+      : -1;
+
+    const findNextFrom = startIdx => {
+      for (let i = startIdx; i < todayHabits.length; i++) {
+        const h = todayHabits[i];
+        if (!hasExecution(h.id, todayKey, h.selectedHour)) return h.key;
+      }
+      return null;
+    };
+
+    const nextKey = findNextFrom(fromIndex + 1) ?? findNextFrom(0);
+
+    if (nextKey) {
+      setActiveKey(nextKey);
       setAllCompleted(false);
     } else {
       setActiveKey(null);
       setAllCompleted(true);
     }
-  }, [activeKeyCandidate]);
+  }, [todayHabits, todayKey, activeHabit]);
 
   return {
     activeHabit,

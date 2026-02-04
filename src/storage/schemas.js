@@ -9,10 +9,8 @@ Habit.schema = {
   properties: {
     id: 'int',
     habitName: 'string',
-    habitEnemy: 'string',
     goodCounter: 'int',
     badCounter: 'int',
-    skipCounter: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
     available: 'bool',

@@ -9,7 +9,7 @@ const _createExecution = (habitId, date, hour, status) => {
     habitId,
     date,
     hour,
-    status, // 'good' | 'bad' | 'skip'
+    status,
     timestamp: new Date(),
   });
 };
@@ -17,12 +17,21 @@ const _createExecution = (habitId, date, hour, status) => {
 // Records a habit execution to history
 export const recordHabitExecution = (habitId, date, hour, status) => {
   realm.write(() => {
+    const exists =
+      realm
+        .objects('HabitExecution')
+        .filtered(
+          'habitId == $0 AND date == $1 AND hour == $2',
+          habitId,
+          date,
+          hour,
+        ).length > 0;
+
+    if (exists) return;
+
     _createExecution(habitId, date, hour, status);
   });
 };
-
-// Records execution inside an already open transaction (for batch operations)
-export const recordHabitExecutionInTransaction = _createExecution;
 
 // Retrieves habit executions from the last N days
 export const getHabitExecutions = (habitId, daysBack = 14) => {
@@ -92,7 +101,6 @@ export const calculateEffectiveness = (habitId, habit = null) => {
         effectiveness: null,
         goodCount: 0,
         badCount: 0,
-        skipCount: 0,
         totalCount: 0,
       };
     }
@@ -117,7 +125,6 @@ export const calculateEffectiveness = (habitId, habit = null) => {
 
   let goodCount = 0;
   let badCount = 0;
-  let skipCount = 0;
 
   for (const e of actualExecutions) {
     const weekday = dateToWeekday(e.date);
@@ -128,7 +135,6 @@ export const calculateEffectiveness = (habitId, habit = null) => {
 
     if (e.status === 'good') goodCount += 1;
     else if (e.status === 'bad') badCount += 1;
-    else if (e.status === 'skip') skipCount += 1;
   }
 
   const totalCount = goodCount + badCount;
@@ -138,7 +144,6 @@ export const calculateEffectiveness = (habitId, habit = null) => {
       totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : null,
     goodCount,
     badCount,
-    skipCount,
     totalCount,
   };
 };
@@ -181,7 +186,7 @@ export const deleteHabitExecutions = habitId => {
   });
 };
 
-// Retrieves the date of the first habit execution
+// Retrieves the date of the last habit execution
 export const getFirstExecutionDate = habitId => {
   const executions = realm
     .objects('HabitExecution')
@@ -233,8 +238,6 @@ export const deleteExecution = (executionId, habitId) => {
         habit.goodCounter = Math.max(0, habit.goodCounter - 1);
       if (exec.status === 'bad')
         habit.badCounter = Math.max(0, habit.badCounter - 1);
-      if (exec.status === 'skip')
-        habit.skipCounter = Math.max(0, habit.skipCounter - 1);
     }
 
     realm.delete(exec);

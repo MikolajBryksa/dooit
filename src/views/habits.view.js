@@ -7,11 +7,10 @@ import NoHabitsCard from '@/components/no-habits.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
 import FilterDialog from '@/dialogs/filter.dialog';
-import {getHabits, autoSkipPastHabits} from '@/services/habits.service';
+import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {dateToWeekday, getLocalDateKey} from '@/utils';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -40,10 +39,6 @@ const HabitsView = () => {
   };
 
   const fetchAllHabits = () => {
-    const todayKey = getLocalDateKey();
-    const weekdayKey = dateToWeekday(todayKey);
-    autoSkipPastHabits(weekdayKey);
-
     const habits = getHabits() || [];
     dispatch(setHabits(habits));
   };
@@ -57,9 +52,6 @@ const HabitsView = () => {
     }
 
     return [...filtered].sort((a, b) => {
-      // if (a.available !== b.available) {
-      //   return a.available ? -1 : 1;
-      // }
       const aFirstHour = a.repeatHours[0];
       const bFirstHour = b.repeatHours[0];
       return aFirstHour.localeCompare(bFirstHour);
@@ -93,7 +85,6 @@ const HabitsView = () => {
               key={habit.id}
               id={habit.id}
               habitName={habit.habitName}
-              habitEnemy={habit.habitEnemy}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               available={habit.available}

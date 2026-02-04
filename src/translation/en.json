@@ -8,7 +8,6 @@
     "add": "Add habit",
     "delete-habit": "Delete habit",
     "delete-execution": "Delete execution",
-    "skip": "Skip habit",
     "no-habits": "No habits",
     "contact": "Contact",
     "support": "Coffee",
@@ -59,6 +58,7 @@
     "back": "Back",
     "next": "Next",
     "skip": "Skip",
+    "skipped": "Skipped",
     "fail": "Fail",
     "done": "Done",
     "reset": "Reset",
@@ -82,14 +82,12 @@
   "card": {
     "habitName": "Habit name",
     "instead": "vs",
-    "habitEnemy": "Opposite of habit",
     "minutes": "(in minutes)",
     "repeatDays": "Repeat days",
     "repeatHours": "Repeat Hours",
     "available": "Available",
     "goodCounter": "Right choices",
     "badCounter": "Easy choices",
-    "skipCounter": "Skipped choices",
     "effectiveness": "Effectiveness",
     "noRepetitions": "No repetitions",
     "done": "All done today!"
@@ -124,7 +122,6 @@
   },
   "addStep": {
     "habitName": "What do you want to do regularly?",
-    "habitEnemy": "What is the opposite of the habit?",
     "repeatDays": "On what days you want to do it?",
     "repeatHours": "What time do you want to do it?"
   },
@@ -144,37 +141,30 @@
     },
     "start": {
       "title": "Let’s get started!",
-      "text": "This is the main screen of the app. You will always see the habit that is most relevant to complete right now.\n\nFor each habit, you make a simple choice: complete the good habit, fall back into the bad one, or skip it entirely.\n\nBased on these choices, Dooit tracks how well you are building your habits. Once you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck, {{userName}}!"
+      "text": "This is the main screen of the app. You will always see the habit that is most relevant to complete right now.\n\nFor each habit, you make a simple choice: complete the habit or skip it.\n\nBased on these choices, Dooit tracks how well you are building your habits. Once you finish all repetitions planned for today, you’ll see a short summary of your progress.\n\nGood luck, {{userName}}!"
     }
   },
   "default-habits": {
     "1": {
-      "habitName": "Drinking water",
-      "habitEnemy": "Sugary drinks"
+      "habitName": "Drinking water"
     },
     "2": {
-      "habitName": "Physical activity",
-      "habitEnemy": "Being inactive"
+      "habitName": "Physical activity"
     },
     "3": {
-      "habitName": "Healthy eating",
-      "habitEnemy": "Unhealthy snacks"
+      "habitName": "Healthy eating"
     },
     "4": {
-      "habitName": "Reading books",
-      "habitEnemy": "Checking the news"
+      "habitName": "Reading books"
     },
     "5": {
-      "habitName": "Skill development",
-      "habitEnemy": "Procrastination"
+      "habitName": "Skill development"
     },
     "6": {
-      "habitName": "Stress relief",
-      "habitEnemy": "Short videos"
+      "habitName": "Stress relief"
     },
     "7": {
-      "habitName": "Consistent sleep",
-      "habitEnemy": "Late-night scrolling"
+      "habitName": "Consistent sleep"
     }
   },
   "motivation": {
@@ -211,9 +201,7 @@
       "Focus on progress, not perfection.",
       "Your habit is stronger than this moment.",
       "What matters most is your next choice.",
-      "Even champions stumble."
-    ],
-    "skip": [
+      "Even champions stumble.",
       "One skip is not the end.",
       "Rest is part of the process.",
       "A pause doesn’t erase progress.",

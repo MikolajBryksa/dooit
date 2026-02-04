@@ -7,12 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
 import {dateToWeekday} from '@/utils';
 import {useTodayKey, useCurrentTime, useActiveHabit} from '@/hooks';
-import {
-  getHabits,
-  autoSkipPastHabits,
-  getTodayHabits,
-  calculateGlobalProgress,
-} from '@/services/habits.service';
+import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {setHabits, setHabitsLoading} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
@@ -56,14 +51,11 @@ const HomeView = () => {
 
   const rebuildTodayHabits = useCallback(async () => {
     dispatch(setHabitsLoading(true));
-
-    autoSkipPastHabits(weekdayKey);
     refreshHabits();
-
     setTimeout(() => {
       dispatch(setHabitsLoading(false));
     }, 500);
-  }, [weekdayKey, refreshHabits, dispatch]);
+  }, [refreshHabits, dispatch]);
 
   useEffect(() => {
     // On mount: auto-skip past habits and load habits immediately
@@ -108,13 +100,8 @@ const HomeView = () => {
     [habits, weekdayKey],
   );
 
-  const globalProgressValue = useMemo(
-    () => calculateGlobalProgress(todayHabits),
-    [todayHabits],
-  );
-
   const {activeHabit, isLastHabit, allCompleted, goToNextHabit} =
-    useActiveHabit(todayHabits, currentTime);
+    useActiveHabit(todayHabits, todayKey);
 
   useEffect(() => {
     // Keep scheduled notifications in sync with current habits
@@ -141,10 +128,8 @@ const HomeView = () => {
             key={activeHabit.key}
             id={activeHabit.id}
             habitName={activeHabit.habitName}
-            habitEnemy={activeHabit.habitEnemy}
             goodCounter={activeHabit.goodCounter}
             badCounter={activeHabit.badCounter}
-            skipCounter={activeHabit.skipCounter}
             repeatDays={activeHabit.repeatDays}
             repeatHours={activeHabit.repeatHours}
             selectedHour={activeHabit.selectedHour}
@@ -153,7 +138,6 @@ const HomeView = () => {
             isLastHabit={isLastHabit}
             onUpdated={refreshHabits}
             onNext={goToNextHabit}
-            globalProgressValue={globalProgressValue}
           />
         ) : null}
       </ScrollView>

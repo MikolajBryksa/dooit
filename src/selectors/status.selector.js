@@ -13,16 +13,8 @@ const StatusSelector = ({value, onChange}) => {
       density="small"
       buttons={[
         {
-          value: 'skip',
-          icon: 'close',
-          checkedColor: theme.colors.primary,
-          uncheckedColor: theme.colors.primary,
-          style: {minWidth: 45},
-        },
-
-        {
           value: 'bad',
-          icon: 'minus',
+          icon: 'close',
           checkedColor: theme.colors.primary,
           uncheckedColor: theme.colors.primary,
           style: {minWidth: 45},

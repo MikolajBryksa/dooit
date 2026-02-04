@@ -25,16 +25,14 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const [progressBarValue, setProgressBarValue] = useState(0);
 
   const [habitName, setHabitName] = useState('');
-  const [habitEnemy, setHabitEnemy] = useState('');
   const [repeatDays, setRepeatDays] = useState([]);
   const [repeatHours, setRepeatHours] = useState([]);
   const [selectedIcon, setSelectedIcon] = useState('infinity');
 
-  const maxSteps = 4;
+  const maxSteps = 3;
 
   const resetInputs = () => {
     setHabitName('');
-    setHabitEnemy('');
     setRepeatDays([]);
     setRepeatHours([]);
     setSelectedIcon('infinity');
@@ -51,7 +49,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
   const handleSave = async () => {
     try {
-      addHabit(habitName, habitEnemy, repeatDays, repeatHours, selectedIcon);
+      addHabit(habitName, repeatDays, repeatHours, selectedIcon);
       fetchAllHabits();
       onDismiss();
       setTimeout(() => {
@@ -71,10 +69,8 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
       case 1:
         return habitName.trim() !== '';
       case 2:
-        return habitEnemy.trim() !== '';
-      case 3:
         return repeatDays.length > 0;
-      case 4:
+      case 3:
         return repeatHours.length > 0;
       default:
         return false;
@@ -122,21 +118,6 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
         {step === 2 && (
           <>
-            <Text variant="bodyMedium" style={styles.modal__label}>
-              {t('addStep.habitEnemy')}
-            </Text>
-            <TextInput
-              mode="outlined"
-              placeholder={t('card.habitEnemy')}
-              value={habitEnemy}
-              onChangeText={setHabitEnemy}
-              maxLength={60}
-            />
-          </>
-        )}
-
-        {step === 3 && (
-          <>
             <Text variant="bodyMedium">{t('addStep.repeatDays')}</Text>
             <DaysSelector
               repeatDays={repeatDays}
@@ -145,7 +126,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
           </>
         )}
 
-        {step === 4 && (
+        {step === 3 && (
           <>
             <Text variant="bodyMedium">{t('addStep.repeatHours')}</Text>
             <View style={styles.gap} />

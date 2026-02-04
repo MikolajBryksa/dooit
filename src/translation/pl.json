@@ -8,7 +8,6 @@
     "add": "Dodaj nawyk",
     "delete-habit": "Usuń nawyk",
     "delete-execution": "Usuń powtórzenie",
-    "skip": "Pomiń nawyk",
     "no-habits": "Brak nawyków",
     "contact": "Kontakt",
     "support": "Kawusia",
@@ -59,6 +58,7 @@
     "back": "Wstecz",
     "next": "Dalej",
     "skip": "Pomiń",
+    "skipped": "Pominięte",
     "fail": "Nieudane",
     "done": "Zrobione",
     "reset": "Reset",
@@ -82,14 +82,12 @@
   "card": {
     "habitName": "Nazwa nawyku",
     "instead": "vs",
-    "habitEnemy": "Przeciwieństwo nawyku",
     "minutes": "(w minutach)",
     "repeatDays": "Dni powtarzania",
     "repeatHours": "Godziny powtarzania",
     "available": "Dostępne",
     "goodCounter": "Dobre wybory",
     "badCounter": "Łatwe wybory",
-    "skipCounter": "Pominięte wybory",
     "effectiveness": "Efektywność",
     "noRepetitions": "Brak powtórzeń",
     "done": "Wszystko dziś zrobione!"
@@ -124,7 +122,6 @@
   },
   "addStep": {
     "habitName": "Co chcesz robić regularnie?",
-    "habitEnemy": "Co jest przeciwieństwem nawyku?",
     "repeatDays": "W jakie dni chcesz to robić?",
     "repeatHours": "O jakiej godzinie chcesz to robić?"
   },
@@ -144,37 +141,30 @@
     },
     "start": {
       "title": "Zaczynajmy!",
-      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać dobry nawyk, ulec jego złej wersji albo całkowicie go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
+      "text": "To jest główny ekran aplikacji. Zawsze zobaczysz tutaj nawyk, który warto wykonać w danej chwili.\n\nPrzy każdym nawyku podejmujesz prostą decyzję: wykonać nawyk albo go pominąć.\n\nNa podstawie tych decyzji Dooit pokaże, jak idzie Ci budowanie nawyków. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
     }
   },
   "default-habits": {
     "1": {
-      "habitName": "Picie wody",
-      "habitEnemy": "Słodkie napoje"
+      "habitName": "Picie wody"
     },
     "2": {
-      "habitName": "Aktywność fizyczna",
-      "habitEnemy": "Brak ruchu"
+      "habitName": "Aktywność fizyczna"
     },
     "3": {
-      "habitName": "Zdrowe jedzenie",
-      "habitEnemy": "Niezdrowe przekąski"
+      "habitName": "Zdrowe jedzenie"
     },
     "4": {
-      "habitName": "Czytanie książek",
-      "habitEnemy": "Przeglądanie newsów"
+      "habitName": "Czytanie książek"
     },
     "5": {
-      "habitName": "Rozwój umiejętności",
-      "habitEnemy": "Prokrastynacja"
+      "habitName": "Rozwój umiejętności"
     },
     "6": {
-      "habitName": "Odstresowanie",
-      "habitEnemy": "Krótkie filmiki"
+      "habitName": "Odstresowanie"
     },
     "7": {
-      "habitName": "Regularny sen",
-      "habitEnemy": "Scrollowanie do późna"
+      "habitName": "Regularny sen"
     }
   },
   "motivation": {
@@ -211,9 +201,7 @@
       "Skup się na postępie, nie na perfekcji.",
       "Nawyk jest silniejszy niż ta chwila.",
       "Najważniejszy jest następny wybór.",
-      "Nawet mistrzowie się potykają."
-    ],
-    "skip": [
+      "Nawet mistrzowie się potykają.",
       "Jedno pominięcie to nie koniec.",
       "Odpoczynek jest częścią procesu.",
       "Przerwa nie kasuje całego postępu.",
