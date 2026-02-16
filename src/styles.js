@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {useTheme} from 'react-native-paper';
+import {white} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const useStyles = () => {
   const theme = useTheme();
@@ -124,7 +125,7 @@ export const useStyles = () => {
       justifyContent: 'center',
     },
     card__choicesTitleContainer: {
-      height: theme.dimensions.height * 1.5,
+      height: theme.dimensions.height * 1.7,
       justifyContent: 'center',
       alignItems: 'center',
       gap: theme.dimensions.gap,
