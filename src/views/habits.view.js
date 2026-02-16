@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {View, ScrollView} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import HabitCard from '@/components/habit.card';
-import NoHabitsCard from '@/components/no-habits.card';
+import EmptyCard from '@/components/empty.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
 import FilterDialog from '@/dialogs/filter.dialog';
@@ -94,7 +94,7 @@ const HabitsView = () => {
             />
           ))
         ) : (
-          <NoHabitsCard onAddHabit={handleAddModal} />
+          <EmptyCard onAddHabit={handleAddModal} />
         )}
         <View style={styles.gap} />
       </ScrollView>

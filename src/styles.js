@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {white} from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 export const useStyles = () => {
   const theme = useTheme();
@@ -86,62 +85,46 @@ export const useStyles = () => {
     },
     card__iconContainer: {
       width: '100%',
-      paddingTop: theme.dimensions.gap,
-      paddingBottom: theme.dimensions.gap * 2,
+      height: 140,
+      paddingTop: theme.dimensions.gap * 2,
+      paddingBottom: theme.dimensions.gap,
+      marginBottom: theme.dimensions.gap * 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    card__subtitleContainer: {
+      width: '100%',
+      height: 32,
+      paddingBottom: theme.dimensions.margin,
       alignItems: 'center',
       justifyContent: 'center',
     },
     card__titleContainer: {
       width: '100%',
-      paddingBottom: theme.dimensions.gap,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    card__progressContainer: {
-      width: '100%',
-      paddingBottom: theme.dimensions.gap,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    card__contentContainer: {
-      width: '100%',
+      height: 72,
       paddingBottom: theme.dimensions.gap,
       alignItems: 'center',
       justifyContent: 'center',
     },
     card__textContainer: {
       width: '100%',
-      flex: 1,
+      paddingHorizontal: theme.dimensions.gap,
+      paddingBottom: theme.dimensions.gap,
     },
     card__buttonsContainer: {
       width: '100%',
+      minHeight: 80,
+      paddingTop: theme.dimensions.gap,
       paddingBottom: theme.dimensions.gap,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    card__choices: {
-      paddingTop: theme.dimensions.gap,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    card__choicesTitleContainer: {
-      height: theme.dimensions.height * 1.7,
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: theme.dimensions.gap,
-    },
-    card__titleLargeContainer: {
-      height: theme.dimensions.height,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    },
     card__buttons: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      paddingTop: theme.dimensions.gap,
       gap: theme.dimensions.gap,
       alignItems: 'center',
-      minHeight: theme.dimensions.height,
+      justifyContent: 'center',
     },
     card__list: {
       flex: 1,
@@ -203,12 +186,6 @@ export const useStyles = () => {
       lineHeight: 22,
       marginBottom: theme.dimensions.gap,
     },
-    text__highlighted: {
-      color: theme.colors.primary,
-    },
-    text__center: {
-      textAlign: 'center',
-    },
     chip: {
       borderRadius: 12,
     },
@@ -258,6 +235,25 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    // circle components
+    circle__container: {
+      position: 'relative',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    circle__centerContent: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    circle__flashText: {
+      fontWeight: '800',
+      letterSpacing: 0.5,
     },
   });
 };

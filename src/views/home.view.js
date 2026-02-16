@@ -11,8 +11,8 @@ import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {setHabits, setHabitsLoading} from '@/redux/actions';
 import NowCard from '@/components/now.card';
 import EndCard from '@/components/end.card';
-import NoHabitsCard from '@/components/no-habits.card';
-import LoadingHabitsCard from '@/components/loading-habits.card';
+import EmptyCard from '@/components/empty.card';
+import LoadingCard from '@/components/loading.card';
 import StartCard from '@/components/start.card';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
 import AddModal from '@/modals/add.modal';
@@ -118,9 +118,9 @@ const HomeView = () => {
         {firstLaunch ? (
           <StartCard />
         ) : habitsLoading ? (
-          <LoadingHabitsCard />
+          <LoadingCard />
         ) : todayHabits.length === 0 ? (
-          <NoHabitsCard onAddHabit={handleAddModal} />
+          <EmptyCard onAddHabit={handleAddModal} />
         ) : allCompleted || isEndDay ? (
           <EndCard weekdayKey={weekdayKey} />
         ) : activeHabit ? (

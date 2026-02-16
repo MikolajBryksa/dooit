@@ -4,15 +4,21 @@
     "habits": "Nawyki",
     "settings": "Ustawienia"
   },
+  "loading": {
+    "subtitle": "Proszę o cierpliwość.",
+    "title": "Ładowanie"
+  },
+  "empty": {
+    "subtitle": "Na dzisiaj nie masz żadnych nawyków.",
+    "title": "Brak nawyków"
+  },
   "title": {
     "add": "Dodaj nawyk",
     "delete-habit": "Usuń nawyk",
     "delete-execution": "Usuń powtórzenie",
-    "no-habits": "Brak nawyków",
     "contact": "Kontakt",
     "support": "Kawusia",
     "filter": "Filtruj nawyki",
-    "loading-habits": "Ładowanie nawyków",
     "history": "Historia"
   },
   "settings": {
@@ -140,8 +146,9 @@
       "accept-default": "lub pozostaw domyślne ustawienia powtórzeń"
     },
     "start": {
-      "title": "Zaczynajmy!",
-      "text": "Na tym ekranie zobaczysz nawyk, który warto teraz wykonać. Przy każdym nawyku podejmujesz prostą decyzję: wykonać nawyk albo go pominąć.\n\nGdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz krótkie podsumowanie swojego dnia.\n\nPowodzenia, {{userName}}!"
+      "subtitle": "Cześć, {{userName}}",
+      "title": "Zaczynajmy",
+      "text": "Na tym ekranie zobaczysz nawyk, który warto teraz wykonać. Przy każdym nawyku podejmujesz prostą decyzję: wykonać nawyk albo go pominąć. Gdy wykonasz wszystkie powtórzenia zaplanowane na dziś, zobaczysz podsumowanie swojego dnia."
     }
   },
   "default-habits": {
@@ -207,13 +214,10 @@
     ]
   },
   "summary": {
+    "subtitle": "Wszystko dziś zrobione!",
+    "title": "Podsumowanie dnia",
     "error-reading": "Błąd odczytu wygenerowanego podsumowania.",
     "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
     "no-response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi."
-  },
-  "error": {
-    "title": "Coś poszło nie tak",
-    "message": "Wystąpił nieoczekiwany błąd.\n\nBłąd został zgłoszony. Proszę, uruchom ponownie aplikację lub spróbuj ponownie.",
-    "restart": "Spróbuj ponownie"
   }
 }

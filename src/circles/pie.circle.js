@@ -2,6 +2,7 @@ import React, {useMemo, useEffect, useState, useRef} from 'react';
 import {View, StyleSheet, Animated, Easing} from 'react-native';
 import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
+import {useStyles} from '@/styles';
 
 const PieCircle = ({
   effectiveness = null,
@@ -12,6 +13,7 @@ const PieCircle = ({
   showPercentage = false,
 }) => {
   const theme = useTheme();
+  const styles = useStyles();
 
   const size = 140;
   const strokeWidth = 10;
@@ -159,7 +161,8 @@ const PieCircle = ({
   };
 
   return (
-    <View style={[styles.container, {width: size, height: size, opacity}]}>
+    <View
+      style={[styles.circle__container, {width: size, height: size, opacity}]}>
       <Svg width={size} height={size}>
         <G rotation="-90" origin={`${cx}, ${cy}`}>
           <Circle
@@ -255,11 +258,11 @@ const PieCircle = ({
         </G>
       </Svg>
 
-      <View pointerEvents="none" style={styles.centerContent}>
+      <View pointerEvents="none" style={styles.circle__centerContent}>
         {showPercentage && effectiveness !== null ? (
           <Text
             style={[
-              styles.flashText,
+              styles.circle__flashText,
               {
                 color: _goodColor,
                 fontSize: Math.min(32, size * 0.24),
@@ -279,23 +282,5 @@ const PieCircle = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  centerContent: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  flashText: {fontWeight: '800', letterSpacing: 0.5},
-});
 
 export default PieCircle;

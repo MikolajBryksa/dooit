@@ -1,19 +1,20 @@
 import React from 'react';
 import MainCard from './main.card';
-import StatusIconCircle from './status-icon.circle';
+import InfoCircle from '../circles/info.circle';
 import {Text, Button} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 
-const NoHabitsCard = ({onAddHabit}) => {
+const EmptyCard = ({onAddHabit}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
   return (
     <MainCard
       outline={true}
-      iconContent={<StatusIconCircle empty />}
-      titleContent={<Text variant="titleLarge">{t('title.no-habits')}</Text>}
+      iconContent={<InfoCircle empty />}
+      subtitleContent={<Text variant="titleMedium">{t('empty.subtitle')}</Text>}
+      titleContent={<Text variant="titleLarge">{t('empty.title')}</Text>}
       buttonsContent={
         <Button
           style={styles.button}
@@ -27,4 +28,4 @@ const NoHabitsCard = ({onAddHabit}) => {
   );
 };
 
-export default NoHabitsCard;
+export default EmptyCard;

@@ -2,8 +2,9 @@ import React, {useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, Animated, Easing} from 'react-native';
 import {Avatar, useTheme} from 'react-native-paper';
 import Svg, {Circle, Defs, LinearGradient, Stop, G} from 'react-native-svg';
+import {useStyles} from '@/styles';
 
-const StatusIconCircle = ({
+const StatusCircle = ({
   end = false,
   loading = false,
   empty = false,
@@ -12,6 +13,7 @@ const StatusIconCircle = ({
   iconSize: iconSizeProp,
 }) => {
   const theme = useTheme();
+  const styles = useStyles();
 
   const goodColor = theme?.colors?.primary;
   const trackColor = theme?.colors?.surfaceVariant;
@@ -56,7 +58,7 @@ const StatusIconCircle = ({
   const spinnerArc = Math.max(24, C * 0.7);
 
   return (
-    <View style={[styles.container, {width: size, height: size}]}>
+    <View style={[styles.circle__container, {width: size, height: size}]}>
       <Svg width={size} height={size}>
         <Circle
           cx={cx}
@@ -110,7 +112,7 @@ const StatusIconCircle = ({
         </Animated.View>
       )}
 
-      <View pointerEvents="none" style={styles.centerContent}>
+      <View pointerEvents="none" style={styles.circle__centerContent}>
         <Avatar.Icon
           size={iconSize}
           style={{backgroundColor: 'transparent'}}
@@ -132,21 +134,4 @@ const StatusIconCircle = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  centerContent: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-export default StatusIconCircle;
+export default StatusCircle;

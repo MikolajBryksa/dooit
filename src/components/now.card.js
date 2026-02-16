@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState, useMemo, useCallback} from 'react';
-import {Text, Button, ProgressBar} from 'react-native-paper';
-import {View, ScrollView, Animated} from 'react-native';
+import {Text, Button} from 'react-native-paper';
+import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateHabit} from '@/services/habits.service';
 import {pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
-import PieCircle from './pie.circle';
+import PieCircle from '../circles/pie.circle';
 import MainCard from './main.card';
 import {
   recordHabitExecution,
@@ -68,52 +68,6 @@ const NowCard = ({
       useNativeDriver: true,
     }).start();
   }, [id, selectedHour, t, cardOpacity]);
-
-  const goodHabitOpacity = useRef(new Animated.Value(1)).current;
-  const badHabitOpacity = useRef(new Animated.Value(0)).current;
-  const nextButtonOpacity = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    // Animates transition between good habit, bad habit, and next button
-    if (step === 1) {
-      Animated.parallel([
-        Animated.timing(goodHabitOpacity, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badHabitOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(nextButtonOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    } else if (step === 2) {
-      Animated.parallel([
-        Animated.timing(goodHabitOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(badHabitOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(nextButtonOpacity, {
-          toValue: 1,
-          duration: 300,
-          delay: 150,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [step, goodHabitOpacity, badHabitOpacity, nextButtonOpacity]);
 
   const today = getLocalDateKey();
   const isCompleted = hasExecution(id, today, selectedHour);
@@ -208,49 +162,27 @@ const NowCard = ({
           showPercentage={isCompleted || hasUserMadeChoice}
         />
       }
+      subtitleContent={
+        <Text variant="titleMedium">
+          {step === 1 ? selectedHour : motivation}
+        </Text>
+      }
+      titleContent={
+        <Text variant="titleLarge" numberOfLines={2}>
+          {step === 1 ? habitName : choiceLabel}
+        </Text>
+      }
       buttonsContent={
-        <View style={{width: '100%', position: 'relative'}}>
-          {/* Good Habit - Step 1 */}
-          <Animated.View
-            style={[
-              styles.card__choices,
-              {
-                opacity: goodHabitOpacity,
-                position: step === 1 ? 'relative' : 'absolute',
-                width: '100%',
-                top: 0,
-                left: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-            ]}
-            pointerEvents={step === 1 ? 'auto' : 'none'}>
-            <View style={styles.card__choicesTitleContainer}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <Text variant="titleMedium" style={styles.text__highlighted}>
-                  {selectedHour}
-                </Text>
-              </ScrollView>
-              <View style={styles.card__titleLargeContainer}>
-                <Text
-                  variant="titleLarge"
-                  style={styles.text__center}
-                  numberOfLines={2}>
-                  {habitName}
-                </Text>
-              </View>
-            </View>
-
-            {isLocked ? (
-              <View style={styles.card__buttons}>
-                <Button
-                  style={styles.button}
-                  mode="contained"
-                  icon="lock-open-variant"
-                  onPress={handleUnlock}>
-                  {t('button.unlock')}
-                </Button>
-              </View>
+        <>
+          {step === 1 ? (
+            isLocked ? (
+              <Button
+                style={styles.button}
+                mode="contained"
+                icon="lock-open-variant"
+                onPress={handleUnlock}>
+                {t('button.unlock')}
+              </Button>
             ) : (
               <View style={styles.card__buttons}>
                 <Button
@@ -268,50 +200,17 @@ const NowCard = ({
                   {t('button.done')}
                 </Button>
               </View>
-            )}
-          </Animated.View>
-
-          {/* Next Button - Step 2 */}
-          <Animated.View
-            style={[
-              styles.card__choices,
-              {
-                opacity: nextButtonOpacity,
-                position: step === 2 ? 'relative' : 'absolute',
-                width: '100%',
-                top: 0,
-                left: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-              },
-            ]}
-            pointerEvents={step === 2 ? 'auto' : 'none'}>
-            <View style={styles.card__choicesTitleContainer}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <Text variant="titleMedium" style={styles.text__highlighted}>
-                  {motivation}
-                </Text>
-              </ScrollView>
-              <View style={styles.card__titleLargeContainer}>
-                <Text
-                  variant="titleLarge"
-                  style={styles.text__center}
-                  numberOfLines={2}>
-                  {choiceLabel}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.card__buttons}>
-              <Button
-                style={styles.button}
-                mode="contained"
-                icon={isLastHabit ? 'check' : 'arrow-right'}
-                onPress={handleNext}>
-                {isLastHabit ? t('button.finish') : t('button.next')}
-              </Button>
-            </View>
-          </Animated.View>
-        </View>
+            )
+          ) : (
+            <Button
+              style={styles.button}
+              mode="contained"
+              icon={isLastHabit ? 'check' : 'arrow-right'}
+              onPress={handleNext}>
+              {isLastHabit ? t('button.finish') : t('button.next')}
+            </Button>
+          )}
+        </>
       }
     />
   );
