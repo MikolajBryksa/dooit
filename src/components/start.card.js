@@ -42,7 +42,7 @@ const StartCard = ({onStart}) => {
         <Text variant="titleLarge">{t('onboarding.start.title')}</Text>
       }
       textContent={
-        <View style={styles.summary_container}>
+        <View style={styles.summary__container}>
           <Text variant="bodyMedium" style={styles.summary__text}>
             {fullText}
           </Text>

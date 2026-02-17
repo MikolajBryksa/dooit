@@ -175,7 +175,7 @@ export const useStyles = () => {
     summary__card: {
       marginBottom: theme.dimensions.gap * 2,
     },
-    summary_container: {
+    summary__container: {
       flex: 1,
       width: '100%',
       paddingHorizontal: theme.dimensions.gap,
@@ -185,6 +185,34 @@ export const useStyles = () => {
       textAlign: 'center',
       lineHeight: 22,
       marginBottom: theme.dimensions.gap,
+    },
+    summary__habits: {
+      marginBottom: theme.dimensions.height / 2,
+    },
+    summary__habit: {
+      backgroundColor: theme.colors.surfaceVariant,
+      borderRadius: 12,
+      paddingVertical: theme.dimensions.margin,
+      paddingHorizontal: theme.dimensions.gap / 2,
+      marginBottom: theme.dimensions.margin / 2,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    summary__habit__icon: {
+      margin: 0,
+    },
+    summary__habit__name: {
+      flex: 1,
+    },
+    summary__habit__stats: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+    },
+    summary__habit__effectiveness: {
+      fontWeight: '700',
+      // fontSize: 16,
+      color: theme.colors.primary,
     },
     chip: {
       borderRadius: 12,

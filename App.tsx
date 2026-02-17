@@ -80,7 +80,7 @@ function AppContent() {
         dispatch(setHabits(habits));
 
         backfillMissedExecutions(habits, 14);
-        deleteOldExecutions(14);
+        // deleteOldExecutions(14);
       } catch (e) {
         logError(e, 'loadLocalData');
       } finally {

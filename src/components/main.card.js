@@ -65,18 +65,20 @@ const MainCard = ({
             {centerAndHighlightText(subtitleContent)}
           </View>
 
-          {/* Title container - reserved space for 2 lines */}
+          {/* Title container - reserved space */}
           <View style={styles.card__titleContainer}>
             {centerText(titleContent)}
           </View>
 
-          {/* Text content - optional, no reserved space */}
+          {/* Text content */}
           {textContent && (
             <View style={styles.card__textContainer}>{textContent}</View>
           )}
 
-          {/* Buttons container - reserved space */}
-          <View style={styles.card__buttonsContainer}>{buttonsContent}</View>
+          {/* Buttons container */}
+          {buttonsContent && (
+            <View style={styles.card__buttonsContainer}>{buttonsContent}</View>
+          )}
         </Card.Content>
       </ContentWrapper>
     </Card>

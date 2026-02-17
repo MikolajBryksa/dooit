@@ -11,33 +11,19 @@ import Realm from 'realm';
 import {logError, flushErrorQueue} from './errors.service.js';
 import {stripMarkdown} from '@/utils';
 
-function selectBestAndWorstHabits(habitsWithEffectiveness) {
-  const valid = (habitsWithEffectiveness || []).filter(
-    h => typeof h?.effectiveness === 'number' && h.effectiveness >= 0,
-  );
-
-  if (valid.length === 0) return [];
-
-  const sorted = [...valid].sort((a, b) => b.effectiveness - a.effectiveness);
-  const bestHabit = sorted[0];
-  const worstHabit = sorted[sorted.length - 1];
-
-  if (bestHabit.id === worstHabit.id) return [bestHabit];
-  return [bestHabit, worstHabit];
-}
-
 export const getDailySummary = date => {
   const summary = realm.objectForPrimaryKey('DailySummary', date);
   return summary;
 };
 
 export const generateAiSummary = async (
-  habitsWithEffectiveness,
+  bestHabit,
+  worstHabit = null,
   maxRetries = 3,
 ) => {
   const fallbackNoActions = i18n.t('summary.no-actions');
 
-  if (!habitsWithEffectiveness || habitsWithEffectiveness.length === 0) {
+  if (!bestHabit) {
     return fallbackNoActions;
   }
 
@@ -58,20 +44,15 @@ export const generateAiSummary = async (
     await logError(e, 'generateAiSummary.userName');
   }
 
-  const selectedHabits = selectBestAndWorstHabits(habitsWithEffectiveness);
-  if (selectedHabits.length === 0) return fallbackNoActions;
-
-  const bestHabit = selectedHabits[0];
-  const worstHabit = selectedHabits.length > 1 ? selectedHabits[1] : null;
-
   const bestName = String(bestHabit?.habitName || '').trim();
-  const worstName = String(worstHabit?.habitName || '').trim();
 
-  const prompt =
-    `Target language: ${language}\n` +
-    `User name: ${userName}\n` +
-    `Best habit: ${bestName}\n` +
-    (worstHabit ? `Habit to improve: ${worstName}\n` : '');
+  let prompt;
+  if (worstHabit) {
+    const worstName = String(worstHabit?.habitName || '').trim();
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am working on building habits. Please praise me for the habit that improved the most today, which is "${bestName}." Give me a short tip on how I can improve the habit that decreased the most today, which is "${worstName}." Motivate me to continue building my habits regularly.`;
+  } else {
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am working on building habits. Please praise me for working on my habit "${bestName}" today. Give me a short motivational message and tip on how to continue improving this habit.`;
+  }
 
   let lastError = null;
 

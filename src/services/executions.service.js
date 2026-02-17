@@ -149,17 +149,6 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
   });
 };
 
-const inclusiveDaysBetween = (startDate, endDate) => {
-  const [y1, m1, d1] = startDate.split('-').map(Number);
-  const [y2, m2, d2] = endDate.split('-').map(Number);
-
-  const date1 = new Date(y1, m1 - 1, d1);
-  const date2 = new Date(y2, m2 - 1, d2);
-
-  const diffDays = Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
-  return Math.max(1, diffDays + 1);
-};
-
 const getFirstExecutionDate = habitId => {
   const first = realm
     .objects('Execution')
@@ -188,13 +177,65 @@ export const calculateEffectiveness = (habitId, habit = null) => {
     };
   }
 
-  const today = getLocalDateKey();
+  const actualExecutions = getExecutions(habitId);
+
+  const repeatDaysSet = new Set(habit.repeatDays || []);
+  const repeatHoursSet = new Set((habit.repeatHours || []).map(String));
+
+  let goodCount = 0;
+  let badCount = 0;
+
+  for (const e of actualExecutions) {
+    const weekday = dateToWeekday(e.date);
+    if (!repeatDaysSet.has(weekday)) continue;
+
+    const hourKey = String(e.hour);
+    if (!repeatHoursSet.has(hourKey)) continue;
+
+    if (e.status === 'good') goodCount += 1;
+    else if (e.status === 'bad') badCount += 1;
+  }
+
+  const totalCount = goodCount + badCount;
+
+  return {
+    effectiveness:
+      totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : null,
+    goodCount,
+    badCount,
+    totalCount,
+  };
+};
+
+export const calculateEffectivenessUpToDate = (
+  habitId,
+  endDate,
+  habit = null,
+) => {
+  if (!habit) {
+    const realmHabit = realm.objectForPrimaryKey('Habit', habitId);
+    if (!realmHabit) {
+      return {
+        effectiveness: null,
+        goodCount: 0,
+        badCount: 0,
+        totalCount: 0,
+      };
+    }
+
+    habit = {
+      id: realmHabit.id,
+      repeatDays: Array.from(realmHabit.repeatDays),
+      repeatHours: Array.from(realmHabit.repeatHours),
+    };
+  }
 
   const firstExecDate = getFirstExecutionDate(habitId);
-  const startDate = firstExecDate || today;
-  const daysBack = inclusiveDaysBetween(startDate, today);
+  const startDate = firstExecDate || endDate;
 
-  const actualExecutions = getExecutions(habitId, daysBack);
+  const actualExecutions = getExecutions(habitId).filter(
+    e => e.date <= endDate,
+  );
 
   const repeatDaysSet = new Set(habit.repeatDays || []);
   const repeatHoursSet = new Set((habit.repeatHours || []).map(String));

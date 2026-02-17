@@ -1,6 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {ActivityIndicator, Button, Text} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Text,
+  IconButton,
+  Icon,
+} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useStyles} from '@/styles';
@@ -11,7 +17,11 @@ import {
   saveSummary,
 } from '@/services/summary.service';
 import {logError} from '@/services/errors.service';
-import {calculateEffectiveness} from '@/services/executions.service';
+import {
+  calculateEffectiveness,
+  calculateEffectivenessUpToDate,
+} from '@/services/executions.service';
+import {subtractDays} from '@/utils';
 import MainCard from './main.card';
 import InfoCircle from '../circles/info.circle';
 
@@ -65,6 +75,42 @@ const EndCard = ({weekdayKey}) => {
     [todayHabits],
   );
 
+  const habitsWithChanges = useMemo(() => {
+    if (todayHabitsWithEff.length === 0) return [];
+
+    const yesterday = subtractDays(todayKey, 1);
+
+    return todayHabitsWithEff.map(habit => {
+      const yesterdayStats = calculateEffectivenessUpToDate(
+        habit.id,
+        yesterday,
+        {
+          id: habit.id,
+          repeatDays: habit.repeatDays,
+          repeatHours: habit.repeatHours,
+        },
+      );
+
+      let change = null;
+      if (
+        habit.effectiveness !== null &&
+        yesterdayStats.effectiveness !== null
+      ) {
+        change = habit.effectiveness - yesterdayStats.effectiveness;
+      }
+
+      return {...habit, change};
+    });
+  }, [todayHabitsWithEff, todayKey]);
+
+  const sortedHabits = useMemo(() => {
+    return [...habitsWithChanges].sort((a, b) => {
+      const changeA = a.change ?? 0;
+      const changeB = b.change ?? 0;
+      return changeB - changeA;
+    });
+  }, [habitsWithChanges]);
+
   useEffect(() => {
     // Check if we have an existing summary for today
     try {
@@ -106,7 +152,24 @@ const EndCard = ({weekdayKey}) => {
     setAiSummary('');
 
     try {
-      const response = await generateAiSummary(todayHabitsWithEff);
+      // Select best (biggest increase) and worst (biggest decrease)
+      let bestHabit = null;
+      let worstHabit = null;
+
+      if (sortedHabits.length === 1) {
+        // Only one habit - use it as the single habit
+        bestHabit = sortedHabits[0];
+      } else if (sortedHabits.length > 1) {
+        bestHabit = sortedHabits[0];
+        worstHabit = sortedHabits[sortedHabits.length - 1];
+
+        // If best and worst are the same (all have same change), only use best
+        if (bestHabit.id === worstHabit.id) {
+          worstHabit = null;
+        }
+      }
+
+      const response = await generateAiSummary(bestHabit, worstHabit);
       setAiSummary(response);
 
       try {
@@ -178,6 +241,54 @@ const EndCard = ({weekdayKey}) => {
     );
   };
 
+  const renderHabitsList = () => {
+    if (sortedHabits.length === 0) return null;
+
+    return (
+      <View style={styles.summary__habits}>
+        {sortedHabits.map((habit, index) => {
+          const habitData = habits.find(h => h.id === habit.id);
+          const icon = habitData?.icon || 'infinity';
+          const showChange = habit.change !== null && habit.change !== 0;
+
+          return (
+            <View key={habit.id} style={styles.summary__habit}>
+              <IconButton
+                icon={icon}
+                size={20}
+                style={styles.summary__habit__icon}
+              />
+              <Text variant="bodyMedium" style={styles.summary__habit__name}>
+                {habit.habitName}
+              </Text>
+              <View style={styles.summary__habit__stats}>
+                {showChange && (
+                  <>
+                    <Text variant="bodyMedium">
+                      {habit.change > 0 ? '+' : ''}
+                      {habit.change}%
+                    </Text>
+                    <Icon
+                      source={habit.change > 0 ? 'arrow-up' : 'arrow-down'}
+                      size={14}
+                    />
+                  </>
+                )}
+                <Text
+                  variant="bodyMedium"
+                  style={styles.summary__habit__effectiveness}>
+                  {habit.effectiveness !== null
+                    ? `${habit.effectiveness}%`
+                    : '-'}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
+
   const hasText = !!aiSummary;
 
   return (
@@ -190,13 +301,16 @@ const EndCard = ({weekdayKey}) => {
       }
       titleContent={<Text variant="titleLarge">{t('summary.title')}</Text>}
       textContent={
-        hasText ? (
-          <View style={styles.summary_container}>
-            <Text variant="bodyMedium" style={styles.summary__text}>
-              {aiSummary}
-            </Text>
-          </View>
-        ) : null
+        <>
+          {renderHabitsList()}
+          {hasText ? (
+            <View style={styles.summary__container}>
+              <Text variant="bodyMedium" style={styles.summary__text}>
+                {aiSummary}
+              </Text>
+            </View>
+          ) : null}
+        </>
       }
       buttonsContent={renderButton()}
     />
