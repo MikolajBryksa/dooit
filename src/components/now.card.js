@@ -9,10 +9,10 @@ import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import MainCard from './main.card';
 import {
-  recordHabitExecution,
+  addExecution,
   hasExecution,
   calculateEffectiveness,
-} from '@/services/effectiveness.service';
+} from '@/services/executions.service';
 
 const NowCard = ({
   id,
@@ -115,7 +115,7 @@ const NowCard = ({
       const today = getLocalDateKey();
 
       if (!hasExecution(id, today, selectedHour)) {
-        recordHabitExecution(id, today, selectedHour, choice);
+        addExecution(id, today, selectedHour, choice);
       }
 
       const patch = {

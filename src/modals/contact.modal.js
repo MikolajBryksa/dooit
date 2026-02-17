@@ -13,7 +13,7 @@ import {useStyles} from '@/styles';
 import {supabase, getSupabaseUserId} from '@/services/supabase.service';
 import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks';
-import {logError} from '@/services/error-tracking.service.js';
+import {logError} from '@/services/errors.service.js';
 import realm from '@/storage/schemas';
 import {initializeAnonymousAuth} from '@/services/supabase.service.js';
 

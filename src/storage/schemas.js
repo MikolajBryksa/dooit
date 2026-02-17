@@ -18,9 +18,9 @@ Habit.schema = {
   },
 };
 
-class HabitExecution extends Realm.Object {}
-HabitExecution.schema = {
-  name: 'HabitExecution',
+class Execution extends Realm.Object {}
+Execution.schema = {
+  name: 'Execution',
   primaryKey: 'id',
   properties: {
     id: 'string',
@@ -88,15 +88,8 @@ ContactMessage.schema = {
 };
 
 const realmConfig = {
-  schema: [
-    Habit,
-    Settings,
-    DailySummary,
-    HabitExecution,
-    ErrorLog,
-    ContactMessage,
-  ],
-  schemaVersion: 21,
+  schema: [Habit, Execution, Settings, DailySummary, ErrorLog, ContactMessage],
+  schemaVersion: 22,
   deleteRealmIfMigrationNeeded: true,
 };
 

@@ -123,8 +123,6 @@ export const flushErrorQueue = async () => {
 
     // Delete errors after successful send to prevent duplicates
     realm.write(() => realm.delete(errors));
-
-    console.log(`Sent ${errorsToSend.length} errors to database`);
     return {success: true, sent: errorsToSend.length};
   } catch (e) {
     console.error('Failed to flush errors:', e);

@@ -8,7 +8,7 @@ import {
 import Config from 'react-native-config';
 import realm from '@/storage/schemas';
 import Realm from 'realm';
-import {logError, flushErrorQueue} from './error-tracking.service.js';
+import {logError, flushErrorQueue} from './errors.service.js';
 import {stripMarkdown} from '@/utils';
 
 function selectBestAndWorstHabits(habitsWithEffectiveness) {

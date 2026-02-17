@@ -1,8 +1,8 @@
 import {getLocalDateKey} from '@/utils';
 import {useState, useEffect, useMemo, useCallback} from 'react';
-import {logError} from '@/services/error-tracking.service';
+import {logError} from '@/services/errors.service';
 import NetInfo from '@react-native-community/netinfo';
-import {hasExecution} from '@/services/effectiveness.service';
+import {hasExecution} from '@/services/executions.service';
 import {selectActiveHabitKey} from '@/services/habits.service';
 
 export function useTodayKey() {

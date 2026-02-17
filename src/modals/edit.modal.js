@@ -15,7 +15,7 @@ import {hourToSec} from '@/utils';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
-import {logError} from '@/services/error-tracking.service.js';
+import {logError} from '@/services/errors.service.js';
 
 const EditModal = ({
   visible,

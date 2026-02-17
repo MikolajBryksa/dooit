@@ -15,7 +15,7 @@ import {useStyles} from '@/styles';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
-import {logError} from '@/services/error-tracking.service.js';
+import {logError} from '@/services/errors.service.js';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();

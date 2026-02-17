@@ -1,7 +1,7 @@
 import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {logError} from './error-tracking.service';
+import {logError} from './errors.service';
 
 export const supabase = createClient(
   Config.SUPABASE_URL,

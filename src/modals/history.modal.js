@@ -10,9 +10,8 @@ import {
 import {View, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {getHabitExecutions} from '@/services/effectiveness.service';
+import {getExecutions, updateExecution} from '@/services/executions.service';
 import {getLocalDateKey, subtractDays} from '@/utils';
-import realm from '@/storage/schemas';
 import StatusSelector from '@/selectors/status.selector';
 import {dayMap} from '@/constants';
 import DeleteExecutionDialog from '@/dialogs/delete-execution.dialog';
@@ -39,7 +38,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   }, [visible, habitId]);
 
   const loadHistory = () => {
-    const history = getHabitExecutions(habitId);
+    const history = getExecutions(habitId);
 
     history.sort((a, b) => {
       if (a.date !== b.date) return b.date.localeCompare(a.date);
@@ -58,36 +57,9 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   };
 
   const handleSave = () => {
-    realm.write(() => {
-      Object.entries(changes).forEach(([executionId, newStatus]) => {
-        const execution = realm.objectForPrimaryKey(
-          'HabitExecution',
-          executionId,
-        );
-        if (!execution) return;
-
-        const oldStatus = execution.status;
-        if (oldStatus === newStatus) return;
-
-        execution.status = newStatus;
-
-        const habit = realm.objectForPrimaryKey('Habit', habitId);
-        if (!habit) return;
-
-        if (oldStatus === 'good') {
-          habit.goodCounter = Math.max(0, (habit.goodCounter || 0) - 1);
-        } else if (oldStatus === 'bad') {
-          habit.badCounter = Math.max(0, (habit.badCounter || 0) - 1);
-        }
-
-        if (newStatus === 'good') {
-          habit.goodCounter = (habit.goodCounter || 0) + 1;
-        } else if (newStatus === 'bad') {
-          habit.badCounter = (habit.badCounter || 0) + 1;
-        }
-      });
+    Object.entries(changes).forEach(([executionId, newStatus]) => {
+      updateExecution(executionId, newStatus);
     });
-
     onDismiss();
   };
 

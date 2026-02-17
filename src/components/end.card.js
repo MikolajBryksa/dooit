@@ -10,8 +10,8 @@ import {
   getDailySummary,
   saveSummary,
 } from '@/services/summary.service';
-import {logError} from '@/services/error-tracking.service';
-import {calculateEffectiveness} from '@/services/effectiveness.service';
+import {logError} from '@/services/errors.service';
+import {calculateEffectiveness} from '@/services/executions.service';
 import MainCard from './main.card';
 import InfoCircle from '../circles/info.circle';
 

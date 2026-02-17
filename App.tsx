@@ -12,7 +12,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
 import {LocaleConfig} from 'react-native-calendars';
 import {useColorScheme} from 'react-native';
-
 import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
 import {getSettings} from './src/services/settings.service';
@@ -21,10 +20,12 @@ import {getTheme} from './src/theme/theme';
 import OnboardingView from './src/views/onboarding.view';
 import {useStyles} from './src/styles';
 import {setupNotificationSync} from './src/services/notifications.service';
-
-import {setupErrorTracking, logError} from '@/services/error-tracking.service';
-import {cleanOldExecutions} from '@/services/effectiveness.service';
+import {setupErrorTracking, logError} from '@/services/errors.service';
 import {getHabits} from '@/services/habits.service';
+import {
+  deleteOldExecutions,
+  backfillMissedExecutions,
+} from '@/services/executions.service';
 
 setupErrorTracking();
 
@@ -78,7 +79,8 @@ function AppContent() {
         const habits = getHabits() || [];
         dispatch(setHabits(habits));
 
-        cleanOldExecutions(14);
+        backfillMissedExecutions(habits, 14);
+        deleteOldExecutions(14);
       } catch (e) {
         logError(e, 'loadLocalData');
       } finally {

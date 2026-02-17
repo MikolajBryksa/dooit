@@ -1,11 +1,8 @@
 import realm from '@/storage/schemas';
-import {getNextId, hourToSec, getLocalDateKey} from '@/utils';
+import {getNextId, hourToSec} from '@/utils';
 import i18next from 'i18next';
 import {habitIcons} from '@/constants';
-import {
-  deleteHabitExecutions,
-  hasExecution,
-} from '@/services/effectiveness.service';
+import {deleteExecutions, hasExecution} from '@/services/executions.service';
 
 export const addHabit = (
   habitName,
@@ -67,7 +64,7 @@ export const deleteHabit = id => {
   });
 
   if (deletedHabit) {
-    deleteHabitExecutions(id);
+    deleteExecutions(id);
   }
 
   return deletedHabit;
@@ -268,7 +265,7 @@ export const deleteUnavailableHabits = () => {
   });
 
   ids.forEach(id => {
-    deleteHabitExecutions(id);
+    deleteExecutions(id);
   });
 
   return ids.length;

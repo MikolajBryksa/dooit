@@ -2,8 +2,8 @@ import notifee, {TriggerType} from '@notifee/react-native';
 import {dateToWeekday, pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
-import {logError} from './error-tracking.service.js';
-import {hasExecution} from './effectiveness.service';
+import {logError} from './errors.service.js';
+import {hasExecution} from './executions.service.js';
 
 export async function syncNotificationStatus(settings, dispatch, setSettings) {
   // Checks system notification permissions and updates app settings to match

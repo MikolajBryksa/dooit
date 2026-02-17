@@ -14,8 +14,8 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {formatHourString} from '@/utils';
-import {calculateEffectiveness} from '@/services/effectiveness.service';
-import {logError} from '@/services/error-tracking.service';
+import {calculateEffectiveness} from '@/services/executions.service';
+import {logError} from '@/services/errors.service';
 
 const HabitCard = ({
   id,

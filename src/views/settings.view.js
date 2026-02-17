@@ -17,7 +17,7 @@ import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
 import SettingCard from '@/components/setting.card';
-import {testErrorLogging} from '@/services/error-tracking.service';
+import {testErrorLogging} from '@/services/errors.service';
 
 const SettingsView = () => {
   const {t} = useTranslation();

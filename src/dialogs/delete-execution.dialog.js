@@ -4,7 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {
   deleteExecution,
   getExecutionLabel,
-} from '@/services/effectiveness.service';
+} from '@/services/executions.service';
 
 const DeleteExecutionDialog = ({
   visible,
