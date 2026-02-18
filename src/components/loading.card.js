@@ -9,7 +9,6 @@ const LoadingCard = () => {
 
   return (
     <MainCard
-      outline={true}
       iconContent={<InfoCircle loading />}
       subtitleContent={
         <Text variant="titleMedium">{t('loading.subtitle')}</Text>

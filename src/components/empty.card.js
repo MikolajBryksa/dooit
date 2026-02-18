@@ -11,7 +11,6 @@ const EmptyCard = ({onAddHabit}) => {
 
   return (
     <MainCard
-      outline={true}
       iconContent={<InfoCircle empty />}
       subtitleContent={<Text variant="titleMedium">{t('empty.subtitle')}</Text>}
       titleContent={<Text variant="titleLarge">{t('empty.title')}</Text>}

@@ -294,7 +294,6 @@ const EndCard = ({weekdayKey}) => {
   return (
     <MainCard
       style={styles.summary__card}
-      outline={true}
       iconContent={<InfoCircle end />}
       subtitleContent={
         <Text variant="titleMedium">{t('summary.subtitle')}</Text>

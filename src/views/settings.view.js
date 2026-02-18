@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ScrollView, View, Linking} from 'react-native';
-import {Appbar, Text, Card} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -134,130 +134,92 @@ const SettingsView = () => {
       </Appbar.Header>
 
       <ScrollView style={styles.container}>
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.version')}
-              value={packageJson.version}
-              icon="information-outline"
-              onPress={handleVersion}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.version')}
+          value={packageJson.version}
+          icon="information-outline"
+          onPress={handleVersion}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.user-name')}
-              value={settings.userName}
-              icon="account-outline"
-              onPress={handleNameModal}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.user-name')}
+          value={settings.userName}
+          icon="account-outline"
+          onPress={handleNameModal}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.language')}
-              value={t(`settings.${language}`)}
-              icon="translate"
-              onPress={handleLanguage}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.language')}
+          value={t(`settings.${language}`)}
+          icon="translate"
+          onPress={handleLanguage}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.notifications')}
-              value={
-                settings.notifications
-                  ? t('settings.enabled')
-                  : t('settings.disabled')
-              }
-              icon={
-                settings.notifications ? 'bell-outline' : 'bell-off-outline'
-              }
-              onPress={handleNotifications}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.notifications')}
+          value={
+            settings.notifications
+              ? t('settings.enabled')
+              : t('settings.disabled')
+          }
+          icon={settings.notifications ? 'bell-outline' : 'bell-off-outline'}
+          onPress={handleNotifications}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.clock-format')}
-              value={clockFormat}
-              icon="clock-outline"
-              onPress={handleClockFormat}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.clock-format')}
+          value={clockFormat}
+          icon="clock-outline"
+          onPress={handleClockFormat}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.first-day')}
-              value={t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
-              icon="calendar"
-              onPress={handleFirstDay}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.first-day')}
+          value={t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
+          icon="calendar"
+          onPress={handleFirstDay}
+        />
 
-        <Card style={styles.card}>
-          <Card.Content style={styles.card__list}>
-            <SettingCard
-              label={t('settings.theme')}
-              value={t(`settings.${currentTheme}`)}
-              icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
-              onPress={handleCurrentTheme}
-            />
-          </Card.Content>
-        </Card>
+        <SettingCard
+          label={t('settings.theme')}
+          value={t(`settings.${currentTheme}`)}
+          icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
+          onPress={handleCurrentTheme}
+        />
 
         {__DEV__ && (
           <>
-            <Card style={styles.card}>
-              <Card.Content style={styles.card__list}>
-                <SettingCard
-                  label={t('settings.test-connection')}
-                  value={
-                    testVisible
-                      ? testResult === 'ok'
-                        ? t('settings.connection-ok')
-                        : t('settings.connection-fail')
-                      : t('settings.test')
-                  }
-                  icon={
-                    testResult === 'ok'
-                      ? 'check'
-                      : testResult === 'fail'
-                      ? 'close'
-                      : 'wifi'
-                  }
-                  onPress={handleTestConnection}
-                  disabled={testVisible}
-                />
-              </Card.Content>
-            </Card>
+            <SettingCard
+              label={t('settings.test-connection')}
+              value={
+                testVisible
+                  ? testResult === 'ok'
+                    ? t('settings.connection-ok')
+                    : t('settings.connection-fail')
+                  : t('settings.test')
+              }
+              icon={
+                testResult === 'ok'
+                  ? 'check'
+                  : testResult === 'fail'
+                  ? 'close'
+                  : 'wifi'
+              }
+              onPress={handleTestConnection}
+              disabled={testVisible}
+            />
 
-            <Card style={styles.card}>
-              <Card.Content style={styles.card__list}>
-                <SettingCard
-                  label={t('settings.test-error-logging')}
-                  value={
-                    testErrorDone
-                      ? t('settings.error-logged')
-                      : t('settings.log-error')
-                  }
-                  icon={testErrorDone ? 'bug-check' : 'bug'}
-                  onPress={handleTestError}
-                  disabled={testErrorDone}
-                />
-              </Card.Content>
-            </Card>
+            <SettingCard
+              label={t('settings.test-error-logging')}
+              value={
+                testErrorDone
+                  ? t('settings.error-logged')
+                  : t('settings.log-error')
+              }
+              icon={testErrorDone ? 'bug-check' : 'bug'}
+              onPress={handleTestError}
+              disabled={testErrorDone}
+            />
           </>
         )}
 

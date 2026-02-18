@@ -70,12 +70,23 @@ export const useStyles = () => {
     // now card
     card: {
       marginBottom: theme.dimensions.gap,
+      overflow: 'hidden',
+      backgroundColor: 'transparent',
     },
-    card__outline: {
-      backgroundColor: theme.colors.primaryContainer,
-      borderColor: theme.colors.primary,
-      borderWidth: 2,
-      marginBottom: theme.dimensions.gap,
+    card__modern: {
+      borderRadius: 12,
+      elevation: 4,
+      shadowColor: theme.colors.primary,
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 8,
+      backgroundColor: 'transparent',
+    },
+    card__gradient: {
+      borderRadius: 12,
     },
     card__center: {
       width: '100%',
@@ -190,11 +201,8 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.height / 2,
     },
     summary__habit: {
-      backgroundColor: theme.colors.surfaceVariant,
       borderRadius: 12,
-      paddingVertical: theme.dimensions.margin,
-      paddingHorizontal: theme.dimensions.gap / 2,
-      marginBottom: theme.dimensions.margin / 2,
+      paddingRight: theme.dimensions.margin,
       flexDirection: 'row',
       alignItems: 'center',
     },
@@ -262,6 +270,7 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      minHeight: theme.dimensions.height * 0.8,
     },
     // circle components
     circle__container: {

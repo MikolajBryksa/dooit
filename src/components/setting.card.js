@@ -1,7 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Text, Chip, Switch, TouchableRipple} from 'react-native-paper';
+import {Card, Text, Chip, Switch, TouchableRipple} from 'react-native-paper';
 import {useStyles} from '@/styles';
+import GradientCard from './gradient.card';
 
 const SettingCard = ({
   label,
@@ -16,27 +17,32 @@ const SettingCard = ({
   const styles = useStyles();
 
   return (
-    <TouchableRipple onPress={onPress} disabled={disabled}>
-      <View style={styles.settings__row}>
-        <Text variant="bodyMedium" numberOfLines={1}>
-          {label}
-        </Text>
+    <GradientCard>
+      <Card.Content style={styles.card__list}>
+        <TouchableRipple onPress={onPress} disabled={disabled}>
+          <View style={styles.settings__row}>
+          <Text variant="bodyMedium" numberOfLines={1}>
+            {label}
+          </Text>
 
-        {typeof switchValue === 'boolean' ? (
-          <Switch value={switchValue} onValueChange={onToggle} />
-        ) : showChip ? (
-          <Chip
-            icon={icon}
-            mode="outlined"
-            onPress={onPress}
-            disabled={disabled}>
-            {value}
-          </Chip>
-        ) : (
-          <Text variant="bodyMedium">{value}</Text>
-        )}
-      </View>
-    </TouchableRipple>
+          {typeof switchValue === 'boolean' ? (
+            <Switch value={switchValue} onValueChange={onToggle} />
+          ) : showChip ? (
+            <Chip
+              icon={icon}
+              mode="outlined"
+              onPress={onPress}
+              disabled={disabled}
+              style={{backgroundColor: 'transparent'}}>
+              {value}
+            </Chip>
+          ) : (
+            <Text variant="bodyMedium">{value}</Text>
+          )}
+          </View>
+        </TouchableRipple>
+      </Card.Content>
+    </GradientCard>
   );
 };
 

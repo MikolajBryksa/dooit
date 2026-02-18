@@ -31,7 +31,6 @@ const StartCard = ({onStart}) => {
   return (
     <MainCard
       style={styles.summary__card}
-      outline
       iconContent={<InfoCircle start />}
       subtitleContent={
         <Text variant="titleMedium">
