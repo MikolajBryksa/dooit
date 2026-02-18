@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {
-  Modal,
   Text,
   Button,
   TextInput,
@@ -16,6 +15,7 @@ import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/errors.service.js';
+import GradientModal from '@/gradients/modal.gradient';
 
 const EditModal = ({
   visible,
@@ -113,10 +113,7 @@ const EditModal = ({
   };
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={onDismiss}
-      contentContainerStyle={styles.modal}>
+    <GradientModal visible={visible} onDismiss={onDismiss}>
       <Card.Content>
         <View style={styles.modal__title}>
           <Text variant="titleMedium">{label || t(`card.${field}`)}</Text>
@@ -179,7 +176,7 @@ const EditModal = ({
           </Button>
         </Card.Actions>
       </Card.Content>
-    </Modal>
+    </GradientModal>
   );
 };
 

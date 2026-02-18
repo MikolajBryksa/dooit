@@ -3,7 +3,7 @@ import {Card} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
-import GradientCard from './gradient.card';
+import GradientCard from '../gradients/card.gradient';
 
 const MainCard = ({
   style = null,
@@ -50,33 +50,31 @@ const MainCard = ({
   return (
     <GradientCard style={style}>
       <ContentWrapper style={wrapperStyle}>
-          <Card.Content style={styles.card__center}>
-            {/* Icon container - reserved space */}
-            <View style={styles.card__iconContainer}>{iconContent}</View>
+        <Card.Content style={styles.card__center}>
+          {/* Icon container - reserved space */}
+          <View style={styles.card__iconContainer}>{iconContent}</View>
 
-            {/* Subtitle container - reserved space */}
-            <View style={styles.card__subtitleContainer}>
-              {centerAndHighlightText(subtitleContent)}
-            </View>
+          {/* Subtitle container - reserved space */}
+          <View style={styles.card__subtitleContainer}>
+            {centerAndHighlightText(subtitleContent)}
+          </View>
 
-            {/* Title container - reserved space */}
-            <View style={styles.card__titleContainer}>
-              {centerText(titleContent)}
-            </View>
+          {/* Title container - reserved space */}
+          <View style={styles.card__titleContainer}>
+            {centerText(titleContent)}
+          </View>
 
-            {/* Text content */}
-            {textContent && (
-              <View style={styles.card__textContainer}>{textContent}</View>
-            )}
+          {/* Text content */}
+          {textContent && (
+            <View style={styles.card__textContainer}>{textContent}</View>
+          )}
 
-            {/* Buttons container */}
-            {buttonsContent && (
-              <View style={styles.card__buttonsContainer}>
-                {buttonsContent}
-              </View>
-            )}
-          </Card.Content>
-        </ContentWrapper>
+          {/* Buttons container */}
+          {buttonsContent && (
+            <View style={styles.card__buttonsContainer}>{buttonsContent}</View>
+          )}
+        </Card.Content>
+      </ContentWrapper>
     </GradientCard>
   );
 };

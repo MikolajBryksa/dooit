@@ -18,6 +18,7 @@ import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
 import SettingCard from '@/components/setting.card';
 import {testErrorLogging} from '@/services/errors.service';
+import GradientAppbar from '@/gradients/appbar.gradient';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -127,11 +128,11 @@ const SettingsView = () => {
 
   return (
     <>
-      <Appbar.Header style={styles.topBar__shadow}>
+      <GradientAppbar>
         <Appbar.Content title={t('view.settings')} />
         <Appbar.Action icon="chat" onPress={handleContactModal} />
         <Appbar.Action icon="coffee" onPress={handleSupportDialog} />
-      </Appbar.Header>
+      </GradientAppbar>
 
       <ScrollView style={styles.container}>
         <SettingCard

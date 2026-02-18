@@ -1,8 +1,9 @@
 import React from 'react';
-import {Dialog, Portal, Button, List} from 'react-native-paper';
+import {Button, List} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {getLocalDateKey, dateToWeekday} from '@/utils';
+import GradientDialog from '@/gradients/dialog.gradient';
 
 const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   const {t} = useTranslation();
@@ -29,10 +30,9 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   };
 
   return (
-    <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{t('title.filter')}</Dialog.Title>
-        <Dialog.Content>
+    <GradientDialog visible={visible} onDismiss={onDismiss}>
+      <GradientDialog.Title>{t('title.filter')}</GradientDialog.Title>
+      <GradientDialog.Content>
           {daily.map(day => (
             <List.Item
               key={day}
@@ -43,8 +43,8 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
               }
             />
           ))}
-        </Dialog.Content>
-        <Dialog.Actions>
+        </GradientDialog.Content>
+        <GradientDialog.Actions>
           <Button onPress={() => handleSelectDay('')}>
             {t('button.reset')}
           </Button>
@@ -55,9 +55,8 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
             }}>
             {t('button.today')}
           </Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+        </GradientDialog.Actions>
+    </GradientDialog>
   );
 };
 

@@ -1,10 +1,11 @@
 import React, {useMemo} from 'react';
-import {Dialog, Portal, Button, Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {
   deleteExecution,
   getExecutionLabel,
 } from '@/services/executions.service';
+import GradientDialog from '@/gradients/dialog.gradient';
 
 const DeleteExecutionDialog = ({
   visible,
@@ -28,21 +29,19 @@ const DeleteExecutionDialog = ({
   };
 
   return (
-    <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss}>
-        <Dialog.Title>{t('title.delete-execution')}</Dialog.Title>
-        <Dialog.Content>
-          <Text variant="bodyMedium">{t('message.delete-execution')}</Text>
-          {!!label && <Text variant="bodyMedium">{label}</Text>}
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={onDismiss}>{t('button.cancel')}</Button>
-          <Button onPress={handleDelete} disabled={!executionId || !habitId}>
-            {t('button.delete')}
-          </Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+    <GradientDialog visible={visible} onDismiss={onDismiss}>
+      <GradientDialog.Title>{t('title.delete-execution')}</GradientDialog.Title>
+      <GradientDialog.Content>
+        <Text variant="bodyMedium">{t('message.delete-execution')}</Text>
+        {!!label && <Text variant="bodyMedium">{label}</Text>}
+      </GradientDialog.Content>
+      <GradientDialog.Actions>
+        <Button onPress={onDismiss}>{t('button.cancel')}</Button>
+        <Button onPress={handleDelete} disabled={!executionId || !habitId}>
+          {t('button.delete')}
+        </Button>
+      </GradientDialog.Actions>
+    </GradientDialog>
   );
 };
 

@@ -4,7 +4,6 @@ import {
   Card,
   Button,
   Text,
-  Modal,
   TextInput,
   ProgressBar,
   IconButton,
@@ -16,6 +15,7 @@ import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/errors.service.js';
+import GradientModal from '@/gradients/modal.gradient';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();
@@ -78,10 +78,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   };
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={onDismiss}
-      contentContainerStyle={styles.modal}>
+    <GradientModal visible={visible} onDismiss={onDismiss}>
       <Card.Content>
         <View style={styles.modal__title}>
           <Text variant="titleLarge">{t('title.add')}</Text>
@@ -162,7 +159,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
           )}
         </Card.Actions>
       </Card.Content>
-    </Modal>
+    </GradientModal>
   );
 };
 

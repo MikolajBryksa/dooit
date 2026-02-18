@@ -11,6 +11,7 @@ import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
+import GradientAppbar from '@/gradients/appbar.gradient';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -64,7 +65,7 @@ const HabitsView = () => {
 
   return (
     <>
-      <Appbar.Header style={styles.topBar__shadow}>
+      <GradientAppbar>
         <Appbar.Content title={t('view.habits')} />
         <Appbar.Action
           icon={filterDay ? 'filter-check' : 'filter'}
@@ -76,7 +77,7 @@ const HabitsView = () => {
             handleAddModal();
           }}
         />
-      </Appbar.Header>
+      </GradientAppbar>
 
       <ScrollView style={styles.container}>
         {sortedHabits && sortedHabits.length > 0 ? (

@@ -4,7 +4,6 @@ import {
   Card,
   Button,
   Text,
-  Modal,
   TextInput,
   IconButton,
 } from 'react-native-paper';
@@ -13,6 +12,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
+import GradientModal from '@/gradients/modal.gradient';
 
 const NameModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -38,10 +38,7 @@ const NameModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={onDismiss}
-      contentContainerStyle={styles.modal}>
+    <GradientModal visible={visible} onDismiss={onDismiss}>
       <Card.Content>
         <View style={styles.modal__title}>
           <Text variant="titleMedium">{t('settings.user-name')}</Text>
@@ -68,7 +65,7 @@ const NameModal = ({visible, onDismiss}) => {
           </Button>
         </Card.Actions>
       </Card.Content>
-    </Modal>
+    </GradientModal>
   );
 };
 

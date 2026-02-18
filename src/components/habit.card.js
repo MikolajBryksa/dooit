@@ -7,7 +7,7 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import {View, Animated} from 'react-native';
-import GradientCard from './gradient.card';
+import GradientCard from '../gradients/card.gradient';
 import {updateHabitValue} from '@/services/habits.service';
 import DeleteHabitDialog from '@/dialogs/delete-habit.dialog';
 import HistoryModal from '@/modals/history.modal';
@@ -85,7 +85,7 @@ const HabitCard = ({
     <>
       <GradientCard>
         <Animated.View style={{opacity: cardOpacity}}>
-            <Card.Content style={styles.card__header}>
+          <Card.Content style={styles.card__header}>
             <View style={styles.card__headerLeft}>
               <TouchableRipple
                 style={{flex: 1}}

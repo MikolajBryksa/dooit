@@ -17,14 +17,6 @@ export const useStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    topBar__shadow: {
-      borderBottomWidth: 3,
-      borderBottomColor: theme.colors.background,
-    },
-    bottomBar__shadow: {
-      borderTopWidth: 3,
-      borderTopColor: theme.colors.background,
-    },
     gap: {
       height: theme.dimensions.margin * 3,
     },

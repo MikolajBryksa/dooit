@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Modal,
   Text,
   Button,
   IconButton,
@@ -15,6 +14,7 @@ import {getLocalDateKey, subtractDays} from '@/utils';
 import StatusSelector from '@/selectors/status.selector';
 import {dayMap} from '@/constants';
 import DeleteExecutionDialog from '@/dialogs/delete-execution.dialog';
+import GradientModal from '@/gradients/modal.gradient';
 
 const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   const {t} = useTranslation();
@@ -93,10 +93,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
   return (
     <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={onDismiss}
-        contentContainerStyle={styles.modal}>
+      <GradientModal visible={visible} onDismiss={onDismiss}>
         <Card.Content>
           <View style={styles.modal__title}>
             <Text variant="titleMedium">{t('title.history')}</Text>
@@ -151,7 +148,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
             </Button>
           </Card.Actions>
         </Card.Content>
-      </Modal>
+      </GradientModal>
 
       <DeleteExecutionDialog
         visible={deleteExecutionDialogVisible}

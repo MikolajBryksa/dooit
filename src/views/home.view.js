@@ -16,6 +16,7 @@ import LoadingCard from '@/components/loading.card';
 import StartCard from '@/components/start.card';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
 import AddModal from '@/modals/add.modal';
+import GradientAppbar from '@/gradients/appbar.gradient';
 
 const HomeView = () => {
   const {t} = useTranslation();
@@ -110,9 +111,9 @@ const HomeView = () => {
 
   return (
     <>
-      <Appbar.Header style={styles.topBar__shadow}>
+      <GradientAppbar>
         <Appbar.Content title={t('view.home')} />
-      </Appbar.Header>
+      </GradientAppbar>
 
       <ScrollView style={styles.container}>
         {firstLaunch ? (

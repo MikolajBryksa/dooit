@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {PaperProvider, BottomNavigation} from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './src/redux/store';
+import GradientBottomBar from './src/gradients/bottombar.gradient';
 import LoadingView from './src/views/loading.view';
 import HomeView from './src/views/home.view';
 import HabitsView from './src/views/habits.view';
@@ -18,7 +19,6 @@ import {getSettings} from './src/services/settings.service';
 import {setSettings, setHabits} from './src/redux/actions';
 import {getTheme} from './src/theme/theme';
 import OnboardingView from './src/views/onboarding.view';
-import {useStyles} from './src/styles';
 import {setupNotificationSync} from './src/services/notifications.service';
 import {setupErrorTracking, logError} from '@/services/errors.service';
 import {getHabits} from '@/services/habits.service';
@@ -32,7 +32,6 @@ setupErrorTracking();
 const Tab = createBottomTabNavigator();
 
 function AppContent() {
-  const styles = useStyles();
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const settings = useSelector((state: any) => state.settings);
@@ -105,11 +104,10 @@ function AppContent() {
     <Tab.Navigator
       screenOptions={{headerShown: false}}
       tabBar={({navigation, state, descriptors, insets}) => (
-        <BottomNavigation.Bar
+        <GradientBottomBar
           navigationState={state}
           safeAreaInsets={insets}
-          style={styles.bottomBar__shadow}
-          onTabPress={({route, preventDefault}) => {
+          onTabPress={({route, preventDefault}: any) => {
             const event = navigation.emit({
               type: 'tabPress',
               target: route.key,
@@ -125,13 +123,13 @@ function AppContent() {
               });
             }
           }}
-          renderIcon={({route, focused, color}) => {
+          renderIcon={({route, focused, color}: any) => {
             const {options} = descriptors[route.key];
             return options.tabBarIcon
               ? options.tabBarIcon({focused, color, size: 24})
               : null;
           }}
-          getLabelText={({route}) => {
+          getLabelText={({route}: any) => {
             const {options} = descriptors[route.key];
             const label = options.tabBarLabel ?? options.title ?? route.name;
             return typeof label === 'string' ? label : undefined;

@@ -4,7 +4,6 @@ import {
   Card,
   Button,
   Text,
-  Modal,
   TextInput,
   IconButton,
 } from 'react-native-paper';
@@ -16,6 +15,7 @@ import {useNetworkStatus} from '@/hooks';
 import {logError} from '@/services/errors.service.js';
 import realm from '@/storage/schemas';
 import {initializeAnonymousAuth} from '@/services/supabase.service.js';
+import GradientModal from '@/gradients/modal.gradient';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -144,10 +144,7 @@ const ContactModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={handleDismiss}
-      contentContainerStyle={styles.modal}>
+    <GradientModal visible={visible} onDismiss={handleDismiss}>
       <Card.Content>
         <View style={styles.modal__title}>
           <Text variant="titleLarge">{t('title.contact')}</Text>
@@ -212,7 +209,7 @@ const ContactModal = ({visible, onDismiss}) => {
           )}
         </Card.Actions>
       </Card.Content>
-    </Modal>
+    </GradientModal>
   );
 };
 
