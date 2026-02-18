@@ -211,7 +211,6 @@ export const useStyles = () => {
     },
     summary__habit__effectiveness: {
       fontWeight: '700',
-      // fontSize: 16,
       color: theme.colors.primary,
     },
     chip: {
