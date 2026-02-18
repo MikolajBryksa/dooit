@@ -1,11 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  Button,
-  IconButton,
-  Card,
-  Portal,
-} from 'react-native-paper';
+import {Text, Button, IconButton, Card, Portal} from 'react-native-paper';
 import {View, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -93,13 +87,11 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
   return (
     <Portal>
-      <GradientModal visible={visible} onDismiss={onDismiss}>
+      <GradientModal
+        visible={visible}
+        onDismiss={onDismiss}
+        title={t('title.history')}>
         <Card.Content>
-          <View style={styles.modal__title}>
-            <Text variant="titleMedium">{t('title.history')}</Text>
-            <IconButton icon="close" size={20} onPress={onDismiss} />
-          </View>
-
           <Text variant="bodyMedium" style={styles.modal__label}>
             {habitName}
           </Text>

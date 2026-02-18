@@ -1,12 +1,6 @@
 import React, {useState, useEffect, useMemo, useRef} from 'react';
 import {View, ScrollView} from 'react-native';
-import {
-  Card,
-  Button,
-  Text,
-  TextInput,
-  IconButton,
-} from 'react-native-paper';
+import {Card, Button, Text, TextInput} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {supabase, getSupabaseUserId} from '@/services/supabase.service';
@@ -144,18 +138,12 @@ const ContactModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <GradientModal visible={visible} onDismiss={handleDismiss}>
+    <GradientModal
+      visible={visible}
+      onDismiss={handleDismiss}
+      title={t('title.contact')}
+      closeButtonDisabled={loading}>
       <Card.Content>
-        <View style={styles.modal__title}>
-          <Text variant="titleLarge">{t('title.contact')}</Text>
-          <IconButton
-            icon="close"
-            size={20}
-            onPress={handleDismiss}
-            disabled={loading}
-          />
-        </View>
-
         <ScrollView>
           <Text variant="bodyMedium" style={{marginBottom: 16}}>
             {!rateLimitError ? t('message.contact') : t('contact.rate-limit')}

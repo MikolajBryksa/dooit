@@ -1,13 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {View} from 'react-native';
-import {
-  Card,
-  Button,
-  Text,
-  TextInput,
-  ProgressBar,
-  IconButton,
-} from 'react-native-paper';
+import {Card, Button, Text, TextInput, ProgressBar} from 'react-native-paper';
 import {addHabit} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -78,19 +71,15 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   };
 
   return (
-    <GradientModal visible={visible} onDismiss={onDismiss}>
+    <GradientModal
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('title.add')}
+      onClose={() => {
+        onDismiss();
+        resetInputs();
+      }}>
       <Card.Content>
-        <View style={styles.modal__title}>
-          <Text variant="titleLarge">{t('title.add')}</Text>
-          <IconButton
-            icon="close"
-            size={20}
-            onPress={() => {
-              onDismiss();
-              resetInputs();
-            }}
-          />
-        </View>
         <ProgressBar style={styles.progress__bar} progress={progressBarValue} />
 
         {step === 1 && (

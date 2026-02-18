@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
-import {
-  Card,
-  Button,
-  Text,
-  TextInput,
-  IconButton,
-} from 'react-native-paper';
+import {Card, Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -38,13 +31,11 @@ const NameModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <GradientModal visible={visible} onDismiss={onDismiss}>
+    <GradientModal
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('settings.user-name')}>
       <Card.Content>
-        <View style={styles.modal__title}>
-          <Text variant="titleMedium">{t('settings.user-name')}</Text>
-          <IconButton icon="close" size={20} onPress={onDismiss} />
-        </View>
-
         <TextInput
           mode="outlined"
           placeholder={t('settings.user-name')}

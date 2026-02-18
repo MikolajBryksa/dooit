@@ -1,11 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  Text,
-  Button,
-  TextInput,
-  Card,
-  IconButton,
-} from 'react-native-paper';
+import {Text, Button, TextInput, Card} from 'react-native-paper';
 import {View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -113,13 +107,11 @@ const EditModal = ({
   };
 
   return (
-    <GradientModal visible={visible} onDismiss={onDismiss}>
+    <GradientModal
+      visible={visible}
+      onDismiss={onDismiss}
+      title={label || t(`card.${field}`)}>
       <Card.Content>
-        <View style={styles.modal__title}>
-          <Text variant="titleMedium">{label || t(`card.${field}`)}</Text>
-          <IconButton icon="close" size={20} onPress={onDismiss} />
-        </View>
-
         {field === 'repeatDays' && (
           <DaysSelector repeatDays={inputValue} setRepeatDays={setInputValue} />
         )}

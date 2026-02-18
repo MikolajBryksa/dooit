@@ -89,7 +89,7 @@ export const useStyles = () => {
     card__iconContainer: {
       width: '100%',
       height: 140,
-      paddingTop: theme.dimensions.gap * 2,
+      paddingTop: theme.dimensions.gap * 3,
       paddingBottom: theme.dimensions.gap,
       marginBottom: theme.dimensions.gap * 4,
       alignItems: 'center',
@@ -171,7 +171,7 @@ export const useStyles = () => {
       width: '50%',
     },
     progress__bar: {
-      marginVertical: theme.dimensions.gap,
+      marginBottom: theme.dimensions.gap,
       height: theme.dimensions.margin,
       borderRadius: theme.dimensions.margin / 2,
     },
@@ -233,7 +233,8 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       alignItems: 'center',
       height: theme.dimensions.height / 2,
-      marginBottom: theme.dimensions.margin,
+      marginBottom: theme.dimensions.gap,
+      paddingLeft: 16,
     },
     modal__label: {
       marginBottom: theme.dimensions.margin,
