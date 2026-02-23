@@ -30,7 +30,7 @@ const StartCard = ({onStart}) => {
 
   return (
     <NowComponent
-      style={styles.summary__card}
+      customStyle={styles.summary__card}
       iconContent={<InfoCircle start />}
       subtitleContent={
         <Text variant="titleMedium">

@@ -158,40 +158,13 @@ const getFirstExecutionDate = habitId => {
   return first ? first.date : null;
 };
 
-export const calculateEffectiveness = (habitId, habit = null) => {
-  if (!habit) {
-    const realmHabit = realm.objectForPrimaryKey('Habit', habitId);
-    if (!realmHabit) {
-      return {
-        effectiveness: null,
-        goodCount: 0,
-        badCount: 0,
-        totalCount: 0,
-      };
-    }
-
-    habit = {
-      id: realmHabit.id,
-      repeatDays: Array.from(realmHabit.repeatDays),
-      repeatHours: Array.from(realmHabit.repeatHours),
-    };
-  }
-
+export const calculateEffectiveness = habitId => {
   const actualExecutions = getExecutions(habitId);
-
-  const repeatDaysSet = new Set(habit.repeatDays || []);
-  const repeatHoursSet = new Set((habit.repeatHours || []).map(String));
 
   let goodCount = 0;
   let badCount = 0;
 
   for (const e of actualExecutions) {
-    const weekday = dateToWeekday(e.date);
-    if (!repeatDaysSet.has(weekday)) continue;
-
-    const hourKey = String(e.hour);
-    if (!repeatHoursSet.has(hourKey)) continue;
-
     if (e.status === 'good') goodCount += 1;
     else if (e.status === 'bad') badCount += 1;
   }
@@ -207,49 +180,15 @@ export const calculateEffectiveness = (habitId, habit = null) => {
   };
 };
 
-export const calculateEffectivenessUpToDate = (
-  habitId,
-  endDate,
-  habit = null,
-) => {
-  if (!habit) {
-    const realmHabit = realm.objectForPrimaryKey('Habit', habitId);
-    if (!realmHabit) {
-      return {
-        effectiveness: null,
-        goodCount: 0,
-        badCount: 0,
-        totalCount: 0,
-      };
-    }
-
-    habit = {
-      id: realmHabit.id,
-      repeatDays: Array.from(realmHabit.repeatDays),
-      repeatHours: Array.from(realmHabit.repeatHours),
-    };
-  }
-
-  const firstExecDate = getFirstExecutionDate(habitId);
-  const startDate = firstExecDate || endDate;
-
+export const calculateEffectivenessUpToDate = (habitId, endDate) => {
   const actualExecutions = getExecutions(habitId).filter(
     e => e.date <= endDate,
   );
-
-  const repeatDaysSet = new Set(habit.repeatDays || []);
-  const repeatHoursSet = new Set((habit.repeatHours || []).map(String));
 
   let goodCount = 0;
   let badCount = 0;
 
   for (const e of actualExecutions) {
-    const weekday = dateToWeekday(e.date);
-    if (!repeatDaysSet.has(weekday)) continue;
-
-    const hourKey = String(e.hour);
-    if (!repeatHoursSet.has(hourKey)) continue;
-
     if (e.status === 'good') goodCount += 1;
     else if (e.status === 'bad') badCount += 1;
   }

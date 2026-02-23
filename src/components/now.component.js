@@ -5,6 +5,7 @@ import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
 
 const NowComponent = ({
+  customStyle = null,
   animatedStyle = null,
   iconContent = null,
   subtitleContent = null,
@@ -46,7 +47,7 @@ const NowComponent = ({
   };
 
   return (
-    <View style={styles.card__background}>
+    <View style={[styles.card__background, customStyle]}>
       <ContentWrapper style={wrapperStyle}>
         <Card.Content style={styles.card__center}>
           {/* Icon container - reserved space */}

@@ -208,7 +208,7 @@ const HabitComponent = ({
             {!onboardingMode && (
               <TouchableRipple
                 onPress={() =>
-                  stats.effectiveness !== null && setHistoryModalVisible(true)
+                  stats.totalCount > 0 && setHistoryModalVisible(true)
                 }>
                 <View style={styles.card__row}>
                   <IconButton

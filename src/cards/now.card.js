@@ -193,7 +193,7 @@ const NowCard = ({
                   {t('button.skip')}
                 </Button>
                 <Button
-                  style={styles.button__good}
+                  style={styles.button}
                   mode="contained"
                   icon="check"
                   onPress={addGoodChoice}>

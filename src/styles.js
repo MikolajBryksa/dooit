@@ -20,16 +20,13 @@ export const useStyles = () => {
     gap: {
       height: theme.dimensions.margin * 3,
     },
+    button: {
+      alignSelf: 'center',
+    },
     bar__background: {
       backgroundColor: theme.colors.surface,
     },
     // onboarding
-    onboarding__card: {
-      height: theme.dimensions.height * 2,
-      justifyContent: 'center',
-      width: '100%',
-      marginBottom: theme.dimensions.gap,
-    },
     onboarding__bar: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -46,42 +43,10 @@ export const useStyles = () => {
       height: theme.dimensions.gap * 5,
       width: '80%',
     },
-    onboarding__subtitle: {
-      textAlign: 'center',
-      marginTop: theme.dimensions.margin,
-      marginHorizontal: theme.dimensions.gap,
-    },
-    // buttons
-    button: {
-      alignSelf: 'center',
-    },
-    button__good: {
-      alignSelf: 'center',
-      backgroundColor: theme.colors.primary,
-    },
-    button__bad: {
-      alignSelf: 'center',
-      backgroundColor: theme.colors.error,
-    },
     // cards
     card__background: {
       backgroundColor: theme.colors.surface,
       marginBottom: theme.dimensions.gap,
-      borderRadius: 12,
-    },
-    card__modern: {
-      borderRadius: 12,
-      elevation: 4,
-      shadowColor: theme.colors.primary,
-      shadowOffset: {
-        width: 0,
-        height: 4,
-      },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      backgroundColor: 'transparent',
-    },
-    card__gradient: {
       borderRadius: 12,
     },
     card__center: {
@@ -179,6 +144,12 @@ export const useStyles = () => {
       height: theme.dimensions.margin,
       borderRadius: theme.dimensions.margin / 2,
     },
+    settings__row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: 8,
+    },
     summary__card: {
       marginBottom: theme.dimensions.gap * 2,
     },
@@ -246,12 +217,7 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.gap,
       paddingLeft: 16,
     },
-    modal__label: {
-      marginBottom: theme.dimensions.margin,
-    },
-    segmentButtons: {
-      marginVertical: theme.dimensions.gap,
-    },
+    // selectors
     selector__scroll: {
       maxHeight: 400,
     },
@@ -269,13 +235,10 @@ export const useStyles = () => {
     selector__iconBtn: {
       marginBottom: theme.dimensions.gap,
     },
-    settings__row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingVertical: 8,
+    segmentButtons: {
+      marginVertical: theme.dimensions.gap,
     },
-    // circle components
+    // circles
     circle__container: {
       position: 'relative',
       alignItems: 'center',

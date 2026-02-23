@@ -17,16 +17,11 @@ export const getDailySummary = date => {
 };
 
 export const generateAiSummary = async (
-  bestHabit,
+  mode,
+  bestHabit = null,
   worstHabit = null,
   maxRetries = 3,
 ) => {
-  const fallbackNoActions = i18n.t('summary.no-actions');
-
-  if (!bestHabit) {
-    return fallbackNoActions;
-  }
-
   let language = 'en';
   let userName = 'Friend';
 
@@ -45,13 +40,17 @@ export const generateAiSummary = async (
   }
 
   const bestName = String(bestHabit?.habitName || '').trim();
+  const worstName = String(worstHabit?.habitName || '').trim();
 
   let prompt;
-  if (worstHabit) {
-    const worstName = String(worstHabit?.habitName || '').trim();
-    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am working on building habits. Please praise me for the habit that improved the most today, which is "${bestName}." Give me a short tip on how I can improve the habit that decreased the most today, which is "${worstName}." Motivate me to continue building my habits regularly.`;
-  } else {
-    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am working on building habits. Please praise me for working on my habit "${bestName}" today. Give me a short motivational message and tip on how to continue improving this habit.`;
+  if (mode === 'no-data') {
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am building habits. I have no past data yet. Encourage me to start today with a very small step and suggest one practical tip to make it easy.`;
+  } else if (mode === 'stable') {
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am building habits. My results are stable today (no clear improvement or decrease). Give me a short motivational recap and one practical tip to stay consistent tomorrow.`;
+  } else if (mode === 'improved' && bestHabit) {
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am building habits. Praise me for improving the most today in "${bestName}". Give one short practical tip to keep improving and stay consistent.`;
+  } else if (mode === 'complex' && bestHabit && worstHabit) {
+    prompt = `Hi, my name is ${userName}. Reply to me in ${language}. I am building habits. Praise me for the habit that improved the most today: "${bestName}". Give one short practical tip to improve the habit that decreased the most today: "${worstName}". Motivate me to continue.`;
   }
 
   let lastError = null;

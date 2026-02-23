@@ -98,9 +98,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
         onDismiss={onDismiss}
         title={t('title.history')}>
         <Card.Content>
-          <Text variant="bodyMedium" style={styles.modal__label}>
-            {habitName}
-          </Text>
+          <Text variant="bodyMedium">{habitName}</Text>
 
           <ScrollView style={{maxHeight: 300}}>
             {executions.map(exec => {
