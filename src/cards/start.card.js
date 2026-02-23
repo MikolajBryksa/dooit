@@ -7,7 +7,7 @@ import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {deleteUnavailableHabits} from '@/services/habits.service';
 import {setSettings} from '@/redux/actions';
-import MainCard from './main.card';
+import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
 
 const StartCard = ({onStart}) => {
@@ -29,7 +29,7 @@ const StartCard = ({onStart}) => {
   }, [dispatch, onStart, settings]);
 
   return (
-    <MainCard
+    <NowComponent
       style={styles.summary__card}
       iconContent={<InfoCircle start />}
       subtitleContent={

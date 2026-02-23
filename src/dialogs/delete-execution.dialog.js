@@ -5,7 +5,7 @@ import {
   deleteExecution,
   getExecutionLabel,
 } from '@/services/executions.service';
-import GradientDialog from '@/gradients/dialog.gradient';
+import DialogComponent from '@/components/dialog.component';
 
 const DeleteExecutionDialog = ({
   visible,
@@ -29,19 +29,21 @@ const DeleteExecutionDialog = ({
   };
 
   return (
-    <GradientDialog visible={visible} onDismiss={onDismiss}>
-      <GradientDialog.Title>{t('title.delete-execution')}</GradientDialog.Title>
-      <GradientDialog.Content>
+    <DialogComponent visible={visible} onDismiss={onDismiss}>
+      <DialogComponent.Title>
+        {t('title.delete-execution')}
+      </DialogComponent.Title>
+      <DialogComponent.Content>
         <Text variant="bodyMedium">{t('message.delete-execution')}</Text>
         {!!label && <Text variant="bodyMedium">{label}</Text>}
-      </GradientDialog.Content>
-      <GradientDialog.Actions>
+      </DialogComponent.Content>
+      <DialogComponent.Actions>
         <Button onPress={onDismiss}>{t('button.cancel')}</Button>
         <Button onPress={handleDelete} disabled={!executionId || !habitId}>
           {t('button.delete')}
         </Button>
-      </GradientDialog.Actions>
-    </GradientDialog>
+      </DialogComponent.Actions>
+    </DialogComponent>
   );
 };
 

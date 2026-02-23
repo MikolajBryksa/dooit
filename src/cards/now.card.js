@@ -7,7 +7,7 @@ import {updateHabit} from '@/services/habits.service';
 import {pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
-import MainCard from './main.card';
+import NowComponent from '../components/now.component';
 import {
   addExecution,
   hasExecution,
@@ -149,7 +149,7 @@ const NowCard = ({
   }
 
   return (
-    <MainCard
+    <NowComponent
       animatedStyle={{opacity: cardOpacity}}
       iconContent={
         <PieCircle

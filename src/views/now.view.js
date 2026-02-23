@@ -1,7 +1,6 @@
 import React, {useMemo, useEffect, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView} from 'react-native';
-import {Appbar} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
@@ -9,16 +8,16 @@ import {dateToWeekday} from '@/utils';
 import {useTodayKey, useCurrentTime, useActiveHabit} from '@/hooks';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {setHabits, setHabitsLoading} from '@/redux/actions';
-import NowCard from '@/components/now.card';
-import EndCard from '@/components/end.card';
-import EmptyCard from '@/components/empty.card';
-import LoadingCard from '@/components/loading.card';
-import StartCard from '@/components/start.card';
+import NowCard from '@/cards/now.card';
+import EndCard from '@/cards/end.card';
+import EmptyCard from '@/cards/empty.card';
+import LoadingCard from '@/cards/loading.card';
+import StartCard from '@/cards/start.card';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
 import AddModal from '@/modals/add.modal';
-import GradientAppbar from '@/gradients/appbar.gradient';
+import Topbar from '@/components/topbar.component';
 
-const HomeView = () => {
+const NowView = () => {
   const {t} = useTranslation();
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -111,9 +110,9 @@ const HomeView = () => {
 
   return (
     <>
-      <GradientAppbar>
-        <Appbar.Content title={t('view.home')} />
-      </GradientAppbar>
+      <Topbar>
+        <Topbar.Content title={t('view.now')} />
+      </Topbar>
 
       <ScrollView style={styles.container}>
         {firstLaunch ? (
@@ -152,4 +151,4 @@ const HomeView = () => {
   );
 };
 
-export default HomeView;
+export default NowView;

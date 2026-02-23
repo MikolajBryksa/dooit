@@ -1,15 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView} from 'react-native';
-import {
-  Text,
-  Button,
-  Card,
-  Avatar,
-  Checkbox,
-  TextInput,
-} from 'react-native-paper';
-import HabitCard from '@/components/habit.card';
+import {Text, Button, TextInput} from 'react-native-paper';
+import HabitComponent from '@/components/habit.component';
 import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -23,6 +16,7 @@ import {
 import {requestNotificationPermission} from '@/services/notifications.service';
 import {habitIcons} from '@/constants';
 import AddModal from '@/modals/add.modal';
+import SettingComponent from '@/components/setting.component';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -182,33 +176,18 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <ScrollView style={styles.container}>
           {[1, 2, 3, 4, 5, 6, 7].map(habitId => (
-            <Card
+            <View
               key={habitId}
-              style={[
-                styles.card,
-                {
-                  opacity: selectedHabits[habitId] ? 1 : 0.6,
-                },
-              ]}
-              onPress={() => handleHabitToggle(habitId)}>
-              <Card.Content
-                style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Avatar.Icon
-                  icon={habitIcons[habitId - 1]}
-                  size={40}
-                  style={{marginRight: 16}}
-                />
-                <View style={{flex: 1}}>
-                  <Text variant="titleMedium">
-                    {t(`default-habits.${habitId}.habitName`)}
-                  </Text>
-                </View>
-                <Checkbox
-                  status={selectedHabits[habitId] ? 'checked' : 'unchecked'}
-                  onPress={() => handleHabitToggle(habitId)}
-                />
-              </Card.Content>
-            </Card>
+              style={{opacity: selectedHabits[habitId] ? 1 : 0.6}}>
+              <SettingComponent
+                label={t(`default-habits.${habitId}.habitName`)}
+                leftIcon={habitIcons[habitId - 1]}
+                checkboxValue={selectedHabits[habitId]}
+                onCheckboxToggle={() => handleHabitToggle(habitId)}
+                onPress={() => handleHabitToggle(habitId)}
+                showChip={false}
+              />
+            </View>
           ))}
           <View style={styles.gap} />
         </ScrollView>
@@ -219,9 +198,7 @@ const OnboardingView = ({setShowOnboarding}) => {
               style={styles.button}
               mode="outlined"
               icon="arrow-left"
-              onPress={() => {
-                setStep(1);
-              }}>
+              onPress={() => setStep(1)}>
               {t('button.back')}
             </Button>
             <Button
@@ -229,9 +206,7 @@ const OnboardingView = ({setShowOnboarding}) => {
               mode="contained"
               icon={!hasSelectedHabits ? 'lock' : 'check'}
               disabled={!hasSelectedHabits}
-              onPress={() => {
-                handleStep2();
-              }}>
+              onPress={handleStep2}>
               {t('button.save')}
             </Button>
           </View>
@@ -252,7 +227,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <ScrollView style={styles.container}>
           {availableHabits.map(habit => (
-            <HabitCard
+            <HabitComponent
               key={habit.id}
               id={habit.id}
               habitName={habit.habitName}

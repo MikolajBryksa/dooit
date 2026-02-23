@@ -1,14 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Button, IconButton, Card, Portal} from 'react-native-paper';
+import {
+  Text,
+  Button,
+  IconButton,
+  Card,
+  Portal,
+  Checkbox,
+} from 'react-native-paper';
 import {View, ScrollView} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {getExecutions, updateExecution} from '@/services/executions.service';
 import {getLocalDateKey, subtractDays} from '@/utils';
-import StatusSelector from '@/selectors/status.selector';
 import {dayMap} from '@/constants';
 import DeleteExecutionDialog from '@/dialogs/delete-execution.dialog';
-import GradientModal from '@/gradients/modal.gradient';
+import ModalComponent from '@/components/modal.component';
 
 const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   const {t} = useTranslation();
@@ -87,7 +93,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
   return (
     <Portal>
-      <GradientModal
+      <ModalComponent
         visible={visible}
         onDismiss={onDismiss}
         title={t('title.history')}>
@@ -97,37 +103,41 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           </Text>
 
           <ScrollView style={{maxHeight: 300}}>
-            {executions.map(exec => (
-              <View
-                key={exec.id}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 12,
-                }}>
-                <View style={{flex: 1}}>
-                  <Text variant="bodySmall">
-                    {formatDate(exec.date)} {exec.hour}
-                  </Text>
-                </View>
+            {executions.map(exec => {
+              const status = getCurrentStatus(exec);
+              const checked = status === 'good';
 
-                <IconButton
-                  icon="trash-can"
-                  size={18}
-                  style={{margin: 0, marginLeft: 6}}
-                  onPress={() => openDelete(exec)}
-                />
+              return (
+                <View
+                  key={exec.id}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingVertical: 12,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <Text variant="bodySmall">
+                      {formatDate(exec.date)} {exec.hour}
+                    </Text>
+                  </View>
 
-                <View style={{width: 155}}>
-                  <StatusSelector
-                    value={getCurrentStatus(exec)}
-                    onChange={newStatus =>
-                      handleStatusChange(exec.id, newStatus)
+                  <IconButton
+                    icon="trash-can"
+                    size={18}
+                    style={{margin: 0, marginLeft: 6}}
+                    onPress={() => openDelete(exec)}
+                  />
+
+                  {/* Zamiast SegmentedButtons: pojedynczy checkbox */}
+                  <Checkbox
+                    status={checked ? 'checked' : 'unchecked'}
+                    onPress={() =>
+                      handleStatusChange(exec.id, checked ? 'bad' : 'good')
                     }
                   />
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </ScrollView>
 
           <Card.Actions>
@@ -140,7 +150,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
             </Button>
           </Card.Actions>
         </Card.Content>
-      </GradientModal>
+      </ModalComponent>
 
       <DeleteExecutionDialog
         visible={deleteExecutionDialogVisible}

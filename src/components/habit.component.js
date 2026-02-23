@@ -7,7 +7,6 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import {View, Animated} from 'react-native';
-import GradientCard from '../gradients/card.gradient';
 import {updateHabitValue} from '@/services/habits.service';
 import DeleteHabitDialog from '@/dialogs/delete-habit.dialog';
 import HistoryModal from '@/modals/history.modal';
@@ -18,7 +17,7 @@ import {formatHourString} from '@/utils';
 import {calculateEffectiveness} from '@/services/executions.service';
 import {logError} from '@/services/errors.service';
 
-const HabitCard = ({
+const HabitComponent = ({
   id,
   habitName,
   repeatDays = [],
@@ -83,7 +82,7 @@ const HabitCard = ({
 
   return (
     <>
-      <GradientCard>
+      <View style={styles.card__background}>
         <Animated.View style={{opacity: cardOpacity}}>
           <Card.Content style={styles.card__header}>
             <View style={styles.card__headerLeft}>
@@ -227,7 +226,7 @@ const HabitCard = ({
             )}
           </Card.Content>
         </Animated.View>
-      </GradientCard>
+      </View>
 
       <DeleteHabitDialog
         visible={deleteHabitDialogVisible}
@@ -253,4 +252,4 @@ const HabitCard = ({
   );
 };
 
-export default HabitCard;
+export default HabitComponent;

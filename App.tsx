@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PaperProvider} from 'react-native-paper';
 import {Provider, useDispatch, useSelector} from 'react-redux';
 import store from './src/redux/store';
-import GradientBottomBar from './src/gradients/bottombar.gradient';
+import Navbar from './src/components/navbar.component';
 import LoadingView from './src/views/loading.view';
-import HomeView from './src/views/home.view';
+import NowView from './src/views/now.view';
 import HabitsView from './src/views/habits.view';
 import SettingsView from './src/views/settings.view';
 import 'react-native-gesture-handler';
@@ -104,7 +104,7 @@ function AppContent() {
     <Tab.Navigator
       screenOptions={{headerShown: false}}
       tabBar={({navigation, state, descriptors, insets}) => (
-        <GradientBottomBar
+        <Navbar
           navigationState={state}
           safeAreaInsets={insets}
           onTabPress={({route, preventDefault}: any) => {
@@ -137,11 +137,11 @@ function AppContent() {
         />
       )}>
       <Tab.Screen
-        name="Home"
-        component={HomeView}
+        name="Now"
+        component={NowView}
         options={{
-          tabBarLabel: t('view.home'),
-          tabBarIcon: ({color, size}) => renderIcon('home', color, size),
+          tabBarLabel: t('view.now'),
+          tabBarIcon: ({color, size}) => renderIcon('now', color, size),
         }}
       />
       <Tab.Screen

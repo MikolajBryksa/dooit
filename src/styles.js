@@ -20,6 +20,10 @@ export const useStyles = () => {
     gap: {
       height: theme.dimensions.margin * 3,
     },
+    bar__background: {
+      backgroundColor: theme.colors.surface,
+    },
+    // onboarding
     onboarding__card: {
       height: theme.dimensions.height * 2,
       justifyContent: 'center',
@@ -59,11 +63,11 @@ export const useStyles = () => {
       alignSelf: 'center',
       backgroundColor: theme.colors.error,
     },
-    // now card
-    card: {
+    // cards
+    card__background: {
+      backgroundColor: theme.colors.surface,
       marginBottom: theme.dimensions.gap,
-      overflow: 'hidden',
-      backgroundColor: 'transparent',
+      borderRadius: 12,
     },
     card__modern: {
       borderRadius: 12,
@@ -220,6 +224,12 @@ export const useStyles = () => {
       borderRadius: 12,
       marginBottom: theme.dimensions.margin,
     },
+    dialog: {
+      backgroundColor: theme.colors.surface,
+      elevation: 0,
+      shadowOpacity: 0,
+      shadowColor: 'transparent',
+    },
     modal: {
       backgroundColor: theme.colors.surface,
       margin: theme.dimensions.gap * 2,
@@ -263,7 +273,7 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      minHeight: theme.dimensions.height * 0.8,
+      paddingVertical: 8,
     },
     // circle components
     circle__container: {

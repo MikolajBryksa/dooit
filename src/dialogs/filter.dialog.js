@@ -3,7 +3,7 @@ import {Button, List} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {getLocalDateKey, dateToWeekday} from '@/utils';
-import GradientDialog from '@/gradients/dialog.gradient';
+import DialogComponent from '@/components/dialog.component';
 
 const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   const {t} = useTranslation();
@@ -30,33 +30,31 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   };
 
   return (
-    <GradientDialog visible={visible} onDismiss={onDismiss}>
-      <GradientDialog.Title>{t('title.filter')}</GradientDialog.Title>
-      <GradientDialog.Content>
-          {daily.map(day => (
-            <List.Item
-              key={day}
-              title={dayNames[day]}
-              onPress={() => handleSelectDay(day)}
-              right={props =>
-                filterDay === day ? <List.Icon {...props} icon="check" /> : null
-              }
-            />
-          ))}
-        </GradientDialog.Content>
-        <GradientDialog.Actions>
-          <Button onPress={() => handleSelectDay('')}>
-            {t('button.reset')}
-          </Button>
-          <Button
-            onPress={() => {
-              const weekdayKey = dateToWeekday(getLocalDateKey());
-              handleSelectDay(weekdayKey);
-            }}>
-            {t('button.today')}
-          </Button>
-        </GradientDialog.Actions>
-    </GradientDialog>
+    <DialogComponent visible={visible} onDismiss={onDismiss}>
+      <DialogComponent.Title>{t('title.filter')}</DialogComponent.Title>
+      <DialogComponent.Content>
+        {daily.map(day => (
+          <List.Item
+            key={day}
+            title={dayNames[day]}
+            onPress={() => handleSelectDay(day)}
+            right={props =>
+              filterDay === day ? <List.Icon {...props} icon="check" /> : null
+            }
+          />
+        ))}
+      </DialogComponent.Content>
+      <DialogComponent.Actions>
+        <Button onPress={() => handleSelectDay('')}>{t('button.reset')}</Button>
+        <Button
+          onPress={() => {
+            const weekdayKey = dateToWeekday(getLocalDateKey());
+            handleSelectDay(weekdayKey);
+          }}>
+          {t('button.today')}
+        </Button>
+      </DialogComponent.Actions>
+    </DialogComponent>
   );
 };
 

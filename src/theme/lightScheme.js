@@ -1,7 +1,7 @@
 import {hexToRgba} from '@/utils';
 
 const backgroundColor = '#f8f9fb';
-const boardColor = '#c1d2e8';
+const boardColor = '#daeaff';
 const buttonColor = '#135d9a';
 const textColor = '#172a38';
 

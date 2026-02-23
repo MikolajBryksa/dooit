@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Text, Button, TextInput, Card} from 'react-native-paper';
-import {View} from 'react-native';
+import {Button, TextInput, Card} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateHabitValue, getHabitById} from '@/services/habits.service';
@@ -9,7 +8,7 @@ import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/errors.service.js';
-import GradientModal from '@/gradients/modal.gradient';
+import ModalComponent from '@/components/modal.component';
 
 const EditModal = ({
   visible,
@@ -107,7 +106,7 @@ const EditModal = ({
   };
 
   return (
-    <GradientModal
+    <ModalComponent
       visible={visible}
       onDismiss={onDismiss}
       title={label || t(`card.${field}`)}>
@@ -168,7 +167,7 @@ const EditModal = ({
           </Button>
         </Card.Actions>
       </Card.Content>
-    </GradientModal>
+    </ModalComponent>
   );
 };
 

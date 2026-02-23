@@ -22,7 +22,7 @@ import {
   calculateEffectivenessUpToDate,
 } from '@/services/executions.service';
 import {subtractDays} from '@/utils';
-import MainCard from './main.card';
+import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
 
 const withEffectiveness = habits =>
@@ -292,7 +292,7 @@ const EndCard = ({weekdayKey}) => {
   const hasText = !!aiSummary;
 
   return (
-    <MainCard
+    <NowComponent
       style={styles.summary__card}
       iconContent={<InfoCircle end />}
       subtitleContent={

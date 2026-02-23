@@ -4,16 +4,12 @@ import {Avatar, useTheme} from 'react-native-paper';
 import Svg, {Circle, Defs, LinearGradient, Stop, G} from 'react-native-svg';
 import {useStyles} from '@/styles';
 
-const StatusCircle = ({
-  end = false,
-  loading = false,
-  empty = false,
-  size = 120,
-  strokeWidth = 10,
-  iconSize: iconSizeProp,
-}) => {
+const InfoCircle = ({end = false, loading = false, empty = false}) => {
   const theme = useTheme();
   const styles = useStyles();
+
+  const size = 140;
+  const strokeWidth = 10;
 
   const goodColor = theme?.colors?.primary;
   const trackColor = theme?.colors?.surfaceVariant;
@@ -23,9 +19,8 @@ const StatusCircle = ({
   const cy = size / 2;
   const C = 2 * Math.PI * radius;
 
-  const iconSize = useMemo(() => {
-    return iconSizeProp ?? Math.max(24, size - (strokeWidth + 8) * 2);
-  }, [iconSizeProp, size, strokeWidth]);
+  const availableSpace = size - (strokeWidth + 8) * 2;
+  const iconSize = Math.max(44, availableSpace);
 
   const isLoading = !!loading;
   const isEnd = !isLoading && !!end;
@@ -134,4 +129,4 @@ const StatusCircle = ({
   );
 };
 
-export default StatusCircle;
+export default InfoCircle;

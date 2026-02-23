@@ -1,5 +1,5 @@
 import React from 'react';
-import MainCard from './main.card';
+import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
 import {Text, Button} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -10,7 +10,7 @@ const EmptyCard = ({onAddHabit}) => {
   const styles = useStyles();
 
   return (
-    <MainCard
+    <NowComponent
       iconContent={<InfoCircle empty />}
       subtitleContent={<Text variant="titleMedium">{t('empty.subtitle')}</Text>}
       titleContent={<Text variant="titleLarge">{t('empty.title')}</Text>}

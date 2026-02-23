@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Text} from 'react-native-paper';
 import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import GradientDialog from '@/gradients/dialog.gradient';
+import DialogComponent from '@/components/dialog.component';
 
 const SupportDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
@@ -13,16 +13,16 @@ const SupportDialog = ({visible, onDismiss, onDone}) => {
   };
 
   return (
-    <GradientDialog visible={visible} onDismiss={onDismiss}>
-      <GradientDialog.Title>{t('title.support')}</GradientDialog.Title>
-      <GradientDialog.Content>
+    <DialogComponent visible={visible} onDismiss={onDismiss}>
+      <DialogComponent.Title>{t('title.support')}</DialogComponent.Title>
+      <DialogComponent.Content>
         <Text variant="bodyMedium">{t('message.support')}</Text>
-      </GradientDialog.Content>
-      <GradientDialog.Actions>
+      </DialogComponent.Content>
+      <DialogComponent.Actions>
         <Button onPress={onDismiss}>{t('button.cancel')}</Button>
         <Button onPress={handleSupport}>{t('button.buy')}</Button>
-      </GradientDialog.Actions>
-    </GradientDialog>
+      </DialogComponent.Actions>
+    </DialogComponent>
   );
 };
 

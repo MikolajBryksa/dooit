@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {ScrollView, View, Linking} from 'react-native';
-import {Appbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -16,9 +15,9 @@ import NameModal from '@/modals/name.modal';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
-import SettingCard from '@/components/setting.card';
+import SettingComponent from '@/components/setting.component';
 import {testErrorLogging} from '@/services/errors.service';
-import GradientAppbar from '@/gradients/appbar.gradient';
+import Topbar from '@/components/topbar.component';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -128,35 +127,35 @@ const SettingsView = () => {
 
   return (
     <>
-      <GradientAppbar>
-        <Appbar.Content title={t('view.settings')} />
-        <Appbar.Action icon="chat" onPress={handleContactModal} />
-        <Appbar.Action icon="coffee" onPress={handleSupportDialog} />
-      </GradientAppbar>
+      <Topbar>
+        <Topbar.Content title={t('view.settings')} />
+        <Topbar.Action icon="chat" onPress={handleContactModal} />
+        <Topbar.Action icon="coffee" onPress={handleSupportDialog} />
+      </Topbar>
 
       <ScrollView style={styles.container}>
-        <SettingCard
+        <SettingComponent
           label={t('settings.version')}
           value={packageJson.version}
           icon="information-outline"
           onPress={handleVersion}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.user-name')}
           value={settings.userName}
           icon="account-outline"
           onPress={handleNameModal}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.language')}
           value={t(`settings.${language}`)}
           icon="translate"
           onPress={handleLanguage}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.notifications')}
           value={
             settings.notifications
@@ -167,21 +166,21 @@ const SettingsView = () => {
           onPress={handleNotifications}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.clock-format')}
           value={clockFormat}
           icon="clock-outline"
           onPress={handleClockFormat}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.first-day')}
           value={t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
           icon="calendar"
           onPress={handleFirstDay}
         />
 
-        <SettingCard
+        <SettingComponent
           label={t('settings.theme')}
           value={t(`settings.${currentTheme}`)}
           icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
@@ -190,7 +189,7 @@ const SettingsView = () => {
 
         {__DEV__ && (
           <>
-            <SettingCard
+            <SettingComponent
               label={t('settings.test-connection')}
               value={
                 testVisible
@@ -210,7 +209,7 @@ const SettingsView = () => {
               disabled={testVisible}
             />
 
-            <SettingCard
+            <SettingComponent
               label={t('settings.test-error-logging')}
               value={
                 testErrorDone

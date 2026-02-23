@@ -9,7 +9,7 @@ import {useNetworkStatus} from '@/hooks';
 import {logError} from '@/services/errors.service.js';
 import realm from '@/storage/schemas';
 import {initializeAnonymousAuth} from '@/services/supabase.service.js';
-import GradientModal from '@/gradients/modal.gradient';
+import ModalComponent from '@/components/modal.component';
 
 const ContactModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
@@ -138,7 +138,7 @@ const ContactModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <GradientModal
+    <ModalComponent
       visible={visible}
       onDismiss={handleDismiss}
       title={t('title.contact')}
@@ -197,7 +197,7 @@ const ContactModal = ({visible, onDismiss}) => {
           )}
         </Card.Actions>
       </Card.Content>
-    </GradientModal>
+    </ModalComponent>
   );
 };
 

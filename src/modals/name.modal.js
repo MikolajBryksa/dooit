@@ -2,14 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {Card, Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
-import GradientModal from '@/gradients/modal.gradient';
+import ModalComponent from '@/components/modal.component';
 
 const NameModal = ({visible, onDismiss}) => {
   const {t} = useTranslation();
-  const styles = useStyles();
   const dispatch = useDispatch();
   const settings = useSelector(state => state.settings);
   const [tempUserName, setTempUserName] = useState('');
@@ -31,7 +29,7 @@ const NameModal = ({visible, onDismiss}) => {
   };
 
   return (
-    <GradientModal
+    <ModalComponent
       visible={visible}
       onDismiss={onDismiss}
       title={t('settings.user-name')}>
@@ -56,7 +54,7 @@ const NameModal = ({visible, onDismiss}) => {
           </Button>
         </Card.Actions>
       </Card.Content>
-    </GradientModal>
+    </ModalComponent>
   );
 };
 

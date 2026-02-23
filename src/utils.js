@@ -32,7 +32,7 @@ export function formatHourString(hour, clockFormat = '24 h') {
 export function renderIcon(name, color, size) {
   // Renders a FontAwesome icon based on the provided name, color, and size
   switch (name) {
-    case 'home':
+    case 'now':
       icon = faClock;
       break;
     case 'habits':

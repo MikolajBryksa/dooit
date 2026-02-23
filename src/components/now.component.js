@@ -3,10 +3,8 @@ import {Card} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
-import GradientCard from '../gradients/card.gradient';
 
-const MainCard = ({
-  style = null,
+const NowComponent = ({
   animatedStyle = null,
   iconContent = null,
   subtitleContent = null,
@@ -48,7 +46,7 @@ const MainCard = ({
   };
 
   return (
-    <GradientCard style={style}>
+    <View style={styles.card__background}>
       <ContentWrapper style={wrapperStyle}>
         <Card.Content style={styles.card__center}>
           {/* Icon container - reserved space */}
@@ -75,8 +73,8 @@ const MainCard = ({
           )}
         </Card.Content>
       </ContentWrapper>
-    </GradientCard>
+    </View>
   );
 };
 
-export default MainCard;
+export default NowComponent;

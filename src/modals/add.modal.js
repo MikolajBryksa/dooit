@@ -8,7 +8,7 @@ import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/errors.service.js';
-import GradientModal from '@/gradients/modal.gradient';
+import ModalComponent from '@/components/modal.component';
 
 const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   const {t} = useTranslation();
@@ -71,7 +71,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
   };
 
   return (
-    <GradientModal
+    <ModalComponent
       visible={visible}
       onDismiss={onDismiss}
       title={t('title.add')}
@@ -148,7 +148,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
           )}
         </Card.Actions>
       </Card.Content>
-    </GradientModal>
+    </ModalComponent>
   );
 };
 

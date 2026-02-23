@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {View, ScrollView} from 'react-native';
-import {Appbar} from 'react-native-paper';
-import HabitCard from '@/components/habit.card';
-import EmptyCard from '@/components/empty.card';
+import HabitComponent from '@/components/habit.component';
+import EmptyCard from '@/cards/empty.card';
 import AddModal from '@/modals/add.modal';
 import EditModal from '@/modals/edit.modal';
 import FilterDialog from '@/dialogs/filter.dialog';
@@ -11,7 +10,7 @@ import {getHabits} from '@/services/habits.service';
 import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import GradientAppbar from '@/gradients/appbar.gradient';
+import Topbar from '@/components/topbar.component';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -65,24 +64,24 @@ const HabitsView = () => {
 
   return (
     <>
-      <GradientAppbar>
-        <Appbar.Content title={t('view.habits')} />
-        <Appbar.Action
+      <Topbar>
+        <Topbar.Content title={t('view.habits')} />
+        <Topbar.Action
           icon={filterDay ? 'filter-check' : 'filter'}
           onPress={() => setVisibleFilterModal(true)}
         />
-        <Appbar.Action
+        <Topbar.Action
           icon="plus"
           onPress={() => {
             handleAddModal();
           }}
         />
-      </GradientAppbar>
+      </Topbar>
 
       <ScrollView style={styles.container}>
         {sortedHabits && sortedHabits.length > 0 ? (
           sortedHabits.map(habit => (
-            <HabitCard
+            <HabitComponent
               key={habit.id}
               id={habit.id}
               habitName={habit.habitName}
