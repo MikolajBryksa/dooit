@@ -7,11 +7,10 @@ const Navbar = ({navigationState, safeAreaInsets, ...props}) => {
   const styles = useStyles();
 
   return (
-    <View>
+    <View style={styles.navbar}>
       <BottomNavigation.Bar
         navigationState={navigationState}
         safeAreaInsets={safeAreaInsets}
-        style={[styles.bar__background]}
         {...props}
       />
     </View>

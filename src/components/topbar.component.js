@@ -7,10 +7,8 @@ const Topbar = ({children, ...props}) => {
   const styles = useStyles();
 
   return (
-    <View>
-      <Appbar.Header {...props} style={styles.bar__background}>
-        {children}
-      </Appbar.Header>
+    <View style={styles.topbar}>
+      <Appbar.Header {...props}>{children}</Appbar.Header>
     </View>
   );
 };

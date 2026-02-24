@@ -23,8 +23,15 @@ export const useStyles = () => {
     button: {
       alignSelf: 'center',
     },
-    bar__background: {
+    topbar: {
       backgroundColor: theme.colors.surface,
+      borderBottomColor: theme.colors.background,
+      borderBottomWidth: 2,
+    },
+    navbar: {
+      backgroundColor: theme.colors.surface,
+      borderTopColor: theme.colors.background,
+      borderTopWidth: 2,
     },
     // onboarding
     onboarding__bar: {
