@@ -222,8 +222,11 @@ const HabitComponent = ({
                       icon="chart-arc"
                       size={18}
                       style={{margin: 0, marginRight: 4}}
+                      opacity={stats.effectiveness !== null ? 1 : 0.5}
                     />
-                    <Text variant="bodyMedium">
+                    <Text
+                      variant="bodyMedium"
+                      opacity={stats.effectiveness !== null ? 1 : 0.5}>
                       {stats.effectiveness !== null
                         ? `${stats.effectiveness}% (${stats.goodCount}/${stats.totalCount})`
                         : t('card.noRepetitions')}

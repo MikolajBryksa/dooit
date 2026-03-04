@@ -2,9 +2,11 @@ import {hexToRgba} from '@/utils';
 
 const backgroundColor = '#181b20';
 const boardColor = '#23272f';
-const outlineColor = '#343b47';
+const outlineColor = '#434d5f';
 const buttonColor = '#4dafff';
 const textColor = '#f1f3f6';
+const disabledButtonColor = '#2a2f38';
+const disabledTextColor = '#6f7785';
 
 export const darkScheme = {
   primary: buttonColor, // buttons
@@ -19,8 +21,8 @@ export const darkScheme = {
   onSecondaryContainer: textColor, // selected icon
   outline: outlineColor, // lines
   onSurfaceVariant: buttonColor, // icons
-  surfaceDisabled: '#2a2f38', // disabled button
-  onSurfaceDisabled: '#6f7785', // text on disabled button
+  surfaceDisabled: disabledButtonColor, // disabled button
+  onSurfaceDisabled: disabledTextColor, // text on disabled button
   backdrop: hexToRgba(textColor, 0.5), // background under modal
   error: backgroundColor,
   elevation: {

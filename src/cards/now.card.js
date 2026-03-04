@@ -163,12 +163,15 @@ const NowCard = ({
         />
       }
       subtitleContent={
-        <Text variant="titleMedium">
+        <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
           {step === 1 ? selectedHour : motivation}
         </Text>
       }
       titleContent={
-        <Text variant="titleLarge" numberOfLines={2}>
+        <Text
+          variant="titleLarge"
+          numberOfLines={2}
+          opacity={isLocked ? 0.5 : 1}>
           {step === 1 ? habitName : choiceLabel}
         </Text>
       }

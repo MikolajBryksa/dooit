@@ -100,7 +100,7 @@ export const useStyles = () => {
     },
     card__divider: {
       height: 1,
-      backgroundColor: theme.colors.outline,
+      backgroundColor: theme.colors.background,
       marginBottom: theme.dimensions.margin,
     },
     card__headerLeft: {
