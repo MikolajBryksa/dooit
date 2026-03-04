@@ -17,7 +17,6 @@ const HabitComponent = ({
   habitName,
   repeatDays = [],
   repeatHours = [],
-  available,
   icon,
   fetchAllHabits,
   onEdit,
@@ -28,9 +27,7 @@ const HabitComponent = ({
   const clockFormat = useSelector(state => state.settings.clockFormat);
   const firstDay = useSelector(state => state.settings.firstDay);
 
-  const [isExpanded, setIsExpanded] = useState(
-    onboardingMode ? true : !!available,
-  );
+  const [isExpanded, setIsExpanded] = useState(onboardingMode);
   const [deleteHabitDialogVisible, setDeleteHabitDialogVisible] =
     useState(false);
   const [historyModalVisible, setHistoryModalVisible] = useState(false);
@@ -75,30 +72,26 @@ const HabitComponent = ({
     outputRange: ['0deg', '180deg'],
   });
 
-  // 1) Klik w całą kartę otwiera TYLKO gdy zwinięta
   const handleCardPressWhenCollapsed = () => {
     if (onboardingMode) return;
     if (!isExpanded) setIsExpanded(true);
   };
 
-  // 2) Klik w tytuł: tylko gdy otwarta -> edycja
   const handleTitlePress = () => {
-    if (!isExpanded) return; // gdy zwinięta, tytuł nie edytuje
+    if (!isExpanded) return;
     openEditModal('habitName', habitName);
   };
 
   return (
     <>
-      {/* OUTER RIPPLE: działa tylko gdy karta zwinięta */}
       <TouchableRipple
         borderless={false}
         onPress={handleCardPressWhenCollapsed}
-        disabled={onboardingMode || isExpanded} // gdy otwarta, nie przechwytuj klików
-        style={styles.card__background}>
+        disabled={onboardingMode || isExpanded}
+        style={styles.card}>
         <View>
           <Card.Content style={styles.card__header}>
             <View style={styles.card__headerLeft}>
-              {/* INNER RIPPLE: edycja tylko gdy karta otwarta */}
               <TouchableRipple
                 style={{flex: 1}}
                 onPress={handleTitlePress}
@@ -122,7 +115,6 @@ const HabitComponent = ({
 
             {!onboardingMode && (
               <View style={styles.card__headerRight}>
-                {/* 3) Kosz dopiero gdy otwarta */}
                 {isExpanded && (
                   <IconButton
                     icon="trash-can"

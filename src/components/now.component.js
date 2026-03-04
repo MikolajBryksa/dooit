@@ -47,9 +47,9 @@ const NowComponent = ({
   };
 
   return (
-    <View style={[styles.card__background, customStyle]}>
+    <View style={[styles.card, customStyle]}>
       <ContentWrapper style={wrapperStyle}>
-        <Card.Content style={styles.card__center}>
+        <Card.Content>
           {/* Icon container - reserved space */}
           <View style={styles.card__iconContainer}>{iconContent}</View>
 
@@ -70,7 +70,10 @@ const NowComponent = ({
 
           {/* Buttons container */}
           {buttonsContent && (
-            <View style={styles.card__buttonsContainer}>{buttonsContent}</View>
+            <>
+              <View style={styles.buttons}>{buttonsContent}</View>
+              <View style={styles.gap} />
+            </>
           )}
         </Card.Content>
       </ContentWrapper>

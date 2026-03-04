@@ -15,11 +15,7 @@ const EmptyCard = ({onAddHabit}) => {
       subtitleContent={<Text variant="titleMedium">{t('empty.subtitle')}</Text>}
       titleContent={<Text variant="titleLarge">{t('empty.title')}</Text>}
       buttonsContent={
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={onAddHabit}
-          icon="plus">
+        <Button mode="contained" onPress={onAddHabit} icon="plus">
           {t('title.add')}
         </Button>
       }

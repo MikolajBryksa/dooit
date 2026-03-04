@@ -45,7 +45,7 @@ const SettingComponent = ({
   };
 
   return (
-    <View style={styles.card__background}>
+    <View style={styles.card}>
       <TouchableRipple onPress={handleRowPress} disabled={disabled}>
         <Card.Content style={styles.card__list}>
           <View style={styles.settings__row}>

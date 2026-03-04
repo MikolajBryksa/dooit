@@ -29,34 +29,32 @@ const StartCard = ({onStart}) => {
   }, [dispatch, onStart, settings]);
 
   return (
-    <NowComponent
-      customStyle={styles.summary__card}
-      iconContent={<InfoCircle start />}
-      subtitleContent={
-        <Text variant="titleMedium">
-          {t('onboarding.start.subtitle', {userName: settings.userName})}
-        </Text>
-      }
-      titleContent={
-        <Text variant="titleLarge">{t('onboarding.start.title')}</Text>
-      }
-      textContent={
-        <View style={styles.summary__container}>
-          <Text variant="bodyMedium" style={styles.summary__text}>
-            {fullText}
+    <>
+      <NowComponent
+        iconContent={<InfoCircle start />}
+        subtitleContent={
+          <Text variant="titleMedium">
+            {t('onboarding.start.subtitle', {userName: settings.userName})}
           </Text>
-        </View>
-      }
-      buttonsContent={
-        <Button
-          style={styles.button}
-          mode="contained"
-          icon="rocket-launch"
-          onPress={handleStart}>
-          {t('button.start')}
-        </Button>
-      }
-    />
+        }
+        titleContent={
+          <Text variant="titleLarge">{t('onboarding.start.title')}</Text>
+        }
+        textContent={
+          <View style={styles.summary__container}>
+            <Text variant="bodyMedium" style={styles.summary__text}>
+              {fullText}
+            </Text>
+          </View>
+        }
+        buttonsContent={
+          <Button mode="contained" icon="rocket-launch" onPress={handleStart}>
+            {t('button.start')}
+          </Button>
+        }
+      />
+      <View style={styles.gap} />
+    </>
   );
 };
 

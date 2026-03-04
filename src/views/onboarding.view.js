@@ -139,7 +139,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
   if (step === 1) {
     return (
-      <View style={styles.container__center}>
+      <View style={[styles.container, styles.center]}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.step1.title')}</Text>
           <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
@@ -156,7 +156,6 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <View style={styles.onboarding__bar}>
           <Button
-            style={styles.button}
             mode="contained"
             onPress={handleStep1}
             disabled={!name.trim()}
@@ -193,16 +192,14 @@ const OnboardingView = ({setShowOnboarding}) => {
         </ScrollView>
 
         <View style={styles.onboarding__bar}>
-          <View style={styles.onboarding__buttons}>
+          <View style={styles.buttons}>
             <Button
-              style={styles.button}
               mode="outlined"
               icon="arrow-left"
               onPress={() => setStep(1)}>
               {t('button.back')}
             </Button>
             <Button
-              style={styles.button}
               mode="contained"
               icon={!hasSelectedHabits ? 'lock' : 'check'}
               disabled={!hasSelectedHabits}
@@ -246,9 +243,8 @@ const OnboardingView = ({setShowOnboarding}) => {
         </ScrollView>
 
         <View style={styles.onboarding__bar}>
-          <View style={styles.onboarding__buttons}>
+          <View style={styles.buttons}>
             <Button
-              style={styles.button}
               mode="outlined"
               icon="arrow-left"
               onPress={() => {
@@ -269,16 +265,11 @@ const OnboardingView = ({setShowOnboarding}) => {
             </Button>
             <Button
               mode="outlined"
-              style={styles.button}
               icon="plus"
               onPress={() => setVisibleAddModal(true)}>
               {t('button.add')}
             </Button>
-            <Button
-              style={styles.button}
-              mode="contained"
-              onPress={handleStep3}
-              icon="check">
+            <Button mode="contained" onPress={handleStep3} icon="check">
               {t('button.save')}
             </Button>
           </View>

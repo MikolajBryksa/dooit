@@ -228,12 +228,7 @@ const EndCard = ({weekdayKey}) => {
 
     if (!isConnected) {
       return (
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={() => {}}
-          disabled
-          icon="wifi-off">
+        <Button mode="contained" onPress={() => {}} disabled icon="wifi-off">
           {t('button.offline')}
         </Button>
       );
@@ -242,7 +237,6 @@ const EndCard = ({weekdayKey}) => {
     if (loadingAI) {
       return (
         <Button
-          style={styles.button}
           mode="contained"
           onPress={() => {}}
           disabled
@@ -253,11 +247,7 @@ const EndCard = ({weekdayKey}) => {
     }
 
     return (
-      <Button
-        style={styles.button}
-        mode="contained"
-        icon="creation"
-        onPress={handleGenerate}>
+      <Button mode="contained" icon="creation" onPress={handleGenerate}>
         {hadError ? t('button.try-again') : t('button.generate-summary')}
       </Button>
     );
@@ -314,27 +304,29 @@ const EndCard = ({weekdayKey}) => {
   const hasText = !!aiSummary;
 
   return (
-    <NowComponent
-      customStyle={styles.summary__card}
-      iconContent={<InfoCircle end />}
-      subtitleContent={
-        <Text variant="titleMedium">{t('summary.subtitle')}</Text>
-      }
-      titleContent={<Text variant="titleLarge">{t('summary.title')}</Text>}
-      textContent={
-        <>
-          {renderHabitsList()}
-          {hasText ? (
-            <View style={styles.summary__container}>
-              <Text variant="bodyMedium" style={styles.summary__text}>
-                {aiSummary}
-              </Text>
-            </View>
-          ) : null}
-        </>
-      }
-      buttonsContent={renderButton()}
-    />
+    <>
+      <NowComponent
+        iconContent={<InfoCircle end />}
+        subtitleContent={
+          <Text variant="titleMedium">{t('summary.subtitle')}</Text>
+        }
+        titleContent={<Text variant="titleLarge">{t('summary.title')}</Text>}
+        textContent={
+          <>
+            {renderHabitsList()}
+            {hasText ? (
+              <View style={styles.summary__container}>
+                <Text variant="bodyMedium" style={styles.summary__text}>
+                  {aiSummary}
+                </Text>
+              </View>
+            ) : null}
+          </>
+        }
+        buttonsContent={renderButton()}
+      />
+      <View style={styles.gap} />
+    </>
   );
 };
 

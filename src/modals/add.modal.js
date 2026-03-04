@@ -85,6 +85,7 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
         {step === 1 && (
           <>
             <Text variant="bodyMedium">{t('addStep.habitName')}</Text>
+            <View style={styles.gap} />
             <TextInput
               mode="outlined"
               placeholder={t('card.habitName')}

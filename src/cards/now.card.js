@@ -173,44 +173,34 @@ const NowCard = ({
         </Text>
       }
       buttonsContent={
-        <>
+        <View style={styles.buttons}>
           {step === 1 ? (
             isLocked ? (
               <Button
-                style={styles.button}
                 mode="contained"
                 icon="lock-open-variant"
                 onPress={handleUnlock}>
                 {t('button.unlock')}
               </Button>
             ) : (
-              <View style={styles.card__buttons}>
-                <Button
-                  style={styles.button}
-                  mode="outlined"
-                  icon="close"
-                  onPress={addBadChoice}>
+              <>
+                <Button mode="outlined" icon="close" onPress={addBadChoice}>
                   {t('button.skip')}
                 </Button>
-                <Button
-                  style={styles.button}
-                  mode="contained"
-                  icon="check"
-                  onPress={addGoodChoice}>
+                <Button mode="contained" icon="check" onPress={addGoodChoice}>
                   {t('button.done')}
                 </Button>
-              </View>
+              </>
             )
           ) : (
             <Button
-              style={styles.button}
               mode="contained"
               icon={isLastHabit ? 'check' : 'arrow-right'}
               onPress={handleNext}>
               {isLastHabit ? t('button.finish') : t('button.next')}
             </Button>
           )}
-        </>
+        </View>
       }
     />
   );

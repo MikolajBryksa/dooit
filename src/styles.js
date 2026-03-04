@@ -10,18 +10,12 @@ export const useStyles = () => {
       padding: theme.dimensions.gap,
       backgroundColor: theme.colors.background,
     },
-    container__center: {
-      flex: 1,
-      padding: theme.dimensions.gap,
-      backgroundColor: theme.colors.background,
+    center: {
       justifyContent: 'center',
       alignItems: 'center',
     },
     gap: {
       height: theme.dimensions.margin * 3,
-    },
-    button: {
-      alignSelf: 'center',
     },
     topbar: {
       backgroundColor: theme.colors.surface,
@@ -33,16 +27,19 @@ export const useStyles = () => {
       borderTopColor: theme.colors.background,
       borderTopWidth: 2,
     },
-    // onboarding
+    buttons: {
+      flexDirection: 'row',
+      gap: theme.dimensions.gap,
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: theme.dimensions.height,
+    },
     onboarding__bar: {
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: theme.dimensions.gap * 3,
       marginTop: theme.dimensions.gap * 3,
-    },
-    onboarding__buttons: {
-      flexDirection: 'row',
-      gap: theme.dimensions.gap,
     },
     onboarding__input: {
       marginBottom: theme.dimensions.gap * 2,
@@ -50,22 +47,15 @@ export const useStyles = () => {
       height: theme.dimensions.gap * 5,
       width: '80%',
     },
-    // cards
-    card__background: {
+    card: {
       backgroundColor: theme.colors.surface,
       marginBottom: theme.dimensions.gap,
       borderRadius: 12,
     },
-    card__center: {
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: theme.dimensions.gap,
-    },
     card__iconContainer: {
       width: '100%',
       height: 140,
-      paddingTop: theme.dimensions.gap * 3,
+      paddingTop: theme.dimensions.gap * 5,
       paddingBottom: theme.dimensions.gap,
       marginBottom: theme.dimensions.gap * 4,
       alignItems: 'center',
@@ -90,28 +80,13 @@ export const useStyles = () => {
       paddingHorizontal: theme.dimensions.gap,
       paddingBottom: theme.dimensions.gap,
     },
-    card__buttonsContainer: {
-      width: '100%',
-      minHeight: 80,
-      paddingTop: theme.dimensions.gap,
-      paddingBottom: theme.dimensions.gap,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    card__buttons: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: theme.dimensions.gap,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     card__list: {
       flex: 1,
     },
     card__header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      minHeight: theme.dimensions.height * 0.8,
+      minHeight: theme.dimensions.height,
     },
     card__options: {
       flexDirection: 'row',
@@ -125,7 +100,7 @@ export const useStyles = () => {
     },
     card__divider: {
       height: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.outline,
       marginBottom: theme.dimensions.margin,
     },
     card__headerLeft: {
@@ -143,9 +118,6 @@ export const useStyles = () => {
       flex: 1,
       flexShrink: 1,
     },
-    progress__container: {
-      width: '50%',
-    },
     progress__bar: {
       marginBottom: theme.dimensions.gap,
       height: theme.dimensions.margin,
@@ -155,10 +127,7 @@ export const useStyles = () => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 8,
-    },
-    summary__card: {
-      marginBottom: theme.dimensions.gap * 2,
+      minHeight: theme.dimensions.height,
     },
     summary__container: {
       flex: 1,
@@ -224,7 +193,6 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.gap,
       paddingLeft: 16,
     },
-    // selectors
     selector__scroll: {
       maxHeight: 400,
     },
@@ -245,7 +213,6 @@ export const useStyles = () => {
     segmentButtons: {
       marginVertical: theme.dimensions.gap,
     },
-    // circles
     circle__container: {
       position: 'relative',
       alignItems: 'center',

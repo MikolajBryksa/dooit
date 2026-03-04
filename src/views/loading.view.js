@@ -7,7 +7,7 @@ const LoadingView = () => {
   const styles = useStyles();
 
   return (
-    <View style={styles.container__center}>
+    <View style={[styles.container, styles.center]}>
       <AnimatedLogo />
     </View>
   );

@@ -1,13 +1,14 @@
 import {hexToRgba} from '@/utils';
 
-const backgroundColor = '#f8f9fb';
-const boardColor = '#daeaff';
-const buttonColor = '#135d9a';
-const textColor = '#172a38';
+const backgroundColor = '#eef1f5';
+const boardColor = '#ffffff';
+const outlineColor = '#e6e8ec';
+const buttonColor = '#1565c0';
+const textColor = '#1a2b3c';
 
 export const lightScheme = {
   primary: buttonColor, // buttons
-  onPrimary: backgroundColor, // text on buttons
+  onPrimary: boardColor, // text on buttons
   primaryContainer: backgroundColor, // clock selected background
   onPrimaryContainer: textColor, // clock outline
   surfaceVariant: backgroundColor, // clock and progress backround
@@ -16,10 +17,10 @@ export const lightScheme = {
   onSurface: textColor, // card text, selected icon text, clock text
   secondaryContainer: backgroundColor, // selected icon background
   onSecondaryContainer: textColor, // selected icon
-  outline: buttonColor, // lines
+  outline: outlineColor, // lines
   onSurfaceVariant: buttonColor, // icons
-  surfaceDisabled: backgroundColor, // disabled button
-  onSurfaceDisabled: buttonColor, // text on disabled button
+  surfaceDisabled: '#e3e7ed', // disabled button
+  onSurfaceDisabled: '#9aa4b2', // text on disabled button
   backdrop: hexToRgba(textColor, 0.5), // background under modal
   error: backgroundColor,
   elevation: {
