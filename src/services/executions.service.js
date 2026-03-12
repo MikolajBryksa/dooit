@@ -1,9 +1,16 @@
 import realm from '@/storage/schemas';
 import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
 
-const executionId = (habitId, date, slotIndex) => `${habitId}_${date}_${slotIndex}`;
+const executionId = (habitId, date, slotIndex) =>
+  `${habitId}_${date}_${slotIndex}`;
 
-export const addExecutionInWrite = (habitId, date, slotIndex, plannedHour, status) => {
+export const addExecutionInWrite = (
+  habitId,
+  date,
+  slotIndex,
+  plannedHour,
+  status,
+) => {
   const id = executionId(habitId, date, slotIndex);
   if (realm.objectForPrimaryKey('Execution', id)) return;
 
@@ -115,8 +122,11 @@ export const getExecutionLabel = executionId => {
   return `${habit.habitName} | ${execution.date} | ${execution.plannedHour}`;
 };
 
-const getLastExecutionDateGlobal = () => {
-  const last = realm.objects('Execution').sorted('date', true)[0];
+const getLastExecutionDateForHabit = habitId => {
+  const last = realm
+    .objects('Execution')
+    .filtered('habitId == $0', habitId)
+    .sorted('date', true)[0];
   return last ? last.date : null;
 };
 
@@ -125,23 +135,41 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
 
   const today = getLocalDateKey();
   const yesterday = subtractDays(today, 1);
-
-  const lastExecutionDate = getLastExecutionDateGlobal();
-  if (!lastExecutionDate) return;
-
   const cutoffDate = subtractDays(today, maxDaysBack);
-  if (lastExecutionDate < cutoffDate) return;
 
   realm.write(() => {
     habits.forEach(habit => {
+      // Get last execution date for THIS specific habit
+      const lastExecutionDate = getLastExecutionDateForHabit(habit.id);
+
+      // If habit has no executions, don't backfill
+      if (!lastExecutionDate) return;
+
+      // Don't backfill if last execution is too old (beyond maxDaysBack)
+      if (lastExecutionDate < cutoffDate) return;
+
       let currentDate = lastExecutionDate;
 
       while (currentDate <= yesterday) {
         const weekday = dateToWeekday(currentDate);
 
         if (habit.repeatDays.includes(weekday)) {
+          // Check each slot individually - backfill only missing ones
           habit.repeatHours.forEach((hour, slotIndex) => {
-            addExecutionInWrite(habit.id, currentDate, slotIndex, hour, 'bad');
+            // Check if this specific slot exists for this day
+            const id = executionId(habit.id, currentDate, slotIndex);
+            const slotExists = realm.objectForPrimaryKey('Execution', id);
+
+            // Only add 'bad' execution if this slot doesn't exist
+            if (!slotExists) {
+              addExecutionInWrite(
+                habit.id,
+                currentDate,
+                slotIndex,
+                hour,
+                'bad',
+              );
+            }
           });
         }
 

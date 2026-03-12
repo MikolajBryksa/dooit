@@ -105,7 +105,11 @@ export async function scheduleHabitNotifications(habits, t) {
       );
 
       for (const habit of dayHabits) {
-        for (let slotIndex = 0; slotIndex < habit.repeatHours.length; slotIndex++) {
+        for (
+          let slotIndex = 0;
+          slotIndex < habit.repeatHours.length;
+          slotIndex++
+        ) {
           const hour = habit.repeatHours[slotIndex];
           const [h, m] = hour.split(':').map(Number);
 

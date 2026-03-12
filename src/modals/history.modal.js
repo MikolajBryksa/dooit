@@ -126,7 +126,6 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                     onPress={() => openDelete(exec)}
                   />
 
-                  {/* Zamiast SegmentedButtons: pojedynczy checkbox */}
                   <Checkbox
                     status={checked ? 'checked' : 'unchecked'}
                     onPress={() =>
