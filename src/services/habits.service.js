@@ -260,6 +260,7 @@ export const getTodayHabits = (habits, weekdayKey) => {
       repeatDays: habit.repeatDays,
       repeatHours: habit.repeatHours,
       selectedHour: hour,
+      slotIndex: idx,
       icon: habit.icon,
     })),
   );
@@ -275,7 +276,7 @@ export function selectActiveHabitKey(todayHabits, dateKey) {
   if (!todayHabits || todayHabits.length === 0) return null;
 
   const incomplete = todayHabits.filter(habit => {
-    return !hasExecution(habit.id, dateKey, habit.selectedHour);
+    return !hasExecution(habit.id, dateKey, habit.slotIndex);
   });
 
   if (incomplete.length === 0) return null;

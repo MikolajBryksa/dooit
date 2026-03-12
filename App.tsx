@@ -22,10 +22,7 @@ import OnboardingView from './src/views/onboarding.view';
 import {setupNotificationSync} from './src/services/notifications.service';
 import {setupErrorTracking, logError} from '@/services/errors.service';
 import {getHabits} from '@/services/habits.service';
-import {
-  deleteOldExecutions,
-  backfillMissedExecutions,
-} from '@/services/executions.service';
+import {backfillMissedExecutions} from '@/services/executions.service';
 
 setupErrorTracking();
 
@@ -79,7 +76,6 @@ function AppContent() {
         dispatch(setHabits(habits));
 
         backfillMissedExecutions(habits, 14);
-        // deleteOldExecutions(14);
       } catch (e) {
         logError(e, 'loadLocalData');
       } finally {

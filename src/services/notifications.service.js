@@ -105,13 +105,14 @@ export async function scheduleHabitNotifications(habits, t) {
       );
 
       for (const habit of dayHabits) {
-        for (const hour of habit.repeatHours) {
+        for (let slotIndex = 0; slotIndex < habit.repeatHours.length; slotIndex++) {
+          const hour = habit.repeatHours[slotIndex];
           const [h, m] = hour.split(':').map(Number);
 
           // For today only: skip notification if already completed
           const isAlreadyCompleted =
             targetDateKey === todayDateKey &&
-            hasExecution(habit.id, targetDateKey, hour);
+            hasExecution(habit.id, targetDateKey, slotIndex);
 
           if (isAlreadyCompleted) {
             continue;
@@ -129,7 +130,7 @@ export async function scheduleHabitNotifications(habits, t) {
 
           // Only schedule future notifications
           if (triggerDate > now) {
-            const notificationId = `${habit.id}-${targetDateKey}-${hour}`;
+            const notificationId = `${habit.id}-${targetDateKey}-${slotIndex}`;
 
             await notifee.createTriggerNotification(
               {

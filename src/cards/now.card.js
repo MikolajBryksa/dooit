@@ -22,6 +22,7 @@ const NowCard = ({
   repeatDays,
   repeatHours,
   selectedHour,
+  slotIndex,
   icon,
   isNext = false,
   isLastHabit = false,
@@ -70,7 +71,7 @@ const NowCard = ({
   }, [id, selectedHour, t, cardOpacity]);
 
   const today = getLocalDateKey();
-  const isCompleted = hasExecution(id, today, selectedHour);
+  const isCompleted = hasExecution(id, today, slotIndex);
 
   const stats = useMemo(() => {
     return calculateEffectiveness(id, {
@@ -114,8 +115,8 @@ const NowCard = ({
 
       const today = getLocalDateKey();
 
-      if (!hasExecution(id, today, selectedHour)) {
-        addExecution(id, today, selectedHour, choice);
+      if (!hasExecution(id, today, slotIndex)) {
+        addExecution(id, today, slotIndex, selectedHour, choice);
       }
 
       const patch = {
@@ -133,6 +134,7 @@ const NowCard = ({
     },
     [
       isCompleted,
+      slotIndex,
       selectedHour,
       habitName,
       repeatDays,

@@ -133,6 +133,7 @@ const NowView = () => {
             repeatDays={activeHabit.repeatDays}
             repeatHours={activeHabit.repeatHours}
             selectedHour={activeHabit.selectedHour}
+            slotIndex={activeHabit.slotIndex}
             icon={activeHabit.icon}
             isNext={true}
             isLastHabit={isLastHabit}

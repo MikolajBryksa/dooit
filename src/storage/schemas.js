@@ -25,7 +25,8 @@ Execution.schema = {
     id: 'string',
     habitId: 'int',
     date: 'string',
-    hour: 'string',
+    slotIndex: 'int',
+    plannedHour: 'string',
     status: 'string',
     timestamp: 'date',
   },
@@ -88,7 +89,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, DailySummary, ErrorLog, ContactMessage],
-  schemaVersion: 23,
+  schemaVersion: 24,
   deleteRealmIfMigrationNeeded: true,
 };
 

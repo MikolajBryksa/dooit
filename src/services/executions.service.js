@@ -1,25 +1,26 @@
 import realm from '@/storage/schemas';
 import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
 
-const executionId = (habitId, date, hour) => `${habitId}_${date}_${hour}`;
+const executionId = (habitId, date, slotIndex) => `${habitId}_${date}_${slotIndex}`;
 
-export const addExecutionInWrite = (habitId, date, hour, status) => {
-  const id = executionId(habitId, date, hour);
+export const addExecutionInWrite = (habitId, date, slotIndex, plannedHour, status) => {
+  const id = executionId(habitId, date, slotIndex);
   if (realm.objectForPrimaryKey('Execution', id)) return;
 
   realm.create('Execution', {
     id,
     habitId,
     date,
-    hour,
+    slotIndex,
+    plannedHour,
     status,
     timestamp: new Date(),
   });
 };
 
-export const addExecution = (habitId, date, hour, status) => {
+export const addExecution = (habitId, date, slotIndex, plannedHour, status) => {
   realm.write(() => {
-    addExecutionInWrite(habitId, date, hour, status);
+    addExecutionInWrite(habitId, date, slotIndex, plannedHour, status);
   });
 };
 
@@ -92,14 +93,15 @@ export const getExecutions = habitId => {
     id: e.id,
     habitId: e.habitId,
     date: e.date,
-    hour: e.hour,
+    slotIndex: e.slotIndex,
+    plannedHour: e.plannedHour,
     status: e.status,
     timestamp: e.timestamp,
   }));
 };
 
-export const hasExecution = (habitId, date, hour) => {
-  const id = executionId(habitId, date, hour);
+export const hasExecution = (habitId, date, slotIndex) => {
+  const id = executionId(habitId, date, slotIndex);
   return !!realm.objectForPrimaryKey('Execution', id);
 };
 
@@ -110,7 +112,7 @@ export const getExecutionLabel = executionId => {
   const habit = realm.objectForPrimaryKey('Habit', execution.habitId);
   if (!habit) return null;
 
-  return `${habit.habitName} | ${execution.date} | ${execution.hour}`;
+  return `${habit.habitName} | ${execution.date} | ${execution.plannedHour}`;
 };
 
 const getLastExecutionDateGlobal = () => {
@@ -138,8 +140,8 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
         const weekday = dateToWeekday(currentDate);
 
         if (habit.repeatDays.includes(weekday)) {
-          habit.repeatHours.forEach(hour => {
-            addExecutionInWrite(habit.id, currentDate, hour, 'bad');
+          habit.repeatHours.forEach((hour, slotIndex) => {
+            addExecutionInWrite(habit.id, currentDate, slotIndex, hour, 'bad');
           });
         }
 
@@ -147,15 +149,6 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
       }
     });
   });
-};
-
-const getFirstExecutionDate = habitId => {
-  const first = realm
-    .objects('Execution')
-    .filtered('habitId == $0', habitId)
-    .sorted('date')[0];
-
-  return first ? first.date : null;
 };
 
 export const calculateEffectiveness = habitId => {

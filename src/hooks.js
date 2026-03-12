@@ -93,7 +93,7 @@ export function useActiveHabit(todayHabits, todayKey) {
   const incomplete = useMemo(() => {
     if (!todayHabits || todayHabits.length === 0) return [];
     return todayHabits.filter(
-      habit => !hasExecution(habit.id, todayKey, habit.selectedHour),
+      habit => !hasExecution(habit.id, todayKey, habit.slotIndex),
     );
   }, [todayHabits, todayKey]);
 
@@ -145,7 +145,7 @@ export function useActiveHabit(todayHabits, todayKey) {
     const findNextFrom = startIdx => {
       for (let i = startIdx; i < todayHabits.length; i++) {
         const h = todayHabits[i];
-        if (!hasExecution(h.id, todayKey, h.selectedHour)) return h.key;
+        if (!hasExecution(h.id, todayKey, h.slotIndex)) return h.key;
       }
       return null;
     };

@@ -42,7 +42,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
     history.sort((a, b) => {
       if (a.date !== b.date) return b.date.localeCompare(a.date);
-      return b.hour.localeCompare(a.hour);
+      return b.plannedHour.localeCompare(a.plannedHour);
     });
 
     setExecutions(history);
@@ -115,7 +115,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   }}>
                   <View style={{flex: 1}}>
                     <Text variant="bodySmall">
-                      {formatDate(exec.date)} {exec.hour}
+                      {formatDate(exec.date)} {exec.plannedHour}
                     </Text>
                   </View>
 
