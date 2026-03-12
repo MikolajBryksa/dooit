@@ -177,6 +177,14 @@ export const useStyles = () => {
       shadowOpacity: 0,
       shadowColor: 'transparent',
     },
+    dialog__title: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      height: theme.dimensions.height / 2,
+      marginBottom: theme.dimensions.gap,
+      paddingLeft: 24,
+    },
     modal: {
       backgroundColor: theme.colors.surface,
       margin: theme.dimensions.gap * 2,

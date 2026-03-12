@@ -13,8 +13,10 @@ const SupportDialog = ({visible, onDismiss, onDone}) => {
   };
 
   return (
-    <DialogComponent visible={visible} onDismiss={onDismiss}>
-      <DialogComponent.Title>{t('title.support')}</DialogComponent.Title>
+    <DialogComponent
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('title.support')}>
       <DialogComponent.Content>
         <Text variant="bodyMedium">{t('message.support')}</Text>
       </DialogComponent.Content>

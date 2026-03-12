@@ -19,8 +19,10 @@ const DeleteHabitDialog = ({
   };
 
   return (
-    <DialogComponent visible={visible} onDismiss={onDismiss}>
-      <DialogComponent.Title>{t('title.delete-habit')}</DialogComponent.Title>
+    <DialogComponent
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('title.delete-habit')}>
       <DialogComponent.Content>
         <Text variant="bodyMedium">{t('message.delete-habit')}</Text>
         <Text variant="bodyMedium">{habitName}</Text>

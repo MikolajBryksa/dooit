@@ -29,10 +29,10 @@ const DeleteExecutionDialog = ({
   };
 
   return (
-    <DialogComponent visible={visible} onDismiss={onDismiss}>
-      <DialogComponent.Title>
-        {t('title.delete-execution')}
-      </DialogComponent.Title>
+    <DialogComponent
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('title.delete-execution')}>
       <DialogComponent.Content>
         <Text variant="bodyMedium">{t('message.delete-execution')}</Text>
         {!!label && <Text variant="bodyMedium">{label}</Text>}

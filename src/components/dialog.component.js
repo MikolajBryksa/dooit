@@ -1,21 +1,27 @@
 import React from 'react';
-import {Dialog, Portal} from 'react-native-paper';
+import {Dialog, Portal, Text} from 'react-native-paper';
 import {View} from 'react-native';
 import {useStyles} from '@/styles';
 
-const DialogComponent = ({visible, onDismiss, children}) => {
+const DialogComponent = ({visible, onDismiss, children, title}) => {
   const styles = useStyles();
 
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss} style={styles.dialog}>
-        <View style={{overflow: 'hidden'}}>{children}</View>
+        <View style={{overflow: 'hidden'}}>
+          {title && (
+            <View style={styles.dialog__title}>
+              <Text variant="titleLarge">{title}</Text>
+            </View>
+          )}
+          {children}
+        </View>
       </Dialog>
     </Portal>
   );
 };
 
-DialogComponent.Title = Dialog.Title;
 DialogComponent.Content = Dialog.Content;
 DialogComponent.Actions = Dialog.Actions;
 

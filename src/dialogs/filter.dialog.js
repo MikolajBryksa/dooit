@@ -30,8 +30,10 @@ const FilterDialog = ({visible, onDismiss, filterDay, setFilterDay}) => {
   };
 
   return (
-    <DialogComponent visible={visible} onDismiss={onDismiss}>
-      <DialogComponent.Title>{t('title.filter')}</DialogComponent.Title>
+    <DialogComponent
+      visible={visible}
+      onDismiss={onDismiss}
+      title={t('title.filter')}>
       <DialogComponent.Content>
         {daily.map(day => (
           <List.Item
