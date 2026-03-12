@@ -9,9 +9,10 @@ import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings, setHabits} from '@/redux/actions';
 import {
-  createDefaultHabits,
-  updateHabit,
+  createDefaultHabit,
   getHabits,
+  deleteHabit,
+  getHabitById,
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
 import {habitIcons} from '@/constants';
@@ -59,7 +60,7 @@ const OnboardingView = ({setShowOnboarding}) => {
       const restoredSelection = {};
       existingHabits.forEach(habit => {
         if (habit.id >= 1 && habit.id <= 7) {
-          restoredSelection[habit.id] = habit.available;
+          restoredSelection[habit.id] = true;
         }
       });
 
@@ -104,23 +105,21 @@ const OnboardingView = ({setShowOnboarding}) => {
   };
 
   function handleStep2() {
-    if (!habitsCreated) {
-      createDefaultHabits();
-      setHabitsCreated(true);
-    }
+    // For default habits (1-7): create selected, delete unselected
+    [1, 2, 3, 4, 5, 6, 7].forEach(habitId => {
+      const isSelected = selectedHabits[habitId];
+      const existingHabit = getHabitById(habitId);
 
-    const allHabits = getHabits();
-    allHabits.forEach(habit => {
-      const habitId = habit.id;
-
-      if (habitId >= 1 && habitId <= 7) {
-        const isSelected = selectedHabits[habitId];
-        updateHabit(habit.id, {
-          available: isSelected,
-        });
+      if (isSelected && !existingHabit) {
+        // Create missing selected habit
+        createDefaultHabit(habitId);
+      } else if (!isSelected && existingHabit) {
+        // Delete unselected habit
+        deleteHabit(habitId);
       }
     });
 
+    setHabitsCreated(true);
     const habits = getHabits() || [];
     dispatch(setHabits(habits));
     setStep(3);
@@ -131,8 +130,6 @@ const OnboardingView = ({setShowOnboarding}) => {
     setShowOnboarding(false);
   }
 
-  // Filters only available habits
-  const availableHabits = (habits || []).filter(habit => habit.available);
   const hasSelectedHabits = Object.values(selectedHabits).some(
     selected => selected,
   );
@@ -223,7 +220,7 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
-          {availableHabits.map(habit => (
+          {habits.map(habit => (
             <HabitComponent
               key={habit.id}
               id={habit.id}
@@ -232,7 +229,6 @@ const OnboardingView = ({setShowOnboarding}) => {
               badCounter={habit.badCounter}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
-              available={habit.available}
               icon={habit.icon}
               fetchAllHabits={fetchAllHabits}
               onEdit={handleEditModal}
@@ -253,7 +249,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
                 currentHabits.forEach(habit => {
                   if (habit.id >= 1 && habit.id <= 7) {
-                    updatedSelectedHabits[habit.id] = habit.available;
+                    updatedSelectedHabits[habit.id] = true;
                   }
                 });
 

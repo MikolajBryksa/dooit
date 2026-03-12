@@ -5,7 +5,6 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
-import {deleteUnavailableHabits} from '@/services/habits.service';
 import {setSettings} from '@/redux/actions';
 import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
@@ -22,7 +21,6 @@ const StartCard = ({onStart}) => {
   );
 
   const handleStart = useCallback(() => {
-    deleteUnavailableHabits();
     updateSettingValue('firstLaunch', false);
     dispatch(setSettings({...settings, firstLaunch: false}));
     onStart?.();

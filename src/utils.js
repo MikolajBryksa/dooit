@@ -4,13 +4,6 @@ import {faCog, faList, faClock} from '@fortawesome/free-solid-svg-icons';
 import realm from '@/storage/schemas';
 import {dayMap} from '@/constants';
 
-export function getNextId(itemName) {
-  // Retrieves the next available ID for a given item type from the database
-  // If no items exist, it returns 1
-  const lastItem = realm.objects(itemName).sorted('id', true)[0];
-  return lastItem ? lastItem.id + 1 : 1;
-}
-
 export function hourToSec(hourString) {
   // Converts a time string (HH:MM) into seconds
   const [h, m] = hourString.split(':').map(Number);

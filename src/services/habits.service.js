@@ -1,5 +1,5 @@
 import realm from '@/storage/schemas';
-import {getNextId, hourToSec} from '@/utils';
+import {hourToSec} from '@/utils';
 import i18next from 'i18next';
 import {habitIcons} from '@/constants';
 import {deleteExecutions, hasExecution} from '@/services/executions.service';
@@ -11,7 +11,12 @@ export const addHabit = (
   icon,
   id = null,
 ) => {
-  id = id || getNextId('Habit');
+  if (id === null) {
+    const lastItem = realm.objects('Habit').sorted('id', true)[0];
+    const nextId = lastItem ? lastItem.id + 1 : 8;
+    // Ensure custom habits never use IDs 1-7
+    id = Math.max(8, nextId);
+  }
 
   let newHabit;
   realm.write(() => {
@@ -22,7 +27,6 @@ export const addHabit = (
       badCounter: 0,
       repeatDays,
       repeatHours,
-      available: true,
       icon: icon || 'infinity',
     });
   });
@@ -44,7 +48,6 @@ export const updateHabit = (id, updates) => {
         badCounter: updates.badCounter ?? habit.badCounter,
         repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
         repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
-        available: updates.available ?? habit.available,
         icon: updates.icon ?? habit.icon,
       },
       'modified',
@@ -80,7 +83,6 @@ export const getHabits = () => {
     badCounter: habit.badCounter,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
-    available: habit.available,
     icon: habit.icon,
   }));
 
@@ -104,7 +106,6 @@ export const getHabitById = id => {
     badCounter: habit.badCounter,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
-    available: habit.available,
     icon: habit.icon,
   };
 };
@@ -123,74 +124,63 @@ export const updateHabitValues = (id, updates) => {
   return updateHabit(id, updates);
 };
 
-export const createDefaultHabits = () => {
-  const t = i18next.t;
-  const defaultHabitsData = [
-    {
-      id: 1,
-      habitName: t('default-habits.1.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-      repeatHours: ['08:00', '10:00', '12:00', '14:00', '18:00', '20:30'],
-      icon: habitIcons[0],
-    },
-    {
-      id: 2,
-      habitName: t('default-habits.2.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['17:30'],
-      icon: habitIcons[1],
-    },
-    {
-      id: 3,
-      habitName: t('default-habits.3.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
-      repeatHours: ['07:30', '13:00', '18:30'],
-      icon: habitIcons[2],
-    },
-    {
-      id: 4,
-      habitName: t('default-habits.4.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['22:00'],
-      icon: habitIcons[3],
-    },
-    {
-      id: 5,
-      habitName: t('default-habits.5.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
-      repeatHours: ['09:00'],
-      icon: habitIcons[4],
-    },
-    {
-      id: 6,
-      habitName: t('default-habits.6.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['21:30'],
-      icon: habitIcons[5],
-    },
-    {
-      id: 7,
-      habitName: t('default-habits.7.habitName'),
-      repeatDays: ['mon', 'tue', 'wed', 'thu'],
-      repeatHours: ['22:30'],
-      icon: habitIcons[6],
-    },
-  ];
+const DEFAULT_HABITS_DATA = [
+  {
+    id: 1,
+    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+    repeatHours: ['08:00', '10:00', '12:00', '14:00', '18:00', '20:30'],
+    icon: habitIcons[0],
+  },
+  {
+    id: 2,
+    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatHours: ['17:30'],
+    icon: habitIcons[1],
+  },
+  {
+    id: 3,
+    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+    repeatHours: ['07:30', '13:00', '18:30'],
+    icon: habitIcons[2],
+  },
+  {
+    id: 4,
+    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatHours: ['22:00'],
+    icon: habitIcons[3],
+  },
+  {
+    id: 5,
+    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+    repeatHours: ['09:00'],
+    icon: habitIcons[4],
+  },
+  {
+    id: 6,
+    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatHours: ['21:30'],
+    icon: habitIcons[5],
+  },
+  {
+    id: 7,
+    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatHours: ['22:30'],
+    icon: habitIcons[6],
+  },
+];
 
-  const createdHabits = [];
+export const createDefaultHabit = habitId => {
+  const data = DEFAULT_HABITS_DATA.find(h => h.id === habitId);
+  if (!data) return null;
 
-  defaultHabitsData.forEach(habit => {
-    const newHabit = addHabit(
-      habit.habitName,
-      habit.repeatDays,
-      habit.repeatHours,
-      habit.icon,
-      habit.id,
-    );
-    createdHabits.push(newHabit);
-  });
-
-  return createdHabits;
+  const habitName = i18next.t(`default-habits.${habitId}.habitName`);
+  return addHabit(
+    habitName,
+    data.repeatDays,
+    data.repeatHours,
+    data.icon,
+    habitId,
+  );
 };
 
 export const translateDefaultHabits = (oldLanguage, newLanguage) => {
@@ -241,7 +231,6 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
             badCounter: habit.badCounter,
             repeatDays: Array.from(habit.repeatDays),
             repeatHours: Array.from(habit.repeatHours),
-            available: habit.available,
             icon: habit.icon,
           },
           'modified',
@@ -254,28 +243,11 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
   return updatedCount;
 };
 
-export const deleteUnavailableHabits = () => {
-  const toDelete = realm.objects('Habit').filtered('available == false');
-  const ids = Array.from(toDelete).map(h => h.id);
-
-  if (ids.length === 0) return 0;
-
-  realm.write(() => {
-    realm.delete(toDelete);
-  });
-
-  ids.forEach(id => {
-    deleteExecutions(id);
-  });
-
-  return ids.length;
-};
-
 export const getTodayHabits = (habits, weekdayKey) => {
   if (!habits || habits.length === 0) return [];
 
-  const filteredHabits = habits.filter(
-    habit => habit.available && habit.repeatDays.includes(weekdayKey),
+  const filteredHabits = habits.filter(habit =>
+    habit.repeatDays.includes(weekdayKey),
   );
 
   const expandedHabits = filteredHabits.flatMap(habit =>

@@ -27,7 +27,7 @@ import InfoCircle from '../circles/info.circle';
 
 const withEffectiveness = habits =>
   habits.map(h => {
-    const stats = calculateEffectiveness(h.id); // "facts", independent of current plan
+    const stats = calculateEffectiveness(h.id);
     return {
       id: h.id,
       habitName: h.habitName,
@@ -95,20 +95,12 @@ const EndCard = ({weekdayKey}) => {
   const [hasExistingSummary, setHasExistingSummary] = useState(false);
   const [hadError, setHadError] = useState(false);
 
-  const availableHabits = useMemo(
-    () => habits.filter(h => h.available),
-    [habits],
-  );
-
   const todayHabits = useMemo(
-    () => habits.filter(h => h.available && h.repeatDays.includes(weekdayKey)),
+    () => habits.filter(h => h.repeatDays.includes(weekdayKey)),
     [habits, weekdayKey],
   );
 
-  const allAvailableHabitsWithEff = useMemo(
-    () => withEffectiveness(availableHabits),
-    [availableHabits],
-  );
+  const allHabitsWithEff = useMemo(() => withEffectiveness(habits), [habits]);
 
   const todayHabitsWithEff = useMemo(
     () => withEffectiveness(todayHabits),
@@ -185,15 +177,14 @@ const EndCard = ({weekdayKey}) => {
 
       const response = await generateAiSummary(mode, bestHabit, worstHabit);
       setAiSummary(response);
+      setHasExistingSummary(true);
+      setLoadingAI(false);
 
+      // Save in background without blocking UI
       try {
-        await saveSummary(todayKey, allAvailableHabitsWithEff, response);
-        setHasExistingSummary(true);
-        setHadError(false);
+        await saveSummary(todayKey, allHabitsWithEff, response);
       } catch (saveError) {
         await logError(saveError, 'EndCard.saveSummary');
-        setHasExistingSummary(false);
-        setHadError(true);
       }
     } catch (error) {
       await logError(error, 'EndCard.generateAiSummary');
@@ -202,14 +193,13 @@ const EndCard = ({weekdayKey}) => {
       setAiSummary(msg);
       setHasExistingSummary(false);
       setHadError(true);
+      setLoadingAI(false);
 
       try {
-        await saveSummary(todayKey, allAvailableHabitsWithEff, null);
+        await saveSummary(todayKey, allHabitsWithEff, null);
       } catch (saveError) {
         await logError(saveError, 'EndCard.saveSummary.null');
       }
-    } finally {
-      setLoadingAI(false);
     }
   }, [
     loadingAI,
@@ -217,7 +207,7 @@ const EndCard = ({weekdayKey}) => {
     isConnected,
     habitsWithChanges,
     todayKey,
-    allAvailableHabitsWithEff,
+    allHabitsWithEff,
     t,
   ]);
 

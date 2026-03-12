@@ -100,8 +100,8 @@ export async function scheduleHabitNotifications(habits, t) {
       const targetDateKey = getLocalDateKey(targetDate);
       const weekdayKey = dateToWeekday(targetDateKey);
 
-      const dayHabits = habits.filter(
-        habit => habit.available && habit.repeatDays.includes(weekdayKey),
+      const dayHabits = habits.filter(habit =>
+        habit.repeatDays.includes(weekdayKey),
       );
 
       for (const habit of dayHabits) {

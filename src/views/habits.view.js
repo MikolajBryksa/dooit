@@ -87,7 +87,6 @@ const HabitsView = () => {
               habitName={habit.habitName}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
-              available={habit.available}
               icon={habit.icon}
               fetchAllHabits={fetchAllHabits}
               onEdit={handleEditModal}
