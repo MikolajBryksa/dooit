@@ -3,7 +3,7 @@ import {dateToWeekday, pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
 import {logError} from './errors.service.js';
-import {hasExecution} from './executions.service.js';
+import {hasExecutionOrDeleted} from './executions.service.js';
 
 export async function syncNotificationStatus(settings, dispatch, setSettings) {
   // Checks system notification permissions and updates app settings to match
@@ -113,10 +113,10 @@ export async function scheduleHabitNotifications(habits, t) {
           const hour = habit.repeatHours[slotIndex];
           const [h, m] = hour.split(':').map(Number);
 
-          // For today only: skip notification if already completed
+          // For today only: skip notification if already completed or deleted
           const isAlreadyCompleted =
             targetDateKey === todayDateKey &&
-            hasExecution(habit.id, targetDateKey, slotIndex);
+            hasExecutionOrDeleted(habit.id, targetDateKey, slotIndex);
 
           if (isAlreadyCompleted) {
             continue;

@@ -12,8 +12,12 @@ export const addExecutionInWrite = (
   status,
 ) => {
   const id = executionId(habitId, date, slotIndex);
-  if (realm.objectForPrimaryKey('Execution', id)) return;
+  const existing = realm.objectForPrimaryKey('Execution', id);
 
+  // If execution exists (even if deleted), don't create/modify
+  if (existing) return;
+
+  // Create new execution
   realm.create('Execution', {
     id,
     habitId,
@@ -22,6 +26,7 @@ export const addExecutionInWrite = (
     plannedHour,
     status,
     timestamp: new Date(),
+    deleted: false,
   });
 };
 
@@ -72,7 +77,8 @@ export const deleteExecution = executionId => {
       }
     }
 
-    realm.delete(exec);
+    // Soft delete - mark as deleted instead of removing
+    exec.deleted = true;
   });
 };
 
@@ -93,7 +99,7 @@ export const deleteOldExecutions = daysToKeep => {
 export const getExecutions = habitId => {
   const results = realm
     .objects('Execution')
-    .filtered('habitId == $0', habitId)
+    .filtered('habitId == $0 AND deleted != true', habitId)
     .sorted('timestamp', true);
 
   return Array.from(results).map(e => ({
@@ -107,8 +113,10 @@ export const getExecutions = habitId => {
   }));
 };
 
-export const hasExecution = (habitId, date, slotIndex) => {
+export const hasExecutionOrDeleted = (habitId, date, slotIndex) => {
   const id = executionId(habitId, date, slotIndex);
+  // Return true if execution exists (even if deleted)
+  // Used in "now" view to prevent showing deleted executions
   return !!realm.objectForPrimaryKey('Execution', id);
 };
 
@@ -125,7 +133,7 @@ export const getExecutionLabel = executionId => {
 const getLastExecutionDateForHabit = habitId => {
   const last = realm
     .objects('Execution')
-    .filtered('habitId == $0', habitId)
+    .filtered('habitId == $0 AND deleted != true', habitId)
     .sorted('date', true)[0];
   return last ? last.date : null;
 };
@@ -154,14 +162,16 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
         const weekday = dateToWeekday(currentDate);
 
         if (habit.repeatDays.includes(weekday)) {
-          // Check each slot individually - backfill only missing ones
           habit.repeatHours.forEach((hour, slotIndex) => {
-            // Check if this specific slot exists for this day
-            const id = executionId(habit.id, currentDate, slotIndex);
-            const slotExists = realm.objectForPrimaryKey('Execution', id);
+            // Don't backfill if execution exists (including deleted ones)
+            // This respects user's delete action
+            const executionExists = hasExecutionOrDeleted(
+              habit.id,
+              currentDate,
+              slotIndex,
+            );
 
-            // Only add 'bad' execution if this slot doesn't exist
-            if (!slotExists) {
+            if (!executionExists) {
               addExecutionInWrite(
                 habit.id,
                 currentDate,

@@ -10,7 +10,7 @@ import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
 import {
   addExecution,
-  hasExecution,
+  hasExecutionOrDeleted,
   calculateEffectiveness,
 } from '@/services/executions.service';
 
@@ -71,7 +71,7 @@ const NowCard = ({
   }, [id, selectedHour, t, cardOpacity]);
 
   const today = getLocalDateKey();
-  const isCompleted = hasExecution(id, today, slotIndex);
+  const isCompleted = hasExecutionOrDeleted(id, today, slotIndex);
 
   const stats = useMemo(() => {
     return calculateEffectiveness(id, {
@@ -115,7 +115,7 @@ const NowCard = ({
 
       const today = getLocalDateKey();
 
-      if (!hasExecution(id, today, slotIndex)) {
+      if (!hasExecutionOrDeleted(id, today, slotIndex)) {
         addExecution(id, today, slotIndex, selectedHour, choice);
       }
 

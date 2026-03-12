@@ -2,7 +2,7 @@ import {getLocalDateKey} from '@/utils';
 import {useState, useEffect, useMemo, useCallback} from 'react';
 import {logError} from '@/services/errors.service';
 import NetInfo from '@react-native-community/netinfo';
-import {hasExecution} from '@/services/executions.service';
+import {hasExecutionOrDeleted} from '@/services/executions.service';
 import {selectActiveHabitKey} from '@/services/habits.service';
 
 export function useTodayKey() {
@@ -93,7 +93,7 @@ export function useActiveHabit(todayHabits, todayKey) {
   const incomplete = useMemo(() => {
     if (!todayHabits || todayHabits.length === 0) return [];
     return todayHabits.filter(
-      habit => !hasExecution(habit.id, todayKey, habit.slotIndex),
+      habit => !hasExecutionOrDeleted(habit.id, todayKey, habit.slotIndex),
     );
   }, [todayHabits, todayKey]);
 
@@ -145,7 +145,7 @@ export function useActiveHabit(todayHabits, todayKey) {
     const findNextFrom = startIdx => {
       for (let i = startIdx; i < todayHabits.length; i++) {
         const h = todayHabits[i];
-        if (!hasExecution(h.id, todayKey, h.slotIndex)) return h.key;
+        if (!hasExecutionOrDeleted(h.id, todayKey, h.slotIndex)) return h.key;
       }
       return null;
     };

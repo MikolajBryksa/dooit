@@ -29,6 +29,7 @@ Execution.schema = {
     plannedHour: 'string',
     status: 'string',
     timestamp: 'date',
+    deleted: 'bool',
   },
 };
 
@@ -89,7 +90,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, DailySummary, ErrorLog, ContactMessage],
-  schemaVersion: 24,
+  schemaVersion: 26,
   deleteRealmIfMigrationNeeded: true,
 };
 

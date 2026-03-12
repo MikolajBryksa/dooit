@@ -2,7 +2,10 @@ import realm from '@/storage/schemas';
 import {hourToSec} from '@/utils';
 import i18next from 'i18next';
 import {habitIcons} from '@/constants';
-import {deleteExecutions, hasExecution} from '@/services/executions.service';
+import {
+  deleteExecutions,
+  hasExecutionOrDeleted,
+} from '@/services/executions.service';
 
 export const addHabit = (
   habitName,
@@ -276,7 +279,7 @@ export function selectActiveHabitKey(todayHabits, dateKey) {
   if (!todayHabits || todayHabits.length === 0) return null;
 
   const incomplete = todayHabits.filter(habit => {
-    return !hasExecution(habit.id, dateKey, habit.slotIndex);
+    return !hasExecutionOrDeleted(habit.id, dateKey, habit.slotIndex);
   });
 
   if (incomplete.length === 0) return null;
