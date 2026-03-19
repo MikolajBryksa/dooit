@@ -7,17 +7,20 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useSelector} from 'react-redux';
 import {formatHourString} from '@/utils';
-import {calculateEffectiveness} from '@/services/executions.service';
+import {getGoalStats} from '@/services/habits.service';
 import {logError} from '@/services/errors.service';
 
-const CONTENT_HEIGHT = 115;
+const CONTENT_HEIGHT = 150;
 
 const HabitComponent = ({
   id,
   habitName,
+  goodCounter = 0,
+  badCounter = 0,
   repeatDays = [],
   repeatHours = [],
   icon,
+  goal,
   fetchAllHabits,
   onEdit,
   onboardingMode = false,
@@ -34,12 +37,21 @@ const HabitComponent = ({
 
   const stats = useMemo(() => {
     try {
-      return calculateEffectiveness(id, {id, repeatDays, repeatHours});
+      return getGoalStats({
+        id,
+        goal,
+      });
     } catch (error) {
-      logError(error, 'calculateEffectiveness');
-      return {effectiveness: null, totalCount: 0, goodCount: 0, badCount: 0};
+      logError(error, 'getGoalStats');
+      return {
+        goalCount: 0,
+        goodCount: 0,
+        badCount: 0,
+        remainingCount: 0,
+        progressPercent: null,
+      };
     }
-  }, [id, repeatDays, repeatHours]);
+  }, [id, goodCounter, badCounter, repeatDays, repeatHours, goal]);
 
   const expandAnim = useRef(new Animated.Value(isExpanded ? 1 : 0)).current;
 
@@ -213,26 +225,39 @@ const HabitComponent = ({
               </TouchableRipple>
 
               {!onboardingMode && (
-                <TouchableRipple
-                  onPress={() =>
-                    stats.totalCount > 0 && setHistoryModalVisible(true)
-                  }>
-                  <View style={styles.card__row}>
-                    <IconButton
-                      icon="chart-arc"
-                      size={18}
-                      style={{margin: 0, marginRight: 4}}
-                      opacity={stats.effectiveness !== null ? 1 : 0.5}
-                    />
-                    <Text
-                      variant="bodyMedium"
-                      opacity={stats.effectiveness !== null ? 1 : 0.5}>
-                      {stats.effectiveness !== null
-                        ? `${stats.effectiveness}% (${stats.goodCount}/${stats.totalCount})`
-                        : t('card.noRepetitions')}
-                    </Text>
-                  </View>
-                </TouchableRipple>
+                <>
+                  <TouchableRipple
+                    onPress={() =>
+                      stats.goalCount > 0 && setHistoryModalVisible(true)
+                    }>
+                    <View style={styles.card__row}>
+                      <IconButton
+                        icon="chart-arc"
+                        size={18}
+                        style={{margin: 0, marginRight: 4}}
+                        opacity={stats.goalCount > 0 ? 1 : 0.5}
+                      />
+                      <Text
+                        variant="bodyMedium"
+                        opacity={stats.goalCount > 0 ? 1 : 0.5}>
+                        {stats.goalCount > 0
+                          ? `${stats.goodCount} (${stats.progressPercent}%)`
+                          : t('card.noRepetitions')}
+                      </Text>
+                    </View>
+                  </TouchableRipple>
+
+                  <TouchableRipple onPress={() => openEditModal('goal', goal)}>
+                    <View style={styles.card__row}>
+                      <IconButton
+                        icon="flag-checkered"
+                        size={18}
+                        style={{margin: 0, marginRight: 4}}
+                      />
+                      <Text variant="bodyMedium">{goal}</Text>
+                    </View>
+                  </TouchableRipple>
+                </>
               )}
             </Card.Content>
           </Animated.View>

@@ -128,13 +128,10 @@ const NowView = () => {
             key={activeHabit.key}
             id={activeHabit.id}
             habitName={activeHabit.habitName}
-            goodCounter={activeHabit.goodCounter}
-            badCounter={activeHabit.badCounter}
-            repeatDays={activeHabit.repeatDays}
-            repeatHours={activeHabit.repeatHours}
             selectedHour={activeHabit.selectedHour}
             slotIndex={activeHabit.slotIndex}
             icon={activeHabit.icon}
+            goal={activeHabit.goal}
             isNext={true}
             isLastHabit={isLastHabit}
             onUpdated={refreshHabits}

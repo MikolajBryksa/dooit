@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   Text,
   Button,
@@ -27,17 +27,12 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     useState(false);
   const [executionToDelete, setExecutionToDelete] = useState(null);
 
-  useEffect(() => {
-    if (visible && habitId) {
-      loadHistory();
-      setChanges({});
-      setDeleteExecutionDialogVisible(false);
-      setExecutionToDelete(null);
+  const loadHistory = useCallback(() => {
+    if (!habitId) {
+      setExecutions([]);
+      return [];
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, habitId]);
 
-  const loadHistory = () => {
     const history = getExecutions(habitId);
 
     history.sort((a, b) => {
@@ -47,7 +42,16 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
     setExecutions(history);
     return history;
-  };
+  }, [habitId]);
+
+  useEffect(() => {
+    if (visible && habitId) {
+      loadHistory();
+      setChanges({});
+      setDeleteExecutionDialogVisible(false);
+      setExecutionToDelete(null);
+    }
+  }, [visible, habitId, loadHistory]);
 
   const handleStatusChange = (executionId, newStatus) => {
     setChanges(prev => ({
@@ -58,8 +62,11 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
   const handleSave = () => {
     Object.entries(changes).forEach(([executionId, newStatus]) => {
-      updateExecution(executionId, newStatus);
+      updateExecution(executionId, {status: newStatus});
     });
+
+    loadHistory();
+    setChanges({});
     onDismiss();
   };
 
@@ -70,8 +77,8 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     if (dateKey === today) return t('button.today');
     if (dateKey === yesterday) return t('button.yesterday');
 
-    const date = new Date(dateKey + 'T00:00:00');
-    const todayDate = new Date(today + 'T00:00:00');
+    const date = new Date(`${dateKey}T00:00:00`);
+    const todayDate = new Date(`${today}T00:00:00`);
     const diffMs = todayDate.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
 
@@ -159,7 +166,9 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
 
           setChanges(prev => {
             const next = {...prev};
-            if (executionToDelete?.id) delete next[executionToDelete.id];
+            if (executionToDelete?.id) {
+              delete next[executionToDelete.id];
+            }
             return next;
           });
 

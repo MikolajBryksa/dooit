@@ -14,6 +14,7 @@ Habit.schema = {
     repeatDays: 'string[]',
     repeatHours: 'string[]',
     icon: 'string',
+    goal: 'int',
   },
 };
 
@@ -90,7 +91,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, DailySummary, ErrorLog, ContactMessage],
-  schemaVersion: 26,
+  schemaVersion: 27,
   deleteRealmIfMigrationNeeded: true,
 };
 

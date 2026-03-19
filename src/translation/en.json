@@ -16,6 +16,7 @@
     "add": "Add habit",
     "delete-habit": "Delete habit",
     "delete-execution": "Delete execution",
+    "change-goal": "Change goal",
     "contact": "Contact",
     "support": "Coffee",
     "filter": "Filter habits",
@@ -49,6 +50,7 @@
   "message": {
     "delete-habit": "Are you sure to remove the habit:",
     "delete-execution": "Are you sure to remove this execution?",
+    "change-goal": "Do you want to change the goal?",
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hey there! 👋\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
   },
@@ -93,7 +95,8 @@
     "repeatHours": "Repeat Hours",
     "goodCounter": "Right choices",
     "badCounter": "Easy choices",
-    "effectiveness": "Effectiveness",
+    "goal": "Current goal",
+    "newGoal": "Suggested goal",
     "noRepetitions": "No repetitions"
   },
   "date": {
@@ -120,10 +123,6 @@
     "afternoon": "Afternoon",
     "evening": "Evening"
   },
-  "common": {
-    "yes": "Yes",
-    "no": "No"
-  },
   "addStep": {
     "habitName": "What do you want to do regularly?",
     "repeatDays": "On what days you want to do it?",
@@ -146,30 +145,30 @@
     "start": {
       "subtitle": "Hi, {{userName}}",
       "title": "Let’s get started",
-      "text": "This screen shows the habit that is worth doing right now. For each habit, you make a simple choice: complete the habit or skip it. Once you finish all repetitions planned for today, you’ll see a summary of your progress."
+      "text": "For each habit, just make one choice:\ndo it or skip it."
     }
   },
   "default-habits": {
     "1": {
-      "habitName": "Drinking water"
+      "habitName": "Fill a glass of water"
     },
     "2": {
-      "habitName": "Physical activity"
+      "habitName": "Start workout"
     },
     "3": {
-      "habitName": "Healthy eating"
+      "habitName": "Eat a fruit"
     },
     "4": {
-      "habitName": "Reading books"
+      "habitName": "Open a book"
     },
     "5": {
-      "habitName": "Skill development"
+      "habitName": "Start a lesson"
     },
     "6": {
-      "habitName": "Stress relief"
+      "habitName": "Take a deep breath"
     },
     "7": {
-      "habitName": "Consistent sleep"
+      "habitName": "Go to bed early"
     }
   },
   "motivation": {

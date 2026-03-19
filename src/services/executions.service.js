@@ -4,21 +4,13 @@ import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
 const executionId = (habitId, date, slotIndex) =>
   `${habitId}_${date}_${slotIndex}`;
 
-export const addExecutionInWrite = (
-  habitId,
-  date,
-  slotIndex,
-  plannedHour,
-  status,
-) => {
+const addExecutionInWrite = (habitId, date, slotIndex, plannedHour, status) => {
   const id = executionId(habitId, date, slotIndex);
   const existing = realm.objectForPrimaryKey('Execution', id);
 
-  // If execution exists (even if deleted), don't create/modify
-  if (existing) return;
+  if (existing) return null;
 
-  // Create new execution
-  realm.create('Execution', {
+  return realm.create('Execution', {
     id,
     habitId,
     date,
@@ -30,54 +22,54 @@ export const addExecutionInWrite = (
   });
 };
 
-export const addExecution = (habitId, date, slotIndex, plannedHour, status) => {
+export const recordExecutionChoice = (
+  habitId,
+  date,
+  slotIndex,
+  plannedHour,
+  status,
+) => {
   realm.write(() => {
-    addExecutionInWrite(habitId, date, slotIndex, plannedHour, status);
+    const id = executionId(habitId, date, slotIndex);
+    const existing = realm.objectForPrimaryKey('Execution', id);
+
+    if (existing && existing.deleted) return;
+
+    if (!existing) {
+      addExecutionInWrite(habitId, date, slotIndex, plannedHour, status);
+      return;
+    }
+
+    if (existing.status === status) return;
+
+    existing.status = status;
+    existing.timestamp = new Date();
+    existing.plannedHour = plannedHour ?? existing.plannedHour;
   });
 };
 
-export const updateExecution = (executionId, newStatus) => {
+export const updateExecution = (executionIdValue, updates = {}) => {
+  let updatedExecution = null;
+
   realm.write(() => {
-    const execution = realm.objectForPrimaryKey('Execution', executionId);
-    if (!execution) return;
+    const execution = realm.objectForPrimaryKey('Execution', executionIdValue);
+    if (!execution || execution.deleted) return null;
 
-    const oldStatus = execution.status;
-    if (oldStatus === newStatus) return;
+    execution.status = updates.status ?? execution.status;
+    execution.plannedHour = updates.plannedHour ?? execution.plannedHour;
+    execution.timestamp = updates.timestamp ?? new Date();
 
-    execution.status = newStatus;
-
-    const habit = realm.objectForPrimaryKey('Habit', execution.habitId);
-    if (!habit) return;
-
-    if (oldStatus === 'good') {
-      habit.goodCounter = Math.max(0, (habit.goodCounter || 0) - 1);
-    } else if (oldStatus === 'bad') {
-      habit.badCounter = Math.max(0, (habit.badCounter || 0) - 1);
-    }
-
-    if (newStatus === 'good') {
-      habit.goodCounter = (habit.goodCounter || 0) + 1;
-    } else if (newStatus === 'bad') {
-      habit.badCounter = (habit.badCounter || 0) + 1;
-    }
+    updatedExecution = execution;
   });
+
+  return updatedExecution;
 };
 
-export const deleteExecution = executionId => {
+export const deleteExecution = executionIdValue => {
   realm.write(() => {
-    const exec = realm.objectForPrimaryKey('Execution', executionId);
+    const exec = realm.objectForPrimaryKey('Execution', executionIdValue);
     if (!exec) return;
 
-    const habit = realm.objectForPrimaryKey('Habit', exec.habitId);
-    if (habit) {
-      if (exec.status === 'good') {
-        habit.goodCounter = Math.max(0, (habit.goodCounter || 0) - 1);
-      } else if (exec.status === 'bad') {
-        habit.badCounter = Math.max(0, (habit.badCounter || 0) - 1);
-      }
-    }
-
-    // Soft delete - mark as deleted instead of removing
     exec.deleted = true;
   });
 };
@@ -113,15 +105,33 @@ export const getExecutions = habitId => {
   }));
 };
 
+export const getExecutionStats = habitId => {
+  const executions = realm
+    .objects('Execution')
+    .filtered('habitId == $0 AND deleted != true', habitId);
+
+  let goodCount = 0;
+  let badCount = 0;
+
+  executions.forEach(e => {
+    if (e.status === 'good') goodCount += 1;
+    else if (e.status === 'bad') badCount += 1;
+  });
+
+  return {
+    totalExecutions: executions.length,
+    goodCount,
+    badCount,
+  };
+};
+
 export const hasExecutionOrDeleted = (habitId, date, slotIndex) => {
   const id = executionId(habitId, date, slotIndex);
-  // Return true if execution exists (even if deleted)
-  // Used in "now" view to prevent showing deleted executions
   return !!realm.objectForPrimaryKey('Execution', id);
 };
 
-export const getExecutionLabel = executionId => {
-  const execution = realm.objectForPrimaryKey('Execution', executionId);
+export const getExecutionLabel = executionIdValue => {
+  const execution = realm.objectForPrimaryKey('Execution', executionIdValue);
   if (!execution) return null;
 
   const habit = realm.objectForPrimaryKey('Habit', execution.habitId);
@@ -135,10 +145,11 @@ const getLastExecutionDateForHabit = habitId => {
     .objects('Execution')
     .filtered('habitId == $0 AND deleted != true', habitId)
     .sorted('date', true)[0];
+
   return last ? last.date : null;
 };
 
-export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
+export const backfillMissedExecutions = (habits, maxDaysBack) => {
   if (!habits || habits.length === 0) return;
 
   const today = getLocalDateKey();
@@ -147,13 +158,9 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
 
   realm.write(() => {
     habits.forEach(habit => {
-      // Get last execution date for THIS specific habit
       const lastExecutionDate = getLastExecutionDateForHabit(habit.id);
 
-      // If habit has no executions, don't backfill
       if (!lastExecutionDate) return;
-
-      // Don't backfill if last execution is too old (beyond maxDaysBack)
       if (lastExecutionDate < cutoffDate) return;
 
       let currentDate = lastExecutionDate;
@@ -163,8 +170,6 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
 
         if (habit.repeatDays.includes(weekday)) {
           habit.repeatHours.forEach((hour, slotIndex) => {
-            // Don't backfill if execution exists (including deleted ones)
-            // This respects user's delete action
             const executionExists = hasExecutionOrDeleted(
               habit.id,
               currentDate,
@@ -189,48 +194,26 @@ export const backfillMissedExecutions = (habits, maxDaysBack = 14) => {
   });
 };
 
-export const calculateEffectiveness = habitId => {
-  const actualExecutions = getExecutions(habitId);
+export const getExecutionStatsForDate = (habitId, date) => {
+  const executions = realm
+    .objects('Execution')
+    .filtered(
+      'habitId == $0 AND date == $1 AND deleted != true',
+      habitId,
+      date,
+    );
 
   let goodCount = 0;
   let badCount = 0;
 
-  for (const e of actualExecutions) {
+  executions.forEach(e => {
     if (e.status === 'good') goodCount += 1;
     else if (e.status === 'bad') badCount += 1;
-  }
-
-  const totalCount = goodCount + badCount;
+  });
 
   return {
-    effectiveness:
-      totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : null,
+    totalExecutions: executions.length,
     goodCount,
     badCount,
-    totalCount,
-  };
-};
-
-export const calculateEffectivenessUpToDate = (habitId, endDate) => {
-  const actualExecutions = getExecutions(habitId).filter(
-    e => e.date <= endDate,
-  );
-
-  let goodCount = 0;
-  let badCount = 0;
-
-  for (const e of actualExecutions) {
-    if (e.status === 'good') goodCount += 1;
-    else if (e.status === 'bad') badCount += 1;
-  }
-
-  const totalCount = goodCount + badCount;
-
-  return {
-    effectiveness:
-      totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : null,
-    goodCount,
-    badCount,
-    totalCount,
   };
 };

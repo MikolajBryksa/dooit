@@ -5,21 +5,29 @@ import {habitIcons} from '@/constants';
 import {
   deleteExecutions,
   hasExecutionOrDeleted,
+  getExecutionStats,
+  getExecutionStatsForDate,
 } from '@/services/executions.service';
+
+const calculateMonthlyTarget = (repeatDays = [], repeatHours = []) => {
+  return (repeatDays.length || 0) * (repeatHours.length || 0) * 4;
+};
 
 export const addHabit = (
   habitName,
   repeatDays,
   repeatHours,
   icon,
+  goal,
   id = null,
 ) => {
   if (id === null) {
     const lastItem = realm.objects('Habit').sorted('id', true)[0];
     const nextId = lastItem ? lastItem.id + 1 : 8;
-    // Ensure custom habits never use IDs 1-7
     id = Math.max(8, nextId);
   }
+
+  const resolvedGoal = goal ?? calculateMonthlyTarget(repeatDays, repeatHours);
 
   let newHabit;
   realm.write(() => {
@@ -31,13 +39,16 @@ export const addHabit = (
       repeatDays,
       repeatHours,
       icon: icon || 'infinity',
+      goal: resolvedGoal,
     });
   });
+
   return newHabit;
 };
 
 export const updateHabit = (id, updates) => {
   let updatedHabit;
+
   realm.write(() => {
     const habit = realm.objectForPrimaryKey('Habit', id);
     if (!habit) return null;
@@ -47,20 +58,23 @@ export const updateHabit = (id, updates) => {
       {
         id,
         habitName: updates.habitName ?? habit.habitName,
-        goodCounter: updates.goodCounter ?? habit.goodCounter,
-        badCounter: updates.badCounter ?? habit.badCounter,
+        goodCounter: habit.goodCounter ?? 0,
+        badCounter: habit.badCounter ?? 0,
         repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
         repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
         icon: updates.icon ?? habit.icon,
+        goal: updates.goal ?? habit.goal,
       },
       'modified',
     );
   });
+
   return updatedHabit;
 };
 
 export const deleteHabit = id => {
   let deletedHabit;
+
   realm.write(() => {
     const habitToDelete = realm.objectForPrimaryKey('Habit', id);
     if (habitToDelete) {
@@ -82,16 +96,17 @@ export const getHabits = () => {
   const habitsArr = Array.from(realmHabits).map(habit => ({
     id: habit.id,
     habitName: habit.habitName,
-    goodCounter: habit.goodCounter,
-    badCounter: habit.badCounter,
+    goodCounter: habit.goodCounter ?? 0,
+    badCounter: habit.badCounter ?? 0,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     icon: habit.icon,
+    goal: habit.goal,
   }));
 
   habitsArr.sort((a, b) => {
-    const aFirstHour = a.repeatHours.length > 0 && a.repeatHours[0];
-    const bFirstHour = b.repeatHours.length > 0 && b.repeatHours[0];
+    const aFirstHour = a.repeatHours?.[0] || '';
+    const bFirstHour = b.repeatHours?.[0] || '';
     return aFirstHour.localeCompare(bFirstHour);
   });
 
@@ -105,11 +120,12 @@ export const getHabitById = id => {
   return {
     id: habit.id,
     habitName: habit.habitName,
-    goodCounter: habit.goodCounter,
-    badCounter: habit.badCounter,
+    goodCounter: habit.goodCounter ?? 0,
+    badCounter: habit.badCounter ?? 0,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     icon: habit.icon,
+    goal: habit.goal,
   };
 };
 
@@ -119,8 +135,7 @@ export const getHabitValue = (id, key) => {
 };
 
 export const updateHabitValue = (id, key, value) => {
-  const updates = {[key]: value};
-  return updateHabit(id, updates);
+  return updateHabit(id, {[key]: value});
 };
 
 export const updateHabitValues = (id, updates) => {
@@ -177,11 +192,13 @@ export const createDefaultHabit = habitId => {
   if (!data) return null;
 
   const habitName = i18next.t(`default-habits.${habitId}.habitName`);
+
   return addHabit(
     habitName,
     data.repeatDays,
     data.repeatHours,
     data.icon,
+    data.goal,
     habitId,
   );
 };
@@ -198,6 +215,7 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
         lng: oldLanguage,
       }),
     };
+
     newTranslations[id] = {
       habitName: i18next.t(`default-habits.${id}.habitName`, {
         lng: newLanguage,
@@ -230,14 +248,16 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
           {
             id: habit.id,
             habitName: newHabitName,
-            goodCounter: habit.goodCounter,
-            badCounter: habit.badCounter,
+            goodCounter: habit.goodCounter ?? 0,
+            badCounter: habit.badCounter ?? 0,
             repeatDays: Array.from(habit.repeatDays),
             repeatHours: Array.from(habit.repeatHours),
             icon: habit.icon,
+            goal: habit.goal,
           },
           'modified',
         );
+
         updatedCount++;
       }
     });
@@ -258,13 +278,14 @@ export const getTodayHabits = (habits, weekdayKey) => {
       key: `${habit.id}__${idx}__${hour}`,
       id: habit.id,
       habitName: habit.habitName,
-      goodCounter: habit.goodCounter,
-      badCounter: habit.badCounter,
+      goodCounter: habit.goodCounter ?? 0,
+      badCounter: habit.badCounter ?? 0,
       repeatDays: habit.repeatDays,
       repeatHours: habit.repeatHours,
       selectedHour: hour,
       slotIndex: idx,
       icon: habit.icon,
+      goal: habit.goal,
     })),
   );
 
@@ -290,3 +311,87 @@ export function selectActiveHabitKey(todayHabits, dateKey) {
 
   return incomplete[0].key;
 }
+
+export const getGoalTarget = habit => {
+  if (!habit) return 0;
+  return habit.goal || 0;
+};
+
+export const getGoalProgress = habit => {
+  if (!habit?.id) return 0;
+  return getExecutionStats(habit.id).goodCount;
+};
+
+export const getGoalPercentage = habit => {
+  const target = getGoalTarget(habit);
+  const progress = getGoalProgress(habit);
+
+  if (target <= 0) return null;
+  return Math.min(100, Math.round((progress / target) * 100));
+};
+
+export const getGoalStats = habit => {
+  if (!habit?.id) {
+    return {
+      goalCount: 0,
+      goodCount: 0,
+      badCount: 0,
+      remainingCount: 0,
+      progressPercent: null,
+    };
+  }
+
+  const goalCount = habit.goal || 0;
+  const {goodCount, badCount} = getExecutionStats(habit.id);
+  const remainingCount = Math.max(0, goalCount - goodCount);
+
+  return {
+    goalCount,
+    goodCount,
+    badCount,
+    remainingCount,
+    progressPercent:
+      goalCount > 0
+        ? Math.min(100, Math.round((goodCount / goalCount) * 100))
+        : null,
+  };
+};
+
+export const getSuggestedGoalFromSchedule = (
+  repeatDays = [],
+  repeatHours = [],
+) => {
+  return calculateMonthlyTarget(repeatDays, repeatHours);
+};
+
+export const getTodayGoalStats = (habit, dateKey, weekdayKey) => {
+  if (!habit?.id) {
+    return {
+      todayTarget: 0,
+      todayGoodCount: 0,
+      todayBadCount: 0,
+      todayDoneCount: 0,
+      todayRemainingCount: 0,
+      todayPercentage: null,
+    };
+  }
+
+  const isScheduledToday = habit.repeatDays?.includes(weekdayKey);
+  const todayTarget = isScheduledToday ? habit.repeatHours?.length || 0 : 0;
+
+  const {goodCount, badCount} = getExecutionStatsForDate(habit.id, dateKey);
+  const todayDoneCount = goodCount + badCount;
+  const todayRemainingCount = Math.max(0, todayTarget - todayDoneCount);
+
+  return {
+    todayTarget,
+    todayGoodCount: goodCount,
+    todayBadCount: badCount,
+    todayDoneCount,
+    todayRemainingCount,
+    todayPercentage:
+      todayTarget > 0
+        ? Math.min(100, Math.round((goodCount / todayTarget) * 100))
+        : null,
+  };
+};

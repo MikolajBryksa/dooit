@@ -3,27 +3,23 @@ import {Text, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {updateHabit} from '@/services/habits.service';
 import {pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
 import {
-  addExecution,
   hasExecutionOrDeleted,
-  calculateEffectiveness,
+  recordExecutionChoice,
+  getExecutionStats,
 } from '@/services/executions.service';
 
 const NowCard = ({
   id,
   habitName,
-  goodCounter,
-  badCounter,
-  repeatDays,
-  repeatHours,
   selectedHour,
   slotIndex,
   icon,
+  goal,
   isNext = false,
   isLastHabit = false,
   onUpdated,
@@ -31,37 +27,41 @@ const NowCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
-  const [hasUserMadeChoice, setHasUserMadeChoice] = useState(false);
   const [choice, setChoice] = useState(null);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
   );
+  const [liveGoodCount, setLiveGoodCount] = useState(0);
+  const [liveBadCount, setLiveBadCount] = useState(0);
 
-  // Card fade-in animation
   const cardOpacity = useRef(new Animated.Value(0)).current;
-
   const currentTime = useCurrentTime();
+
   const isSelectedHourLater = useMemo(() => {
-    // Comparison of selectedHour with the current time
     if (!selectedHour || !currentTime) return false;
+
     const [h, m] = selectedHour.split(':').map(Number);
     const nowMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
-    const selMinutes = h * 60 + (m || 0);
-    return selMinutes > nowMinutes;
+    const selectedMinutes = h * 60 + (m || 0);
+
+    return selectedMinutes > nowMinutes;
   }, [selectedHour, currentTime]);
 
   const isLocked = isSelectedHourLater && !isManuallyUnlocked;
 
   useEffect(() => {
-    // Resets the step and motivation when the card changes
+    const currentStats = getExecutionStats(id);
+
     setStep(1);
     setIsManuallyUnlocked(false);
-    setHasUserMadeChoice(false);
+    setChoice(null);
     setMotivation(pickRandomMotivation(t, 'notification'));
+    setLiveGoodCount(currentStats.goodCount || 0);
+    setLiveBadCount(currentStats.badCount || 0);
 
-    // Fade in the new card
     cardOpacity.setValue(0);
     Animated.timing(cardOpacity, {
       toValue: 1,
@@ -74,18 +74,48 @@ const NowCard = ({
   const isCompleted = hasExecutionOrDeleted(id, today, slotIndex);
 
   const stats = useMemo(() => {
-    return calculateEffectiveness(id, {
-      id,
-      repeatDays,
-      repeatHours,
-    });
-  }, [id, repeatDays, repeatHours]);
+    const target = goal || 0;
+    const progress = Math.max(0, liveGoodCount || 0);
+    const remaining = Math.max(0, target - progress);
+
+    return {
+      effectiveness:
+        target > 0
+          ? Math.min(100, Math.round((progress / target) * 100))
+          : null,
+      goalCount: target,
+      goodCount: progress,
+      badCount: Math.max(0, liveBadCount || 0),
+      target,
+      progress,
+      label: target > 0 ? `${progress}/${target}` : null,
+      remaining,
+    };
+  }, [goal, liveGoodCount, liveBadCount]);
 
   const choiceLabel = useMemo(() => {
     if (choice === 'good') return t('button.done');
     if (choice === 'bad') return t('button.skipped');
     return t('button.done');
   }, [choice, t]);
+
+  const handleChoice = useCallback(
+    status => {
+      if (isCompleted || step !== 1) return;
+
+      const date = getLocalDateKey();
+      recordExecutionChoice(id, date, slotIndex, selectedHour, status);
+
+      if (status === 'good') {
+        setLiveGoodCount(prev => prev + 1);
+      } else if (status === 'bad') {
+        setLiveBadCount(prev => prev + 1);
+      }
+
+      onUpdated?.();
+    },
+    [id, slotIndex, selectedHour, isCompleted, step, onUpdated],
+  );
 
   const addGoodChoice = () => {
     setChoice('good');
@@ -109,43 +139,6 @@ const NowCard = ({
     onNext?.();
   };
 
-  const handleChoice = useCallback(
-    choice => {
-      if (isCompleted) return;
-
-      const today = getLocalDateKey();
-
-      if (!hasExecutionOrDeleted(id, today, slotIndex)) {
-        addExecution(id, today, slotIndex, selectedHour, choice);
-      }
-
-      const patch = {
-        habitName,
-        repeatDays,
-        repeatHours,
-      };
-
-      if (choice === 'good') patch.goodCounter = (goodCounter || 0) + 1;
-      if (choice === 'bad') patch.badCounter = (badCounter || 0) + 1;
-
-      updateHabit(id, patch);
-      setHasUserMadeChoice(true);
-      onUpdated?.();
-    },
-    [
-      isCompleted,
-      slotIndex,
-      selectedHour,
-      habitName,
-      repeatDays,
-      repeatHours,
-      goodCounter,
-      badCounter,
-      id,
-      onUpdated,
-    ],
-  );
-
   if (!isNext) {
     return null;
   }
@@ -156,12 +149,10 @@ const NowCard = ({
       iconContent={
         <PieCircle
           icon={icon}
-          effectiveness={stats.effectiveness}
-          totalCount={stats.totalCount}
+          goalCount={stats.goalCount}
           goodCount={stats.goodCount}
-          badCount={stats.badCount}
           opacity={isLocked ? 0.5 : 1}
-          showPercentage={isCompleted || hasUserMadeChoice}
+          showCounter={true}
         />
       }
       subtitleContent={

@@ -1,16 +1,15 @@
 import React, {useMemo, useEffect, useState, useRef} from 'react';
-import {View, StyleSheet, Animated, Easing} from 'react-native';
+import {View, Animated, Easing} from 'react-native';
 import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 import {useStyles} from '@/styles';
 
 const PieCircle = ({
-  effectiveness = null,
+  goalCount = 0,
   goodCount = 0,
-  badCount = 0,
   icon,
   opacity: propOpacity = 1,
-  showPercentage = false,
+  showCounter = false,
 }) => {
   const theme = useTheme();
   const styles = useStyles();
@@ -20,46 +19,43 @@ const PieCircle = ({
   const animateDuration = 550;
   const opacity = propOpacity;
 
-  const total = Math.max(0, (goodCount || 0) + (badCount || 0));
+  const progress = Math.max(0, goodCount || 0);
+  const target = Math.max(0, goalCount || 0);
+  const remaining = Math.max(0, target - progress);
 
-  // Tick density based on total (good+bad)
   let tickArcLen = 1.2;
-  if (total >= 200) {
+  if (target >= 200) {
     tickArcLen = 0;
-  } else if (total >= 150) {
+  } else if (target >= 150) {
     tickArcLen = 0.4;
-  } else if (total >= 100) {
+  } else if (target >= 100) {
     tickArcLen = 0.7;
-  } else if (total >= 50) {
+  } else if (target >= 50) {
     tickArcLen = 1;
   }
 
   const _iconColor = theme?.colors?.primary;
-  const _goodColor = theme?.colors?.primary;
-  const _badColor = theme?.colors?.error;
+  const _progressColor = theme?.colors?.primary;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
 
   const radius = (size - strokeWidth) / 2;
-  const cx = size / 2,
-    cy = size / 2;
+  const cx = size / 2;
+  const cy = size / 2;
   const C = 2 * Math.PI * radius;
   const EPS = 1e-3;
 
-  // Fractions only for good/bad
-  const fG = total > 0 ? goodCount / total : 0;
-  const fB = total > 0 ? badCount / total : 0;
+  const progressFraction = target > 0 ? Math.min(1, progress / target) : 0;
 
-  const target = useMemo(
+  const targetArc = useMemo(
     () => ({
-      g: C * fG,
-      b: C * fB,
+      progressLen: C * progressFraction,
     }),
-    [C, fG, fB],
+    [C, progressFraction],
   );
 
   const mountedRef = useRef(false);
-  const prevRef = useRef({g: 0, b: 0});
+  const prevRef = useRef({progressLen: 0});
   const t = useRef(new Animated.Value(1)).current;
   const [animT, setAnimT] = useState(1);
 
@@ -71,11 +67,12 @@ const PieCircle = ({
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
-      prevRef.current = target;
+      prevRef.current = targetArc;
       t.setValue(1);
       setAnimT(1);
       return;
     }
+
     t.setValue(0);
     Animated.timing(t, {
       toValue: 1,
@@ -83,68 +80,54 @@ const PieCircle = ({
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
     }).start(({finished}) => {
-      if (finished) prevRef.current = target;
+      if (finished) prevRef.current = targetArc;
     });
-  }, [target.g, target.b, animateDuration, t]);
+  }, [targetArc.progressLen, animateDuration, t]);
 
   const lerp = (a, b, k) => a + (b - a) * k;
-
-  const lenG = lerp(prevRef.current.g, target.g, animT);
-  const lenB = lerp(prevRef.current.b, target.b, animT);
-
-  const startG = 0;
-  const startB = lenG;
-
-  const hasAny = lenG > EPS || lenB > EPS;
-
-  const isFullG = lenG > C - EPS;
-  const isFullB = lenB > C - EPS;
-
-  const unitG = goodCount > 0 ? lenG / goodCount : 0;
-  const unitB = badCount > 0 ? lenB / badCount : 0;
-
-  const prevEffectiveness = useRef(effectiveness ?? 0);
-  const effectivenessAnim = useRef(
-    new Animated.Value(effectiveness ?? 0),
-  ).current;
-  const [displayedEffectiveness, setDisplayedEffectiveness] = useState(
-    effectiveness ?? 0,
+  const progressLen = lerp(
+    prevRef.current.progressLen,
+    targetArc.progressLen,
+    animT,
   );
 
+  const hasProgress = progressLen > EPS;
+  const isFull = progressLen > C - EPS;
+  const unitLen = target > 0 ? C / target : 0;
+
+  const prevDisplayCount = useRef(progress);
+  const countAnim = useRef(new Animated.Value(progress)).current;
+  const [displayedCount, setDisplayedCount] = useState(progress);
+
   useEffect(() => {
-    const listener = effectivenessAnim.addListener(({value}) => {
-      setDisplayedEffectiveness(Math.round(value));
+    const listener = countAnim.addListener(({value}) => {
+      setDisplayedCount(Math.round(value));
     });
-    return () => effectivenessAnim.removeListener(listener);
-  }, [effectivenessAnim]);
+    return () => countAnim.removeListener(listener);
+  }, [countAnim]);
 
   useEffect(() => {
-    if (effectiveness === null) {
-      prevEffectiveness.current = 0;
-      effectivenessAnim.setValue(0);
-      setDisplayedEffectiveness(0);
-      return;
-    }
+    if (progress === prevDisplayCount.current) return;
 
-    const dEff = effectiveness - prevEffectiveness.current;
-    if (Math.abs(dEff) > 0.1) {
-      Animated.timing(effectivenessAnim, {
-        toValue: effectiveness,
-        duration: 600,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false,
-      }).start();
-      prevEffectiveness.current = effectiveness;
-    }
-  }, [effectiveness, effectivenessAnim]);
+    Animated.timing(countAnim, {
+      toValue: progress,
+      duration: 400,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+
+    prevDisplayCount.current = progress;
+  }, [progress, countAnim]);
 
   const availableSpace = size - (strokeWidth + 8) * 2;
   const iconSize = Math.max(44, availableSpace);
 
   const TinyArc = ({at, length, stroke}) => {
-    if (!hasAny || length <= 0) return null;
+    if (length <= 0) return null;
+
     const arc = Math.max(0, Math.min(C - EPS, length));
     const offset = -(at - arc / 2);
+
     return (
       <Circle
         cx={cx}
@@ -175,101 +158,59 @@ const PieCircle = ({
             strokeLinecap="butt"
           />
 
-          {hasAny && lenG > EPS && (
+          {hasProgress && (
             <Circle
               cx={cx}
               cy={cy}
               r={radius}
-              stroke={_goodColor}
+              stroke={_progressColor}
               strokeWidth={strokeWidth}
               fill="none"
-              strokeDasharray={`${lenG} ${Math.max(0, C - lenG)}`}
-              strokeDashoffset={-startG}
+              strokeDasharray={`${progressLen} ${Math.max(0, C - progressLen)}`}
+              strokeDashoffset={0}
               strokeLinecap="butt"
             />
           )}
 
-          {hasAny && lenB > EPS && (
-            <Circle
-              cx={cx}
-              cy={cy}
-              r={radius}
-              stroke={_badColor}
-              strokeWidth={strokeWidth}
-              fill="none"
-              strokeDasharray={`${lenB} ${Math.max(0, C - lenB)}`}
-              strokeDashoffset={-startB}
-              strokeLinecap="butt"
-            />
-          )}
-
-          {lenG > EPS &&
-            goodCount > 0 &&
-            unitG > 0 &&
+          {target > 0 &&
+            unitLen > 0 &&
             Array.from({
-              length: isFullG ? goodCount : Math.max(0, goodCount - 1),
+              length: isFull ? target : Math.max(0, target - 1),
             }).map((_, i) => {
-              const m = (isFullG ? 0 : 1) + i;
-              const pos = startG + m * unitG;
+              const m = (isFull ? 0 : 1) + i;
+              const pos = m * unitLen;
+
               return (
                 <TinyArc
-                  key={`tick-g-${i}`}
+                  key={`tick-${i}`}
                   at={pos}
                   length={tickArcLen}
                   stroke={_tickColor}
                 />
               );
             })}
-
-          {lenB > EPS &&
-            badCount > 0 &&
-            unitB > 0 &&
-            Array.from({
-              length: isFullB ? badCount : Math.max(0, badCount - 1),
-            }).map((_, i) => {
-              const m = (isFullB ? 0 : 1) + i;
-              const pos = startB + m * unitB;
-              return (
-                <TinyArc
-                  key={`tick-b-${i}`}
-                  at={pos}
-                  length={tickArcLen}
-                  stroke={_tickColor}
-                />
-              );
-            })}
-
-          {lenG > EPS && lenB > EPS && (
-            <>
-              <TinyArc
-                key="sep-g-b"
-                at={startB}
-                length={tickArcLen}
-                stroke={_tickColor}
-              />
-              <TinyArc
-                key="sep-wrap"
-                at={startG}
-                length={tickArcLen}
-                stroke={_tickColor}
-              />
-            </>
-          )}
         </G>
       </Svg>
 
-      <View pointerEvents="none" style={styles.circle__centerContent}>
-        {showPercentage && effectiveness !== null ? (
-          <Text
-            style={[
-              styles.circle__flashText,
-              {
-                color: _goodColor,
-                fontSize: Math.min(32, size * 0.24),
-              },
-            ]}>
-            {displayedEffectiveness}%
-          </Text>
+      <View
+        pointerEvents="none"
+        style={[
+          styles.circle__centerContent,
+          {alignItems: 'center', justifyContent: 'center'},
+        ]}>
+        {showCounter && target > 0 ? (
+          <>
+            <Text
+              style={[
+                styles.circle__flashText,
+                {
+                  color: _progressColor,
+                  fontSize: Math.min(32, size * 0.24),
+                },
+              ]}>
+              {displayedCount}
+            </Text>
+          </>
         ) : (
           <Avatar.Icon
             icon={icon}

@@ -1,14 +1,19 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Button, TextInput, Card} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useStyles} from '@/styles';
-import {updateHabitValue, getHabitById} from '@/services/habits.service';
+import {
+  updateHabitValue,
+  updateHabitValues,
+  getHabitById,
+  getSuggestedGoalFromSchedule,
+} from '@/services/habits.service';
 import {hourToSec} from '@/utils';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
 import {logError} from '@/services/errors.service.js';
 import ModalComponent from '@/components/modal.component';
+import ChangeGoalDialog from '@/dialogs/change-goal.dialog';
 
 const EditModal = ({
   visible,
@@ -19,16 +24,20 @@ const EditModal = ({
   habitId,
   fetchAllHabits,
   keyboardType = 'default',
+  onboardingMode = false,
 }) => {
   const {t} = useTranslation();
-  const styles = useStyles();
   const hoursResetRef = useRef(null);
 
   const getDefaultValueForField = currentField => {
-    if (currentField === 'repeatDays' || currentField === 'repeatHours')
+    if (currentField === 'repeatDays' || currentField === 'repeatHours') {
       return [];
-    if (currentField === 'habitName') return '';
-    if (['goodCounter', 'badCounter'].includes(currentField)) return '';
+    }
+
+    if (currentField === 'habitName' || currentField === 'goal') {
+      return '';
+    }
+
     return '';
   };
 
@@ -47,6 +56,10 @@ const EditModal = ({
   );
   const [selectedIcon, setSelectedIcon] = useState('infinity');
 
+  const [changeGoalVisible, setChangeGoalVisible] = useState(false);
+  const [pendingGoal, setPendingGoal] = useState(null);
+  const [currentGoal, setCurrentGoal] = useState(null);
+
   useEffect(() => {
     if (field === 'repeatDays' || field === 'repeatHours') {
       setInputValue(normalizeArray(value));
@@ -54,20 +67,36 @@ const EditModal = ({
       setInputValue(value);
     }
 
-    if (field === 'habitName' && habitId) {
+    if (habitId) {
       const habit = getHabitById(habitId);
-      if (habit && habit.icon) {
+
+      if (field === 'habitName' && habit?.icon) {
         setSelectedIcon(habit.icon);
       }
+
+      if (habit?.goal != null) {
+        setCurrentGoal(habit.goal);
+      }
     }
+
+    setChangeGoalVisible(false);
+    setPendingGoal(null);
   }, [value, field, habitId]);
+
+  const closeModal = () => {
+    fetchAllHabits();
+
+    setTimeout(() => {
+      onDismiss();
+    }, 100);
+  };
 
   const handleSave = async () => {
     let valueToSave = inputValue;
-    const numericFields = ['goodCounter', 'badCounter'];
-    if (numericFields.includes(field)) {
+
+    if (field === 'goal') {
       const parsed = parseInt(inputValue, 10);
-      valueToSave = isNaN(parsed) ? 0 : parsed;
+      valueToSave = isNaN(parsed) ? 1 : Math.max(1, Math.min(parsed, 999));
     }
 
     if (field === 'repeatHours' && Array.isArray(valueToSave)) {
@@ -77,20 +106,90 @@ const EditModal = ({
     }
 
     try {
-      updateHabitValue(habitId, field, valueToSave);
+      const habit = getHabitById(habitId);
 
-      if (field === 'habitName' && selectedIcon) {
-        updateHabitValue(habitId, 'icon', selectedIcon);
+      if (!habit) {
+        closeModal();
+        return;
       }
 
-      fetchAllHabits();
-      setTimeout(() => {
-        onDismiss();
-      }, 100);
+      if (field === 'habitName') {
+        updateHabitValues(habitId, {
+          habitName: valueToSave,
+          icon: selectedIcon || habit.icon || 'infinity',
+        });
+
+        closeModal();
+        return;
+      }
+
+      if (field === 'repeatDays' || field === 'repeatHours') {
+        const nextRepeatDays =
+          field === 'repeatDays' ? valueToSave : habit.repeatDays;
+        const nextRepeatHours =
+          field === 'repeatHours' ? valueToSave : habit.repeatHours;
+
+        const suggestedGoal = getSuggestedGoalFromSchedule(
+          nextRepeatDays,
+          nextRepeatHours,
+        );
+
+        const existingGoal = habit.goal || 0;
+
+        if (onboardingMode) {
+          const updates = {
+            [field]: valueToSave,
+          };
+
+          if (suggestedGoal > 0 && suggestedGoal !== existingGoal) {
+            updates.goal = suggestedGoal;
+          }
+
+          updateHabitValues(habitId, updates);
+          closeModal();
+          return;
+        }
+
+        updateHabitValue(habitId, field, valueToSave);
+
+        if (suggestedGoal > 0 && suggestedGoal !== existingGoal) {
+          setCurrentGoal(existingGoal);
+          setPendingGoal(suggestedGoal);
+          setChangeGoalVisible(true);
+          return;
+        }
+
+        closeModal();
+        return;
+      }
+
+      updateHabitValue(habitId, field, valueToSave);
+      closeModal();
     } catch (error) {
-      logError(error, 'handleSave');
+      logError(error, 'EditModal.handleSave');
       onDismiss();
     }
+  };
+
+  const handleConfirmGoalChange = () => {
+    try {
+      if (pendingGoal != null) {
+        updateHabitValue(habitId, 'goal', pendingGoal);
+      }
+
+      setChangeGoalVisible(false);
+      setPendingGoal(null);
+      closeModal();
+    } catch (error) {
+      logError(error, 'EditModal.handleConfirmGoalChange');
+      onDismiss();
+    }
+  };
+
+  const handleDismissGoalChange = () => {
+    setChangeGoalVisible(false);
+    setPendingGoal(null);
+    closeModal();
   };
 
   const handleReset = () => {
@@ -105,69 +204,93 @@ const EditModal = ({
     }
   };
 
+  const isEmptyArray = Array.isArray(inputValue) && inputValue.length === 0;
+
+  const isEmptyText =
+    !Array.isArray(inputValue) &&
+    (inputValue === null ||
+      inputValue === undefined ||
+      inputValue.toString().trim().length === 0);
+
+  const isSaveDisabled = isEmptyArray || isEmptyText;
+
   return (
-    <ModalComponent
-      visible={visible}
-      onDismiss={onDismiss}
-      title={label || t(`card.${field}`)}>
-      <Card.Content>
-        {field === 'repeatDays' && (
-          <DaysSelector repeatDays={inputValue} setRepeatDays={setInputValue} />
-        )}
+    <>
+      <ModalComponent
+        visible={visible}
+        onDismiss={onDismiss}
+        title={label || t(`card.${field}`)}>
+        <Card.Content>
+          {field === 'repeatDays' && (
+            <DaysSelector
+              repeatDays={inputValue}
+              setRepeatDays={setInputValue}
+            />
+          )}
 
-        {field === 'repeatHours' && (
-          <HoursSelector
-            repeatHours={inputValue}
-            setRepeatHours={setInputValue}
-            onResetRef={hoursResetRef}
-          />
-        )}
+          {field === 'repeatHours' && (
+            <HoursSelector
+              repeatHours={inputValue}
+              setRepeatHours={setInputValue}
+              onResetRef={hoursResetRef}
+            />
+          )}
 
-        {['goodCounter', 'badCounter'].includes(field) && (
-          <TextInput
-            mode="outlined"
-            value={inputValue === 0 ? '' : inputValue?.toString()}
-            onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
-            keyboardType="numeric"
-            autoFocus
-            style={{marginBottom: 16}}
-            maxLength={5}
-          />
-        )}
-
-        {['habitName'].includes(field) && (
-          <>
+          {field === 'goal' && (
             <TextInput
               mode="outlined"
-              value={inputValue?.toString()}
-              onChangeText={setInputValue}
-              keyboardType={keyboardType}
-              autoFocus={field === 'habitName'}
+              value={inputValue?.toString() ?? ''}
+              onChangeText={text => setInputValue(text.replace(/[^0-9]/g, ''))}
+              keyboardType="numeric"
+              autoFocus
               style={{marginBottom: 16}}
-              maxLength={60}
+              maxLength={3}
             />
-            {field === 'habitName' && (
+          )}
+
+          {field === 'habitName' && (
+            <>
+              <TextInput
+                mode="outlined"
+                value={inputValue?.toString() ?? ''}
+                onChangeText={setInputValue}
+                keyboardType={keyboardType}
+                autoFocus
+                style={{marginBottom: 16}}
+                maxLength={60}
+              />
+
               <IconSelector
                 selectedIcon={selectedIcon}
                 setSelectedIcon={setSelectedIcon}
               />
-            )}
-          </>
-        )}
-        <Card.Actions>
-          <Button mode="outlined" onPress={handleReset} icon="refresh">
-            {t('button.reset')}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={handleSave}
-            icon={!inputValue || inputValue.length === 0 ? 'lock' : 'check'}
-            disabled={!inputValue || inputValue.length === 0}>
-            {t('button.save')}
-          </Button>
-        </Card.Actions>
-      </Card.Content>
-    </ModalComponent>
+            </>
+          )}
+
+          <Card.Actions>
+            <Button mode="outlined" onPress={handleReset} icon="refresh">
+              {t('button.reset')}
+            </Button>
+
+            <Button
+              mode="contained"
+              onPress={handleSave}
+              icon={isSaveDisabled ? 'lock' : 'check'}
+              disabled={isSaveDisabled}>
+              {t('button.save')}
+            </Button>
+          </Card.Actions>
+        </Card.Content>
+      </ModalComponent>
+
+      <ChangeGoalDialog
+        visible={changeGoalVisible}
+        onDismiss={handleDismissGoalChange}
+        onConfirm={handleConfirmGoalChange}
+        currentGoal={currentGoal}
+        suggestedGoal={pendingGoal}
+      />
+    </>
   );
 };
 

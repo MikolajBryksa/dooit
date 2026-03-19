@@ -230,6 +230,7 @@ const OnboardingView = ({setShowOnboarding}) => {
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               icon={habit.icon}
+              goal={habit.goal}
               fetchAllHabits={fetchAllHabits}
               onEdit={handleEditModal}
               onboardingMode={true}
@@ -279,6 +280,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           label={editModalData?.label}
           habitId={editModalData?.habitId}
           fetchAllHabits={fetchAllHabits}
+          onboardingMode={true}
         />
 
         <AddModal
