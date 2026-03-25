@@ -20,7 +20,8 @@
     "contact": "Contact",
     "support": "Coffee",
     "filter": "Filter habits",
-    "history": "History"
+    "history": "History",
+    "motivation": "Motivation"
   },
   "settings": {
     "version": "Version",
@@ -52,7 +53,7 @@
     "delete-execution": "Are you sure to remove this execution?",
     "change-goal": "Do you want to change the goal?",
     "contact": "Fill out the form to contact the app's author.",
-    "support": "Hey there! 👋\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
+    "support": "Hey there!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Delete",
@@ -69,6 +70,7 @@
     "skipped": "Skipped",
     "fail": "Fail",
     "done": "Done",
+    "try": "Try",
     "reset": "Reset",
     "today": "Today",
     "yesterday": "Yesterday",
@@ -172,6 +174,11 @@
     }
   },
   "motivation": {
+    "lastChance": [
+      "Count 5, 4, 3, 2, 1 and take action!\n\nMel Robbins shows that a quick countdown forces your brain to act immediately, before excuses can take over.",
+      "Take at least one small step today.\n\nBJ Fogg emphasizes that even minimal actions build habits and increase your chances of success in daily life.",
+      "Imagine how your future self will thank you.\n\nHal Hershfield demonstrates that visualizing the consequences of your decisions increases the satisfaction of taking action."
+    ],
     "notification": [
       "Small step, big progress.",
       "Your habits shape your future.",

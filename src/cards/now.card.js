@@ -4,10 +4,11 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
-import {pickRandomMotivation, getLocalDateKey, hexToRgba} from '@/utils';
+import {pickRandomMotivation, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
+import MotivationDialog from '@/dialogs/motivation.dialog';
 import {
   hasExecutionOrDeleted,
   recordExecutionChoice,
@@ -32,6 +33,7 @@ const NowCard = ({
 
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
+  const [showMotivationDialog, setShowMotivationDialog] = useState(false);
   const [choice, setChoice] = useState(null);
   const [motivation, setMotivation] = useState(
     pickRandomMotivation(t, 'notification'),
@@ -126,6 +128,11 @@ const NowCard = ({
     setStep(2);
   };
 
+  const selectSkip = () => {
+    setMotivation(pickRandomMotivation(t, 'lastChance'));
+    setShowMotivationDialog(true);
+  };
+
   const addBadChoice = () => {
     setChoice('bad');
     setMotivation(pickRandomMotivation(t, 'bad'));
@@ -153,62 +160,77 @@ const NowCard = ({
   };
 
   return (
-    <NowComponent
-      animatedStyle={{opacity: cardOpacity}}
-      iconContent={
-        <PieCircle
-          icon={icon}
-          goalCount={stats.goalCount}
-          goodCount={stats.goodCount}
-          opacity={isLocked ? 0.5 : 1}
-          showCounter={true}
-        />
-      }
-      subtitleContent={
-        <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
-          {step === 1 ? selectedHour : motivation}
-        </Text>
-      }
-      titleContent={
-        <Text
-          variant="titleLarge"
-          numberOfLines={2}
-          opacity={isLocked ? 0.5 : 1}
-          style={{color: getChoiceTextColor()}}>
-          {step === 1 ? habitName : choiceLabel}
-        </Text>
-      }
-      buttonsContent={
-        <View style={styles.buttons}>
-          {step === 1 ? (
-            isLocked ? (
+    <>
+      <NowComponent
+        animatedStyle={{opacity: cardOpacity}}
+        iconContent={
+          <PieCircle
+            icon={icon}
+            goalCount={stats.goalCount}
+            goodCount={stats.goodCount}
+            opacity={isLocked ? 0.5 : 1}
+            showCounter={true}
+          />
+        }
+        subtitleContent={
+          <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
+            {step === 1 ? selectedHour : motivation}
+          </Text>
+        }
+        titleContent={
+          <Text
+            variant="titleLarge"
+            numberOfLines={2}
+            opacity={isLocked ? 0.5 : 1}
+            style={{color: getChoiceTextColor()}}>
+            {step === 1 ? habitName : choiceLabel}
+          </Text>
+        }
+        buttonsContent={
+          <View style={styles.buttons}>
+            {step === 1 ? (
+              isLocked ? (
+                <Button
+                  mode="contained"
+                  icon="lock-open-variant"
+                  onPress={handleUnlock}>
+                  {t('button.unlock')}
+                </Button>
+              ) : (
+                <>
+                  <Button mode="outlined" icon="close" onPress={selectSkip}>
+                    {t('button.skip')}
+                  </Button>
+                  <Button mode="contained" icon="check" onPress={addGoodChoice}>
+                    {t('button.done')}
+                  </Button>
+                </>
+              )
+            ) : (
               <Button
                 mode="contained"
-                icon="lock-open-variant"
-                onPress={handleUnlock}>
-                {t('button.unlock')}
+                icon={isLastHabit ? 'check' : 'arrow-right'}
+                onPress={handleNext}>
+                {isLastHabit ? t('button.finish') : t('button.next')}
               </Button>
-            ) : (
-              <>
-                <Button mode="outlined" icon="close" onPress={addBadChoice}>
-                  {t('button.skip')}
-                </Button>
-                <Button mode="contained" icon="check" onPress={addGoodChoice}>
-                  {t('button.done')}
-                </Button>
-              </>
-            )
-          ) : (
-            <Button
-              mode="contained"
-              icon={isLastHabit ? 'check' : 'arrow-right'}
-              onPress={handleNext}>
-              {isLastHabit ? t('button.finish') : t('button.next')}
-            </Button>
-          )}
-        </View>
-      }
-    />
+            )}
+          </View>
+        }
+      />
+
+      <MotivationDialog
+        visible={showMotivationDialog}
+        onDismiss={() => setShowMotivationDialog(false)}
+        message={motivation}
+        onTry={() => {
+          setShowMotivationDialog(false);
+        }}
+        onSkip={() => {
+          addBadChoice();
+          setShowMotivationDialog(false);
+        }}
+      />
+    </>
   );
 };
 

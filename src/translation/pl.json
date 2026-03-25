@@ -20,7 +20,8 @@
     "contact": "Kontakt",
     "support": "Kawusia",
     "filter": "Filtruj nawyki",
-    "history": "Historia"
+    "history": "Historia",
+    "motivation": "Motywacja"
   },
   "settings": {
     "version": "Wersja",
@@ -52,7 +53,7 @@
     "delete-execution": "Czy na pewno chcesz usunąć to powtórzenie?",
     "change-goal": "Czy chcesz zmienić cel?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
-    "support": "Cześć 👋\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
+    "support": "Cześć!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Usuń",
@@ -69,6 +70,7 @@
     "skipped": "Pominięte",
     "fail": "Nieudane",
     "done": "Zrobione",
+    "try": "Spróbuj",
     "reset": "Reset",
     "today": "Dzisiaj",
     "yesterday": "Wczoraj",
@@ -173,6 +175,11 @@
     }
   },
   "motivation": {
+    "lastChance": [
+      "Odlicz 5, 4, 3, 2, 1 i rusz się!\n\nMel Robbins pokazuje, że szybkie odliczanie zmusza Twój mózg do natychmiastowego działania, zanim pojawią się wymówki.",
+      "Zrób choć jeden mały krok dzisiaj.\n\nBJ Fogg podkreśla, że nawet minimalne działania budują nawyki i zwiększają szansę na sukces w codziennym życiu.",
+      "Wyobraź sobie, jak Twoje przyszłe ja Ci podziękuje.\n\nHal Hershfield udowadnia, że wizualizacja konsekwencji decyzji zwiększa radość z wykonywanych działań."
+    ],
     "notification": [
       "Mały krok, wielki postęp.",
       "Nawyki kształtują Twoją przyszłość.",
