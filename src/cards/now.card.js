@@ -3,7 +3,8 @@ import {Text, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import {pickRandomMotivation, getLocalDateKey} from '@/utils';
+import {useTheme} from 'react-native-paper';
+import {pickRandomMotivation, getLocalDateKey, hexToRgba} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
@@ -27,6 +28,7 @@ const NowCard = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const theme = useTheme();
 
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
@@ -143,6 +145,13 @@ const NowCard = ({
     return null;
   }
 
+  const getChoiceTextColor = () => {
+    if (step !== 2) return theme.colors.text;
+    if (choice === 'good') return theme.colors.success;
+    if (choice === 'bad') return theme.colors.error;
+    return theme.colors.text;
+  };
+
   return (
     <NowComponent
       animatedStyle={{opacity: cardOpacity}}
@@ -164,7 +173,8 @@ const NowCard = ({
         <Text
           variant="titleLarge"
           numberOfLines={2}
-          opacity={isLocked ? 0.5 : 1}>
+          opacity={isLocked ? 0.5 : 1}
+          style={{color: getChoiceTextColor()}}>
           {step === 1 ? habitName : choiceLabel}
         </Text>
       }
