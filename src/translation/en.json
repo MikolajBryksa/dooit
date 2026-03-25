@@ -145,7 +145,7 @@
     "start": {
       "subtitle": "Hi, {{userName}}",
       "title": "Let’s get started",
-      "text": "For each habit, just make one choice:\ndo it or skip it."
+      "text": "For each habit,\njust make one choice:\ndo it or skip it."
     }
   },
   "default-habits": {

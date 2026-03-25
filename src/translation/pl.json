@@ -146,7 +146,7 @@
     "start": {
       "subtitle": "Cześć, {{userName}}",
       "title": "Zaczynajmy",
-      "text": "Dla każdego nawyku podejmuj prostą decyzję:\nrobisz albo pomijasz."
+      "text": "Dla każdego nawyku\npodejmuj prostą decyzję:\nrobisz albo pomijasz."
     }
   },
   "default-habits": {

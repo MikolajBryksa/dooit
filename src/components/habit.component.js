@@ -107,7 +107,7 @@ const HabitComponent = ({
               <TouchableRipple
                 style={{flex: 1}}
                 onPress={handleTitlePress}
-                disabled={onboardingMode || !isExpanded}>
+                disabled={!isExpanded}>
                 <View style={styles.card__row}>
                   <IconButton
                     icon={icon || 'infinity'}
