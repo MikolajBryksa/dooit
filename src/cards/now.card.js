@@ -153,10 +153,10 @@ const NowCard = ({
   }
 
   const getChoiceTextColor = () => {
-    if (step !== 2) return theme.colors.text;
+    if (step !== 2) return theme.colors.onSurface;
     if (choice === 'good') return theme.colors.success;
     if (choice === 'bad') return theme.colors.error;
-    return theme.colors.text;
+    return theme.colors.onSurface;
   };
 
   return (
