@@ -1,14 +1,33 @@
 import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 import {logError} from './errors.service';
+
+const SERVICE_NAME = 'supabase_auth';
+
+const KeychainAdapter = {
+  getItem: async key => {
+    const credentials = await Keychain.getGenericPassword({
+      service: `${SERVICE_NAME}_${key}`,
+    });
+    return credentials ? credentials.password : null;
+  },
+  setItem: async (key, value) => {
+    await Keychain.setGenericPassword(key, value, {
+      service: `${SERVICE_NAME}_${key}`,
+    });
+  },
+  removeItem: async key => {
+    await Keychain.resetGenericPassword({service: `${SERVICE_NAME}_${key}`});
+  },
+};
 
 export const supabase = createClient(
   Config.SUPABASE_URL,
   Config.SUPABASE_ANON_KEY,
   {
     auth: {
-      storage: AsyncStorage,
+      storage: KeychainAdapter,
       autoRefreshToken: false,
       persistSession: true,
       detectSessionInUrl: false,
