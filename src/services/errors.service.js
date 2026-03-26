@@ -7,16 +7,10 @@ const APP_VERSION = require('../../package.json').version;
 export const logError = async (error, context = 'unknown') => {
   try {
     let supabaseUserId = null;
-    let userName = null;
 
     try {
       const id = await getSupabaseUserId();
       if (id) supabaseUserId = id;
-    } catch (e) {}
-
-    try {
-      const name = getSettingValue('userName');
-      if (name) userName = name;
     } catch (e) {}
 
     const errorData = {
@@ -25,7 +19,6 @@ export const logError = async (error, context = 'unknown') => {
       context,
       app_version: APP_VERSION,
       user_id: supabaseUserId,
-      user_name: userName,
       created_at: new Date().toISOString(),
     };
 
@@ -44,7 +37,6 @@ export const logError = async (error, context = 'unknown') => {
     }
     console.error(
       'User:',
-      errorData.user_name || 'Anonymous',
       errorData.user_id ? `(${errorData.user_id})` : '(no user ID)',
     );
     console.error('Version:', errorData.app_version);
@@ -88,18 +80,11 @@ export const flushErrorQueue = async () => {
     }
 
     let currentUserId = null;
-    let currentUserName = null;
 
     try {
       currentUserId = await getSupabaseUserId();
     } catch (e) {
       console.warn('Could not get user ID for error flush:', e);
-    }
-
-    try {
-      currentUserName = getSettingValue('userName');
-    } catch (e) {
-      console.warn('Could not get user name for error flush:', e);
     }
 
     const errorsToSend = errors.map(e => ({
@@ -108,7 +93,6 @@ export const flushErrorQueue = async () => {
       context: e.context,
       app_version: e.app_version,
       user_id: currentUserId || e.user_id,
-      user_name: currentUserName || e.user_name,
       created_at: e.created_at,
     }));
 

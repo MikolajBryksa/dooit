@@ -4,7 +4,6 @@ import {Card, Button, Text, TextInput} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {supabase, getSupabaseUserId} from '@/services/supabase.service';
-import {getSettingValue} from '@/services/settings.service';
 import {useNetworkStatus} from '@/hooks';
 import {logError} from '@/services/errors.service.js';
 import realm from '@/storage/schemas';
@@ -99,11 +98,9 @@ const ContactModal = ({visible, onDismiss}) => {
 
     try {
       const supabaseUserId = await getSupabaseUserId();
-      const userName = getSettingValue('userName');
 
       const {error} = await supabase.from('contact').insert({
         user_id: supabaseUserId,
-        user_name: userName,
         email: email.trim(),
         message: message.trim(),
       });

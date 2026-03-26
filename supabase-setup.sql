@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS public.users (
 CREATE TABLE IF NOT EXISTS public.errors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-    user_name TEXT,
     error_message TEXT NOT NULL,
     error_stack TEXT,
     context TEXT,
@@ -50,7 +49,6 @@ CREATE TABLE IF NOT EXISTS public.errors (
 CREATE TABLE IF NOT EXISTS public.contact (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-    user_name TEXT,
     email TEXT NOT NULL,
     message TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -83,6 +81,10 @@ CREATE POLICY "Users can update their own data"
     USING (auth.uid() = user_id)
     WITH CHECK (auth.uid() = user_id);
 
+CREATE POLICY "Users can delete their own data"
+    ON public.users FOR DELETE TO authenticated
+    USING (auth.uid() = user_id);
+
 
 -- ============================================
 -- 3. ROW LEVEL SECURITY - ERRORS TABLE
@@ -90,12 +92,16 @@ CREATE POLICY "Users can update their own data"
 ALTER TABLE public.errors ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
-CREATE POLICY "Authenticated users can insert errors"
+CREATE POLICY "Users can insert their own errors"
     ON public.errors FOR INSERT TO authenticated
-    WITH CHECK (true);
+    WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can view their own errors"
     ON public.errors FOR SELECT TO authenticated
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own errors"
+    ON public.errors FOR DELETE TO authenticated
     USING (auth.uid() = user_id);
 
 
@@ -105,12 +111,16 @@ CREATE POLICY "Users can view their own errors"
 ALTER TABLE public.contact ENABLE ROW LEVEL SECURITY;
 
 -- Create policies
-CREATE POLICY "Authenticated users can insert contact messages"
+CREATE POLICY "Users can insert their own contact messages"
     ON public.contact FOR INSERT TO authenticated
-    WITH CHECK (true);
+    WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can view their own contact messages"
     ON public.contact FOR SELECT TO authenticated
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own contact messages"
+    ON public.contact FOR DELETE TO authenticated
     USING (auth.uid() = user_id);
 
 
