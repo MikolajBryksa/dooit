@@ -1,6 +1,7 @@
 # Dooit
 
 A **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
+https://dooit-one-focus.lovable.app/
 https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
@@ -86,26 +87,6 @@ Before you begin, ensure you have met the following requirements:
   SQL Editor → Run the entire `supabase-setup.sql` file
   ```
 
-### Launch
-
-- **Build the APK file**:
-
-  ```
-  npm run build
-  ```
-
-- **Find the APK file**:
-
-  ```
-  android/app/build/outputs/apk/release/app-release.apk
-  ```
-
-- **Run the app in Android Studio**:
-
-  ```
-  npm run android
-  ```
-
 ## Development
 
 - **Change the app icon**:
@@ -130,11 +111,7 @@ Before you begin, ensure you have met the following requirements:
   Settings > Apps > All apps > Dooit > Uninstall
   ```
 
-- **The current prompt version used by the Agent**:
-
-  https://console.cloud.google.com/run/detail/europe-central2/dooit/yaml/view?project=amiable-nova-476814-u1
-
-## Publishing
+## Build
 
 - **Update version**:
 
@@ -143,30 +120,24 @@ Before you begin, ensure you have met the following requirements:
   Change versionCode and versionName in android/app/build.gradle
   ```
 
-- **Build the Android App Bundle**:
+- **Build new version**:
 
   ```
+  npm run build
   npm run build-bundle
   ```
 
-- **Find the Android App Bundle**:
+- **Find the app builds**:
 
   ```
+  android/app/build/outputs/apk/release/app-release.apk
   android/app/build/outputs/bundle/release/app-release.aab
   ```
 
-- **Submit new version to Google Play**:
+### Launch
 
-  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/bundle-explorer-selector
+- **Run the app in Android Studio**:
 
-- **Update the app info**:
-
-  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/main-store-listing
-
-- **Create new version for testers**:
-
-  https://play.google.com/console/u/0/developers/7319941563958195551/app/4975927330793716884/tracks/4698028729410342214?tab=releases
-
-- **Link for testers**:
-
-  https://play.google.com/apps/testing/com.dooit.bryksa
+  ```
+  npm run android
+  ```
