@@ -4,7 +4,7 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
-import {pickRandomMotivation, getLocalDateKey} from '@/utils';
+import {pickRandomMessage, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
@@ -36,7 +36,7 @@ const NowCard = ({
   const [showMotivationDialog, setShowMotivationDialog] = useState(false);
   const [choice, setChoice] = useState(null);
   const [motivation, setMotivation] = useState(
-    pickRandomMotivation(t, 'notification'),
+    pickRandomMessage(t, 'notification'),
   );
   const [liveGoodCount, setLiveGoodCount] = useState(0);
   const [liveBadCount, setLiveBadCount] = useState(0);
@@ -62,7 +62,7 @@ const NowCard = ({
     setStep(1);
     setIsManuallyUnlocked(false);
     setChoice(null);
-    setMotivation(pickRandomMotivation(t, 'notification'));
+    setMotivation(pickRandomMessage(t, 'notification'));
     setLiveGoodCount(currentStats.goodCount || 0);
     setLiveBadCount(currentStats.badCount || 0);
 
@@ -123,19 +123,19 @@ const NowCard = ({
 
   const addGoodChoice = () => {
     setChoice('good');
-    setMotivation(pickRandomMotivation(t, 'good'));
+    setMotivation(pickRandomMessage(t, 'good'));
     handleChoice('good');
     setStep(2);
   };
 
   const selectSkip = () => {
-    setMotivation(pickRandomMotivation(t, 'lastChance'));
+    setMotivation(pickRandomMessage(t, 'lastChance'));
     setShowMotivationDialog(true);
   };
 
   const addBadChoice = () => {
     setChoice('bad');
-    setMotivation(pickRandomMotivation(t, 'bad'));
+    setMotivation(pickRandomMessage(t, 'bad'));
     handleChoice('bad');
     setStep(2);
   };

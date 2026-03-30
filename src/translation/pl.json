@@ -216,13 +216,33 @@
       "Pominięcia się zdarzają, idź dalej.",
       "Nawet przerwy mogą napędzać postęp.",
       "To tylko pauza, podróż trwa dalej."
-    ]
-  },
-  "summary": {
-    "subtitle": "Wszystko dziś zrobione!",
-    "title": "Podsumowanie dnia",
-    "error-reading": "Błąd odczytu wygenerowanego podsumowania.",
-    "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku.",
-    "no-response": "Nie udało się wygenerować podsumowania. AI nie udzieliło odpowiedzi."
+    ],
+    "no-data": [
+      "Hej {{userName}}, dziś nie masz zaplanowanych nawyków! Czas na zasłużony odpoczynek.",
+      "Dobrze czasem odpocząć, {{userName}}! Brak nawyków na dzisiaj. Naładuj baterie przed jutrem.",
+      "Dzień odpoczynku, {{userName}}! Brak nawyków do śledzenia. Jutro czeka Cię świeży start."
+    ],
+    "stable": [
+      "Świetna robota dziś, {{userName}}! Jesteś konsekwentny z {{habitName}} — dokładnie tak buduje się trwałe nawyki.",
+      "Niezła robota, {{userName}}! Każde powtórzenie {{habitName}} kształtuje to, kim się stajesz. Wracaj jutro!",
+      "Brawo, {{userName}}! {{habitName}} staje się naturalną częścią Twojego dnia. Tak trzymaj!"
+    ],
+
+    "praise": [
+      "Niesamowita robota dziś, {{userName}}! {{bestHabit}} to było Twoje dzisiejsze wyróżnienie.",
+      "Fantastycznie, {{userName}}! Rozbiłeś {{bestHabit}} dziś — to poważny postęp.",
+      "Świetna robota, {{userName}}! {{bestHabit}} naprawdę przynosi efekty. Możesz być z siebie dumny."
+    ],
+    "tip": [
+      "Przy {{worstHabit}} pomyśl o jednym małym kroku na jutro — nawet minuta się liczy.",
+      "Jutro z {{worstHabit}}: zacznij od dwóch minut, bez presji robienia więcej. Samo zaczęcie to wszystko.",
+      "Jaki jest najmniejszy krok, który możesz jutro zrobić przy {{worstHabit}}? Nawet mały ruch do przodu ma znaczenie.",
+      "Przy {{worstHabit}} spróbuj zrobić to przez chwilę — samo zaczęcie to połowa sukcesu."
+    ],
+    "summary": {
+      "subtitle": "Wszystko dziś zrobione!",
+      "title": "Podsumowanie dnia",
+      "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku."
+    }
   }
 }

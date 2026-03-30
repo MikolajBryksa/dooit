@@ -215,13 +215,33 @@
       "Skips happen, keep moving forward.",
       "Even breaks can fuel progress.",
       "It’s just a pause, your journey continues."
+    ],
+    "no-data": [
+      "Hey {{userName}}, no habits scheduled for today! Take a well-deserved rest — you'll be back stronger tomorrow.",
+      "Good job taking a breather, {{userName}}! No habits today. Recharge and get ready for tomorrow.",
+      "Rest day, {{userName}}! No habits to track today. Tomorrow is a fresh start — make it count."
+    ],
+    "stable": [
+      "Great job today, {{userName}}! You're staying consistent with {{habitName}} — that's exactly how lasting habits are built.",
+      "Nice work, {{userName}}! Every repetition of {{habitName}} is shaping who you're becoming. Keep showing up!",
+      "Well done, {{userName}}! {{habitName}} is becoming a natural part of your day. Keep the momentum going!"
+    ],
+
+    "praise": [
+      "Amazing work today, {{userName}}! {{bestHabit}} is where you really shined.",
+      "Fantastic, {{userName}}! You crushed it with {{bestHabit}} today — that's serious progress.",
+      "Great job, {{userName}}! {{bestHabit}} is really paying off. You should be proud of yourself."
+    ],
+    "tip": [
+      "For {{worstHabit}}, think of just one tiny step you could take tomorrow — even one minute counts.",
+      "Tomorrow with {{worstHabit}}: start it for just two minutes, no pressure to do more. Getting started is everything.",
+      "What's the smallest possible action for {{worstHabit}} you could do tomorrow? Even a tiny move forward matters.",
+      "For {{worstHabit}}, try doing it for just a moment — getting started is half the battle."
     ]
   },
   "summary": {
     "subtitle": "All done today!",
     "title": "Daily summary",
-    "error-reading": "Error reading generated summary.",
-    "no-actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit.",
-    "no-response": "Failed to generate summary. AI has not provided a response."
+    "no-actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit."
   }
 }

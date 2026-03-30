@@ -1,5 +1,5 @@
 import notifee, {TriggerType} from '@notifee/react-native';
-import {dateToWeekday, pickRandomMotivation, getLocalDateKey} from '@/utils';
+import {dateToWeekday, pickRandomMessage, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
 import {logError} from './errors.service.js';
@@ -140,7 +140,7 @@ export async function scheduleHabitNotifications(habits, t) {
               {
                 id: notificationId,
                 title: `${hour} ${habit.habitName}`,
-                body: pickRandomMotivation(t, 'notification'),
+                body: pickRandomMessage(t, 'notification'),
                 android: {
                   channelId: 'default',
                   smallIcon: 'ic_notification',

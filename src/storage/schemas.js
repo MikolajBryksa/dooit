@@ -52,17 +52,6 @@ Settings.schema = {
   },
 };
 
-class DailySummary extends Realm.Object {}
-DailySummary.schema = {
-  name: 'DailySummary',
-  primaryKey: 'updatedAt',
-  properties: {
-    updatedAt: 'string',
-    habitsJson: 'string?',
-    aiSummary: 'string?',
-  },
-};
-
 class ErrorLog extends Realm.Object {}
 ErrorLog.schema = {
   name: 'ErrorLog',
@@ -90,8 +79,8 @@ ContactMessage.schema = {
 };
 
 const realmConfig = {
-  schema: [Habit, Execution, Settings, DailySummary, ErrorLog, ContactMessage],
-  schemaVersion: 27,
+  schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
+  schemaVersion: 28,
   deleteRealmIfMigrationNeeded: true,
 };
 

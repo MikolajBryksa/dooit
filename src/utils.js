@@ -70,7 +70,7 @@ let lastPickedMessages = {
   bad: '',
 };
 
-export function pickRandomMotivation(translationFunction, category) {
+export function pickRandomMessage(translationFunction, category) {
   // Gets a random motivation message from translation that's different from the last one
   const messagesArray = translationFunction(`motivation.${category}`, {
     returnObjects: true,

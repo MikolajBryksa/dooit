@@ -1,15 +1,11 @@
-import React, {useEffect, useMemo, useState, useCallback} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View} from 'react-native';
-import {ActivityIndicator, Button, Text, IconButton} from 'react-native-paper';
+import {Text, IconButton} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useStyles} from '@/styles';
-import {useNetworkStatus, useTodayKey} from '@/hooks';
-import {
-  generateAiSummary,
-  getDailySummary,
-  saveSummary,
-} from '@/services/summary.service';
+import {useTodayKey} from '@/hooks';
+import {generateTemplateSummary, saveSummary} from '@/services/summary.service';
 import {logError} from '@/services/errors.service';
 import {getTodayGoalStats} from '@/services/habits.service';
 import NowComponent from '../components/now.component';
@@ -67,7 +63,7 @@ const sortForWorst = (a, b) => {
   return String(a.habitName).localeCompare(String(b.habitName));
 };
 
-const pickAiInputs = habitsWithStats => {
+const pickSummaryInputs = habitsWithStats => {
   const withTargets = habitsWithStats.filter(h => (h.todayTarget ?? 0) > 0);
 
   if (withTargets.length === 0) {
@@ -90,12 +86,6 @@ const EndCard = ({weekdayKey}) => {
 
   const habits = useSelector(state => state.habits);
   const todayKey = useTodayKey();
-  const {isConnected} = useNetworkStatus(true);
-
-  const [aiSummary, setAiSummary] = useState('');
-  const [loadingAI, setLoadingAI] = useState(false);
-  const [hasExistingSummary, setHasExistingSummary] = useState(false);
-  const [hadError, setHadError] = useState(false);
 
   const todayHabits = useMemo(
     () => habits.filter(h => h.repeatDays.includes(weekdayKey)),
@@ -112,112 +102,25 @@ const EndCard = ({weekdayKey}) => {
     [todayHabits, todayKey, weekdayKey],
   );
 
-  const sortedHabitsUi = useMemo(() => {
-    return [...todayHabitsWithStats].sort(sortForUi);
-  }, [todayHabitsWithStats]);
+  const sortedHabitsUi = useMemo(
+    () => [...todayHabitsWithStats].sort(sortForUi),
+    [todayHabitsWithStats],
+  );
+
+  const summary = useMemo(() => {
+    if (todayHabits.length === 0) {
+      return t('summary.no-actions');
+    }
+    const {mode, bestHabit, worstHabit} =
+      pickSummaryInputs(todayHabitsWithStats);
+    return generateTemplateSummary(t, mode, bestHabit, worstHabit);
+  }, [todayHabits.length, todayHabitsWithStats, t]);
 
   useEffect(() => {
-    try {
-      const existingSummary = getDailySummary(todayKey);
-
-      if (existingSummary?.aiSummary) {
-        setAiSummary(existingSummary.aiSummary);
-        setHasExistingSummary(true);
-        setHadError(false);
-        return;
-      }
-
-      if (todayHabits.length === 0) {
-        setAiSummary(t('summary.no-actions'));
-        setHasExistingSummary(false);
-        setHadError(false);
-        return;
-      }
-
-      setAiSummary('');
-      setHasExistingSummary(false);
-      setHadError(false);
-    } catch (e) {
-      setAiSummary(t('summary.error-reading'));
-      setHasExistingSummary(false);
-      setHadError(true);
-    }
-  }, [todayKey, todayHabits.length, t]);
-
-  const handleGenerate = useCallback(async () => {
-    if (loadingAI || todayHabitsWithStats.length === 0 || !isConnected) return;
-
-    setLoadingAI(true);
-    setHadError(false);
-    setAiSummary('');
-
-    try {
-      const {mode, bestHabit, worstHabit} = pickAiInputs(todayHabitsWithStats);
-      const response = await generateAiSummary(mode, bestHabit, worstHabit);
-
-      setAiSummary(response);
-      setHasExistingSummary(true);
-      setLoadingAI(false);
-
-      try {
-        await saveSummary(todayKey, allHabitsWithStats, response);
-      } catch (saveError) {
-        await logError(saveError, 'EndCard.saveSummary');
-      }
-    } catch (error) {
-      await logError(error, 'EndCard.generateAiSummary');
-
-      setAiSummary(t('summary.no-response'));
-      setHasExistingSummary(false);
-      setHadError(true);
-      setLoadingAI(false);
-
-      try {
-        await saveSummary(todayKey, allHabitsWithStats, null);
-      } catch (saveError) {
-        await logError(saveError, 'EndCard.saveSummary.null');
-      }
-    }
-  }, [
-    loadingAI,
-    todayHabitsWithStats,
-    isConnected,
-    todayKey,
-    allHabitsWithStats,
-    t,
-  ]);
-
-  const renderButton = () => {
-    const hasHabitsToday = todayHabitsWithStats.length > 0;
-
-    if (!hasHabitsToday || hasExistingSummary) return null;
-
-    if (!isConnected) {
-      return (
-        <Button mode="contained" onPress={() => {}} disabled icon="wifi-off">
-          {t('button.offline')}
-        </Button>
-      );
-    }
-
-    if (loadingAI) {
-      return (
-        <Button
-          mode="contained"
-          onPress={() => {}}
-          disabled
-          icon={() => <ActivityIndicator size={16} />}>
-          {t('button.generating')}
-        </Button>
-      );
-    }
-
-    return (
-      <Button mode="contained" icon="creation" onPress={handleGenerate}>
-        {hadError ? t('button.try-again') : t('button.generate-summary')}
-      </Button>
+    saveSummary(allHabitsWithStats).catch(e =>
+      logError(e, 'EndCard.saveSummary'),
     );
-  };
+  }, [todayKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderHabitsList = () => {
     if (sortedHabitsUi.length === 0) return null;
@@ -257,8 +160,6 @@ const EndCard = ({weekdayKey}) => {
     );
   };
 
-  const hasText = !!aiSummary;
-
   return (
     <>
       <NowComponent
@@ -270,16 +171,14 @@ const EndCard = ({weekdayKey}) => {
         textContent={
           <>
             {renderHabitsList()}
-            {hasText ? (
-              <View style={styles.summary__container}>
-                <Text variant="bodyMedium" style={styles.summary__text}>
-                  {aiSummary}
-                </Text>
-              </View>
-            ) : null}
+            <View style={styles.summary__container}>
+              <Text variant="bodyMedium" style={styles.summary__text}>
+                {summary}
+              </Text>
+            </View>
           </>
         }
-        buttonsContent={renderButton()}
+        buttonsContent={null}
       />
       <View style={styles.gap} />
     </>
