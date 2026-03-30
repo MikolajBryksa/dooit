@@ -112,6 +112,7 @@ const NowView = () => {
     <>
       <Topbar>
         <Topbar.Content title={t('view.now')} />
+        <Topbar.Action icon="refresh" onPress={rebuildTodayHabits} />
       </Topbar>
 
       <ScrollView style={styles.container}>
