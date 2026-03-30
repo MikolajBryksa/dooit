@@ -254,7 +254,9 @@ const HabitComponent = ({
                         size={18}
                         style={{margin: 0, marginRight: 4}}
                       />
-                      <Text variant="bodyMedium">{goal}</Text>
+                      <Text variant="bodyMedium">
+                        {goal} {t('card.repetitions')}
+                      </Text>
                     </View>
                   </TouchableRipple>
                 </>

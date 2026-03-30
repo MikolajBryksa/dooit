@@ -18,6 +18,7 @@
     "delete-execution": "Delete execution",
     "delete-data": "Delete all data",
     "change-goal": "Change goal",
+    "goal-reached": "Goal reached!",
     "contact": "Contact",
     "support": "Coffee",
     "filter": "Filter habits",
@@ -62,7 +63,8 @@
     "delete-habit": "Are you sure to remove the habit:",
     "delete-execution": "Are you sure to remove this execution?",
     "delete-data": "Are you sure? This will permanently delete all your habits, history, and account data.",
-    "change-goal": "Do you want to change the goal?",
+    "change-goal": "Do you want to change the goal?\nBy default, it is set as the number of repetitions to be done within 4 weeks.",
+    "goal-reached": "You've reached your goal! Want to push further and increase the limit to build an even stronger habit?",
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hey there!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
   },
@@ -103,7 +105,8 @@
     "repeatHours": "Repeat Hours",
     "goal": "Current goal",
     "newGoal": "Suggested goal",
-    "noRepetitions": "No repetitions"
+    "noRepetitions": "No repetitions",
+    "repetitions": "repetitions"
   },
   "date": {
     "daily": "Daily",

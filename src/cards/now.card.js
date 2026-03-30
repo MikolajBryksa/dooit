@@ -9,11 +9,13 @@ import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
 import MotivationDialog from '@/dialogs/motivation.dialog';
+import GoalReachedDialog from '@/dialogs/goal-reached.dialog';
 import {
   hasExecutionOrDeleted,
   recordExecutionChoice,
   getExecutionStats,
 } from '@/services/executions.service';
+import {updateHabitValue} from '@/services/habits.service';
 
 const NowCard = ({
   id,
@@ -40,6 +42,7 @@ const NowCard = ({
   );
   const [liveGoodCount, setLiveGoodCount] = useState(0);
   const [liveBadCount, setLiveBadCount] = useState(0);
+  const [showGoalReachedDialog, setShowGoalReachedDialog] = useState(false);
 
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const currentTime = useCurrentTime();
@@ -121,11 +124,20 @@ const NowCard = ({
     [id, slotIndex, selectedHour, isCompleted, step, onUpdated],
   );
 
+  const isGoalReached =
+    stats.goalCount > 0 && stats.goodCount >= stats.goalCount;
+  const suggestedGoal =
+    goal > 0 ? Math.max(goal + 1, Math.ceil(goal * 1.2)) : 0;
+
   const addGoodChoice = () => {
     setChoice('good');
     setMotivation(pickRandomMessage(t, 'good'));
     handleChoice('good');
     setStep(2);
+
+    if (goal > 0 && liveGoodCount < goal && liveGoodCount + 1 >= goal) {
+      setShowGoalReachedDialog(true);
+    }
   };
 
   const selectSkip = () => {
@@ -170,6 +182,7 @@ const NowCard = ({
             goodCount={stats.goodCount}
             opacity={isLocked ? 0.5 : 1}
             showCounter={true}
+            isGoalReached={isGoalReached}
           />
         }
         subtitleContent={
@@ -228,6 +241,18 @@ const NowCard = ({
         onSkip={() => {
           addBadChoice();
           setShowMotivationDialog(false);
+        }}
+      />
+
+      <GoalReachedDialog
+        visible={showGoalReachedDialog}
+        onDismiss={() => setShowGoalReachedDialog(false)}
+        currentGoal={goal}
+        suggestedGoal={suggestedGoal}
+        onIncreaseGoal={() => {
+          updateHabitValue(id, 'goal', suggestedGoal);
+          onUpdated?.();
+          setShowGoalReachedDialog(false);
         }}
       />
     </>

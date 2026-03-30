@@ -10,6 +10,7 @@ const PieCircle = ({
   icon,
   opacity: propOpacity = 1,
   showCounter = false,
+  isGoalReached = false,
 }) => {
   const theme = useTheme();
   const styles = useStyles();
@@ -34,8 +35,8 @@ const PieCircle = ({
     tickArcLen = 1;
   }
 
-  const _iconColor = theme?.colors?.primary;
-  const _progressColor = theme?.colors?.primary;
+  const _iconColor = isGoalReached ? theme?.colors?.success : theme?.colors?.primary;
+  const _progressColor = isGoalReached ? theme?.colors?.success : theme?.colors?.primary;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
 

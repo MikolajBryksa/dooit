@@ -31,7 +31,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [editModalData, setEditModalData] = useState(null);
   const [name, setName] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [habitsCreated, setHabitsCreated] = useState(false);
+  const [selectedCustomHabits, setSelectedCustomHabits] = useState({});
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
   const theme = useTheme();
@@ -54,25 +54,21 @@ const OnboardingView = ({setShowOnboarding}) => {
 
     const existingHabits = getHabits() || [];
 
-    const defaultHabitsExist = existingHabits.some(
-      habit => habit.id >= 1 && habit.id <= 7,
-    );
-
-    if (defaultHabitsExist) {
-      setHabitsCreated(true);
-
-      const restoredSelection = {};
-      existingHabits.forEach(habit => {
-        if (habit.id >= 1 && habit.id <= 7) {
-          restoredSelection[habit.id] = true;
-        }
-      });
-
-      setSelectedHabits(prev => ({
-        ...prev,
-        ...restoredSelection,
-      }));
-    }
+    const restoredSelection = {
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+      5: false,
+      6: false,
+      7: false,
+    };
+    existingHabits.forEach(habit => {
+      if (habit.id >= 1 && habit.id <= 7) {
+        restoredSelection[habit.id] = true;
+      }
+    });
+    setSelectedHabits(restoredSelection);
   }, [settings]);
 
   function handleStep1() {
@@ -88,6 +84,13 @@ const OnboardingView = ({setShowOnboarding}) => {
   const fetchAllHabits = () => {
     const updatedHabits = getHabits() || [];
     dispatch(setHabits(updatedHabits));
+    setSelectedCustomHabits(prev => {
+      const next = {...prev};
+      updatedHabits.filter(h => h.id > 7).forEach(h => {
+        if (next[h.id] === undefined) next[h.id] = true;
+      });
+      return next;
+    });
   };
 
   function handleHabitToggle(habitId) {
@@ -109,34 +112,35 @@ const OnboardingView = ({setShowOnboarding}) => {
   };
 
   function handleStep2() {
-    // For default habits (1-7): create selected, delete unselected
     [1, 2, 3, 4, 5, 6, 7].forEach(habitId => {
       const isSelected = selectedHabits[habitId];
       const existingHabit = getHabitById(habitId);
 
       if (isSelected && !existingHabit) {
-        // Create missing selected habit
         createDefaultHabit(habitId);
       } else if (!isSelected && existingHabit) {
-        // Delete unselected habit
         deleteHabit(habitId);
       }
     });
 
-    setHabitsCreated(true);
-    const habits = getHabits() || [];
-    dispatch(setHabits(habits));
+    const updatedHabits = getHabits() || [];
+    dispatch(setHabits(updatedHabits));
     setStep(3);
   }
 
   function handleStep3() {
+    Object.entries(selectedCustomHabits).forEach(([id, selected]) => {
+      if (!selected) deleteHabit(Number(id));
+    });
+    dispatch(setHabits(getHabits() || []));
     requestNotificationPermission(settings, dispatch, setSettings);
     setShowOnboarding(false);
   }
 
-  const hasSelectedHabits = Object.values(selectedHabits).some(
-    selected => selected,
-  );
+  const customHabits = habits.filter(h => h.id > 7);
+  const hasSelectedHabits = Object.values(selectedHabits).some(Boolean);
+  const canProceedStep2 =
+    hasSelectedHabits || customHabits.some(h => selectedCustomHabits[h.id]);
 
   if (step === 1) {
     return (
@@ -220,6 +224,30 @@ const OnboardingView = ({setShowOnboarding}) => {
               />
             </View>
           ))}
+          {customHabits.map(habit => (
+            <View
+              key={habit.id}
+              style={{opacity: selectedCustomHabits[habit.id] ? 1 : 0.6}}>
+              <SettingComponent
+                label={habit.habitName}
+                leftIcon={habit.icon}
+                checkboxValue={!!selectedCustomHabits[habit.id]}
+                onCheckboxToggle={() =>
+                  setSelectedCustomHabits(prev => ({
+                    ...prev,
+                    [habit.id]: !prev[habit.id],
+                  }))
+                }
+                onPress={() =>
+                  setSelectedCustomHabits(prev => ({
+                    ...prev,
+                    [habit.id]: !prev[habit.id],
+                  }))
+                }
+                showChip={false}
+              />
+            </View>
+          ))}
           <View style={styles.gap} />
         </ScrollView>
 
@@ -232,14 +260,37 @@ const OnboardingView = ({setShowOnboarding}) => {
               {t('button.back')}
             </Button>
             <Button
+              mode="outlined"
+              icon="plus"
+              onPress={() => setVisibleAddModal(true)}>
+              {t('button.add')}
+            </Button>
+            <Button
               mode="contained"
-              icon={!hasSelectedHabits ? 'lock' : 'check'}
-              disabled={!hasSelectedHabits}
+              icon={!canProceedStep2 ? 'lock' : 'check'}
+              disabled={!canProceedStep2}
               onPress={handleStep2}>
               {t('button.save')}
             </Button>
           </View>
         </View>
+
+        <EditModal
+          visible={visibleEditModal}
+          onDismiss={closeEditModal}
+          field={editModalData?.field}
+          value={editModalData?.value}
+          label={editModalData?.label}
+          habitId={editModalData?.habitId}
+          fetchAllHabits={fetchAllHabits}
+          onboardingMode={true}
+        />
+
+        <AddModal
+          visible={visibleAddModal}
+          onDismiss={() => setVisibleAddModal(false)}
+          fetchAllHabits={fetchAllHabits}
+        />
       </View>
     );
   } else if (step === 3) {
@@ -255,7 +306,9 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
-          {habits.map(habit => (
+          {habits
+            .filter(h => h.id <= 7 || selectedCustomHabits[h.id])
+            .map(habit => (
             <HabitComponent
               key={habit.id}
               id={habit.id}
@@ -281,14 +334,20 @@ const OnboardingView = ({setShowOnboarding}) => {
               icon="arrow-left"
               onPress={() => {
                 const currentHabits = getHabits() || [];
-                const updatedSelectedHabits = {};
-
+                const updatedSelectedHabits = {
+                  1: false,
+                  2: false,
+                  3: false,
+                  4: false,
+                  5: false,
+                  6: false,
+                  7: false,
+                };
                 currentHabits.forEach(habit => {
                   if (habit.id >= 1 && habit.id <= 7) {
                     updatedSelectedHabits[habit.id] = true;
                   }
                 });
-
                 setSelectedHabits(updatedSelectedHabits);
                 dispatch(setHabits(currentHabits));
                 setStep(2);

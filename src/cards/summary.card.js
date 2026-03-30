@@ -63,6 +63,8 @@ const sortForWorst = (a, b) => {
   return String(a.habitName).localeCompare(String(b.habitName));
 };
 
+let lastBestHabitId = null;
+
 const pickSummaryInputs = habitsWithStats => {
   const withTargets = habitsWithStats.filter(h => (h.todayTarget ?? 0) > 0);
 
@@ -70,10 +72,22 @@ const pickSummaryInputs = habitsWithStats => {
     return {bestHabit: null, worstHabit: null};
   }
 
-  const bestHabit = [...withTargets].sort(sortForUi)[0] || null;
-  const worstHabit =
+  const sorted = [...withTargets].sort(sortForUi);
+  const topPercentage = sorted[0].todayPercentage;
+  const topCandidates = sorted.filter(h => h.todayPercentage === topPercentage);
+  const freshCandidates = topCandidates.filter(h => h.id !== lastBestHabitId);
+  const pool = freshCandidates.length > 0 ? freshCandidates : topCandidates;
+  const bestHabit = pool[Math.floor(Math.random() * pool.length)];
+  lastBestHabitId = bestHabit.id;
+
+  const worstCandidate =
     withTargets.length > 1
       ? [...withTargets].sort(sortForWorst)[0] || null
+      : null;
+  const worstHabit =
+    worstCandidate &&
+    worstCandidate.todayPercentage < bestHabit.todayPercentage
+      ? worstCandidate
       : null;
 
   return {bestHabit, worstHabit};
