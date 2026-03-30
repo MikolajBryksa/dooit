@@ -43,14 +43,11 @@ export const saveSummary = async habits => {
       return;
     }
 
-    const userName = getSettingValue('userName') || 'Anonymous';
-
     await flushErrorQueue();
 
     const {error} = await supabase.from('users').upsert(
       {
         user_id: supabaseUserId,
-        user_name: userName,
         updated_at: new Date().toISOString(),
         habits_json: habits,
       },

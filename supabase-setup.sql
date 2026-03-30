@@ -27,7 +27,6 @@ DROP TABLE IF EXISTS public.contact CASCADE;
 CREATE TABLE IF NOT EXISTS public.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID UNIQUE REFERENCES auth.users(id) ON DELETE SET NULL,
-    user_name TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     habits_json JSONB

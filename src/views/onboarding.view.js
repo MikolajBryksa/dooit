@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View, ScrollView} from 'react-native';
-import {Text, Button, TextInput} from 'react-native-paper';
+import {View, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, Button, TextInput, Checkbox, useTheme} from 'react-native-paper';
 import HabitComponent from '@/components/habit.component';
 import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
@@ -18,6 +18,7 @@ import {requestNotificationPermission} from '@/services/notifications.service';
 import {habitIcons} from '@/constants';
 import AddModal from '@/modals/add.modal';
 import SettingComponent from '@/components/setting.component';
+import TermsDialog from '@/dialogs/terms.dialog';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -31,6 +32,9 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [name, setName] = useState('');
   const [visibleAddModal, setVisibleAddModal] = useState(false);
   const [habitsCreated, setHabitsCreated] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
+  const theme = useTheme();
 
   const [selectedHabits, setSelectedHabits] = useState({
     1: false,
@@ -151,15 +155,46 @@ const OnboardingView = ({setShowOnboarding}) => {
           maxLength={30}
         />
 
+        <TouchableOpacity
+          onPress={() => setTermsAccepted(v => !v)}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '80%',
+            marginBottom: 8,
+          }}>
+          <Checkbox
+            status={termsAccepted ? 'checked' : 'unchecked'}
+            onPress={() => setTermsAccepted(v => !v)}
+          />
+          <Text variant="bodySmall">
+            {t('onboarding.step1.terms-prefix')}{' '}
+            <Text
+              variant="bodySmall"
+              onPress={() => setVisibleTermsDialog(true)}
+              style={{
+                color: theme.colors.primary,
+                textDecorationLine: 'underline',
+              }}>
+              {t('onboarding.step1.terms-link')}
+            </Text>
+          </Text>
+        </TouchableOpacity>
+
         <View style={styles.onboarding__bar}>
           <Button
             mode="contained"
             onPress={handleStep1}
-            disabled={!name.trim()}
-            icon={!name.trim() ? 'lock' : 'check'}>
+            disabled={!name.trim() || !termsAccepted}
+            icon={!name.trim() || !termsAccepted ? 'lock' : 'check'}>
             {t('button.save')}
           </Button>
         </View>
+
+        <TermsDialog
+          visible={visibleTermsDialog}
+          onDismiss={() => setVisibleTermsDialog(false)}
+        />
       </View>
     );
   } else if (step === 2) {

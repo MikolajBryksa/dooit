@@ -239,5 +239,17 @@ export const useStyles = () => {
       fontWeight: '800',
       letterSpacing: 0.5,
     },
+    terms__section: {
+      marginBottom: theme.dimensions.gap,
+    },
+    terms__title: {
+      marginBottom: theme.dimensions.gap,
+      color: theme.colors.primary,
+    },
+    terms__body: {
+      lineHeight: 22,
+      marginBottom: theme.dimensions.gap,
+      color: theme.colors.onSurface,
+    },
   });
 };

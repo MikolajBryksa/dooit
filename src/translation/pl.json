@@ -22,7 +22,17 @@
     "support": "Kawusia",
     "filter": "Filtruj nawyki",
     "history": "Historia",
-    "motivation": "Motywacja"
+    "motivation": "Motywacja",
+    "terms": "Regulamin"
+  },
+  "terms": {
+    "s1-title": "Zbieranie danych",
+    "s1-intro": "Dooit zbiera dane dotyczące Twoich nawyków w dwóch momentach: po zakończeniu procesu onboardingu oraz po zakończeniu dziennego podsumowania.",
+    "s1-body": "Zbierane dane obejmują nazwy nawyków, częstotliwość ich wykonywania oraz statystyki postępów. Dane te są wykorzystywane wyłącznie do analizy, jakie nawyki użytkownicy najczęściej budują oraz w jakiej liczbie. Analiza ta pozwala rozwijać aplikację zgodnie z rzeczywistymi potrzebami użytkowników.",
+    "s2-title": "Twoja prywatność",
+    "s2-body": "Wszystkie dane są zbierane anonimowo. Nazwa użytkownika nie jest przesyłana ani przechowywana poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem. Dane nie są sprzedawane ani udostępniane podmiotom trzecim.",
+    "s3-title": "Usuwanie danych",
+    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne."
   },
   "settings": {
     "version": "Wersja",
@@ -124,7 +134,9 @@
     "step1": {
       "title": "Witaj w Dooit",
       "subtitle": "gdzie powstają dobre nawyki",
-      "name": "Wpisz swoje imię"
+      "name": "Wpisz swoje imię",
+      "terms-prefix": "Akceptuję",
+      "terms-link": "Regulamin"
     },
     "step2": {
       "choose": "Wybierz",
