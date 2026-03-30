@@ -67,20 +67,19 @@ const pickSummaryInputs = habitsWithStats => {
   const withTargets = habitsWithStats.filter(h => (h.todayTarget ?? 0) > 0);
 
   if (withTargets.length === 0) {
-    return {mode: 'no-data', bestHabit: null, worstHabit: null};
+    return {bestHabit: null, worstHabit: null};
   }
 
   const bestHabit = [...withTargets].sort(sortForUi)[0] || null;
-  const worstHabit = [...withTargets].sort(sortForWorst)[0] || null;
+  const worstHabit =
+    withTargets.length > 1
+      ? [...withTargets].sort(sortForWorst)[0] || null
+      : null;
 
-  if (withTargets.length === 1) {
-    return {mode: 'stable', bestHabit, worstHabit: null};
-  }
-
-  return {mode: 'complex', bestHabit, worstHabit};
+  return {bestHabit, worstHabit};
 };
 
-const EndCard = ({weekdayKey}) => {
+const SummaryCard = ({weekdayKey}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -111,15 +110,20 @@ const EndCard = ({weekdayKey}) => {
     if (todayHabits.length === 0) {
       return t('summary.no-actions');
     }
-    const {mode, bestHabit, worstHabit} =
-      pickSummaryInputs(todayHabitsWithStats);
-    return generateTemplateSummary(t, mode, bestHabit, worstHabit);
+    const {bestHabit, worstHabit} = pickSummaryInputs(todayHabitsWithStats);
+    return generateTemplateSummary(t, bestHabit, worstHabit);
   }, [todayHabits.length, todayHabitsWithStats, t]);
 
   useEffect(() => {
-    saveSummary(allHabitsWithStats).catch(e =>
-      logError(e, 'EndCard.saveSummary'),
+    const habitsForSave = allHabitsWithStats.map(
+      ({id, habitName, todayGoodCount, todayTarget}) => ({
+        id,
+        habitName,
+        todayGoodCount,
+        todayTarget,
+      }),
     );
+    saveSummary(habitsForSave).catch(e => logError(e, 'EndCard.saveSummary'));
   }, [todayKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderHabitsList = () => {
@@ -185,4 +189,4 @@ const EndCard = ({weekdayKey}) => {
   );
 };
 
-export default EndCard;
+export default SummaryCard;

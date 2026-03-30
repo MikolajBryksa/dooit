@@ -89,6 +89,12 @@ function AppContent() {
   }, [dispatch]);
 
   useEffect(() => {
+    if (!loading && settings?.firstLaunch) {
+      setShowOnboarding(true);
+    }
+  }, [settings?.firstLaunch, loading]);
+
+  useEffect(() => {
     return setupNotificationSync(settings, loading, dispatch, setSettings);
   }, [loading, settings, dispatch]);
 

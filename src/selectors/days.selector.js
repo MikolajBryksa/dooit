@@ -25,7 +25,6 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
       : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
   const workdays = ['mon', 'tue', 'wed', 'thu', 'fri'];
-  const weekend = ['sat', 'sun'];
 
   const isSameSet = (a, b) =>
     a.length === b.length && a.every(x => b.includes(x));
@@ -34,14 +33,12 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
     if (repeatDays.length === 0) return '';
     if (isSameSet(repeatDays, daily)) return 'daily';
     if (isSameSet(repeatDays, workdays)) return 'workdays';
-    if (isSameSet(repeatDays, weekend)) return 'weekend';
     return '';
   }, [repeatDays, daily]);
 
   const handleSegmentChange = value => {
     if (value === 'daily') setRepeatDays(daily);
     else if (value === 'workdays') setRepeatDays(workdays);
-    else if (value === 'weekend') setRepeatDays(weekend);
   };
 
   const handleCheckboxChange = day => {
@@ -57,8 +54,8 @@ const DaysSelector = ({repeatDays, setRepeatDays}) => {
         onValueChange={handleSegmentChange}
         style={styles.segmentButtons}
         buttons={[
+          {value: 'daily', label: t('date.daily')},
           {value: 'workdays', label: t('date.workdays')},
-          {value: 'weekend', label: t('date.weekend')},
         ]}
       />
 

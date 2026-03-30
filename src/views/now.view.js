@@ -9,7 +9,7 @@ import {useTodayKey, useCurrentTime, useActiveHabit} from '@/hooks';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {setHabits, setHabitsLoading} from '@/redux/actions';
 import NowCard from '@/cards/now.card';
-import EndCard from '@/cards/end.card';
+import SummaryCard from '@/cards/summary.card';
 import EmptyCard from '@/cards/empty.card';
 import LoadingCard from '@/cards/loading.card';
 import StartCard from '@/cards/start.card';
@@ -32,7 +32,7 @@ const NowView = () => {
     setVisibleAddModal(!visibleAddModal);
   };
 
-  // Auto-show EndCard after 23:50
+  // Auto-show SummaryCard after 23:50
   const currentTime = useCurrentTime();
   const isEndDay = useMemo(() => {
     const hours = currentTime.getHours();
@@ -122,7 +122,7 @@ const NowView = () => {
         ) : todayHabits.length === 0 ? (
           <EmptyCard onAddHabit={handleAddModal} />
         ) : allCompleted || isEndDay ? (
-          <EndCard weekdayKey={weekdayKey} />
+          <SummaryCard weekdayKey={weekdayKey} />
         ) : activeHabit ? (
           <NowCard
             key={activeHabit.key}

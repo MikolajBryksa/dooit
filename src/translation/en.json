@@ -16,6 +16,7 @@
     "add": "Add habit",
     "delete-habit": "Delete habit",
     "delete-execution": "Delete execution",
+    "delete-data": "Delete all data",
     "change-goal": "Change goal",
     "contact": "Contact",
     "support": "Coffee",
@@ -31,15 +32,14 @@
     "pl": "Polish",
     "clock-format": "Clock format",
     "first-day": "First day",
-    "future-habits": "Future habits",
-    "locked": "Locked",
-    "unlocked": "Unlocked",
     "theme": "Theme",
     "dark": "Dark",
     "light": "Light",
     "notifications": "Notifications",
     "enabled": "Enabled",
     "disabled": "Disabled",
+    "data": "Account data",
+    "delete": "Delete",
     "test-connection": "Test connection",
     "test": "Test",
     "connection-ok": "Connected",
@@ -51,6 +51,7 @@
   "message": {
     "delete-habit": "Are you sure to remove the habit:",
     "delete-execution": "Are you sure to remove this execution?",
+    "delete-data": "Are you sure? This will permanently delete all your habits, history, and account data.",
     "change-goal": "Do you want to change the goal?",
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hey there!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
@@ -78,11 +79,8 @@
     "send": "Send",
     "sent": "Sent",
     "offline": "Offline",
-    "hints": "Hints",
-    "generate-summary": "Generate summary",
-    "try-again": "Try again",
-    "generating": "Generating",
-    "finish": "Finish"
+    "finish": "Finish",
+    "deleting": "Deleting"
   },
   "contact": {
     "email": "Your e-mail",
@@ -91,12 +89,8 @@
   },
   "card": {
     "habitName": "Habit name",
-    "instead": "vs",
-    "minutes": "(in minutes)",
     "repeatDays": "Repeat days",
     "repeatHours": "Repeat Hours",
-    "goodCounter": "Right choices",
-    "badCounter": "Easy choices",
     "goal": "Current goal",
     "newGoal": "Suggested goal",
     "noRepetitions": "No repetitions"
@@ -119,11 +113,6 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
-  },
-  "hour": {
-    "morning": "Morning",
-    "afternoon": "Afternoon",
-    "evening": "Evening"
   },
   "addStep": {
     "habitName": "What do you want to do regularly?",
@@ -216,27 +205,20 @@
       "Even breaks can fuel progress.",
       "It’s just a pause, your journey continues."
     ],
-    "no-data": [
-      "Hey {{userName}}, no habits scheduled for today! Take a well-deserved rest — you'll be back stronger tomorrow.",
-      "Good job taking a breather, {{userName}}! No habits today. Recharge and get ready for tomorrow.",
-      "Rest day, {{userName}}! No habits to track today. Tomorrow is a fresh start — make it count."
+    "intro": [
+      "Another day is behind you, {{userName}}. Every time you show up here is a step in the right direction.",
+      "{{userName}}, you're here again — and that’s the key to success. Consistency makes the difference.",
+      "Habits are built one day at a time, {{userName}}. That’s why every day counts."
     ],
-    "stable": [
-      "Great job today, {{userName}}! You're staying consistent with {{habitName}} — that's exactly how lasting habits are built.",
-      "Nice work, {{userName}}! Every repetition of {{habitName}} is shaping who you're becoming. Keep showing up!",
-      "Well done, {{userName}}! {{habitName}} is becoming a natural part of your day. Keep the momentum going!"
-    ],
-
     "praise": [
-      "Amazing work today, {{userName}}! {{bestHabit}} is where you really shined.",
-      "Fantastic, {{userName}}! You crushed it with {{bestHabit}} today — that's serious progress.",
-      "Great job, {{userName}}! {{bestHabit}} is really paying off. You should be proud of yourself."
+      "The habit '{{bestHabit}}' is your highlight today. Great job.",
+      "'{{bestHabit}}' went the best for you today. That’s real progress.",
+      "'{{bestHabit}}' is really paying off. That’s something to be happy and proud of."
     ],
     "tip": [
-      "For {{worstHabit}}, think of just one tiny step you could take tomorrow — even one minute counts.",
-      "Tomorrow with {{worstHabit}}: start it for just two minutes, no pressure to do more. Getting started is everything.",
-      "What's the smallest possible action for {{worstHabit}} you could do tomorrow? Even a tiny move forward matters.",
-      "For {{worstHabit}}, try doing it for just a moment — getting started is half the battle."
+      "With '{{worstHabit}}', start tomorrow with just one minute — getting started is already a success.",
+      "Tomorrow, with '{{worstHabit}}': one minute, no pressure. What matters is that you begin.",
+      "For '{{worstHabit}}', find a moment tomorrow for a small step. Even minimal action builds the habit."
     ]
   },
   "summary": {

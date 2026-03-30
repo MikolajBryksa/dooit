@@ -1,4 +1,5 @@
 import realm from '@/storage/schemas';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getSettings = () => {
   const settings = realm.objects('Settings')[0];
@@ -46,4 +47,31 @@ export const getSettingValue = key => {
 export const updateSettingValue = (key, value) => {
   const updates = {[key]: value};
   return updateSettings(updates);
+};
+
+export const deleteAllLocalData = async () => {
+  realm.write(() => {
+    realm.delete(realm.objects('Habit'));
+    realm.delete(realm.objects('Execution'));
+    realm.delete(realm.objects('ErrorLog'));
+    realm.delete(realm.objects('ContactMessage'));
+    realm.create(
+      'Settings',
+      {
+        id: 1,
+        userName: null,
+        language: 'en',
+        clockFormat: '24 h',
+        firstDay: 'mon',
+        firstLaunch: true,
+        currentTheme: null,
+        currentItem: 0,
+        currentDay: null,
+        notifications: false,
+      },
+      'modified',
+    );
+  });
+
+  await AsyncStorage.removeItem('LAST_RESET_DATE');
 };

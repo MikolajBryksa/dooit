@@ -72,6 +72,25 @@ export const getCurrentUserToken = async () => {
   }
 };
 
+export const deleteUserData = async () => {
+  try {
+    const {
+      data: {session},
+    } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+
+    if (userId) {
+      await supabase.from('users').delete().eq('user_id', userId);
+    }
+
+    await supabase.auth.signOut();
+    initAuthPromise = null;
+  } catch (error) {
+    logError(error, 'deleteUserData');
+    throw error;
+  }
+};
+
 export const getSupabaseUserId = async () => {
   try {
     const {

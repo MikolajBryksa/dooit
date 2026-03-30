@@ -3,7 +3,7 @@ import {Dialog, Portal, Text} from 'react-native-paper';
 import {View} from 'react-native';
 import {useStyles} from '@/styles';
 
-const DialogComponent = ({visible, onDismiss, children, title}) => {
+const DialogComponent = ({visible, onDismiss, children, title, titleStyle}) => {
   const styles = useStyles();
 
   return (
@@ -12,7 +12,7 @@ const DialogComponent = ({visible, onDismiss, children, title}) => {
         <View style={{overflow: 'hidden'}}>
           {title && (
             <View style={styles.dialog__title}>
-              <Text variant="titleLarge">{title}</Text>
+              <Text variant="titleLarge" style={titleStyle}>{title}</Text>
             </View>
           )}
           {children}

@@ -6,11 +6,16 @@ import {useStyles} from '@/styles';
 import i18next from 'i18next';
 import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
-import {updateSettingValue} from '@/services/settings.service';
+import {
+  updateSettingValue,
+  deleteAllLocalData,
+} from '@/services/settings.service';
+import {deleteUserData} from '@/services/supabase.service';
 import {setSettings, setHabits} from '@/redux/actions';
 import {translateDefaultHabits, getHabits} from '@/services/habits.service';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
+import DeleteDataDialog from '@/dialogs/delete-data.dialog';
 import NameModal from '@/modals/name.modal';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
@@ -29,6 +34,7 @@ const SettingsView = () => {
   const [visibleContactModal, setVisibleContactModal] = useState(false);
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
   const [visibleNameModal, setVisibleNameModal] = useState(false);
+  const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
@@ -71,6 +77,27 @@ const SettingsView = () => {
   const handleContactModal = () => setVisibleContactModal(v => !v);
   const handleSupportDialog = () => setVisibleSupportDialog(v => !v);
   const handleNameModal = () => setVisibleNameModal(v => !v);
+  const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
+
+  async function handleDeleteData() {
+    await deleteUserData();
+    await deleteAllLocalData();
+    dispatch(setHabits([]));
+    dispatch(
+      setSettings({
+        id: 1,
+        userName: null,
+        language: 'en',
+        clockFormat: '24 h',
+        firstDay: 'mon',
+        firstLaunch: true,
+        currentTheme: null,
+        currentItem: 0,
+        currentDay: null,
+        notifications: false,
+      }),
+    );
+  }
 
   function handleVersion() {
     Linking.openURL(
@@ -187,6 +214,13 @@ const SettingsView = () => {
           onPress={handleCurrentTheme}
         />
 
+        <SettingComponent
+          label={t('settings.data')}
+          value={t('settings.delete')}
+          icon="delete-outline"
+          onPress={handleDeleteDataDialog}
+        />
+
         {__DEV__ && (
           <>
             <SettingComponent
@@ -238,6 +272,12 @@ const SettingsView = () => {
       />
 
       <NameModal visible={visibleNameModal} onDismiss={handleNameModal} />
+
+      <DeleteDataDialog
+        visible={visibleDeleteDataDialog}
+        onDismiss={handleDeleteDataDialog}
+        onConfirm={handleDeleteData}
+      />
     </>
   );
 };

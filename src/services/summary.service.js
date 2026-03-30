@@ -7,30 +7,27 @@ import {
 import {logError, flushErrorQueue} from './errors.service.js';
 import {pickRandomMessage} from '@/utils';
 
-export const generateTemplateSummary = (t, mode, bestHabit, worstHabit) => {
+export const generateTemplateSummary = (t, bestHabit, worstHabit) => {
   const userName = getSettingValue('userName') || '';
-  const bestName = String(bestHabit?.habitName || '').trim();
-  const worstName = String(worstHabit?.habitName || '').trim();
+  const bestHabitName = String(bestHabit?.habitName || '').trim();
+  const worstHabitName = String(worstHabit?.habitName || '').trim();
 
-  if (mode === 'no-data') {
-    return pickRandomMessage(t, 'no-data').replace('{{userName}}', userName);
-  }
-  if (mode === 'stable') {
-    return pickRandomMessage(t, 'stable')
-      .replace('{{userName}}', userName)
-      .replace('{{habitName}}', bestName);
-  }
-  if (mode === 'complex') {
-    const praise = pickRandomMessage(t, 'praise')
-      .replace('{{userName}}', userName)
-      .replace('{{bestHabit}}', bestName);
-    const tip = pickRandomMessage(t, 'tip').replace(
-      '{{worstHabit}}',
-      worstName,
+  const intro = pickRandomMessage(t, 'intro').replace('{{userName}}', userName);
+
+  const middle = pickRandomMessage(t, 'praise').replace(
+    '{{bestHabit}}',
+    bestHabitName,
+  );
+
+  const parts = [intro, middle];
+
+  if (worstHabit) {
+    parts.push(
+      pickRandomMessage(t, 'tip').replace('{{worstHabit}}', worstHabitName),
     );
-    return `${praise} ${tip}`;
   }
-  return '';
+
+  return parts.join('\n\n');
 };
 
 export const saveSummary = async habits => {

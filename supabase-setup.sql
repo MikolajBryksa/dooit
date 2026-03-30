@@ -30,8 +30,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     user_name TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    habits_json JSONB,
-    ai_summary TEXT
+    habits_json JSONB
 );
 
 -- errors table - stores application errors for tracking
