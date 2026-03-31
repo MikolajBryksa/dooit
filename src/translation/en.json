@@ -94,7 +94,8 @@
     "sent": "Sent",
     "offline": "Offline",
     "finish": "Finish",
-    "deleting": "Deleting"
+    "deleting": "Deleting",
+    "understand": "Got it"
   },
   "contact": {
     "email": "Your e-mail",
@@ -133,6 +134,14 @@
     "habitName": "What do you want to do regularly?",
     "repeatDays": "On what days you want to do it?",
     "repeatHours": "What time do you want to do it?"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "Think of a habit not as a big task — like working out or drinking 3 liters of water — but as the first small step that habit requires. For example: putting on your shoes or pouring a glass of water.",
+    "onboarding-same-time": "Habits stick most easily when you repeat them at the same time every day. Pick a time you can realistically commit to.",
+    "now-repetitions-matter": "In Dooit, only repetitions count. It doesn't matter how long you spend on a habit or what result you achieve — the only goal is to learn to consistently return to the planned activity.",
+    "summary-daily-recap": "Once you complete all habits planned for the day, Dooit will show you how many repetitions you managed to do and present a short recap of your day.",
+    "habits-edit-and-goal": "You can edit any habit at any time. The default goal is the number of repetitions calculated for 28 days — that's usually enough to build a habit. You can always increase it to make it even stronger!",
+    "settings-overview": "Here you can update your name used in the daily summary, change the app language, switch between dark and light mode, and toggle notifications on or off."
   },
   "onboarding": {
     "step1": {

@@ -35,6 +35,10 @@ export const useStyles = () => {
       justifyContent: 'center',
       height: theme.dimensions.height,
     },
+    onboarding__container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
     onboarding__bar: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -237,6 +241,20 @@ export const useStyles = () => {
     circle__flashText: {
       fontWeight: '800',
       letterSpacing: 0.5,
+    },
+    tip: {
+      backgroundColor: theme.colors.surface,
+      borderRadius: 12,
+      marginBottom: theme.dimensions.gap,
+    },
+    tip__footer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      paddingHorizontal: theme.dimensions.gap,
+      paddingBottom: theme.dimensions.gap,
+    },
+    tip__content: {
+      padding: theme.dimensions.gap * 2,
     },
     terms__section: {
       marginBottom: theme.dimensions.gap,

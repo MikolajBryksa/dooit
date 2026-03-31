@@ -11,6 +11,7 @@ import {getHabitsForSync} from '@/services/habits.service';
 import {logError} from '@/services/errors.service';
 import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
+import TipComponent from '../components/tip.component';
 
 const StartCard = ({onStart}) => {
   const {t} = useTranslation();
@@ -33,6 +34,9 @@ const StartCard = ({onStart}) => {
 
   return (
     <>
+      <TipComponent tipId="now_repetitions_matter">
+        {t('tip.now-repetitions-matter')}
+      </TipComponent>
       <NowComponent
         iconContent={<InfoCircle start />}
         subtitleContent={

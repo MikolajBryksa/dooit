@@ -10,6 +10,7 @@ import {logError} from '@/services/errors.service';
 import {getTodayGoalStats, getHabitsForSync} from '@/services/habits.service';
 import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
+import TipComponent from '../components/tip.component';
 
 const withTodayStats = (habits, todayKey, weekdayKey) =>
   habits.map(h => {
@@ -186,6 +187,9 @@ const SummaryCard = ({weekdayKey}) => {
 
   return (
     <>
+      <TipComponent tipId="summary_daily_recap">
+        {t('tip.summary-daily-recap')}
+      </TipComponent>
       <NowComponent
         iconContent={<InfoCircle end />}
         subtitleContent={

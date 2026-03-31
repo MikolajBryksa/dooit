@@ -23,6 +23,7 @@ import notifee from '@notifee/react-native';
 import SettingComponent from '@/components/setting.component';
 import {testErrorLogging, logError} from '@/services/errors.service';
 import Topbar from '@/components/topbar.component';
+import TipComponent from '@/components/tip.component';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -173,6 +174,9 @@ const SettingsView = () => {
       </Topbar>
 
       <ScrollView style={styles.container}>
+        <TipComponent tipId="settings_overview">
+          {t('tip.settings-overview')}
+        </TipComponent>
         <SettingComponent
           label={t('settings.version')}
           value={packageJson.version}

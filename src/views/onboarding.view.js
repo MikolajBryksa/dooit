@@ -19,6 +19,7 @@ import {habitIcons} from '@/constants';
 import AddModal from '@/modals/add.modal';
 import SettingComponent from '@/components/setting.component';
 import TermsDialog from '@/dialogs/terms.dialog';
+import TipComponent from '@/components/tip.component';
 
 const OnboardingView = ({setShowOnboarding}) => {
   const {t} = useTranslation();
@@ -203,13 +204,16 @@ const OnboardingView = ({setShowOnboarding}) => {
     );
   } else if (step === 2) {
     return (
-      <View style={styles.container}>
+      <View style={styles.onboarding__container}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.step2.choose')}</Text>
           <Text variant="bodyLarge">{t('onboarding.step2.which-habits')}</Text>
         </View>
 
         <ScrollView style={styles.container}>
+          <TipComponent tipId="onboarding_habit_mindset">
+            {t('tip.onboarding-habit-mindset')}
+          </TipComponent>
           {[1, 2, 3, 4, 5, 6, 7].map(habitId => (
             <View
               key={habitId}
@@ -295,7 +299,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     );
   } else if (step === 3) {
     return (
-      <View style={styles.container}>
+      <View style={styles.onboarding__container}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">
             {t('onboarding.step3.select-repetition')}
@@ -306,6 +310,9 @@ const OnboardingView = ({setShowOnboarding}) => {
         </View>
 
         <ScrollView style={styles.container}>
+          <TipComponent tipId="onboarding_same_time">
+            {t('tip.onboarding-same-time')}
+          </TipComponent>
           {habits
             .filter(h => h.id <= 7 || selectedCustomHabits[h.id])
             .map(habit => (

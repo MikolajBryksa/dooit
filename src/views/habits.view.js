@@ -11,6 +11,7 @@ import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import Topbar from '@/components/topbar.component';
+import TipComponent from '@/components/tip.component';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -79,6 +80,9 @@ const HabitsView = () => {
       </Topbar>
 
       <ScrollView style={styles.container}>
+        <TipComponent tipId="habits_edit_and_goal">
+          {t('tip.habits-edit-and-goal')}
+        </TipComponent>
         {sortedHabits && sortedHabits.length > 0 ? (
           sortedHabits.map(habit => (
             <HabitComponent

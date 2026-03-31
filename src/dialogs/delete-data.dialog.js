@@ -13,7 +13,7 @@ const DeleteDataDialog = ({visible, onDismiss, onConfirm}) => {
     setIsDeleting(true);
     try {
       await onConfirm();
-    } finally {
+    } catch {
       setIsDeleting(false);
       onDismiss();
     }
@@ -23,6 +23,7 @@ const DeleteDataDialog = ({visible, onDismiss, onConfirm}) => {
     <DialogComponent
       visible={visible}
       onDismiss={isDeleting ? () => {} : onDismiss}
+      dismissable={!isDeleting}
       title={t('title.delete-data')}
       titleStyle={{color: theme.colors.error}}>
       <DialogComponent.Content>

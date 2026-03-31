@@ -17,6 +17,7 @@ export const getSettings = () => {
       currentItem: settings.currentItem,
       currentDay: settings.currentDay,
       notifications: settings.notifications,
+      dismissedTips: [...(settings.dismissedTips || [])],
     };
   } catch (e) {
     console.error('[settings.getSettings]', e?.message);
@@ -42,9 +43,22 @@ export const updateSettings = updates => {
       currentItem: updatedSettings.currentItem,
       currentDay: updatedSettings.currentDay,
       notifications: updatedSettings.notifications,
+      dismissedTips: [...(updatedSettings.dismissedTips || [])],
     };
   } catch (e) {
     console.error('[settings.updateSettings]', e?.message);
+    return null;
+  }
+};
+
+export const dismissTip = (tipId, currentSettings) => {
+  try {
+    const already = currentSettings?.dismissedTips || [];
+    if (already.includes(tipId)) return currentSettings;
+    const updated = [...already, tipId];
+    return updateSettingValue('dismissedTips', updated);
+  } catch (e) {
+    console.error('[settings.dismissTip]', e?.message);
     return null;
   }
 };
@@ -79,6 +93,7 @@ export const deleteAllLocalData = async () => {
           currentItem: 0,
           currentDay: null,
           notifications: false,
+          dismissedTips: [],
         },
         'modified',
       );

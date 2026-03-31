@@ -47,6 +47,7 @@ Settings.schema = {
     currentItem: 'int?',
     currentDay: 'string?',
     notifications: 'bool',
+    dismissedTips: 'string[]',
   },
 };
 
@@ -78,7 +79,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 30,
+  schemaVersion: 31,
   deleteRealmIfMigrationNeeded: true,
 };
 
