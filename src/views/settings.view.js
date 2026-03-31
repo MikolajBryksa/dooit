@@ -50,6 +50,14 @@ const SettingsView = () => {
   // Test Error Logging
   const [testErrorDone, setTestErrorDone] = useState(false);
 
+  // Test Error Boundary (DEV only)
+  const [triggerCrash, setTriggerCrash] = useState(false);
+  const CrashTest = () => {
+    if (triggerCrash)
+      throw new Error('DEV: Test UI crash — Error Boundary test');
+    return null;
+  };
+
   async function handleTestConnection() {
     setTestResult(null);
     setTestVisible(false);
@@ -225,6 +233,8 @@ const SettingsView = () => {
           onPress={handleDeleteDataDialog}
         />
 
+        {__DEV__ && <CrashTest />}
+
         {__DEV__ && (
           <>
             <SettingComponent
@@ -257,6 +267,13 @@ const SettingsView = () => {
               icon={testErrorDone ? 'bug-check' : 'bug'}
               onPress={handleTestError}
               disabled={testErrorDone}
+            />
+
+            <SettingComponent
+              label={t('settings.test-crash')}
+              value={t('settings.crash-app')}
+              icon="alert-octagon-outline"
+              onPress={() => setTriggerCrash(true)}
             />
           </>
         )}

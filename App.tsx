@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState, Component} from 'react';
 import {PaperProvider} from 'react-native-paper';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Provider, useDispatch, useSelector} from 'react-redux';
+import RNRestart from 'react-native-restart';
 import store from './src/redux/store';
 import Navbar from './src/components/navbar.component';
 import LoadingView from './src/views/loading.view';
@@ -45,11 +47,63 @@ class ErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return null;
+      return (
+        <View style={errorStyles.container}>
+          <Text style={errorStyles.title}>
+            {i18next.t('error-boundary.title')}
+          </Text>
+          <Text style={errorStyles.body}>
+            {i18next.t('error-boundary.body')}
+          </Text>
+          <TouchableOpacity
+            style={errorStyles.button}
+            onPress={() => RNRestart.restart()}>
+            <Text style={errorStyles.buttonText}>
+              {i18next.t('error-boundary.button')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
     }
     return this.props.children;
   }
 }
+
+const errorStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#111',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  body: {
+    color: '#aaa',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 32,
+  },
+  button: {
+    backgroundColor: '#fff',
+    height: 44,
+    paddingHorizontal: 28,
+    borderRadius: 22,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#111',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+});
 
 const Tab = createBottomTabNavigator();
 

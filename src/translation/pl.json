@@ -57,7 +57,9 @@
     "connection-fail": "Rozłączony",
     "test-error-logging": "Test błędu",
     "error-logged": "Błąd zgłoszony",
-    "log-error": "Zgłoś błąd"
+    "log-error": "Zgłoś błąd",
+    "test-crash": "Testuj awarię",
+    "crash-app": "Zepsuj aplikację"
   },
   "message": {
     "delete-habit": "Czy na pewno chcesz usunąć nawyk:",
@@ -240,5 +242,10 @@
       "title": "Podsumowanie dnia",
       "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku."
     }
+  },
+  "error-boundary": {
+    "title": "Ups, coś poszło nie tak",
+    "body": "Błąd został automatycznie zgłoszony.\nPrzepraszam za niedogodności.",
+    "button": "Uruchom ponownie"
   }
 }

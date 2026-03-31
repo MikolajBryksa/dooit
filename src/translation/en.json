@@ -57,7 +57,9 @@
     "connection-fail": "Disconnected",
     "test-error-logging": "Test error",
     "error-logged": "Error logged",
-    "log-error": "Log error"
+    "log-error": "Log error",
+    "test-crash": "Test crash",
+    "crash-app": "Crash app"
   },
   "message": {
     "delete-habit": "Are you sure to remove the habit:",
@@ -240,5 +242,10 @@
     "subtitle": "All done today!",
     "title": "Daily summary",
     "no-actions": "Your progress summary will appear here once you complete at least one repetition of your chosen habit."
+  },
+  "error-boundary": {
+    "title": "Oops, something went wrong",
+    "body": "The error has been reported automatically.\nI am sorry for the inconvenience.",
+    "button": "Restart"
   }
 }
