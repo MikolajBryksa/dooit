@@ -122,7 +122,7 @@ Before you begin, ensure you have met the following requirements:
 
   ```
   npm run build
-  npm run build-bundle
+  npm run bundle
   ```
 
 - **Find the app builds**:

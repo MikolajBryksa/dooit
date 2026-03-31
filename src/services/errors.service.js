@@ -11,7 +11,9 @@ export const logError = async (error, context = 'unknown') => {
     try {
       const id = await getSupabaseUserId();
       if (id) supabaseUserId = id;
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Could not resolve user ID for error logging:', e?.message);
+    }
 
     const errorData = {
       error_message: error?.message || String(error),

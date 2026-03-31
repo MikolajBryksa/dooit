@@ -84,26 +84,30 @@ const realmConfig = {
 
 const realm = new Realm(realmConfig);
 
-realm.write(() => {
-  const existingSettings = realm.objects('Settings')[0];
-  if (!existingSettings) {
-    const deviceLocales = RNLocalize.getLocales();
-    const deviceLanguage =
-      deviceLocales && deviceLocales.length > 0
-        ? deviceLocales[0].languageCode
-        : 'en';
+try {
+  realm.write(() => {
+    const existingSettings = realm.objects('Settings')[0];
+    if (!existingSettings) {
+      const deviceLocales = RNLocalize.getLocales();
+      const deviceLanguage =
+        deviceLocales && deviceLocales.length > 0
+          ? deviceLocales[0].languageCode
+          : 'en';
 
-    realm.create('Settings', {
-      id: 1,
-      language: deviceLanguage,
-      clockFormat: '24 h',
-      firstDay: 'mon',
-      firstLaunch: true,
-      currentItem: 0,
-      currentDay: dayMap[new Date().getDay()],
-      notifications: false,
-    });
-  }
-});
+      realm.create('Settings', {
+        id: 1,
+        language: deviceLanguage,
+        clockFormat: '24 h',
+        firstDay: 'mon',
+        firstLaunch: true,
+        currentItem: 0,
+        currentDay: dayMap[new Date().getDay()],
+        notifications: false,
+      });
+    }
+  });
+} catch (e) {
+  console.error('[schemas] Failed to initialize default settings:', e?.message);
+}
 
 export default realm;

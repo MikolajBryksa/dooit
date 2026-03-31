@@ -8,6 +8,7 @@ import {
   getExecutionStats,
   getExecutionStatsForDate,
 } from '@/services/executions.service';
+import {logError} from '@/services/errors.service';
 
 const calculateMonthlyTarget = (repeatDays = [], repeatHours = []) => {
   return (repeatDays.length || 0) * (repeatHours.length || 0) * 4;
@@ -21,104 +22,129 @@ export const addHabit = (
   goal,
   id = null,
 ) => {
-  if (id === null) {
-    const lastItem = realm.objects('Habit').sorted('id', true)[0];
-    const nextId = lastItem ? lastItem.id + 1 : 8;
-    id = Math.max(8, nextId);
-  }
+  try {
+    if (id === null) {
+      const lastItem = realm.objects('Habit').sorted('id', true)[0];
+      const nextId = lastItem ? lastItem.id + 1 : 8;
+      id = Math.max(8, nextId);
+    }
 
-  const resolvedGoal = goal ?? calculateMonthlyTarget(repeatDays, repeatHours);
+    const resolvedGoal = goal ?? calculateMonthlyTarget(repeatDays, repeatHours);
 
-  let newHabit;
-  realm.write(() => {
-    newHabit = realm.create('Habit', {
-      id,
-      habitName,
-      repeatDays,
-      repeatHours,
-      icon: icon || 'infinity',
-      goal: resolvedGoal,
+    let newHabit;
+    realm.write(() => {
+      newHabit = realm.create('Habit', {
+        id,
+        habitName,
+        repeatDays,
+        repeatHours,
+        icon: icon || 'infinity',
+        goal: resolvedGoal,
+      });
     });
-  });
 
-  return newHabit;
+    return newHabit;
+  } catch (e) {
+    logError(e, 'habits.addHabit');
+    return null;
+  }
 };
 
 export const updateHabit = (id, updates) => {
-  let updatedHabit;
+  try {
+    let updatedHabit;
 
-  realm.write(() => {
-    const habit = realm.objectForPrimaryKey('Habit', id);
-    if (!habit) return null;
+    realm.write(() => {
+      const habit = realm.objectForPrimaryKey('Habit', id);
+      if (!habit) return null;
 
-    updatedHabit = realm.create(
-      'Habit',
-      {
-        id,
-        habitName: updates.habitName ?? habit.habitName,
-        repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
-        repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
-        icon: updates.icon ?? habit.icon,
-        goal: updates.goal ?? habit.goal,
-      },
-      'modified',
-    );
-  });
+      updatedHabit = realm.create(
+        'Habit',
+        {
+          id,
+          habitName: updates.habitName ?? habit.habitName,
+          repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
+          repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
+          icon: updates.icon ?? habit.icon,
+          goal: updates.goal ?? habit.goal,
+        },
+        'modified',
+      );
+    });
 
-  return updatedHabit;
+    return updatedHabit;
+  } catch (e) {
+    logError(e, 'habits.updateHabit');
+    return null;
+  }
 };
 
 export const deleteHabit = id => {
-  let deletedHabit;
+  try {
+    let deletedHabit;
 
-  realm.write(() => {
-    const habitToDelete = realm.objectForPrimaryKey('Habit', id);
-    if (habitToDelete) {
-      deletedHabit = {...habitToDelete};
-      realm.delete(habitToDelete);
+    realm.write(() => {
+      const habitToDelete = realm.objectForPrimaryKey('Habit', id);
+      if (habitToDelete) {
+        deletedHabit = {...habitToDelete};
+        realm.delete(habitToDelete);
+      }
+    });
+
+    if (deletedHabit) {
+      deleteExecutions(id);
     }
-  });
 
-  if (deletedHabit) {
-    deleteExecutions(id);
+    return deletedHabit;
+  } catch (e) {
+    logError(e, 'habits.deleteHabit');
+    return null;
   }
-
-  return deletedHabit;
 };
 
 export const getHabits = () => {
-  const realmHabits = realm.objects('Habit');
+  try {
+    const realmHabits = realm.objects('Habit');
 
-  const habitsArr = Array.from(realmHabits).map(habit => ({
-    id: habit.id,
-    habitName: habit.habitName,
-    repeatDays: Array.from(habit.repeatDays),
-    repeatHours: Array.from(habit.repeatHours),
-    icon: habit.icon,
-    goal: habit.goal,
-  }));
+    const habitsArr = Array.from(realmHabits).map(habit => ({
+      id: habit.id,
+      habitName: habit.habitName,
+      repeatDays: Array.from(habit.repeatDays),
+      repeatHours: Array.from(habit.repeatHours),
+      icon: habit.icon,
+      goal: habit.goal,
+    }));
 
-  habitsArr.sort((a, b) => {
-    const aFirstHour = a.repeatHours?.[0] || '';
-    const bFirstHour = b.repeatHours?.[0] || '';
-    return aFirstHour.localeCompare(bFirstHour);
-  });
+    habitsArr.sort((a, b) => {
+      const aFirstHour = a.repeatHours?.[0] || '';
+      const bFirstHour = b.repeatHours?.[0] || '';
+      return aFirstHour.localeCompare(bFirstHour);
+    });
 
-  return habitsArr;
+    return habitsArr;
+  } catch (e) {
+    logError(e, 'habits.getHabits');
+    return [];
+  }
 };
 
 export const getHabitById = id => {
-  const habit = realm.objectForPrimaryKey('Habit', id);
-  if (!habit) return null;
+  try {
+    const habit = realm.objectForPrimaryKey('Habit', id);
+    if (!habit) return null;
 
-  return {
-    id: habit.id,
-    habitName: habit.habitName,
-    repeatDays: Array.from(habit.repeatDays),
-    repeatHours: Array.from(habit.repeatHours),
-    icon: habit.icon,
-    goal: habit.goal,
-  };
+    return {
+      id: habit.id,
+      habitName: habit.habitName,
+      repeatDays: Array.from(habit.repeatDays),
+      repeatHours: Array.from(habit.repeatHours),
+      icon: habit.icon,
+      goal: habit.goal,
+    };
+  } catch (e) {
+    logError(e, 'habits.getHabitById');
+    return null;
+  }
 };
 
 export const getHabitValue = (id, key) => {
@@ -196,64 +222,69 @@ export const createDefaultHabit = habitId => {
 };
 
 export const translateDefaultHabits = (oldLanguage, newLanguage) => {
-  const defaultHabitIds = [1, 2, 3, 4, 5, 6, 7];
+  try {
+    const defaultHabitIds = [1, 2, 3, 4, 5, 6, 7];
 
-  const oldTranslations = {};
-  const newTranslations = {};
+    const oldTranslations = {};
+    const newTranslations = {};
 
-  defaultHabitIds.forEach(id => {
-    oldTranslations[id] = {
-      habitName: i18next.t(`default-habits.${id}.habitName`, {
-        lng: oldLanguage,
-      }),
-    };
+    defaultHabitIds.forEach(id => {
+      oldTranslations[id] = {
+        habitName: i18next.t(`default-habits.${id}.habitName`, {
+          lng: oldLanguage,
+        }),
+      };
 
-    newTranslations[id] = {
-      habitName: i18next.t(`default-habits.${id}.habitName`, {
-        lng: newLanguage,
-      }),
-    };
-  });
-
-  let updatedCount = 0;
-
-  realm.write(() => {
-    const habits = realm.objects('Habit');
-
-    habits.forEach(habit => {
-      let needsUpdate = false;
-      let newHabitName = habit.habitName;
-
-      for (const id of defaultHabitIds) {
-        const oldHabit = oldTranslations[id];
-
-        if (habit.habitName === oldHabit.habitName) {
-          newHabitName = newTranslations[id].habitName;
-          needsUpdate = true;
-          break;
-        }
-      }
-
-      if (needsUpdate) {
-        realm.create(
-          'Habit',
-          {
-            id: habit.id,
-            habitName: newHabitName,
-            repeatDays: Array.from(habit.repeatDays),
-            repeatHours: Array.from(habit.repeatHours),
-            icon: habit.icon,
-            goal: habit.goal,
-          },
-          'modified',
-        );
-
-        updatedCount++;
-      }
+      newTranslations[id] = {
+        habitName: i18next.t(`default-habits.${id}.habitName`, {
+          lng: newLanguage,
+        }),
+      };
     });
-  });
 
-  return updatedCount;
+    let updatedCount = 0;
+
+    realm.write(() => {
+      const habits = realm.objects('Habit');
+
+      habits.forEach(habit => {
+        let needsUpdate = false;
+        let newHabitName = habit.habitName;
+
+        for (const id of defaultHabitIds) {
+          const oldHabit = oldTranslations[id];
+
+          if (habit.habitName === oldHabit.habitName) {
+            newHabitName = newTranslations[id].habitName;
+            needsUpdate = true;
+            break;
+          }
+        }
+
+        if (needsUpdate) {
+          realm.create(
+            'Habit',
+            {
+              id: habit.id,
+              habitName: newHabitName,
+              repeatDays: Array.from(habit.repeatDays),
+              repeatHours: Array.from(habit.repeatHours),
+              icon: habit.icon,
+              goal: habit.goal,
+            },
+            'modified',
+          );
+
+          updatedCount++;
+        }
+      });
+    });
+
+    return updatedCount;
+  } catch (e) {
+    logError(e, 'habits.translateDefaultHabits');
+    return 0;
+  }
 };
 
 export const getTodayHabits = (habits, weekdayKey) => {

@@ -1,5 +1,6 @@
 import realm from '@/storage/schemas';
 import {getLocalDateKey, subtractDays, dateToWeekday} from '@/utils';
+import {logError} from '@/services/errors.service';
 
 const executionId = (habitId, date, slotIndex) =>
   `${habitId}_${date}_${slotIndex}`;
@@ -29,105 +30,141 @@ export const recordExecutionChoice = (
   plannedHour,
   status,
 ) => {
-  realm.write(() => {
-    const id = executionId(habitId, date, slotIndex);
-    const existing = realm.objectForPrimaryKey('Execution', id);
+  try {
+    realm.write(() => {
+      const id = executionId(habitId, date, slotIndex);
+      const existing = realm.objectForPrimaryKey('Execution', id);
 
-    if (existing && existing.deleted) return;
+      if (existing && existing.deleted) return;
 
-    if (!existing) {
-      addExecutionInWrite(habitId, date, slotIndex, plannedHour, status);
-      return;
-    }
+      if (!existing) {
+        addExecutionInWrite(habitId, date, slotIndex, plannedHour, status);
+        return;
+      }
 
-    if (existing.status === status) return;
+      if (existing.status === status) return;
 
-    existing.status = status;
-    existing.timestamp = new Date();
-    existing.plannedHour = plannedHour ?? existing.plannedHour;
-  });
+      existing.status = status;
+      existing.timestamp = new Date();
+      existing.plannedHour = plannedHour ?? existing.plannedHour;
+    });
+  } catch (e) {
+    logError(e, 'executions.recordExecutionChoice');
+  }
 };
 
 export const updateExecution = (executionIdValue, updates = {}) => {
-  let updatedExecution = null;
+  try {
+    let updatedExecution = null;
 
-  realm.write(() => {
-    const execution = realm.objectForPrimaryKey('Execution', executionIdValue);
-    if (!execution || execution.deleted) return null;
+    realm.write(() => {
+      const execution = realm.objectForPrimaryKey('Execution', executionIdValue);
+      if (!execution || execution.deleted) return null;
 
-    execution.status = updates.status ?? execution.status;
-    execution.plannedHour = updates.plannedHour ?? execution.plannedHour;
-    execution.timestamp = updates.timestamp ?? new Date();
+      execution.status = updates.status ?? execution.status;
+      execution.plannedHour = updates.plannedHour ?? execution.plannedHour;
+      execution.timestamp = updates.timestamp ?? new Date();
 
-    updatedExecution = execution;
-  });
+      updatedExecution = execution;
+    });
 
-  return updatedExecution;
+    return updatedExecution;
+  } catch (e) {
+    logError(e, 'executions.updateExecution');
+    return null;
+  }
 };
 
 export const deleteExecution = executionIdValue => {
-  realm.write(() => {
-    const exec = realm.objectForPrimaryKey('Execution', executionIdValue);
-    if (!exec) return;
+  try {
+    realm.write(() => {
+      const exec = realm.objectForPrimaryKey('Execution', executionIdValue);
+      if (!exec) return;
 
-    exec.deleted = true;
-  });
+      exec.deleted = true;
+    });
+  } catch (e) {
+    logError(e, 'executions.deleteExecution');
+  }
 };
 
 export const deleteExecutions = habitId => {
-  realm.write(() => {
-    realm.delete(realm.objects('Execution').filtered('habitId == $0', habitId));
-  });
+  try {
+    realm.write(() => {
+      realm.delete(realm.objects('Execution').filtered('habitId == $0', habitId));
+    });
+  } catch (e) {
+    logError(e, 'executions.deleteExecutions');
+  }
 };
 
 export const deleteOldExecutions = daysToKeep => {
-  const cutoffDate = subtractDays(getLocalDateKey(), daysToKeep);
+  try {
+    const cutoffDate = subtractDays(getLocalDateKey(), daysToKeep);
 
-  realm.write(() => {
-    realm.delete(realm.objects('Execution').filtered('date < $0', cutoffDate));
-  });
+    realm.write(() => {
+      realm.delete(realm.objects('Execution').filtered('date < $0', cutoffDate));
+    });
+  } catch (e) {
+    logError(e, 'executions.deleteOldExecutions');
+  }
 };
 
 export const getExecutions = habitId => {
-  const results = realm
-    .objects('Execution')
-    .filtered('habitId == $0 AND deleted != true', habitId)
-    .sorted('timestamp', true);
+  try {
+    const results = realm
+      .objects('Execution')
+      .filtered('habitId == $0 AND deleted != true', habitId)
+      .sorted('timestamp', true);
 
-  return Array.from(results).map(execution => ({
-    id: execution.id,
-    habitId: execution.habitId,
-    date: execution.date,
-    slotIndex: execution.slotIndex,
-    plannedHour: execution.plannedHour,
-    status: execution.status,
-    timestamp: execution.timestamp,
-  }));
+    return Array.from(results).map(execution => ({
+      id: execution.id,
+      habitId: execution.habitId,
+      date: execution.date,
+      slotIndex: execution.slotIndex,
+      plannedHour: execution.plannedHour,
+      status: execution.status,
+      timestamp: execution.timestamp,
+    }));
+  } catch (e) {
+    logError(e, 'executions.getExecutions');
+    return [];
+  }
 };
 
 export const getExecutionStats = habitId => {
-  const executions = realm
-    .objects('Execution')
-    .filtered('habitId == $0 AND deleted != true', habitId);
+  try {
+    const executions = realm
+      .objects('Execution')
+      .filtered('habitId == $0 AND deleted != true', habitId);
 
-  let doneCount = 0;
-  let skippedCount = 0;
+    let doneCount = 0;
+    let skippedCount = 0;
 
-  executions.forEach(execution => {
-    if (execution.status === 'done') doneCount += 1;
-    else if (execution.status === 'skipped') skippedCount += 1;
-  });
+    executions.forEach(execution => {
+      if (execution.status === 'done') doneCount += 1;
+      else if (execution.status === 'skipped') skippedCount += 1;
+    });
 
-  return {
-    totalExecutions: executions.length,
-    doneCount,
-    skippedCount,
-  };
+    return {
+      totalExecutions: executions.length,
+      doneCount,
+      skippedCount,
+    };
+  } catch (e) {
+    logError(e, 'executions.getExecutionStats');
+    return {totalExecutions: 0, doneCount: 0, skippedCount: 0};
+  }
 };
 
 export const hasExecutionOrDeleted = (habitId, date, slotIndex) => {
-  const id = executionId(habitId, date, slotIndex);
-  return !!realm.objectForPrimaryKey('Execution', id);
+  try {
+    const id = executionId(habitId, date, slotIndex);
+    return !!realm.objectForPrimaryKey('Execution', id);
+  } catch (e) {
+    logError(e, 'executions.hasExecutionOrDeleted');
+    return false;
+  }
 };
 
 export const getExecutionLabel = executionIdValue => {
@@ -152,68 +189,77 @@ const getLastExecutionDateForHabit = habitId => {
 export const backfillMissedExecutions = (habits, maxDaysBack) => {
   if (!habits || habits.length === 0) return;
 
-  const today = getLocalDateKey();
-  const yesterday = subtractDays(today, 1);
-  const cutoffDate = subtractDays(today, maxDaysBack);
+  try {
+    const today = getLocalDateKey();
+    const yesterday = subtractDays(today, 1);
+    const cutoffDate = subtractDays(today, maxDaysBack);
 
-  realm.write(() => {
-    habits.forEach(habit => {
-      const lastExecutionDate = getLastExecutionDateForHabit(habit.id);
+    realm.write(() => {
+      habits.forEach(habit => {
+        const lastExecutionDate = getLastExecutionDateForHabit(habit.id);
 
-      if (!lastExecutionDate) return;
-      if (lastExecutionDate < cutoffDate) return;
+        if (!lastExecutionDate) return;
+        if (lastExecutionDate < cutoffDate) return;
 
-      let currentDate = lastExecutionDate;
+        let currentDate = lastExecutionDate;
 
-      while (currentDate <= yesterday) {
-        const weekday = dateToWeekday(currentDate);
+        while (currentDate <= yesterday) {
+          const weekday = dateToWeekday(currentDate);
 
-        if (habit.repeatDays.includes(weekday)) {
-          habit.repeatHours.forEach((hour, slotIndex) => {
-            const executionExists = hasExecutionOrDeleted(
-              habit.id,
-              currentDate,
-              slotIndex,
-            );
-
-            if (!executionExists) {
-              addExecutionInWrite(
+          if (habit.repeatDays.includes(weekday)) {
+            habit.repeatHours.forEach((hour, slotIndex) => {
+              const executionExists = hasExecutionOrDeleted(
                 habit.id,
                 currentDate,
                 slotIndex,
-                hour,
-                'skipped',
               );
-            }
-          });
-        }
 
-        currentDate = subtractDays(currentDate, -1);
-      }
+              if (!executionExists) {
+                addExecutionInWrite(
+                  habit.id,
+                  currentDate,
+                  slotIndex,
+                  hour,
+                  'skipped',
+                );
+              }
+            });
+          }
+
+          currentDate = subtractDays(currentDate, -1);
+        }
+      });
     });
-  });
+  } catch (e) {
+    logError(e, 'executions.backfillMissedExecutions');
+  }
 };
 
 export const getExecutionStatsForDate = (habitId, date) => {
-  const executions = realm
-    .objects('Execution')
-    .filtered(
-      'habitId == $0 AND date == $1 AND deleted != true',
-      habitId,
-      date,
-    );
+  try {
+    const executions = realm
+      .objects('Execution')
+      .filtered(
+        'habitId == $0 AND date == $1 AND deleted != true',
+        habitId,
+        date,
+      );
 
-  let doneCount = 0;
-  let skippedCount = 0;
+    let doneCount = 0;
+    let skippedCount = 0;
 
-  executions.forEach(execution => {
-    if (execution.status === 'done') doneCount += 1;
-    else if (execution.status === 'skipped') skippedCount += 1;
-  });
+    executions.forEach(execution => {
+      if (execution.status === 'done') doneCount += 1;
+      else if (execution.status === 'skipped') skippedCount += 1;
+    });
 
-  return {
-    totalExecutions: executions.length,
-    doneCount,
-    skippedCount,
-  };
+    return {
+      totalExecutions: executions.length,
+      doneCount,
+      skippedCount,
+    };
+  } catch (e) {
+    logError(e, 'executions.getExecutionStatsForDate');
+    return {totalExecutions: 0, doneCount: 0, skippedCount: 0};
+  }
 };

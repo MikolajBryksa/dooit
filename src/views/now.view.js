@@ -14,6 +14,7 @@ import EmptyCard from '@/cards/empty.card';
 import LoadingCard from '@/cards/loading.card';
 import StartCard from '@/cards/start.card';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
+import {logError} from '@/services/errors.service';
 import AddModal from '@/modals/add.modal';
 import Topbar from '@/components/topbar.component';
 
@@ -78,19 +79,23 @@ const NowView = () => {
   useEffect(() => {
     // Check if date changed and rebuild habits for new day
     (async () => {
-      const LAST_RESET_DATE = 'habits:lastResetDate';
-      const lastDate = await AsyncStorage.getItem(LAST_RESET_DATE);
+      try {
+        const LAST_RESET_DATE = 'habits:lastResetDate';
+        const lastDate = await AsyncStorage.getItem(LAST_RESET_DATE);
 
-      if (lastDate === null) {
-        // First run: save today's date
-        await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
-        return;
-      }
+        if (lastDate === null) {
+          // First run: save today's date
+          await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
+          return;
+        }
 
-      if (lastDate !== todayKey) {
-        // New day: rebuild habits
-        await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
-        rebuildTodayHabits();
+        if (lastDate !== todayKey) {
+          // New day: rebuild habits
+          await AsyncStorage.setItem(LAST_RESET_DATE, todayKey);
+          rebuildTodayHabits();
+        }
+      } catch (e) {
+        logError(e, 'now.dateChangeCheck');
       }
     })();
   }, [todayKey, rebuildTodayHabits]);

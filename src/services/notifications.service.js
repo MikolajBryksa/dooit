@@ -1,5 +1,5 @@
 import notifee, {TriggerType} from '@notifee/react-native';
-import {dateToWeekday, pickRandomMessage, getLocalDateKey} from '@/utils';
+import {dateToWeekday, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
 import {logError} from './errors.service.js';
@@ -87,6 +87,23 @@ export async function scheduleHabitNotifications(habits, t) {
       name: 'Dooit Channel',
     });
 
+    await notifee.setNotificationCategories([
+      {
+        id: 'habit-actions',
+        actions: [
+          {
+            id: 'skip',
+            title: t('button.skip'),
+            destructive: true,
+          },
+          {
+            id: 'done',
+            title: t('button.done'),
+          },
+        ],
+      },
+    ]);
+
     await notifee.cancelAllNotifications();
 
     const now = new Date();
@@ -140,7 +157,12 @@ export async function scheduleHabitNotifications(habits, t) {
               {
                 id: notificationId,
                 title: `${hour} ${habit.habitName}`,
-                body: pickRandomMessage(t, 'notification'),
+                data: {
+                  habitId: String(habit.id),
+                  date: targetDateKey,
+                  slotIndex: String(slotIndex),
+                  plannedHour: hour,
+                },
                 android: {
                   channelId: 'default',
                   smallIcon: 'ic_notification',
@@ -148,6 +170,19 @@ export async function scheduleHabitNotifications(habits, t) {
                     id: 'default',
                     launchActivity: 'default',
                   },
+                  actions: [
+                    {
+                      title: t('button.skip'),
+                      pressAction: {id: 'skip'},
+                    },
+                    {
+                      title: t('button.done'),
+                      pressAction: {id: 'done'},
+                    },
+                  ],
+                },
+                ios: {
+                  categoryId: 'habit-actions',
                 },
               },
               {

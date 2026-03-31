@@ -21,7 +21,7 @@ import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
 import SettingComponent from '@/components/setting.component';
-import {testErrorLogging} from '@/services/errors.service';
+import {testErrorLogging, logError} from '@/services/errors.service';
 import Topbar from '@/components/topbar.component';
 
 const SettingsView = () => {
@@ -80,29 +80,33 @@ const SettingsView = () => {
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
 
   async function handleDeleteData() {
-    await deleteUserData();
-    await deleteAllLocalData();
-    dispatch(setHabits([]));
-    dispatch(
-      setSettings({
-        id: 1,
-        userName: null,
-        language: 'en',
-        clockFormat: '24 h',
-        firstDay: 'mon',
-        firstLaunch: true,
-        currentTheme: null,
-        currentItem: 0,
-        currentDay: null,
-        notifications: false,
-      }),
-    );
+    try {
+      await deleteUserData();
+      await deleteAllLocalData();
+      dispatch(setHabits([]));
+      dispatch(
+        setSettings({
+          id: 1,
+          userName: null,
+          language: 'en',
+          clockFormat: '24 h',
+          firstDay: 'mon',
+          firstLaunch: true,
+          currentTheme: null,
+          currentItem: 0,
+          currentDay: null,
+          notifications: false,
+        }),
+      );
+    } catch (e) {
+      logError(e, 'settings.handleDeleteData');
+    }
   }
 
   function handleVersion() {
     Linking.openURL(
       'https://play.google.com/store/apps/details?id=com.dooit.bryksa',
-    );
+    ).catch(e => logError(e, 'settings.handleVersion'));
   }
 
   function handleLanguage() {
