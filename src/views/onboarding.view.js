@@ -313,8 +313,6 @@ const OnboardingView = ({setShowOnboarding}) => {
               key={habit.id}
               id={habit.id}
               habitName={habit.habitName}
-              goodCounter={habit.goodCounter}
-              badCounter={habit.badCounter}
               repeatDays={habit.repeatDays}
               repeatHours={habit.repeatHours}
               icon={habit.icon}

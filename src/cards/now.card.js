@@ -40,8 +40,8 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMessage(t, 'notification'),
   );
-  const [liveGoodCount, setLiveGoodCount] = useState(0);
-  const [liveBadCount, setLiveBadCount] = useState(0);
+  const [liveDoneCount, setLiveDoneCount] = useState(0);
+  const [liveSkippedCount, setLiveSkippedCount] = useState(0);
   const [showGoalReachedDialog, setShowGoalReachedDialog] = useState(false);
 
   const cardOpacity = useRef(new Animated.Value(0)).current;
@@ -66,8 +66,8 @@ const NowCard = ({
     setIsManuallyUnlocked(false);
     setChoice(null);
     setMotivation(pickRandomMessage(t, 'notification'));
-    setLiveGoodCount(currentStats.goodCount || 0);
-    setLiveBadCount(currentStats.badCount || 0);
+    setLiveDoneCount(currentStats.doneCount || 0);
+    setLiveSkippedCount(currentStats.skippedCount || 0);
 
     cardOpacity.setValue(0);
     Animated.timing(cardOpacity, {
@@ -82,7 +82,7 @@ const NowCard = ({
 
   const stats = useMemo(() => {
     const target = goal || 0;
-    const progress = Math.max(0, liveGoodCount || 0);
+    const progress = Math.max(0, liveDoneCount || 0);
     const remaining = Math.max(0, target - progress);
 
     return {
@@ -91,18 +91,18 @@ const NowCard = ({
           ? Math.min(100, Math.round((progress / target) * 100))
           : null,
       goalCount: target,
-      goodCount: progress,
-      badCount: Math.max(0, liveBadCount || 0),
+      doneCount: progress,
+      skippedCount: Math.max(0, liveSkippedCount || 0),
       target,
       progress,
       label: target > 0 ? `${progress}/${target}` : null,
       remaining,
     };
-  }, [goal, liveGoodCount, liveBadCount]);
+  }, [goal, liveDoneCount, liveSkippedCount]);
 
   const choiceLabel = useMemo(() => {
-    if (choice === 'good') return t('button.done');
-    if (choice === 'bad') return t('button.skipped');
+    if (choice === 'done') return t('button.done');
+    if (choice === 'skipped') return t('button.skipped');
     return t('button.done');
   }, [choice, t]);
 
@@ -113,10 +113,10 @@ const NowCard = ({
       const date = getLocalDateKey();
       recordExecutionChoice(id, date, slotIndex, selectedHour, status);
 
-      if (status === 'good') {
-        setLiveGoodCount(prev => prev + 1);
-      } else if (status === 'bad') {
-        setLiveBadCount(prev => prev + 1);
+      if (status === 'done') {
+        setLiveDoneCount(prev => prev + 1);
+      } else if (status === 'skipped') {
+        setLiveSkippedCount(prev => prev + 1);
       }
 
       onUpdated?.();
@@ -125,17 +125,17 @@ const NowCard = ({
   );
 
   const isGoalReached =
-    stats.goalCount > 0 && stats.goodCount >= stats.goalCount;
+    stats.goalCount > 0 && stats.doneCount >= stats.goalCount;
   const suggestedGoal =
     goal > 0 ? Math.max(goal + 1, Math.ceil(goal * 1.2)) : 0;
 
   const addGoodChoice = () => {
-    setChoice('good');
-    setMotivation(pickRandomMessage(t, 'good'));
-    handleChoice('good');
+    setChoice('done');
+    setMotivation(pickRandomMessage(t, 'done'));
+    handleChoice('done');
     setStep(2);
 
-    if (goal > 0 && liveGoodCount < goal && liveGoodCount + 1 >= goal) {
+    if (goal > 0 && liveDoneCount < goal && liveDoneCount + 1 >= goal) {
       setShowGoalReachedDialog(true);
     }
   };
@@ -146,9 +146,9 @@ const NowCard = ({
   };
 
   const addBadChoice = () => {
-    setChoice('bad');
-    setMotivation(pickRandomMessage(t, 'bad'));
-    handleChoice('bad');
+    setChoice('skipped');
+    setMotivation(pickRandomMessage(t, 'skipped'));
+    handleChoice('skipped');
     setStep(2);
   };
 
@@ -166,8 +166,8 @@ const NowCard = ({
 
   const getChoiceTextColor = () => {
     if (step !== 2) return theme.colors.onSurface;
-    if (choice === 'good') return theme.colors.success;
-    if (choice === 'bad') return theme.colors.error;
+    if (choice === 'done') return theme.colors.success;
+    if (choice === 'skipped') return theme.colors.error;
     return theme.colors.onSurface;
   };
 
@@ -179,7 +179,7 @@ const NowCard = ({
           <PieCircle
             icon={icon}
             goalCount={stats.goalCount}
-            goodCount={stats.goodCount}
+            doneCount={stats.doneCount}
             opacity={isLocked ? 0.5 : 1}
             showCounter={true}
             isGoalReached={isGoalReached}

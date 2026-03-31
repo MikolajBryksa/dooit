@@ -94,14 +94,14 @@ export const getExecutions = habitId => {
     .filtered('habitId == $0 AND deleted != true', habitId)
     .sorted('timestamp', true);
 
-  return Array.from(results).map(e => ({
-    id: e.id,
-    habitId: e.habitId,
-    date: e.date,
-    slotIndex: e.slotIndex,
-    plannedHour: e.plannedHour,
-    status: e.status,
-    timestamp: e.timestamp,
+  return Array.from(results).map(execution => ({
+    id: execution.id,
+    habitId: execution.habitId,
+    date: execution.date,
+    slotIndex: execution.slotIndex,
+    plannedHour: execution.plannedHour,
+    status: execution.status,
+    timestamp: execution.timestamp,
   }));
 };
 
@@ -110,18 +110,18 @@ export const getExecutionStats = habitId => {
     .objects('Execution')
     .filtered('habitId == $0 AND deleted != true', habitId);
 
-  let goodCount = 0;
-  let badCount = 0;
+  let doneCount = 0;
+  let skippedCount = 0;
 
-  executions.forEach(e => {
-    if (e.status === 'good') goodCount += 1;
-    else if (e.status === 'bad') badCount += 1;
+  executions.forEach(execution => {
+    if (execution.status === 'done') doneCount += 1;
+    else if (execution.status === 'skipped') skippedCount += 1;
   });
 
   return {
     totalExecutions: executions.length,
-    goodCount,
-    badCount,
+    doneCount,
+    skippedCount,
   };
 };
 
@@ -182,7 +182,7 @@ export const backfillMissedExecutions = (habits, maxDaysBack) => {
                 currentDate,
                 slotIndex,
                 hour,
-                'bad',
+                'skipped',
               );
             }
           });
@@ -203,17 +203,17 @@ export const getExecutionStatsForDate = (habitId, date) => {
       date,
     );
 
-  let goodCount = 0;
-  let badCount = 0;
+  let doneCount = 0;
+  let skippedCount = 0;
 
-  executions.forEach(e => {
-    if (e.status === 'good') goodCount += 1;
-    else if (e.status === 'bad') badCount += 1;
+  executions.forEach(execution => {
+    if (execution.status === 'done') doneCount += 1;
+    else if (execution.status === 'skipped') skippedCount += 1;
   });
 
   return {
     totalExecutions: executions.length,
-    goodCount,
-    badCount,
+    doneCount,
+    skippedCount,
   };
 };

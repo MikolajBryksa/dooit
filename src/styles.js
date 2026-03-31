@@ -161,7 +161,6 @@ export const useStyles = () => {
       gap: 4,
     },
     summary__habit__effectiveness: {
-      fontWeight: '700',
       color: theme.colors.primary,
     },
     chip: {

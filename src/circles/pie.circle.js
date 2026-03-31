@@ -6,7 +6,7 @@ import {useStyles} from '@/styles';
 
 const PieCircle = ({
   goalCount = 0,
-  goodCount = 0,
+  doneCount = 0,
   icon,
   opacity: propOpacity = 1,
   showCounter = false,
@@ -20,7 +20,7 @@ const PieCircle = ({
   const animateDuration = 550;
   const opacity = propOpacity;
 
-  const progress = Math.max(0, goodCount || 0);
+  const progress = Math.max(0, doneCount || 0);
   const target = Math.max(0, goalCount || 0);
   const remaining = Math.max(0, target - progress);
 

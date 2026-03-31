@@ -34,8 +34,6 @@ export const addHabit = (
     newHabit = realm.create('Habit', {
       id,
       habitName,
-      goodCounter: 0,
-      badCounter: 0,
       repeatDays,
       repeatHours,
       icon: icon || 'infinity',
@@ -58,8 +56,6 @@ export const updateHabit = (id, updates) => {
       {
         id,
         habitName: updates.habitName ?? habit.habitName,
-        goodCounter: habit.goodCounter ?? 0,
-        badCounter: habit.badCounter ?? 0,
         repeatDays: updates.repeatDays ?? Array.from(habit.repeatDays),
         repeatHours: updates.repeatHours ?? Array.from(habit.repeatHours),
         icon: updates.icon ?? habit.icon,
@@ -96,8 +92,6 @@ export const getHabits = () => {
   const habitsArr = Array.from(realmHabits).map(habit => ({
     id: habit.id,
     habitName: habit.habitName,
-    goodCounter: habit.goodCounter ?? 0,
-    badCounter: habit.badCounter ?? 0,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     icon: habit.icon,
@@ -120,8 +114,6 @@ export const getHabitById = id => {
   return {
     id: habit.id,
     habitName: habit.habitName,
-    goodCounter: habit.goodCounter ?? 0,
-    badCounter: habit.badCounter ?? 0,
     repeatDays: Array.from(habit.repeatDays),
     repeatHours: Array.from(habit.repeatHours),
     icon: habit.icon,
@@ -248,8 +240,6 @@ export const translateDefaultHabits = (oldLanguage, newLanguage) => {
           {
             id: habit.id,
             habitName: newHabitName,
-            goodCounter: habit.goodCounter ?? 0,
-            badCounter: habit.badCounter ?? 0,
             repeatDays: Array.from(habit.repeatDays),
             repeatHours: Array.from(habit.repeatHours),
             icon: habit.icon,
@@ -278,8 +268,6 @@ export const getTodayHabits = (habits, weekdayKey) => {
       key: `${habit.id}__${idx}__${hour}`,
       id: habit.id,
       habitName: habit.habitName,
-      goodCounter: habit.goodCounter ?? 0,
-      badCounter: habit.badCounter ?? 0,
       repeatDays: habit.repeatDays,
       repeatHours: habit.repeatHours,
       selectedHour: hour,
@@ -319,7 +307,7 @@ export const getGoalTarget = habit => {
 
 export const getGoalProgress = habit => {
   if (!habit?.id) return 0;
-  return getExecutionStats(habit.id).goodCount;
+  return getExecutionStats(habit.id).doneCount;
 };
 
 export const getGoalPercentage = habit => {
@@ -334,27 +322,39 @@ export const getGoalStats = habit => {
   if (!habit?.id) {
     return {
       goalCount: 0,
-      goodCount: 0,
-      badCount: 0,
+      doneCount: 0,
+      skippedCount: 0,
       remainingCount: 0,
       progressPercent: null,
     };
   }
 
   const goalCount = habit.goal || 0;
-  const {goodCount, badCount} = getExecutionStats(habit.id);
-  const remainingCount = Math.max(0, goalCount - goodCount);
+  const {doneCount, skippedCount} = getExecutionStats(habit.id);
+  const remainingCount = Math.max(0, goalCount - doneCount);
 
   return {
     goalCount,
-    goodCount,
-    badCount,
+    doneCount,
+    skippedCount,
     remainingCount,
     progressPercent:
       goalCount > 0
-        ? Math.min(100, Math.round((goodCount / goalCount) * 100))
+        ? Math.min(100, Math.round((doneCount / goalCount) * 100))
         : null,
   };
+};
+
+export const getHabitsForSync = habits => {
+  return habits.map(habit => ({
+    id: habit.id,
+    habitName: habit.habitName,
+    repeatDays: habit.repeatDays,
+    repeatHours: habit.repeatHours,
+    icon: habit.icon,
+    goal: habit.goal,
+    repetitions: getExecutionStats(habit.id).doneCount,
+  }));
 };
 
 export const getSuggestedGoalFromSchedule = (
@@ -368,9 +368,9 @@ export const getTodayGoalStats = (habit, dateKey, weekdayKey) => {
   if (!habit?.id) {
     return {
       todayTarget: 0,
-      todayGoodCount: 0,
-      todayBadCount: 0,
       todayDoneCount: 0,
+      todaySkippedCount: 0,
+      todayAttemptedCount: 0,
       todayRemainingCount: 0,
       todayPercentage: null,
     };
@@ -379,19 +379,19 @@ export const getTodayGoalStats = (habit, dateKey, weekdayKey) => {
   const isScheduledToday = habit.repeatDays?.includes(weekdayKey);
   const todayTarget = isScheduledToday ? habit.repeatHours?.length || 0 : 0;
 
-  const {goodCount, badCount} = getExecutionStatsForDate(habit.id, dateKey);
-  const todayDoneCount = goodCount + badCount;
-  const todayRemainingCount = Math.max(0, todayTarget - todayDoneCount);
+  const {doneCount, skippedCount} = getExecutionStatsForDate(habit.id, dateKey);
+  const todayAttemptedCount = doneCount + skippedCount;
+  const todayRemainingCount = Math.max(0, todayTarget - todayAttemptedCount);
 
   return {
     todayTarget,
-    todayGoodCount: goodCount,
-    todayBadCount: badCount,
-    todayDoneCount,
+    todayDoneCount: doneCount,
+    todaySkippedCount: skippedCount,
+    todayAttemptedCount,
     todayRemainingCount,
     todayPercentage:
       todayTarget > 0
-        ? Math.min(100, Math.round((goodCount / todayTarget) * 100))
+        ? Math.min(100, Math.round((doneCount / todayTarget) * 100))
         : null,
   };
 };

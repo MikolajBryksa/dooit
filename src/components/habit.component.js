@@ -15,8 +15,6 @@ const CONTENT_HEIGHT = 150;
 const HabitComponent = ({
   id,
   habitName,
-  goodCounter = 0,
-  badCounter = 0,
   repeatDays = [],
   repeatHours = [],
   icon,
@@ -45,13 +43,13 @@ const HabitComponent = ({
       logError(error, 'getGoalStats');
       return {
         goalCount: 0,
-        goodCount: 0,
-        badCount: 0,
+        doneCount: 0,
+        skippedCount: 0,
         remainingCount: 0,
         progressPercent: null,
       };
     }
-  }, [id, goodCounter, badCounter, repeatDays, repeatHours, goal]);
+  }, [id, repeatDays, repeatHours, goal]);
 
   const expandAnim = useRef(new Animated.Value(isExpanded ? 1 : 0)).current;
 
@@ -241,7 +239,7 @@ const HabitComponent = ({
                         variant="bodyMedium"
                         opacity={stats.goalCount > 0 ? 1 : 0.5}>
                         {stats.goalCount > 0
-                          ? `${stats.goodCount} (${stats.progressPercent}%)`
+                          ? `${stats.doneCount} (${stats.progressPercent}%)`
                           : t('card.noRepetitions')}
                       </Text>
                     </View>

@@ -192,7 +192,7 @@
       "Konsekwencja daje rezultaty.",
       "Mały wysiłek daje trwałą zmianę."
     ],
-    "good": [
+    "done": [
       "Jeden nawyk pociąga za sobą kolejne.",
       "Udowadniasz swoją determinację.",
       "Z każdym krokiem się zmieniasz.",
@@ -204,7 +204,7 @@
       "Piszesz własną historię sukcesu.",
       "Świetny wybór, Twoja rutyna działa."
     ],
-    "bad": [
+    "skipped": [
       "Potknięcie nie kasuje całego postępu.",
       "Wyciągnij wniosek i idź dalej.",
       "Nie rezygnuj, popraw kurs i idź dalej.",

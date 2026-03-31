@@ -7,6 +7,7 @@ import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
 import {setSettings} from '@/redux/actions';
 import {saveSummary} from '@/services/summary.service';
+import {getHabitsForSync} from '@/services/habits.service';
 import {logError} from '@/services/errors.service';
 import NowComponent from '../components/now.component';
 import InfoCircle from '../circles/info.circle';
@@ -19,7 +20,7 @@ const StartCard = ({onStart}) => {
   const habits = useSelector(state => state.habits);
 
   useEffect(() => {
-    saveSummary(habits).catch(e => logError(e, 'StartCard.saveSummary'));
+    saveSummary(getHabitsForSync(habits)).catch(e => logError(e, 'StartCard.saveSummary'));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fullText = useMemo(

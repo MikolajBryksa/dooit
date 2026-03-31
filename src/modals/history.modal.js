@@ -110,7 +110,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
           <ScrollView style={{maxHeight: 300}}>
             {executions.map(exec => {
               const status = getCurrentStatus(exec);
-              const checked = status === 'good';
+              const checked = status === 'done';
 
               return (
                 <View
@@ -136,7 +136,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   <Checkbox
                     status={checked ? 'checked' : 'unchecked'}
                     onPress={() =>
-                      handleStatusChange(exec.id, checked ? 'bad' : 'good')
+                      handleStatusChange(exec.id, checked ? 'skipped' : 'done')
                     }
                   />
                 </View>

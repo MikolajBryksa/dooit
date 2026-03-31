@@ -9,8 +9,6 @@ Habit.schema = {
   properties: {
     id: 'int',
     habitName: 'string',
-    goodCounter: 'int',
-    badCounter: 'int',
     repeatDays: 'string[]',
     repeatHours: 'string[]',
     icon: 'string',
@@ -80,7 +78,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 28,
+  schemaVersion: 30,
   deleteRealmIfMigrationNeeded: true,
 };
 
