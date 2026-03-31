@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
@@ -19,10 +19,6 @@ const StartCard = ({onStart}) => {
   const settings = useSelector(state => state.settings);
   const habits = useSelector(state => state.habits);
 
-  useEffect(() => {
-    saveSummary(getHabitsForSync(habits)).catch(e => logError(e, 'StartCard.saveSummary'));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const fullText = useMemo(
     () => t('onboarding.start.text', {userName: settings.userName}),
     [t, settings.userName],
@@ -31,8 +27,9 @@ const StartCard = ({onStart}) => {
   const handleStart = useCallback(() => {
     updateSettingValue('firstLaunch', false);
     dispatch(setSettings({...settings, firstLaunch: false}));
+    saveSummary(getHabitsForSync(habits)).catch(e => logError(e, 'StartCard.saveSummary'));
     onStart?.();
-  }, [dispatch, onStart, settings]);
+  }, [dispatch, onStart, settings, habits]);
 
   return (
     <>

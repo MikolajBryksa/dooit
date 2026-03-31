@@ -80,6 +80,8 @@ export const deleteUserData = async () => {
     const userId = session?.user?.id;
 
     if (userId) {
+      await supabase.from('contact').delete().eq('user_id', userId);
+      await supabase.from('errors').delete().eq('user_id', userId);
       await supabase.from('users').delete().eq('user_id', userId);
     }
 

@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public.users (
 -- errors table - stores application errors for tracking
 CREATE TABLE IF NOT EXISTS public.errors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     error_message TEXT NOT NULL,
     error_stack TEXT,
     context TEXT,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS public.errors (
 -- contact table - stores user contact form submissions
 CREATE TABLE IF NOT EXISTS public.contact (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT NOT NULL,
     message TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -92,7 +92,15 @@ ALTER TABLE public.errors ENABLE ROW LEVEL SECURITY;
 -- Create policies
 CREATE POLICY "Users can insert their own errors"
     ON public.errors FOR INSERT TO authenticated
-    WITH CHECK (auth.uid() = user_id);
+    WITH CHECK (
+        auth.uid() = user_id
+        AND (
+            SELECT COUNT(*)
+            FROM public.errors
+            WHERE user_id = auth.uid()
+            AND created_at >= date_trunc('day', NOW() AT TIME ZONE 'UTC')
+        ) < 50
+    );
 
 CREATE POLICY "Users can view their own errors"
     ON public.errors FOR SELECT TO authenticated
@@ -111,7 +119,15 @@ ALTER TABLE public.contact ENABLE ROW LEVEL SECURITY;
 -- Create policies
 CREATE POLICY "Users can insert their own contact messages"
     ON public.contact FOR INSERT TO authenticated
-    WITH CHECK (auth.uid() = user_id);
+    WITH CHECK (
+        auth.uid() = user_id
+        AND (
+            SELECT COUNT(*)
+            FROM public.contact
+            WHERE user_id = auth.uid()
+            AND created_at >= date_trunc('day', NOW() AT TIME ZONE 'UTC')
+        ) < 3
+    );
 
 CREATE POLICY "Users can view their own contact messages"
     ON public.contact FOR SELECT TO authenticated
