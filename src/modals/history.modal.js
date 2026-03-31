@@ -106,7 +106,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
         title={t('title.history')}>
         <Card.Content>
           <Text variant="bodyMedium">{habitName}</Text>
-
+          <View style={[styles.card__divider, {marginTop: 16}]} />
           <ScrollView style={{maxHeight: 300}}>
             {executions.map(exec => {
               const status = getCurrentStatus(exec);
@@ -118,7 +118,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    paddingVertical: 12,
+                    paddingVertical: 8,
                   }}>
                   <View style={{flex: 1}}>
                     <Text variant="bodySmall">
