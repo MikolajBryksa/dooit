@@ -27,8 +27,11 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
     'meditation',
     'run',
     'bike',
+    'hiking',
     'swim',
+    'lingerie',
     'basketball',
+    'paw',
     'book-open',
     'notebook',
     'school',
@@ -43,7 +46,14 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
     'puzzle',
     'laptop',
     'cellphone',
+    'battery-medium',
     'briefcase',
+    'lipstick',
+    'lotion',
+    'hair-dryer',
+    'face-man-shimmer',
+    'face-woman-shimmer',
+    'content-cut',
     'heart',
     'star',
     'trophy',
@@ -53,6 +63,7 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
     'home',
     'car',
     'bus',
+    'motorbike',
     'bed',
     'power-sleep',
     'shower',
@@ -60,6 +71,7 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
     'gift',
     'email',
     'tshirt-crew',
+    'shoe-heel',
     'shoe-sneaker',
     'weight',
   ];
@@ -69,7 +81,7 @@ const IconSelector = ({selectedIcon, setSelectedIcon}) => {
       <ScrollView
         horizontal={false}
         showsVerticalScrollIndicator={false}
-        style={{maxHeight: 220}}>
+        style={{maxHeight: 185}}>
         <View style={styles.selector__grid}>
           {availableIcons.map(icon => {
             const isSelected = selectedIcon === icon;
