@@ -70,7 +70,7 @@
     "change-goal": "Czy chcesz zmienić cel?\nDomyślnie cel jest ustawiany jako liczba powtórzeń do zrobienia w ciągu 4 tygodni.",
     "goal-reached": "Osiągnąłeś swój cel! Chcesz pójść dalej i zwiększyć limit, żeby jeszcze mocniej budować nawyk?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
-    "support": "Cześć!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
+    "support": "Cześć, {{userName}}!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Usuń",
@@ -141,6 +141,7 @@
     "onboarding-habit-mindset": "Myśl o nawyku nie jako o dużym zadaniu — jak trening czy wypicie 3 litrów wody — ale jako o pierwszym małym kroku, którego ten nawyk wymaga. Na przykład: wyjście na siłownię lub nalanie szklanki wody.",
     "onboarding-same-time": "Nawyki najłatwiej się utrwalają, gdy powtarzasz je o tej samej porze każdego dnia. Wybierz godzinę, którą jesteś w stanie regularnie dotrzymać.",
     "now-repetitions-matter": "W Dooit liczą się tylko powtórzenia. Nie ważne, ile czasu poświęcisz na dany nawyk ani jaki osiągniesz wynik — chodzi wyłącznie o to, żeby nauczyć się regularnie wracać do zaplanowanej czynności.",
+    "now-first-habit": "Widzisz swój pierwszy nawyk na dziś. Skup się tylko na nim — reszta poczeka. Gdy będziesz gotowy, możesz odłożyć telefon i zająć się tym, co zaplanowałeś. To właśnie tutaj zaczyna się prawdziwa zmiana.",
     "summary-daily-recap": "Po zakończeniu wszystkich nawyków zaplanowanych na dany dzień Dooit podsumuje, ile powtórzeń udało się wykonać, i przedstawi krótką ocenę Twojego dnia.",
     "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń wyliczona na 28 dni — tyle zazwyczaj wystarczy, żeby zbudować nawyk. Zawsze możesz go zwiększyć, żeby jeszcze bardziej go umocnić!",
     "settings-overview": "Tu możesz zaktualizować swoje imię używane w codziennym podsumowaniu, zmienić język aplikacji, przełączyć tryb ciemny lub jasny oraz włączyć i wyłączyć powiadomienia."

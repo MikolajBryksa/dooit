@@ -2,10 +2,12 @@ import React from 'react';
 import {Button, Text} from 'react-native-paper';
 import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
 import DialogComponent from '@/components/dialog.component';
 
 const SupportDialog = ({visible, onDismiss, onDone}) => {
   const {t} = useTranslation();
+  const userName = useSelector(state => state.settings.userName);
 
   const handleSupport = () => {
     Linking.openURL('https://buymeacoffee.com/dooit');
@@ -18,7 +20,7 @@ const SupportDialog = ({visible, onDismiss, onDone}) => {
       onDismiss={onDismiss}
       title={t('title.support')}>
       <DialogComponent.Content>
-        <Text variant="bodyMedium">{t('message.support')}</Text>
+        <Text variant="bodyMedium">{t('message.support', {userName})}</Text>
       </DialogComponent.Content>
       <DialogComponent.Actions>
         <Button onPress={onDismiss}>{t('button.cancel')}</Button>

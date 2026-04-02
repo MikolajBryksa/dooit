@@ -17,6 +17,7 @@ import {scheduleHabitNotifications} from '@/services/notifications.service';
 import {logError} from '@/services/errors.service';
 import AddModal from '@/modals/add.modal';
 import Topbar from '@/components/topbar.component';
+import TipComponent from '@/components/tip.component';
 
 const NowView = () => {
   const {t} = useTranslation();
@@ -130,7 +131,11 @@ const NowView = () => {
         ) : allCompleted || isEndDay ? (
           <SummaryCard weekdayKey={weekdayKey} />
         ) : activeHabit ? (
-          <NowCard
+          <>
+            <TipComponent tipId="now_first_habit">
+              {t('tip.now-first-habit')}
+            </TipComponent>
+            <NowCard
             key={activeHabit.key}
             id={activeHabit.id}
             habitName={activeHabit.habitName}
@@ -142,7 +147,8 @@ const NowView = () => {
             isLastHabit={isLastHabit}
             onUpdated={refreshHabits}
             onNext={goToNextHabit}
-          />
+            />
+          </>
         ) : null}
       </ScrollView>
 

@@ -70,7 +70,7 @@
     "change-goal": "Do you want to change the goal?\nBy default, it is set as the number of repetitions to be done within 4 weeks.",
     "goal-reached": "You've reached your goal! Want to push further and increase the limit to build an even stronger habit?",
     "contact": "Fill out the form to contact the app's author.",
-    "support": "Hey there!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
+    "support": "Hi, {{userName}}!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Delete",
@@ -141,6 +141,7 @@
     "onboarding-habit-mindset": "Think of a habit not as a big task — like working out or drinking 3 liters of water — but as the first small step that habit requires. For example: putting on your shoes or pouring a glass of water.",
     "onboarding-same-time": "Habits stick most easily when you repeat them at the same time every day. Pick a time you can realistically commit to.",
     "now-repetitions-matter": "In Dooit, only repetitions count. It doesn't matter how long you spend on a habit or what result you achieve — the only goal is to learn to consistently return to the planned activity.",
+    "now-first-habit": "This is your first habit for today. Focus on this one — the rest can wait. When you're ready, feel free to put your phone down and take care of what you planned. This is where real change begins.",
     "summary-daily-recap": "Once you complete all habits planned for the day, Dooit will show you how many repetitions you managed to do and present a short recap of your day.",
     "habits-edit-and-goal": "You can edit any habit at any time. The default goal is the number of repetitions calculated for 28 days — that's usually enough to build a habit. You can always increase it to make it even stronger!",
     "settings-overview": "Here you can update your name used in the daily summary, change the app language, switch between dark and light mode, and toggle notifications on or off."

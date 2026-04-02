@@ -8,6 +8,7 @@ import {pickRandomMessage, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
+import TipComponent from '@/components/tip.component';
 import MotivationDialog from '@/dialogs/motivation.dialog';
 import GoalReachedDialog from '@/dialogs/goal-reached.dialog';
 import {

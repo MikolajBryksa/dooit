@@ -23,15 +23,15 @@ https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
 ## Features
 
-- **No account required**. Start instantly without registration.
-- **Ad-free**. No subscriptions, no ads. Ever.
-- **Offline-first**. Works without internet, always.
+- **No account**. Start instantly without registration.
+- **Free**. No subscriptions, no ads.
+- **Offline**. Works without internet.
 - **Custom schedules**. Your habits, your rhythm.
 - **Progress tracking**. See how your habits grow.
 - **Daily summary**. Personalized recap.
-- **Distraction-free**. Clean design, zero noise.
-- **Light & dark mode**. Beautiful in any lighting.
-- **Multi-language support**. Available in English and Polish.
+- **No distraction**. Clean design, zero noise.
+- **Dark mode**. Beautiful in any lighting.
+- **Multi-language**. Available in English and Polish.
 
 ## Setup
 
@@ -145,4 +145,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## License
 
-This project is licensed under the [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) license — see the [LICENSE](LICENSE) file for details. Non-commercial use is permitted with attribution. Commercial use is strictly prohibited.
+This project is licensed under the [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) license.  
+See the [LICENSE](LICENSE) file for details.  
+Non-commercial use is permitted with attribution.  
+Commercial use is strictly prohibited.
