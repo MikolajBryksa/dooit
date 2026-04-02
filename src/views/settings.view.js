@@ -38,8 +38,8 @@ const SettingsView = () => {
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [quickSkip, setSkipConfirmation] = useState(
-    settings.quickSkip,
+  const [secondChance, setSkipConfirmation] = useState(
+    settings.secondChance,
   );
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
@@ -115,7 +115,7 @@ const SettingsView = () => {
           currentItem: 0,
           currentDay: null,
           notifications: false,
-          quickSkip: false,
+          secondChance: true,
         }),
       );
     } catch (e) {
@@ -156,10 +156,10 @@ const SettingsView = () => {
   }
 
   function handleSkipConfirmation() {
-    const newValue = !quickSkip;
+    const newValue = !secondChance;
     setSkipConfirmation(newValue);
-    updateSettingValue('quickSkip', newValue);
-    dispatch(setSettings({...settings, quickSkip: newValue}));
+    updateSettingValue('secondChance', newValue);
+    dispatch(setSettings({...settings, secondChance: newValue}));
   }
 
   function handleClockFormat() {
@@ -228,13 +228,13 @@ const SettingsView = () => {
         />
 
         <SettingComponent
-          label={t('settings.quick-skip')}
+          label={t('settings.second-chance')}
           value={
-            quickSkip
+            secondChance
               ? t('settings.enabled')
               : t('settings.disabled')
           }
-          icon={quickSkip ? 'comment-check-outline' : 'comment-off-outline'}
+          icon={secondChance ? 'comment-check-outline' : 'comment-off-outline'}
           onPress={handleSkipConfirmation}
         />
 

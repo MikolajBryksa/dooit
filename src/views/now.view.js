@@ -28,6 +28,7 @@ const NowView = () => {
   const habitsLoading = useSelector(state => state.habitsLoading);
   const firstLaunch = useSelector(state => state.settings.firstLaunch);
   const userName = useSelector(state => state.settings.userName);
+  const onboardingDate = useSelector(state => state.settings.onboardingDate);
 
   const [visibleAddModal, setVisibleAddModal] = useState(false);
 
@@ -46,6 +47,13 @@ const NowView = () => {
   // Current date key and weekday key
   const todayKey = useTodayKey();
   const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
+
+  const dayNumber = useMemo(() => {
+    if (!onboardingDate) return null;
+    const start = new Date(onboardingDate);
+    const today = new Date(todayKey);
+    return Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+  }, [onboardingDate, todayKey]);
 
   const refreshHabits = useCallback(() => {
     const newHabits = getHabits() || [];
@@ -118,7 +126,9 @@ const NowView = () => {
   return (
     <>
       <Topbar>
-        <Topbar.Content title={t('view.now')} />
+        <Topbar.Content
+          title={dayNumber ? t('view.day', {count: dayNumber}) : t('view.now')}
+        />
         <Topbar.Action icon="refresh" onPress={rebuildTodayHabits} />
       </Topbar>
 

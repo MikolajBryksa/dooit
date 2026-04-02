@@ -2,7 +2,8 @@
   "view": {
     "now": "Now",
     "habits": "Habits",
-    "settings": "Settings"
+    "settings": "Settings",
+    "day": "Day {{count}}"
   },
   "loading": {
     "subtitle": "Please be patient.",
@@ -49,7 +50,7 @@
     "dark": "Dark",
     "light": "Light",
     "notifications": "Notifications",
-    "quick-skip": "Quick skip",
+    "second-chance": "Second chance",
     "enabled": "Enabled",
     "disabled": "Disabled",
     "tips": "Tips",
@@ -141,7 +142,7 @@
     "repeatHours": "What time do you want to do it?"
   },
   "tip": {
-    "onboarding-habit-mindset": "Think of a habit not as a big task, but as the first small step it requires. Instead of overwhelming yourself with the idea of drinking 3 liters of water every day, just focus from time to time on filling a glass of water.",
+    "onboarding-habit-mindset": "Think of a habit not as a big task, but as the first small step it requires. Instead of overwhelming yourself with the idea of drinking 3 liters of water every day, just focus from time to time on pouring a glass of water.",
 
     "onboarding-same-time": "Habits are easiest to build when you repeat them at the same time on the same days. Over time, you’ll start to naturally feel what action to take at that moment. In the beginning, set only a few repetitions so it’s easy to start, and increase the intensity later.",
 
@@ -179,13 +180,13 @@
   },
   "default-habits": {
     "1": {
-      "habitName": "Fill a glass of water"
+      "habitName": "Pour a glass of water"
     },
     "2": {
-      "habitName": "Start workout"
+      "habitName": "Go to the gym"
     },
     "3": {
-      "habitName": "Eat a fruit"
+      "habitName": "Wash a fruit"
     },
     "4": {
       "habitName": "Open a book"

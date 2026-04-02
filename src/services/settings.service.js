@@ -18,6 +18,7 @@ export const getSettings = () => {
       currentDay: settings.currentDay,
       notifications: settings.notifications,
       dismissedTips: [...(settings.dismissedTips || [])],
+      onboardingDate: settings.onboardingDate ?? null,
     };
   } catch (e) {
     console.error('[settings.getSettings]', e?.message);
@@ -44,6 +45,7 @@ export const updateSettings = updates => {
       currentDay: updatedSettings.currentDay,
       notifications: updatedSettings.notifications,
       dismissedTips: [...(updatedSettings.dismissedTips || [])],
+      onboardingDate: updatedSettings.onboardingDate ?? null,
     };
   } catch (e) {
     console.error('[settings.updateSettings]', e?.message);

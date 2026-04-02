@@ -2,7 +2,8 @@
   "view": {
     "now": "Teraz",
     "habits": "Nawyki",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "day": "Dzień {{count}}"
   },
   "loading": {
     "subtitle": "Proszę o cierpliwość.",
@@ -49,7 +50,7 @@
     "dark": "Ciemny",
     "light": "Jasny",
     "notifications": "Powiadomienia",
-    "quick-skip": "Szybkie pomijanie",
+    "second-chance": "Druga szansa",
     "enabled": "Włączone",
     "disabled": "Wyłączone",
     "tips": "Wskazówki",
@@ -182,10 +183,10 @@
       "habitName": "Nalej szklankę wody"
     },
     "2": {
-      "habitName": "Zacznij trening"
+      "habitName": "Wyjdź na siłownię"
     },
     "3": {
-      "habitName": "Zjedz owoc"
+      "habitName": "Umyj owoc"
     },
     "4": {
       "habitName": "Otwórz książkę"

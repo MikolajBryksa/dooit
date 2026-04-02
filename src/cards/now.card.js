@@ -34,8 +34,8 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const theme = useTheme();
-  const quickSkip = useSelector(
-    state => state.settings?.quickSkip,
+  const secondChance = useSelector(
+    state => state.settings?.secondChance,
   );
 
   const [step, setStep] = useState(1);
@@ -146,7 +146,7 @@ const NowCard = ({
   };
 
   const selectSkip = () => {
-    if (quickSkip) {
+    if (!secondChance) {
       addBadChoice();
       return;
     }

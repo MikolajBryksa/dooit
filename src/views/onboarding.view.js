@@ -7,6 +7,7 @@ import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {updateSettingValue} from '@/services/settings.service';
+import {getLocalDateKey} from '@/utils';
 import {setSettings, setHabits} from '@/redux/actions';
 import {
   createDefaultHabit,
@@ -134,6 +135,8 @@ const OnboardingView = ({setShowOnboarding}) => {
       if (!selected) deleteHabit(Number(id));
     });
     dispatch(setHabits(getHabits() || []));
+    const updatedSettings = updateSettingValue('onboardingDate', getLocalDateKey());
+    if (updatedSettings) dispatch(setSettings(updatedSettings));
     requestNotificationPermission(settings, dispatch, setSettings);
     setShowOnboarding(false);
   }
