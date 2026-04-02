@@ -38,9 +38,7 @@ const SettingsView = () => {
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [secondChance, setSkipConfirmation] = useState(
-    settings.secondChance,
-  );
+  const [secondChance, setSkipConfirmation] = useState(settings.secondChance);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [currentTheme, setCurrentTheme] = useState(
@@ -229,11 +227,7 @@ const SettingsView = () => {
 
         <SettingComponent
           label={t('settings.second-chance')}
-          value={
-            secondChance
-              ? t('settings.enabled')
-              : t('settings.disabled')
-          }
+          value={secondChance ? t('settings.enabled') : t('settings.disabled')}
           icon={secondChance ? 'comment-check-outline' : 'comment-off-outline'}
           onPress={handleSkipConfirmation}
         />
@@ -273,10 +267,10 @@ const SettingsView = () => {
           onPress={handleDeleteDataDialog}
         />
 
-        {__DEV__ && <CrashTest />}
-
         {__DEV__ && (
           <>
+            <CrashTest />
+
             <SettingComponent
               label={t('settings.test-connection')}
               value={
