@@ -33,7 +33,9 @@
     "s2-title": "Your Privacy",
     "s2-body": "All data is collected anonymously. Your username is not transmitted or stored outside your device. Habit data is labeled with a randomly generated identifier. Your data is not sold or shared with third parties.",
     "s3-title": "Data Deletion",
-    "s3-body": "You can permanently delete all your data at any time in the Settings tab. The data will be removed both from your device and from the Dooit database. Data deletion is irreversible."
+    "s3-body": "You can permanently delete all your data at any time in the Settings tab. The data will be removed both from your device and from the Dooit database. Data deletion is irreversible.",
+    "s4-title": "License",
+    "s4-body": "Dooit is free to use. The only official version is available on Google Play. The source code is publicly available under the CC BY-NC 4.0 license — you are free to view and use it for non-commercial purposes, but commercial use is strictly prohibited."
   },
   "settings": {
     "version": "Version",

@@ -33,7 +33,9 @@
     "s2-title": "Twoja prywatność",
     "s2-body": "Wszystkie dane są zbierane anonimowo. Nazwa użytkownika nie jest przesyłana ani przechowywana poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem. Dane nie są sprzedawane ani udostępniane podmiotom trzecim.",
     "s3-title": "Usuwanie danych",
-    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne."
+    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne.",
+    "s4-title": "Licencja",
+    "s4-body": "Dooit jest bezpłatny. Oficjalna wersja aplikacji jest dostępna w Google Play. Kod źródłowy jest publicznie dostępny na licencji CC BY-NC 4.0 — możesz go przeglądać i wykorzystywać w celach niekomercyjnych, jednak jego komercyjne użycie jest zabronione."
   },
   "settings": {
     "version": "Wersja",

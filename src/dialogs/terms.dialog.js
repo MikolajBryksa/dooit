@@ -45,6 +45,15 @@ const TermsDialog = ({visible, onDismiss}) => {
               {t('terms.s3-body')}
             </Text>
           </View>
+
+          <View style={styles.terms__section}>
+            <Text variant="bodyMedium" style={styles.terms__title}>
+              {t('terms.s4-title')}
+            </Text>
+            <Text variant="bodySmall" style={styles.terms__body}>
+              {t('terms.s4-body')}
+            </Text>
+          </View>
         </ScrollView>
       </DialogComponent.Content>
       <DialogComponent.Actions>
