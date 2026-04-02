@@ -34,7 +34,8 @@ export const addHabit = (
       id = Math.max(8, nextId);
     }
 
-    const resolvedGoal = goal ?? calculateMonthlyTarget(repeatDays, repeatHours);
+    const resolvedGoal =
+      goal ?? calculateMonthlyTarget(repeatDays, repeatHours);
 
     let newHabit;
     realm.write(() => {
@@ -174,7 +175,7 @@ const DEFAULT_HABITS_DATA = [
   },
   {
     id: 2,
-    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatDays: ['tue', 'thu'],
     repeatHours: ['17:30'],
     icon: habitIcons[1],
   },
@@ -192,7 +193,7 @@ const DEFAULT_HABITS_DATA = [
   },
   {
     id: 5,
-    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+    repeatDays: ['mon', 'wed'],
     repeatHours: ['09:00'],
     icon: habitIcons[4],
   },
