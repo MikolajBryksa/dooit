@@ -38,6 +38,9 @@ const SettingsView = () => {
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
+  const [quickSkip, setSkipConfirmation] = useState(
+    settings.quickSkip,
+  );
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [currentTheme, setCurrentTheme] = useState(
@@ -88,6 +91,13 @@ const SettingsView = () => {
   const handleNameModal = () => setVisibleNameModal(v => !v);
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
 
+  const handleRestoreTips = () => {
+    const updated = updateSettingValue('dismissedTips', []);
+    if (updated) {
+      dispatch(setSettings({...settings, dismissedTips: []}));
+    }
+  };
+
   async function handleDeleteData() {
     try {
       await deleteUserData();
@@ -105,6 +115,7 @@ const SettingsView = () => {
           currentItem: 0,
           currentDay: null,
           notifications: false,
+          quickSkip: false,
         }),
       );
     } catch (e) {
@@ -142,6 +153,13 @@ const SettingsView = () => {
 
   async function handleNotifications() {
     await notifee.openNotificationSettings();
+  }
+
+  function handleSkipConfirmation() {
+    const newValue = !quickSkip;
+    setSkipConfirmation(newValue);
+    updateSettingValue('quickSkip', newValue);
+    dispatch(setSettings({...settings, quickSkip: newValue}));
   }
 
   function handleClockFormat() {
@@ -210,6 +228,17 @@ const SettingsView = () => {
         />
 
         <SettingComponent
+          label={t('settings.quick-skip')}
+          value={
+            quickSkip
+              ? t('settings.enabled')
+              : t('settings.disabled')
+          }
+          icon={quickSkip ? 'comment-check-outline' : 'comment-off-outline'}
+          onPress={handleSkipConfirmation}
+        />
+
+        <SettingComponent
           label={t('settings.clock-format')}
           value={clockFormat}
           icon="clock-outline"
@@ -228,6 +257,13 @@ const SettingsView = () => {
           value={t(`settings.${currentTheme}`)}
           icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
           onPress={handleCurrentTheme}
+        />
+
+        <SettingComponent
+          label={t('settings.tips')}
+          value={t('settings.restore-tips')}
+          icon="lightbulb-outline"
+          onPress={handleRestoreTips}
         />
 
         <SettingComponent

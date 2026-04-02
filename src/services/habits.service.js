@@ -1,7 +1,7 @@
 import realm from '@/storage/schemas';
 import {hourToSec} from '@/utils';
 import i18next from 'i18next';
-import {habitIcons} from '@/constants';
+import {habitIcons, MAX_HABITS} from '@/constants';
 import {
   deleteExecutions,
   hasExecutionOrDeleted,
@@ -23,6 +23,11 @@ export const addHabit = (
   id = null,
 ) => {
   try {
+    const currentCount = realm.objects('Habit').length;
+    if (id === null && currentCount >= MAX_HABITS) {
+      return null;
+    }
+
     if (id === null) {
       const lastItem = realm.objects('Habit').sorted('id', true)[0];
       const nextId = lastItem ? lastItem.id + 1 : 8;

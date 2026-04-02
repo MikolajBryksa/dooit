@@ -11,6 +11,7 @@ import {setHabits} from '@/redux/actions';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import Topbar from '@/components/topbar.component';
+import {MAX_HABITS} from '@/constants';
 import TipComponent from '@/components/tip.component';
 
 const HabitsView = () => {
@@ -71,12 +72,14 @@ const HabitsView = () => {
           icon={filterDay ? 'filter-check' : 'filter'}
           onPress={() => setVisibleFilterModal(true)}
         />
-        <Topbar.Action
-          icon="plus"
-          onPress={() => {
-            handleAddModal();
-          }}
-        />
+        {habits.length < MAX_HABITS && (
+          <Topbar.Action
+            icon="plus"
+            onPress={() => {
+              handleAddModal();
+            }}
+          />
+        )}
       </Topbar>
 
       <ScrollView style={styles.container}>

@@ -49,8 +49,11 @@
     "dark": "Ciemny",
     "light": "Jasny",
     "notifications": "Powiadomienia",
+    "quick-skip": "Szybkie pomijanie",
     "enabled": "Włączone",
     "disabled": "Wyłączone",
+    "tips": "Wskazówki",
+    "restore-tips": "Przywróć",
     "data": "Dane konta",
     "delete": "Usuń",
     "test-connection": "Test połączenia",
@@ -70,7 +73,7 @@
     "change-goal": "Czy chcesz zmienić cel?\nDomyślnie cel jest ustawiany jako liczba powtórzeń do zrobienia w ciągu 4 tygodni.",
     "goal-reached": "Osiągnąłeś swój cel! Chcesz pójść dalej i zwiększyć limit, żeby jeszcze mocniej budować nawyk?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
-    "support": "Cześć, {{userName}}!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomóc Ci budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
+    "support": "Cześć, {{userName}}!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomagać budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Usuń",
@@ -138,13 +141,19 @@
     "repeatHours": "O jakiej godzinie chcesz to robić?"
   },
   "tip": {
-    "onboarding-habit-mindset": "Myśl o nawyku nie jako o dużym zadaniu — jak trening czy wypicie 3 litrów wody — ale jako o pierwszym małym kroku, którego ten nawyk wymaga. Na przykład: wyjście na siłownię lub nalanie szklanki wody.",
-    "onboarding-same-time": "Nawyki najłatwiej się utrwalają, gdy powtarzasz je o tej samej porze każdego dnia. Wybierz godzinę, którą jesteś w stanie regularnie dotrzymać.",
-    "now-repetitions-matter": "W Dooit liczą się tylko powtórzenia. Nie ważne, ile czasu poświęcisz na dany nawyk ani jaki osiągniesz wynik — chodzi wyłącznie o to, żeby nauczyć się regularnie wracać do zaplanowanej czynności.",
-    "now-first-habit": "Widzisz swój pierwszy nawyk na dziś. Skup się tylko na nim — reszta poczeka. Gdy będziesz gotowy, możesz odłożyć telefon i zająć się tym, co zaplanowałeś. To właśnie tutaj zaczyna się prawdziwa zmiana.",
-    "summary-daily-recap": "Po zakończeniu wszystkich nawyków zaplanowanych na dany dzień Dooit podsumuje, ile powtórzeń udało się wykonać, i przedstawi krótką ocenę Twojego dnia.",
-    "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń wyliczona na 28 dni — tyle zazwyczaj wystarczy, żeby zbudować nawyk. Zawsze możesz go zwiększyć, żeby jeszcze bardziej go umocnić!",
-    "settings-overview": "Tu możesz zaktualizować swoje imię używane w codziennym podsumowaniu, zmienić język aplikacji, przełączyć tryb ciemny lub jasny oraz włączyć i wyłączyć powiadomienia."
+    "onboarding-habit-mindset": "Pomyśl o nawyku nie jako o dużym zadaniu, ale jak o pierwszym małym kroku, którego ten nawyk wymaga. Czyli zamiast przytłaczać się myślą o konieczności wypicia 3 litrów wody każdego dnia, wystarczy że od czasu do czasu skupisz się na nalaniu szklanki wody.",
+
+    "onboarding-same-time": "Nawyki najłatwiej się utrwalają, gdy powtarzasz je o tej samej godzinie w te same dni. Z czasem o wybranej porze będziesz wewnętrznie czuć, jaką czynność warto wykonać. Na początek ustaw niewiele powtórzeń, aby łatwo zacząć i dopiero później zwiększaj intensywność.",
+
+    "now-repetitions-matter": "W Dooit liczą się tylko powtórzenia. Nie musisz się martwić jaki wynik dzisiaj osiągniesz wykonując daną czynność. Nie mierzysz tu kalorii, litrów, kilogramów, okrążeń czy minut. Chodzi wyłącznie o to, żeby nauczyć się regularnie wracać do zaplanowanej czynności.",
+
+    "now-first-habit": "Poniżej widzisz to, co jest teraz według Ciebie {{userName}} najważniejsze. Skup się tylko na tym, nie myśl o innych rzeczach do odhaczenia. Następnie zaznacz czy się udało i przejdź dalej. To właśnie dzięki tym czynnością dokonuje się prawdziwa zmiana.",
+
+    "summary-daily-recap": "Po zakończeniu wszystkich nawyków zaplanowanych na dany dzień Dooit podsumuje, ile powtórzeń udało się wykonać, i przedstawi krótką analizę Twojego dnia. Zwróci uwagę na to co poszło najlepiej i na to co sprawia najwięcej trudności.",
+
+    "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń wyliczona na 28 dni. Tyle zazwyczaj wystarczy, żeby zbudować nawyk. Zawsze możesz zwiększyć cel, żeby jeszcze bardziej umocnić swoją nową rutynę.",
+
+    "settings-overview": "Tu możesz zaktualizować swoje imię używane w codziennym podsumowaniu, zmienić język aplikacji, przełączyć tryb na ciemny lub jasny oraz włączyć i wyłączyć powiadomienia. Jeśli chcesz zacząć od nowa to na końcu znajdziesz opcję usunięcia wszystkich swoich danych."
   },
   "onboarding": {
     "step1": {
@@ -193,9 +202,9 @@
   },
   "motivation": {
     "lastChance": [
-      "Odlicz 5, 4, 3, 2, 1 i rusz się!\n\nMel Robbins pokazuje, że szybkie odliczanie zmusza Twój mózg do natychmiastowego działania, zanim pojawią się wymówki.",
-      "Zrób choć jeden mały krok dzisiaj.\n\nBJ Fogg podkreśla, że nawet minimalne działania budują nawyki i zwiększają szansę na sukces w codziennym życiu.",
-      "Wyobraź sobie, jak Twoje przyszłe ja Ci podziękuje.\n\nHal Hershfield udowadnia, że wizualizacja konsekwencji decyzji zwiększa radość z wykonywanych działań."
+      "Odlicz 5, 4, 3, 2, 1 i podejmij działanie!\n\nMel Robbins udowadnia, że szybkie odliczanie zmusza Twój mózg do natychmiastowego działania, zanim pojawią się wymówki.",
+      "Zrób chociaż jeden mały krok.\n\nBJ Fogg udowadnia, że nawet minimalne działania budują nawyki i zwiększają szansę na sukces w codziennym życiu.",
+      "Wyobraź sobie, jak w przyszłości sobie podziękujesz.\n\nHal Hershfield udowadnia, że wizualizacja konsekwencji decyzji zwiększa radość z wykonywanych działań."
     ],
     "notification": [
       "Mały krok, wielki postęp.",
@@ -235,19 +244,25 @@
       "To tylko pauza, podróż trwa dalej."
     ],
     "intro": [
-      "Kolejny dzień za Tobą, {{userName}}. Każde pojawienie się tu to krok w dobrą stronę.",
-      "{{userName}}, znów tu jesteś — i to właśnie klucz do sukcesu. Konsekwencja robi różnicę.",
-      "Nawyki powstają dzień po dniu, {{userName}}. Dlatego liczy się każdy dzień."
+      "Kolejny dzień za Tobą, {{userName}}. Każde uruchomienie Dooit to krok w dobrą stronę.",
+      "Wspaniale {{userName}}, że znów tu jesteś. Konsekwencja w budowaniu nawyków to klucz do sukcesu.",
+      "Nawyki powstają dzień po dniu, {{userName}}. Dlatego liczy się każdy dzień i każda decyzja.",
+      "Bardzo się cieszę, ze Dooit jest częścią Twojej codzienności, {{userName}}. Regularność to sekret trwałej zmiany.",
+      "Im częściej tu wracasz, {{userName}}, tym szybciej zbudujesz swoje nawyki i zmienisz swoje życie."
     ],
     "praise": [
-      "Nawyk '{{bestHabit}}' to Twoje dzisiejsze wyróżnienie. Świetna robota.",
-      "Najlepiej dzisiaj poszedł Ci nawyk '{{bestHabit}}'. To poważny postęp.",
-      "'{{bestHabit}}' naprawdę przynosi efekty. To powód do radości i dumy."
+      "Brawo za regularne wykonywanie nawyku '{{bestHabit}}'! Dzisiaj poszedł Ci rewelacyjnie.",
+      "Wygląda na to, ze robisz duże postępy w wyrabianiu nawyku '{{bestHabit}}'. Bardzo dobrze Ci idzie!",
+      "Czujesz już efekty powtarzania nawyku '{{bestHabit}}'? Jesteś na dobrej drodze, żeby zmienił Twoje życie!",
+      "Jestem pod dużym wrażeniem Twojej konsekwencji w wykonywaniu nawyku '{{bestHabit}}'. Świetna robota!",
+      "Nawyk '{{bestHabit}}' jest dziś Twoim największym osiągnięciem. Oby tak dalej!"
     ],
     "tip": [
-      "Przy '{{worstHabit}}' zacznij jutro od jednej minuty — samo rozpoczęcie to już sukces.",
-      "Jutro z '{{worstHabit}}': jedna minuta, bez presji. Liczy się tylko to, że zaczniesz.",
-      "Przy '{{worstHabit}}' znajdź jutro chwilę na mały krok. Nawet minimalne działanie napędza nawyk."
+      "Wygląda na to, że coś blokuje nawyk '{{worstHabit}}'. Może warto uprościć pierwszy krok?",
+      "Czy nawyk '{{worstHabit}}' jest zaplanowany na dobrą porę dnia? Może warto go wykonać o innej porze?",
+      "W przypadku nawyku '{{worstHabit}}' może zaczynasz od zbyt dużego kroku. Co by było jego najprostszą wersją?",
+      "Czy możesz powiązać nawyk '{{worstHabit}}' z czymś, co już robisz regularnie? Najłatwiej wykonywać nawyki jeden po drugim.",
+      "To, że nawyk '{{worstHabit}}' nie idzie zgodnie z planem, to tylko sygnał do zmiany strategii, a nie porażka."
     ],
     "summary": {
       "subtitle": "Wszystko dziś zrobione!",

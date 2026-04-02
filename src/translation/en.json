@@ -49,8 +49,11 @@
     "dark": "Dark",
     "light": "Light",
     "notifications": "Notifications",
+    "quick-skip": "Quick skip",
     "enabled": "Enabled",
     "disabled": "Disabled",
+    "tips": "Tips",
+    "restore-tips": "Restore",
     "data": "Account data",
     "delete": "Delete",
     "test-connection": "Test connection",
@@ -138,13 +141,19 @@
     "repeatHours": "What time do you want to do it?"
   },
   "tip": {
-    "onboarding-habit-mindset": "Think of a habit not as a big task — like working out or drinking 3 liters of water — but as the first small step that habit requires. For example: putting on your shoes or pouring a glass of water.",
-    "onboarding-same-time": "Habits stick most easily when you repeat them at the same time every day. Pick a time you can realistically commit to.",
-    "now-repetitions-matter": "In Dooit, only repetitions count. It doesn't matter how long you spend on a habit or what result you achieve — the only goal is to learn to consistently return to the planned activity.",
-    "now-first-habit": "This is your first habit for today. Focus on this one — the rest can wait. When you're ready, feel free to put your phone down and take care of what you planned. This is where real change begins.",
-    "summary-daily-recap": "Once you complete all habits planned for the day, Dooit will show you how many repetitions you managed to do and present a short recap of your day.",
-    "habits-edit-and-goal": "You can edit any habit at any time. The default goal is the number of repetitions calculated for 28 days — that's usually enough to build a habit. You can always increase it to make it even stronger!",
-    "settings-overview": "Here you can update your name used in the daily summary, change the app language, switch between dark and light mode, and toggle notifications on or off."
+    "onboarding-habit-mindset": "Think of a habit not as a big task, but as the first small step it requires. Instead of overwhelming yourself with the idea of drinking 3 liters of water every day, just focus from time to time on filling a glass of water.",
+
+    "onboarding-same-time": "Habits are easiest to build when you repeat them at the same time on the same days. Over time, you’ll start to naturally feel what action to take at that moment. In the beginning, set only a few repetitions so it’s easy to start, and increase the intensity later.",
+
+    "now-repetitions-matter": "In Dooit, only repetitions matter. You don’t need to worry about the result you achieve today while doing a task. You’re not tracking calories, liters, kilograms, laps, or minutes. The goal is simply to learn how to consistently come back to the planned activity.",
+
+    "now-first-habit": "Below you see what matters most to you right now, {{userName}}. Focus only on that, don’t think about other tasks to check off. Then mark whether you completed it and move on. This is how real change happens.",
+
+    "summary-daily-recap": "After completing all habits planned for the day, Dooit will summarize how many repetitions you completed and provide a short analysis of your day. It will highlight what went best and what was the most challenging.",
+
+    "habits-edit-and-goal": "You can edit any habit at any time. The default goal is the number of repetitions calculated for 28 days, which is usually enough to build a habit. You can always increase the goal to strengthen your new routine even more!",
+
+    "settings-overview": "Here you can update your name used in daily summaries, change the app language, switch between dark and light mode, and enable or disable notifications. If you want to start over, you’ll find an option at the bottom to delete all your data."
   },
   "onboarding": {
     "step1": {
@@ -194,8 +203,8 @@
   "motivation": {
     "lastChance": [
       "Count 5, 4, 3, 2, 1 and take action!\n\nMel Robbins shows that a quick countdown forces your brain to act immediately, before excuses can take over.",
-      "Take at least one small step today.\n\nBJ Fogg emphasizes that even minimal actions build habits and increase your chances of success in daily life.",
-      "Imagine how your future self will thank you.\n\nHal Hershfield demonstrates that visualizing the consequences of your decisions increases the satisfaction of taking action."
+      "Take at least one small step today.\n\nBJ Fogg shows that even minimal actions build habits and increase your chances of success in daily life.",
+      "Imagine how your future self will thank you.\n\nHal Hershfield shows that visualizing the consequences of your decisions increases the satisfaction of taking action."
     ],
     "notification": [
       "Small step, big progress.",
@@ -235,19 +244,25 @@
       "It’s just a pause, your journey continues."
     ],
     "intro": [
-      "Another day is behind you, {{userName}}. Every time you show up here is a step in the right direction.",
-      "{{userName}}, you're here again — and that’s the key to success. Consistency makes the difference.",
-      "Habits are built one day at a time, {{userName}}. That’s why every day counts."
+      "Another day behind you, {{userName}}. Every time you open Dooit is a step in the right direction.",
+      "Great to see you back again, {{userName}}. Consistency is the key to building lasting habits.",
+      "Habits are built day by day, {{userName}}. That’s why every day and every decision counts.",
+      "I’m really glad Dooit is part of your daily routine, {{userName}}. Consistency is the secret to lasting change.",
+      "The more often you come back, {{userName}}, the faster you’ll build your habits and change your life."
     ],
     "praise": [
-      "The habit '{{bestHabit}}' is your highlight today. Great job.",
-      "'{{bestHabit}}' went the best for you today. That’s real progress.",
-      "'{{bestHabit}}' is really paying off. That’s something to be happy and proud of."
+      "Great job staying consistent with the habit '{{bestHabit}}'! You nailed it today.",
+      "It looks like you're making great progress with the habit '{{bestHabit}}'. You're doing really well!",
+      "Can you already feel the effects of repeating the habit '{{bestHabit}}'? You're on the right track to making it life-changing.",
+      "I'm really impressed by your consistency with the habit '{{bestHabit}}'. Keep up the great work!",
+      "The habit '{{bestHabit}}' is your biggest win today. Keep it going!"
     ],
     "tip": [
-      "With '{{worstHabit}}', start tomorrow with just one minute — getting started is already a success.",
-      "Tomorrow, with '{{worstHabit}}': one minute, no pressure. What matters is that you begin.",
-      "For '{{worstHabit}}', find a moment tomorrow for a small step. Even minimal action builds the habit."
+      "It looks like something is blocking the habit '{{worstHabit}}'. Maybe try simplifying the first step?",
+      "Is the habit '{{worstHabit}}' scheduled at the right time of day? Maybe try a different time?",
+      "With the habit '{{worstHabit}}', you might be starting too big. What would the simplest version look like?",
+      "Can you link the habit '{{worstHabit}}' to something you already do regularly? It’s easier to stack habits together.",
+      "If the habit '{{worstHabit}}' isn’t going as planned, it’s just a signal to adjust your strategy — not a failure."
     ]
   },
   "summary": {

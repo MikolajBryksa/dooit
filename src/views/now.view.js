@@ -27,6 +27,7 @@ const NowView = () => {
   const habits = useSelector(state => state.habits);
   const habitsLoading = useSelector(state => state.habitsLoading);
   const firstLaunch = useSelector(state => state.settings.firstLaunch);
+  const userName = useSelector(state => state.settings.userName);
 
   const [visibleAddModal, setVisibleAddModal] = useState(false);
 
@@ -133,7 +134,7 @@ const NowView = () => {
         ) : activeHabit ? (
           <>
             <TipComponent tipId="now_first_habit">
-              {t('tip.now-first-habit')}
+              {t('tip.now-first-habit', {userName})}
             </TipComponent>
             <NowCard
             key={activeHabit.key}

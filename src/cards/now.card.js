@@ -4,6 +4,7 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import {pickRandomMessage, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
@@ -33,6 +34,9 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const theme = useTheme();
+  const quickSkip = useSelector(
+    state => state.settings?.quickSkip,
+  );
 
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
@@ -142,6 +146,10 @@ const NowCard = ({
   };
 
   const selectSkip = () => {
+    if (quickSkip) {
+      addBadChoice();
+      return;
+    }
     setMotivation(pickRandomMessage(t, 'lastChance'));
     setShowMotivationDialog(true);
   };
