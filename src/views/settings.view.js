@@ -13,9 +13,11 @@ import {
 import {deleteUserData} from '@/services/supabase.service';
 import {setSettings, setHabits} from '@/redux/actions';
 import {translateDefaultHabits, getHabits} from '@/services/habits.service';
+import {getLocalDateKey} from '@/utils';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
 import DeleteDataDialog from '@/dialogs/delete-data.dialog';
+import ResetDayDialog from '@/dialogs/reset-day.dialog';
 import NameModal from '@/modals/name.modal';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
@@ -36,6 +38,7 @@ const SettingsView = () => {
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
   const [visibleNameModal, setVisibleNameModal] = useState(false);
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
+  const [visibleResetDayDialog, setVisibleResetDayDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
@@ -87,6 +90,18 @@ const SettingsView = () => {
   const handleSupportDialog = () => setVisibleSupportDialog(v => !v);
   const handleNameModal = () => setVisibleNameModal(v => !v);
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
+
+  const isDay1 =
+    !settings.onboardingDate || settings.onboardingDate === getLocalDateKey();
+
+  const handleResetDayDialog = () => setVisibleResetDayDialog(v => !v);
+
+  function handleResetDay() {
+    const today = getLocalDateKey();
+    updateSettingValue('onboardingDate', today);
+    dispatch(setSettings({...settings, onboardingDate: today}));
+    setVisibleResetDayDialog(false);
+  }
 
   const handleRestoreTips = () => {
     const updated = updateSettingValue('dismissedTips', []);
@@ -238,6 +253,14 @@ const SettingsView = () => {
         />
 
         <SettingComponent
+          label={t('settings.day-counter')}
+          value={t(isDay1 ? 'settings.day-is-1' : 'settings.reset-day')}
+          icon="calendar-refresh-outline"
+          onPress={handleResetDayDialog}
+          disabled={isDay1}
+        />
+
+        <SettingComponent
           label={t('settings.tips')}
           value={t(
             settings.dismissedTips?.length > 0
@@ -316,6 +339,12 @@ const SettingsView = () => {
       />
 
       <NameModal visible={visibleNameModal} onDismiss={handleNameModal} />
+
+      <ResetDayDialog
+        visible={visibleResetDayDialog}
+        onDismiss={handleResetDayDialog}
+        onConfirm={handleResetDay}
+      />
 
       <DeleteDataDialog
         visible={visibleDeleteDataDialog}
