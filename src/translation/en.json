@@ -24,7 +24,6 @@
     "support": "Coffee",
     "filter": "Filter habits",
     "history": "History",
-    "motivation": "Motivation",
     "terms": "Terms of Service"
   },
   "terms": {
@@ -50,7 +49,6 @@
     "dark": "Dark",
     "light": "Light",
     "notifications": "Notifications",
-    "second-chance": "Second chance",
     "enabled": "Enabled",
     "disabled": "Disabled",
     "tips": "Tips",
@@ -91,7 +89,6 @@
     "skipped": "Skipped",
     "fail": "Fail",
     "done": "Done",
-    "try": "Try",
     "reset": "Reset",
     "today": "Today",
     "yesterday": "Yesterday",
@@ -202,11 +199,6 @@
     }
   },
   "motivation": {
-    "lastChance": [
-      "Count 5, 4, 3, 2, 1 and take action!\n\nMel Robbins shows that a quick countdown forces your brain to act immediately, before excuses can take over.",
-      "Take at least one small step today.\n\nBJ Fogg shows that even minimal actions build habits and increase your chances of success in daily life.",
-      "Imagine how your future self will thank you.\n\nHal Hershfield shows that visualizing the consequences of your decisions increases the satisfaction of taking action."
-    ],
     "notification": [
       "Small step, big progress.",
       "Your habits shape your future.",

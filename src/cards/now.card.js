@@ -4,13 +4,10 @@ import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
-import {useSelector} from 'react-redux';
 import {pickRandomMessage, getLocalDateKey} from '@/utils';
 import {useCurrentTime} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
-import TipComponent from '@/components/tip.component';
-import MotivationDialog from '@/dialogs/motivation.dialog';
 import GoalReachedDialog from '@/dialogs/goal-reached.dialog';
 import {
   hasExecutionOrDeleted,
@@ -34,13 +31,8 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const theme = useTheme();
-  const secondChance = useSelector(
-    state => state.settings?.secondChance,
-  );
-
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
-  const [showMotivationDialog, setShowMotivationDialog] = useState(false);
   const [choice, setChoice] = useState(null);
   const [motivation, setMotivation] = useState(
     pickRandomMessage(t, 'notification'),
@@ -146,12 +138,7 @@ const NowCard = ({
   };
 
   const selectSkip = () => {
-    if (!secondChance) {
-      addBadChoice();
-      return;
-    }
-    setMotivation(pickRandomMessage(t, 'lastChance'));
-    setShowMotivationDialog(true);
+    addBadChoice();
   };
 
   const addBadChoice = () => {
@@ -238,19 +225,6 @@ const NowCard = ({
             )}
           </View>
         }
-      />
-
-      <MotivationDialog
-        visible={showMotivationDialog}
-        onDismiss={() => setShowMotivationDialog(false)}
-        message={motivation}
-        onTry={() => {
-          setShowMotivationDialog(false);
-        }}
-        onSkip={() => {
-          addBadChoice();
-          setShowMotivationDialog(false);
-        }}
       />
 
       <GoalReachedDialog

@@ -47,7 +47,6 @@ Settings.schema = {
     currentItem: 'int?',
     currentDay: 'string?',
     notifications: 'bool',
-    secondChance: 'bool',
     dismissedTips: 'string[]',
     onboardingDate: 'string?',
   },
@@ -81,7 +80,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 33,
+  schemaVersion: 34,
   deleteRealmIfMigrationNeeded: true,
 };
 
@@ -106,7 +105,6 @@ try {
         currentItem: 0,
         currentDay: dayMap[new Date().getDay()],
         notifications: false,
-        secondChance: true,
       });
     }
   });

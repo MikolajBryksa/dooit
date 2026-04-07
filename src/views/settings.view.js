@@ -38,7 +38,6 @@ const SettingsView = () => {
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
-  const [secondChance, setSkipConfirmation] = useState(settings.secondChance);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
   const [firstDay, setFirstDay] = useState(settings.firstDay);
   const [currentTheme, setCurrentTheme] = useState(
@@ -113,7 +112,6 @@ const SettingsView = () => {
           currentItem: 0,
           currentDay: null,
           notifications: false,
-          secondChance: true,
         }),
       );
     } catch (e) {
@@ -151,13 +149,6 @@ const SettingsView = () => {
 
   async function handleNotifications() {
     await notifee.openNotificationSettings();
-  }
-
-  function handleSkipConfirmation() {
-    const newValue = !secondChance;
-    setSkipConfirmation(newValue);
-    updateSettingValue('secondChance', newValue);
-    dispatch(setSettings({...settings, secondChance: newValue}));
   }
 
   function handleClockFormat() {
@@ -223,13 +214,6 @@ const SettingsView = () => {
           }
           icon={settings.notifications ? 'bell-outline' : 'bell-off-outline'}
           onPress={handleNotifications}
-        />
-
-        <SettingComponent
-          label={t('settings.second-chance')}
-          value={secondChance ? t('settings.enabled') : t('settings.disabled')}
-          icon={secondChance ? 'comment-check-outline' : 'comment-off-outline'}
-          onPress={handleSkipConfirmation}
         />
 
         <SettingComponent
