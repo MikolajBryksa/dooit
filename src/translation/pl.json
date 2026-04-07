@@ -140,19 +140,13 @@
     "repeatHours": "O jakiej godzinie chcesz to robić?"
   },
   "tip": {
-    "onboarding-habit-mindset": "Pomyśl o nawyku nie jako o dużym zadaniu, ale jak o pierwszym małym kroku, którego ten nawyk wymaga. Czyli zamiast przytłaczać się myślą o konieczności wypicia 3 litrów wody każdego dnia, wystarczy że od czasu do czasu skupisz się na nalaniu szklanki wody.",
-
-    "onboarding-same-time": "Nawyki najłatwiej się utrwalają, gdy powtarzasz je o tej samej godzinie w te same dni. Z czasem o wybranej porze będziesz wewnętrznie czuć, jaką czynność warto wykonać. Na początek ustaw niewiele powtórzeń, aby łatwo zacząć i dopiero później zwiększaj intensywność.",
-
-    "now-repetitions-matter": "W Dooit liczą się tylko powtórzenia. Nie musisz się martwić jaki wynik dzisiaj osiągniesz wykonując daną czynność. Nie mierzysz tu kalorii, litrów, kilogramów, okrążeń czy minut. Chodzi wyłącznie o to, żeby nauczyć się regularnie wracać do zaplanowanej czynności.",
-
-    "now-first-habit": "Poniżej widzisz to, co jest teraz według Ciebie {{userName}} najważniejsze. Skup się tylko na tym, nie myśl o innych rzeczach do odhaczenia. Następnie zaznacz czy się udało i przejdź dalej. To właśnie dzięki tym czynnością dokonuje się prawdziwa zmiana.",
-
-    "summary-daily-recap": "Po zakończeniu wszystkich nawyków zaplanowanych na dany dzień Dooit podsumuje, ile powtórzeń udało się wykonać, i przedstawi krótką analizę Twojego dnia. Zwróci uwagę na to co poszło najlepiej i na to co sprawia najwięcej trudności.",
-
-    "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń wyliczona na 28 dni. Tyle zazwyczaj wystarczy, żeby zbudować nawyk. Zawsze możesz zwiększyć cel, żeby jeszcze bardziej umocnić swoją nową rutynę.",
-
-    "settings-overview": "Tu możesz zaktualizować swoje imię używane w codziennym podsumowaniu, zmienić język aplikacji, przełączyć tryb na ciemny lub jasny oraz włączyć i wyłączyć powiadomienia. Jeśli chcesz zacząć od nowa to na końcu znajdziesz opcję usunięcia wszystkich swoich danych."
+    "onboarding-habit-mindset": "Pomyśl o nawyku nie jak o dużym zadaniu, ale jak o pierwszym małym kroku, który do niego prowadzi.",
+    "onboarding-same-time": "Nawyki najłatwiej się utrwalają, gdy powtarzasz je o tej samej porze, w te same dni.",
+    "now-repetitions-matter": "W Dooit liczą się tylko powtórzenia. Nie mierzysz tutaj kalorii, litrów, kilogramów ani minut.",
+    "now-first-habit": "Skoncentruj się tylko na tym, co widzisz poniżej, {{userName}}, a następnie zaznacz, czy się udało.",
+    "summary-daily-recap": "Na koniec dnia Dooit podsumowuje liczbę wykonanych powtórzeń i przedstawia krótką analizę.",
+    "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń obliczona na 28 dni.",
+    "settings-overview": "Tutaj możesz zaktualizować swoje imię, zmienić język, przełączyć motyw oraz zarządzać powiadomieniami."
   },
   "onboarding": {
     "step1": {

@@ -45,7 +45,7 @@
     "pl": "Polish",
     "clock-format": "Clock format",
     "first-day": "First day",
-    "theme": "Theme",
+    "theme": "Mode",
     "dark": "Dark",
     "light": "Light",
     "notifications": "Notifications",
@@ -140,19 +140,13 @@
     "repeatHours": "What time do you want to do it?"
   },
   "tip": {
-    "onboarding-habit-mindset": "Think of a habit not as a big task, but as the first small step it requires. Instead of overwhelming yourself with the idea of drinking 3 liters of water every day, just focus from time to time on pouring a glass of water.",
-
-    "onboarding-same-time": "Habits are easiest to build when you repeat them at the same time on the same days. Over time, you’ll start to naturally feel what action to take at that moment. In the beginning, set only a few repetitions so it’s easy to start, and increase the intensity later.",
-
-    "now-repetitions-matter": "In Dooit, only repetitions matter. You don’t need to worry about the result you achieve today while doing a task. You’re not tracking calories, liters, kilograms, laps, or minutes. The goal is simply to learn how to consistently come back to the planned activity.",
-
-    "now-first-habit": "Below you see what matters most to you right now, {{userName}}. Focus only on that, don’t think about other tasks to check off. Then mark whether you completed it and move on. This is how real change happens.",
-
-    "summary-daily-recap": "After completing all habits planned for the day, Dooit will summarize how many repetitions you completed and provide a short analysis of your day. It will highlight what went best and what was the most challenging.",
-
-    "habits-edit-and-goal": "You can edit any habit at any time. The default goal is the number of repetitions calculated for 28 days, which is usually enough to build a habit. You can always increase the goal to strengthen your new routine even more!",
-
-    "settings-overview": "Here you can update your name used in daily summaries, change the app language, switch between dark and light mode, and enable or disable notifications. If you want to start over, you’ll find an option at the bottom to delete all your data."
+    "onboarding-habit-mindset": "Think of a habit not as a big task, but as the first small step it requires.",
+    "onboarding-same-time": "Habits stick best when you repeat them at the same time on the same days.",
+    "now-repetitions-matter": "In Dooit, only repetitions matter. No calories, liters, kilograms, or minutes.",
+    "now-first-habit": "Focus only on what you see below, {{userName}}, then mark if you completed it.",
+    "summary-daily-recap": "At the end of the day, Dooit summarizes your repetitions and gives a short analysis.",
+    "habits-edit-and-goal": "You can edit any habit anytime. The default goal is based on 28 days of repetitions.",
+    "settings-overview": "Here you can update your name, change the language, switch the mode, and manage notifications."
   },
   "onboarding": {
     "step1": {
