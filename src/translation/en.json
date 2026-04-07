@@ -53,6 +53,7 @@
     "disabled": "Disabled",
     "tips": "Tips",
     "restore-tips": "Restore",
+    "tips-restored": "Restored",
     "data": "Account data",
     "delete": "Delete",
     "test-connection": "Test connection",

@@ -239,9 +239,10 @@ const SettingsView = () => {
 
         <SettingComponent
           label={t('settings.tips')}
-          value={t('settings.restore-tips')}
+          value={t(settings.dismissedTips?.length > 0 ? 'settings.restore-tips' : 'settings.tips-restored')}
           icon="lightbulb-outline"
           onPress={handleRestoreTips}
+          disabled={!settings.dismissedTips?.length}
         />
 
         <SettingComponent

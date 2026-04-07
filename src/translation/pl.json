@@ -53,6 +53,7 @@
     "disabled": "Wyłączone",
     "tips": "Wskazówki",
     "restore-tips": "Przywróć",
+    "tips-restored": "Przywrócono",
     "data": "Dane konta",
     "delete": "Usuń",
     "test-connection": "Test połączenia",
