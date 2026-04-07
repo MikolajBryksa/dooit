@@ -70,6 +70,8 @@ const queueErrorLocally = async errorData => {
 };
 
 export const flushErrorQueue = async () => {
+  if (__DEV__) return {success: true, sent: 0};
+
   try {
     const errors = realm.objects('ErrorLog');
 

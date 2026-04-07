@@ -31,6 +31,8 @@ export const generateTemplateSummary = (t, bestHabit, worstHabit) => {
 };
 
 export const saveSummary = async habits => {
+  if (__DEV__) return;
+
   try {
     await initializeAnonymousAuth();
     const supabaseUserId = await getSupabaseUserId();
