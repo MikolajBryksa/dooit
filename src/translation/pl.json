@@ -264,12 +264,12 @@
       "W przypadku nawyku '{{worstHabit}}' może zaczynasz od zbyt dużego kroku. Co by było jego najprostszą wersją?",
       "Czy możesz powiązać nawyk '{{worstHabit}}' z czymś, co już robisz regularnie? Najłatwiej wykonywać nawyki jeden po drugim.",
       "To, że nawyk '{{worstHabit}}' nie idzie zgodnie z planem, to tylko sygnał do zmiany strategii, a nie porażka."
-    ],
-    "summary": {
-      "subtitle": "Wszystko dziś zrobione!",
-      "title": "Podsumowanie dnia",
-      "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku."
-    }
+    ]
+  },
+  "summary": {
+    "subtitle": "Wszystko dziś zrobione!",
+    "title": "Podsumowanie dnia",
+    "no-actions": "Tutaj pojawi się podsumowanie Twoich postępów. Najpierw wykonaj przynajmniej jedno powtórzenie wybranego nawyku."
   },
   "error-boundary": {
     "title": "Ups, coś poszło nie tak",
