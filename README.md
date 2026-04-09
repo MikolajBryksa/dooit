@@ -2,7 +2,7 @@
 
 A **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
 https://dooit-one-focus.lovable.app/  
-https://play.google.com/store/apps/details?id=com.dooit.bryksa
+https://play.google.com/store/apps/details?id=com.dooit.bryksa  
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <img src="https://github.com/user-attachments/assets/eaf3437e-c7fb-4abb-822b-9b04fd277a25" width="13%" alt="01 Create a habit system" />
@@ -10,8 +10,8 @@ https://play.google.com/store/apps/details?id=com.dooit.bryksa
   <img src="https://github.com/user-attachments/assets/9e2d552d-9b59-4f9f-921a-ab4dffe1b3b5" width="13%" alt="03 Modify your habits" />
   <img src="https://github.com/user-attachments/assets/a2b348e8-36c5-476e-a45e-42e487cf5eaa" width="13%" alt="04 Add new habits" />
   <img src="https://github.com/user-attachments/assets/56c8c9f9-bdbe-4bee-a899-801305f06be6" width="13%" alt="05 Select the best time" />
-  <img src="https://github.com/user-attachments/assets/b965fe2a-819d-4cc2-b481-2946c55bf5ad" width="13%" alt="06 Customize the app" />
-  <img src="https://github.com/user-attachments/assets/6954af4e-fa3d-4cef-a20b-bbd8be554820" width="13%" alt="07 Use a dark mode" />
+  <img src="https://github.com/user-attachments/assets/b276fbcf-1f0d-4cb3-be24-0fc338d04f83" width="13%" alt="06 Customize the app" />
+  <img src="https://github.com/user-attachments/assets/26ac2de3-cbba-4eb4-996f-313ec96c6ab3" width="13%" alt="07 Use a dark mode" />
 </div>
 
 ## Tech Stack
