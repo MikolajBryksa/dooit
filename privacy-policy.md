@@ -15,7 +15,3 @@ All data is collected anonymously. Your username is not transmitted or stored ou
 ### Data Deletion
 
 You can permanently delete all your data at any time in the Settings tab. The data will be removed both from your device and from the Dooit database. Data deletion is irreversible.
-
----
-
-_Last updated: April 2026_
