@@ -5,7 +5,13 @@ import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
 import {dateToWeekday} from '@/utils';
-import {useTodayKey, useCurrentTime, useActiveHabit} from '@/hooks';
+import {
+  useTodayKey,
+  useCurrentTime,
+  useActiveHabit,
+  useDoubleBackExit,
+} from '@/hooks';
+import {useIsFocused} from '@react-navigation/native';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {setHabits, setHabitsLoading} from '@/redux/actions';
 import NowCard from '@/cards/now.card';
@@ -21,6 +27,8 @@ import TipComponent from '@/components/tip.component';
 
 const NowView = () => {
   const {t} = useTranslation();
+  const isFocused = useIsFocused();
+  useDoubleBackExit(isFocused);
   const styles = useStyles();
   const dispatch = useDispatch();
 
@@ -147,17 +155,17 @@ const NowView = () => {
               {t('tip.now-first-habit', {userName})}
             </TipComponent>
             <NowCard
-            key={activeHabit.key}
-            id={activeHabit.id}
-            habitName={activeHabit.habitName}
-            selectedHour={activeHabit.selectedHour}
-            slotIndex={activeHabit.slotIndex}
-            icon={activeHabit.icon}
-            goal={activeHabit.goal}
-            isNext={true}
-            isLastHabit={isLastHabit}
-            onUpdated={refreshHabits}
-            onNext={goToNextHabit}
+              key={activeHabit.key}
+              id={activeHabit.id}
+              habitName={activeHabit.habitName}
+              selectedHour={activeHabit.selectedHour}
+              slotIndex={activeHabit.slotIndex}
+              icon={activeHabit.icon}
+              goal={activeHabit.goal}
+              isNext={true}
+              isLastHabit={isLastHabit}
+              onUpdated={refreshHabits}
+              onNext={goToNextHabit}
             />
           </>
         ) : null}

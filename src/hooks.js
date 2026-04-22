@@ -1,9 +1,33 @@
 import {getLocalDateKey} from '@/utils';
-import {useState, useEffect, useMemo, useCallback} from 'react';
+import {useState, useEffect, useMemo, useCallback, useRef} from 'react';
+import {BackHandler} from 'react-native';
 import {logError} from '@/services/errors.service';
 import NetInfo from '@react-native-community/netinfo';
 import {hasExecutionOrDeleted} from '@/services/executions.service';
 import {selectActiveHabitKey} from '@/services/habits.service';
+
+export function useDoubleBackExit(enabled = true) {
+  const lastBackPress = useRef(null);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const backAction = () => {
+      const now = Date.now();
+      if (lastBackPress.current && now - lastBackPress.current < 2000) {
+        BackHandler.exitApp();
+        return true;
+      }
+      lastBackPress.current = now;
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, [enabled]);
+}
 
 export function useTodayKey() {
   const [todayKey, setTodayKey] = useState(getLocalDateKey());

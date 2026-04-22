@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View, ScrollView, TouchableOpacity} from 'react-native';
+import {View, ScrollView, TouchableOpacity, BackHandler} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text, Button, TextInput, Checkbox, useTheme} from 'react-native-paper';
 import HabitComponent from '@/components/habit.component';
 import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
+import {useDoubleBackExit} from '@/hooks';
 import {updateSettingValue} from '@/services/settings.service';
 import {getLocalDateKey} from '@/utils';
 import {setSettings, setHabits} from '@/redux/actions';
@@ -48,6 +49,20 @@ const OnboardingView = ({setShowOnboarding}) => {
     6: false,
     7: false,
   });
+
+  useDoubleBackExit(step === 1);
+
+  useEffect(() => {
+    if (step === 1) return;
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setStep(step - 1);
+        return true;
+      },
+    );
+    return () => backHandler.remove();
+  }, [step]);
 
   // Initialize state from existing habits if user returns to onboarding
   useEffect(() => {

@@ -183,6 +183,7 @@ function AppContent() {
 
   return (
     <Tab.Navigator
+      backBehavior="history"
       screenOptions={{headerShown: false}}
       tabBar={({navigation, state, descriptors, insets}) => (
         <Navbar
