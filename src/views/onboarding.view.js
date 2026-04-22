@@ -8,6 +8,7 @@ import EditModal from '@/modals/edit.modal';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useDoubleBackExit} from '@/hooks';
+import Benefits from '@/components/benefits.component';
 import {updateSettingValue} from '@/services/settings.service';
 import {getLocalDateKey} from '@/utils';
 import {setSettings, setHabits} from '@/redux/actions';
@@ -169,11 +170,13 @@ const OnboardingView = ({setShowOnboarding}) => {
 
   if (step === 1) {
     return (
-      <SafeAreaView style={[styles.container, styles.center]}>
+      <SafeAreaView style={[styles.onboarding__container, styles.center]}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.step1.title')}</Text>
           <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
         </View>
+
+        <Benefits />
 
         <TextInput
           mode="outlined"
@@ -186,12 +189,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
         <TouchableOpacity
           onPress={() => setTermsAccepted(v => !v)}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            width: '80%',
-            marginBottom: 8,
-          }}>
+          style={styles.onboarding__terms}>
           <Checkbox
             status={termsAccepted ? 'checked' : 'unchecked'}
             onPress={() => setTermsAccepted(v => !v)}

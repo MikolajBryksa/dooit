@@ -51,6 +51,58 @@ export const useStyles = () => {
       height: theme.dimensions.gap * 5,
       width: '80%',
     },
+    onboarding__terms: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '80%',
+    },
+    carousel: {
+      marginTop: theme.dimensions.gap,
+      alignSelf: 'stretch',
+      marginBottom: theme.dimensions.gap,
+    },
+    carousel__list: {
+      height: 160,
+    },
+    carousel__card__inner: {
+      backgroundColor: theme.colors.surface,
+      borderRadius: 16,
+      paddingVertical: theme.dimensions.gap * 2,
+      paddingHorizontal: theme.dimensions.gap * 2,
+      width: '80%',
+      alignItems: 'center',
+      height: 160,
+      justifyContent: 'center',
+    },
+    carousel__card__title: {
+      textAlign: 'center',
+      marginTop: 10,
+      marginBottom: 6,
+    },
+    carousel__card__body: {
+      textAlign: 'center',
+      color: theme.colors.onSurfaceVariant,
+    },
+    carousel__dots: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: theme.dimensions.gap,
+      gap: 6,
+    },
+    carousel__dot: {
+      height: 8,
+      borderRadius: 4,
+    },
+    carousel__dot__active: {
+      width: 20,
+      backgroundColor: 'white',
+    },
+    carousel__dot__inactive: {
+      width: 8,
+      backgroundColor: 'white',
+      opacity: 0.7,
+    },
     card: {
       backgroundColor: theme.colors.surface,
       marginBottom: theme.dimensions.gap,

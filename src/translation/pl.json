@@ -156,11 +156,29 @@
   "onboarding": {
     "step1": {
       "title": "Witaj w Dooit",
-      "subtitle": "gdzie powstają dobre nawyki",
+      "subtitle": "który pomoże Ci budować nawyki",
       "name": "Wpisz swoje imię",
       "terms-prefix": "Akceptuję",
       "terms-link": "Regulamin"
     },
+    "features": [
+      {
+        "title": "Łatwość obsługi",
+        "body": "Tworzysz nawyk w kilka sekund i od razu działasz."
+      },
+      {
+        "title": "Widoczny postęp",
+        "body": "Skupiasz się na powtórzeniach, nie na osiągnięciach."
+      },
+      {
+        "title": "Pełna personalizacja",
+        "body": "Dopasowujesz nawyki do swojego stylu dnia."
+      },
+      {
+        "title": "Jeden krok naraz",
+        "body": "Zamiast długiej listy widzisz tylko to, co zrobić teraz."
+      }
+    ],
     "step2": {
       "choose": "Wybierz",
       "which-habits": "jakie nawyki chcesz budować"

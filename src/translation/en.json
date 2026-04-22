@@ -156,11 +156,29 @@
   "onboarding": {
     "step1": {
       "title": "Welcome to Dooit",
-      "subtitle": "where habits are built",
+      "subtitle": "your partner in building habits",
       "name": "Enter your name",
       "terms-prefix": "I accept the",
       "terms-link": "Terms of Service"
     },
+    "features": [
+      {
+        "title": "Easy to use",
+        "body": "Create a habit in seconds and start right away."
+      },
+      {
+        "title": "Visible progress",
+        "body": "Focus on repetitions, not achievements."
+      },
+      {
+        "title": "Full customization",
+        "body": "Adjust habits to match your daily rhythm."
+      },
+      {
+        "title": "One step at a time",
+        "body": "Only what's next, not the whole list."
+      }
+    ],
     "step2": {
       "choose": "Choose",
       "which-habits": "which habits you want to build"
