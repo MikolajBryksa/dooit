@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, ScrollView, TouchableOpacity} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text, Button, TextInput, Checkbox, useTheme} from 'react-native-paper';
 import HabitComponent from '@/components/habit.component';
 import EditModal from '@/modals/edit.modal';
@@ -88,9 +89,11 @@ const OnboardingView = ({setShowOnboarding}) => {
     dispatch(setHabits(updatedHabits));
     setSelectedCustomHabits(prev => {
       const next = {...prev};
-      updatedHabits.filter(h => h.id > 7).forEach(h => {
-        if (next[h.id] === undefined) next[h.id] = true;
-      });
+      updatedHabits
+        .filter(h => h.id > 7)
+        .forEach(h => {
+          if (next[h.id] === undefined) next[h.id] = true;
+        });
       return next;
     });
   };
@@ -135,7 +138,10 @@ const OnboardingView = ({setShowOnboarding}) => {
       if (!selected) deleteHabit(Number(id));
     });
     dispatch(setHabits(getHabits() || []));
-    const updatedSettings = updateSettingValue('onboardingDate', getLocalDateKey());
+    const updatedSettings = updateSettingValue(
+      'onboardingDate',
+      getLocalDateKey(),
+    );
     if (updatedSettings) dispatch(setSettings(updatedSettings));
     requestNotificationPermission(settings, dispatch, setSettings);
     setShowOnboarding(false);
@@ -148,7 +154,7 @@ const OnboardingView = ({setShowOnboarding}) => {
 
   if (step === 1) {
     return (
-      <View style={[styles.container, styles.center]}>
+      <SafeAreaView style={[styles.container, styles.center]}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.step1.title')}</Text>
           <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
@@ -203,11 +209,11 @@ const OnboardingView = ({setShowOnboarding}) => {
           visible={visibleTermsDialog}
           onDismiss={() => setVisibleTermsDialog(false)}
         />
-      </View>
+      </SafeAreaView>
     );
   } else if (step === 2) {
     return (
-      <View style={styles.onboarding__container}>
+      <SafeAreaView style={styles.onboarding__container}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">{t('onboarding.step2.choose')}</Text>
           <Text variant="bodyLarge">{t('onboarding.step2.which-habits')}</Text>
@@ -298,11 +304,11 @@ const OnboardingView = ({setShowOnboarding}) => {
           onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
         />
-      </View>
+      </SafeAreaView>
     );
   } else if (step === 3) {
     return (
-      <View style={styles.onboarding__container}>
+      <SafeAreaView style={styles.onboarding__container}>
         <View style={styles.onboarding__bar}>
           <Text variant="headlineMedium">
             {t('onboarding.step3.select-repetition')}
@@ -319,19 +325,19 @@ const OnboardingView = ({setShowOnboarding}) => {
           {habits
             .filter(h => h.id <= 7 || selectedCustomHabits[h.id])
             .map(habit => (
-            <HabitComponent
-              key={habit.id}
-              id={habit.id}
-              habitName={habit.habitName}
-              repeatDays={habit.repeatDays}
-              repeatHours={habit.repeatHours}
-              icon={habit.icon}
-              goal={habit.goal}
-              fetchAllHabits={fetchAllHabits}
-              onEdit={handleEditModal}
-              onboardingMode={true}
-            />
-          ))}
+              <HabitComponent
+                key={habit.id}
+                id={habit.id}
+                habitName={habit.habitName}
+                repeatDays={habit.repeatDays}
+                repeatHours={habit.repeatHours}
+                icon={habit.icon}
+                goal={habit.goal}
+                fetchAllHabits={fetchAllHabits}
+                onEdit={handleEditModal}
+                onboardingMode={true}
+              />
+            ))}
           <View style={styles.gap} />
         </ScrollView>
 
@@ -390,7 +396,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 };
