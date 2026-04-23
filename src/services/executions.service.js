@@ -58,7 +58,10 @@ export const updateExecution = (executionIdValue, updates = {}) => {
     let updatedExecution = null;
 
     realm.write(() => {
-      const execution = realm.objectForPrimaryKey('Execution', executionIdValue);
+      const execution = realm.objectForPrimaryKey(
+        'Execution',
+        executionIdValue,
+      );
       if (!execution || execution.deleted) return null;
 
       execution.status = updates.status ?? execution.status;
@@ -91,10 +94,31 @@ export const deleteExecution = executionIdValue => {
 export const deleteExecutions = habitId => {
   try {
     realm.write(() => {
-      realm.delete(realm.objects('Execution').filtered('habitId == $0', habitId));
+      realm.delete(
+        realm.objects('Execution').filtered('habitId == $0', habitId),
+      );
     });
   } catch (e) {
     logError(e, 'executions.deleteExecutions');
+  }
+};
+
+export const resetAllExecutions = () => {
+  try {
+    realm.write(() => {
+      realm.delete(realm.objects('Execution'));
+    });
+  } catch (e) {
+    logError(e, 'executions.resetAllExecutions');
+  }
+};
+
+export const hasAnyExecutions = () => {
+  try {
+    return realm.objects('Execution').filtered('deleted != true').length > 0;
+  } catch (e) {
+    logError(e, 'executions.hasAnyExecutions');
+    return false;
   }
 };
 
@@ -103,7 +127,9 @@ export const deleteOldExecutions = daysToKeep => {
     const cutoffDate = subtractDays(getLocalDateKey(), daysToKeep);
 
     realm.write(() => {
-      realm.delete(realm.objects('Execution').filtered('date < $0', cutoffDate));
+      realm.delete(
+        realm.objects('Execution').filtered('date < $0', cutoffDate),
+      );
     });
   } catch (e) {
     logError(e, 'executions.deleteOldExecutions');

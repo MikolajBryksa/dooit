@@ -10,6 +10,10 @@ import {
   updateSettingValue,
   deleteAllLocalData,
 } from '@/services/settings.service';
+import {
+  resetAllExecutions,
+  hasAnyExecutions,
+} from '@/services/executions.service';
 import {deleteUserData} from '@/services/supabase.service';
 import {setSettings, setHabits} from '@/redux/actions';
 import {translateDefaultHabits, getHabits} from '@/services/habits.service';
@@ -17,7 +21,7 @@ import {getLocalDateKey} from '@/utils';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
 import DeleteDataDialog from '@/dialogs/delete-data.dialog';
-import ResetDayDialog from '@/dialogs/reset-day.dialog';
+import ResetDataDialog from '@/dialogs/reset-counters.dialog';
 import NameModal from '@/modals/name.modal';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
@@ -38,7 +42,7 @@ const SettingsView = () => {
   const [visibleSupportDialog, setVisibleSupportDialog] = useState(false);
   const [visibleNameModal, setVisibleNameModal] = useState(false);
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
-  const [visibleResetDayDialog, setVisibleResetDayDialog] = useState(false);
+  const [visibleResetDataDialog, setVisibleResetDataDialog] = useState(false);
 
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
@@ -93,14 +97,18 @@ const SettingsView = () => {
 
   const isDay1 =
     !settings.onboardingDate || settings.onboardingDate === getLocalDateKey();
+  const canReset = hasAnyExecutions() || !isDay1;
 
-  const handleResetDayDialog = () => setVisibleResetDayDialog(v => !v);
+  const handleResetDataDialog = () => setVisibleResetDataDialog(v => !v);
 
-  function handleResetDay() {
+  function handleResetData() {
+    resetAllExecutions();
     const today = getLocalDateKey();
     updateSettingValue('onboardingDate', today);
     dispatch(setSettings({...settings, onboardingDate: today}));
-    setVisibleResetDayDialog(false);
+    const habits = getHabits();
+    dispatch(setHabits(habits));
+    setVisibleResetDataDialog(false);
   }
 
   const handleRestoreTips = () => {
@@ -253,14 +261,6 @@ const SettingsView = () => {
         />
 
         <SettingComponent
-          label={t('settings.day-counter')}
-          value={t(isDay1 ? 'settings.day-is-1' : 'settings.reset-day')}
-          icon="calendar-refresh-outline"
-          onPress={handleResetDayDialog}
-          disabled={isDay1}
-        />
-
-        <SettingComponent
           label={t('settings.tips')}
           value={t(
             settings.dismissedTips?.length > 0
@@ -270,6 +270,14 @@ const SettingsView = () => {
           icon="lightbulb-outline"
           onPress={handleRestoreTips}
           disabled={!settings.dismissedTips?.length}
+        />
+
+        <SettingComponent
+          label={t('settings.repetition-counters')}
+          value={t(canReset ? 'settings.reset-counters' : 'settings.day-is-1')}
+          icon="calendar-refresh-outline"
+          onPress={handleResetDataDialog}
+          disabled={!canReset}
         />
 
         <SettingComponent
@@ -340,10 +348,10 @@ const SettingsView = () => {
 
       <NameModal visible={visibleNameModal} onDismiss={handleNameModal} />
 
-      <ResetDayDialog
-        visible={visibleResetDayDialog}
-        onDismiss={handleResetDayDialog}
-        onConfirm={handleResetDay}
+      <ResetDataDialog
+        visible={visibleResetDataDialog}
+        onDismiss={handleResetDataDialog}
+        onConfirm={handleResetData}
       />
 
       <DeleteDataDialog

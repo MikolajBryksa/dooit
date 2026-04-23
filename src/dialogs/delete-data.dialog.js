@@ -6,8 +6,8 @@ import {useTheme} from 'react-native-paper';
 
 const DeleteDataDialog = ({visible, onDismiss, onConfirm}) => {
   const {t} = useTranslation();
-  const [isDeleting, setIsDeleting] = useState(false);
   const theme = useTheme();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleConfirm = async () => {
     setIsDeleting(true);
