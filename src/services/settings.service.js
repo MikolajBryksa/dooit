@@ -1,5 +1,6 @@
 import realm from '@/storage/schemas';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {subtractDays} from '@/utils';
 
 export const getSettings = () => {
   try {
@@ -62,8 +63,10 @@ export const updateSettings = updates => {
 export const updateStreakIfNeeded = today => {
   const settings = getSettings();
   if (!settings || settings.lastStreakDate === today) return null;
+  const yesterday = subtractDays(today, 1);
+  const isConsecutive = settings.lastStreakDate === yesterday;
   return updateSettings({
-    streakCount: (settings.streakCount || 0) + 1,
+    streakCount: isConsecutive ? (settings.streakCount || 0) + 1 : 1,
     lastStreakDate: today,
   });
 };

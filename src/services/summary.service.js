@@ -1,9 +1,5 @@
 import {getSettingValue} from './settings.service.js';
-import {
-  supabase,
-  getSupabaseUserId,
-  initializeAnonymousAuth,
-} from './supabase.service.js';
+import {syncUserData} from './supabase.service.js';
 import {logError, flushErrorQueue} from './errors.service.js';
 import {pickRandomMessage} from '@/utils';
 
@@ -30,35 +26,12 @@ export const generateTemplateSummary = (t, bestHabit, worstHabit) => {
   return parts.join('\n\n');
 };
 
-export const saveSummary = async habits => {
+export const saveSummary = async (habits, streak) => {
   if (__DEV__) return;
 
   try {
-    await initializeAnonymousAuth();
-    const supabaseUserId = await getSupabaseUserId();
-
-    if (!supabaseUserId) {
-      await logError(
-        new Error('No Supabase user ID - cannot sync to cloud'),
-        'saveSummary.noUserId',
-      );
-      return;
-    }
-
     await flushErrorQueue();
-
-    const {error} = await supabase.from('users').upsert(
-      {
-        user_id: supabaseUserId,
-        updated_at: new Date().toISOString(),
-        habits_json: habits,
-      },
-      {onConflict: 'user_id'},
-    );
-
-    if (error) {
-      logError(error, 'saveSummary.users');
-    }
+    await syncUserData(habits, streak);
   } catch (error) {
     logError(error, 'saveSummary');
   }

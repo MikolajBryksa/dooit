@@ -28,8 +28,7 @@
   },
   "terms": {
     "s1-title": "Zbieranie danych",
-    "s1-intro": "Dooit zbiera dane dotyczące Twoich nawyków w dwóch momentach: po zakończeniu procesu onboardingu oraz po zakończeniu dziennego podsumowania.",
-    "s1-body": "Zbierane dane obejmują nazwy nawyków, częstotliwość ich wykonywania oraz statystyki postępów. Dane te są wykorzystywane wyłącznie do analizy, jakie nawyki użytkownicy najczęściej budują oraz w jakiej liczbie. Analiza ta pozwala rozwijać aplikację zgodnie z rzeczywistymi potrzebami użytkowników.",
+    "s1-body": "Dooit zbiera dane dotyczące Twoich nawyków. Zbierane dane obejmują nazwy nawyków, częstotliwość ich wykonywania oraz statystyki postępów. Dane te są wykorzystywane wyłącznie do analizy, jakie nawyki użytkownicy najczęściej budują oraz w jakiej liczbie. Analiza ta pozwala rozwijać aplikację zgodnie z rzeczywistymi potrzebami użytkowników.",
     "s2-title": "Twoja prywatność",
     "s2-body": "Wszystkie dane są zbierane anonimowo. Nazwa użytkownika nie jest przesyłana ani przechowywana poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem. Dane nie są sprzedawane ani udostępniane podmiotom trzecim.",
     "s3-title": "Usuwanie danych",

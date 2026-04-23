@@ -15,13 +15,12 @@ const TermsDialog = ({visible, onDismiss}) => {
       onDismiss={onDismiss}
       title={t('title.terms')}>
       <DialogComponent.Content>
-        <ScrollView style={{maxHeight: 360}} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{maxHeight: 360}}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.terms__section}>
             <Text variant="bodyMedium" style={styles.terms__title}>
               {t('terms.s1-title')}
-            </Text>
-            <Text variant="bodySmall" style={styles.terms__body}>
-              {t('terms.s1-intro')}
             </Text>
             <Text variant="bodySmall" style={styles.terms__body}>
               {t('terms.s1-body')}

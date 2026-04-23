@@ -93,6 +93,31 @@ export const deleteUserData = async () => {
   }
 };
 
+export const syncUserData = async (habits, streak) => {
+  try {
+    await initializeAnonymousAuth();
+    const {
+      data: {session},
+    } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) return;
+
+    const {error} = await supabase.from('users').upsert(
+      {
+        user_id: userId,
+        habits_json: habits,
+        streak,
+        updated_at: new Date().toISOString(),
+      },
+      {onConflict: 'user_id'},
+    );
+
+    if (error) logError(error, 'syncUserData');
+  } catch (error) {
+    logError(error, 'syncUserData');
+  }
+};
+
 export const getSupabaseUserId = async () => {
   try {
     const {

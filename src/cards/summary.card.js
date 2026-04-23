@@ -116,6 +116,7 @@ const SummaryCard = ({weekdayKey}) => {
   const theme = useTheme();
 
   const habits = useSelector(state => state.habits);
+  const streakCount = useSelector(state => state.settings.streakCount ?? 0);
   const todayKey = useTodayKey();
 
   const todayHabits = useMemo(
@@ -142,7 +143,7 @@ const SummaryCard = ({weekdayKey}) => {
   }, [todayHabits.length, todayHabitsWithStats, t]);
 
   useEffect(() => {
-    saveSummary(getHabitsForSync(habits)).catch(e =>
+    saveSummary(getHabitsForSync(habits), streakCount).catch(e =>
       logError(e, 'EndCard.saveSummary'),
     );
   }, [todayKey]); // eslint-disable-line react-hooks/exhaustive-deps

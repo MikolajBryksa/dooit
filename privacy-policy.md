@@ -4,9 +4,7 @@ This Privacy Policy explains how user data is handled in the Dooit app.
 
 ### Data Collection
 
-Dooit collects data related to your habits at two points: after completing the onboarding process and after completing the daily summary.
-
-The collected data includes habit names, frequency of completion, and progress statistics. This data is used solely to analyze which habits users build most often and in what quantity. This analysis helps improve the app in line with users' real needs.
+Dooit collects data related to your habits. The collected data includes habit names, frequency of completion, and progress statistics. This data is used solely to analyze which habits users build most often and in what quantity. This analysis helps improve the app in line with users' real needs.
 
 ### Your Privacy
 

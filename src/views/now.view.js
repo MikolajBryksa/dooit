@@ -14,7 +14,11 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
 import {updateStreakIfNeeded} from '@/services/settings.service';
-import {scheduleStreakReminder} from '@/services/notifications.service';
+import {syncUserData} from '@/services/supabase.service';
+import {
+  scheduleHabitNotifications,
+  scheduleStreakReminder,
+} from '@/services/notifications.service';
 import {setHabits, setHabitsLoading, setSettings} from '@/redux/actions';
 import {Icon, Text} from 'react-native-paper';
 import NowCard from '@/cards/now.card';
@@ -22,7 +26,6 @@ import SummaryCard from '@/cards/summary.card';
 import EmptyCard from '@/cards/empty.card';
 import LoadingCard from '@/cards/loading.card';
 import StartCard from '@/cards/start.card';
-import {scheduleHabitNotifications} from '@/services/notifications.service';
 import {logError} from '@/services/errors.service';
 import AddModal from '@/modals/add.modal';
 import Topbar from '@/components/topbar.component';
@@ -62,8 +65,11 @@ const NowView = () => {
 
   const handleDone = useCallback(() => {
     const updated = updateStreakIfNeeded(todayKey);
-    if (updated) dispatch(setSettings(updated));
-  }, [todayKey, dispatch]);
+    if (updated) {
+      dispatch(setSettings(updated));
+      syncUserData(habits, updated.streakCount);
+    }
+  }, [todayKey, dispatch, habits]);
 
   const refreshHabits = useCallback(() => {
     const newHabits = getHabits() || [];
