@@ -26,6 +26,7 @@ const NowCard = ({
   isNext = false,
   isLastHabit = false,
   onUpdated,
+  onDone,
   onNext,
 }) => {
   const {t} = useTranslation();
@@ -130,6 +131,7 @@ const NowCard = ({
     setChoice('done');
     setMotivation(pickRandomMessage(t, 'done'));
     handleChoice('done');
+    onDone?.();
     setStep(2);
 
     if (goal > 0 && liveDoneCount < goal && liveDoneCount + 1 >= goal) {

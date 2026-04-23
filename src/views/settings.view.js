@@ -8,6 +8,7 @@ import {en, pl, registerTranslation} from 'react-native-paper-dates';
 import {LocaleConfig} from 'react-native-calendars';
 import {
   updateSettingValue,
+  updateSettings,
   deleteAllLocalData,
 } from '@/services/settings.service';
 import {
@@ -17,7 +18,6 @@ import {
 import {deleteUserData} from '@/services/supabase.service';
 import {setSettings, setHabits} from '@/redux/actions';
 import {translateDefaultHabits, getHabits} from '@/services/habits.service';
-import {getLocalDateKey} from '@/utils';
 import ContactModal from '@/modals/contact.modal';
 import SupportDialog from '@/dialogs/support.dialog';
 import DeleteDataDialog from '@/dialogs/delete-data.dialog';
@@ -95,17 +95,14 @@ const SettingsView = () => {
   const handleNameModal = () => setVisibleNameModal(v => !v);
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
 
-  const isDay1 =
-    !settings.onboardingDate || settings.onboardingDate === getLocalDateKey();
-  const canReset = hasAnyExecutions() || !isDay1;
+  const canReset = hasAnyExecutions() || settings.streakCount > 0;
 
   const handleResetDataDialog = () => setVisibleResetDataDialog(v => !v);
 
   function handleResetData() {
     resetAllExecutions();
-    const today = getLocalDateKey();
-    updateSettingValue('onboardingDate', today);
-    dispatch(setSettings({...settings, onboardingDate: today}));
+    const updated = updateSettings({streakCount: 0, lastStreakDate: null});
+    if (updated) dispatch(setSettings(updated));
     const habits = getHabits();
     dispatch(setHabits(habits));
     setVisibleResetDataDialog(false);
@@ -135,6 +132,8 @@ const SettingsView = () => {
           currentItem: 0,
           currentDay: null,
           notifications: false,
+          streakCount: 0,
+          lastStreakDate: null,
         }),
       );
     } catch (e) {
@@ -274,7 +273,7 @@ const SettingsView = () => {
 
         <SettingComponent
           label={t('settings.repetition-counters')}
-          value={t(canReset ? 'settings.reset-counters' : 'settings.day-is-1')}
+          value={t(canReset ? 'settings.reset-counters' : 'settings.no-data')}
           icon="calendar-refresh-outline"
           onPress={handleResetDataDialog}
           disabled={!canReset}

@@ -1,6 +1,6 @@
 import React, {useMemo, useEffect, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
@@ -13,7 +13,10 @@ import {
 } from '@/hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
-import {setHabits, setHabitsLoading} from '@/redux/actions';
+import {updateStreakIfNeeded} from '@/services/settings.service';
+import {scheduleStreakReminder} from '@/services/notifications.service';
+import {setHabits, setHabitsLoading, setSettings} from '@/redux/actions';
+import {Icon, Text} from 'react-native-paper';
 import NowCard from '@/cards/now.card';
 import SummaryCard from '@/cards/summary.card';
 import EmptyCard from '@/cards/empty.card';
@@ -36,7 +39,8 @@ const NowView = () => {
   const habitsLoading = useSelector(state => state.habitsLoading);
   const firstLaunch = useSelector(state => state.settings.firstLaunch);
   const userName = useSelector(state => state.settings.userName);
-  const onboardingDate = useSelector(state => state.settings.onboardingDate);
+  const streakCount = useSelector(state => state.settings.streakCount ?? 0);
+  const lastStreakDate = useSelector(state => state.settings.lastStreakDate);
 
   const [visibleAddModal, setVisibleAddModal] = useState(false);
 
@@ -56,12 +60,10 @@ const NowView = () => {
   const todayKey = useTodayKey();
   const weekdayKey = useMemo(() => dateToWeekday(todayKey), [todayKey]);
 
-  const dayNumber = useMemo(() => {
-    if (!onboardingDate) return null;
-    const start = new Date(onboardingDate);
-    const today = new Date(todayKey);
-    return Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
-  }, [onboardingDate, todayKey]);
+  const handleDone = useCallback(() => {
+    const updated = updateStreakIfNeeded(todayKey);
+    if (updated) dispatch(setSettings(updated));
+  }, [todayKey, dispatch]);
 
   const refreshHabits = useCallback(() => {
     const newHabits = getHabits() || [];
@@ -127,17 +129,30 @@ const NowView = () => {
     useActiveHabit(todayHabits, todayKey);
 
   useEffect(() => {
-    // Keep scheduled notifications in sync with current habits
-    scheduleHabitNotifications(habits, t);
-  }, [habits, t]);
+    (async () => {
+      await scheduleHabitNotifications(habits, t);
+      scheduleStreakReminder(lastStreakDate, t);
+    })();
+  }, [habits, t, lastStreakDate]);
 
   return (
     <>
       <Topbar>
-        <Topbar.Content
-          title={dayNumber ? t('view.day', {count: dayNumber}) : t('view.now')}
-        />
-        <Topbar.Action icon="refresh" onPress={rebuildTodayHabits} />
+        <Topbar.Content title={t('view.now')} />
+        {streakCount > 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 16,
+            }}>
+            <Icon source="fire" size={24} />
+            <Text variant="titleMedium" style={{marginLeft: 4}}>
+              {streakCount}
+            </Text>
+          </View>
+        )}
+        {/* <Topbar.Action icon="refresh" onPress={rebuildTodayHabits} /> */}
       </Topbar>
 
       <ScrollView style={styles.container}>
@@ -165,6 +180,7 @@ const NowView = () => {
               isNext={true}
               isLastHabit={isLastHabit}
               onUpdated={refreshHabits}
+              onDone={handleDone}
               onNext={goToNextHabit}
             />
           </>

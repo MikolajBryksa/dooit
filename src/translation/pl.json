@@ -2,8 +2,7 @@
   "view": {
     "now": "Teraz",
     "habits": "Nawyki",
-    "settings": "Ustawienia",
-    "day": "Dzień {{count}}"
+    "settings": "Ustawienia"
   },
   "loading": {
     "subtitle": "Proszę o cierpliwość.",
@@ -54,7 +53,7 @@
     "disabled": "Wyłączone",
     "repetition-counters": "Powtórzenia",
     "reset-counters": "Resetuj",
-    "day-is-1": "Dzień 1",
+    "no-data": "Brak danych",
     "tips": "Wskazówki",
     "restore-tips": "Przywróć",
     "tips-restored": "Przywrócono",
@@ -215,6 +214,10 @@
     "7": {
       "habitName": "Połóż się wcześnie"
     }
+  },
+  "streak": {
+    "reminder-title": "Utrzymaj serię! 🔥",
+    "reminder-body": "Pamiętaj o nawykach, otwórz Dooit i nie przerywaj serii."
   },
   "motivation": {
     "notification": [

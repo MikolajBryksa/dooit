@@ -73,6 +73,51 @@ export function setupNotificationSync(
   }
 }
 
+const STREAK_REMINDER_ID = 'streak-reminder';
+
+export async function scheduleStreakReminder(lastStreakDate, t) {
+  try {
+    const today = getLocalDateKey();
+    await notifee.cancelNotification(STREAK_REMINDER_ID);
+
+    if (lastStreakDate === today) return;
+
+    const now = new Date();
+    const triggerDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      18,
+      0,
+      0,
+      0,
+    );
+
+    if (triggerDate <= now) return;
+
+    await notifee.createChannel({id: 'default', name: 'Dooit Channel'});
+
+    await notifee.createTriggerNotification(
+      {
+        id: STREAK_REMINDER_ID,
+        title: t('streak.reminder-title'),
+        body: t('streak.reminder-body'),
+        android: {
+          channelId: 'default',
+          smallIcon: 'ic_notification',
+          pressAction: {id: 'default', launchActivity: 'default'},
+        },
+      },
+      {
+        type: TriggerType.TIMESTAMP,
+        timestamp: triggerDate.getTime(),
+      },
+    );
+  } catch (error) {
+    logError(error, 'scheduleStreakReminder');
+  }
+}
+
 export async function scheduleHabitNotifications(habits, t) {
   // Schedules notifications for habits over the next 3 days
   // Skips notifications for already completed executions today

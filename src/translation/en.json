@@ -2,8 +2,7 @@
   "view": {
     "now": "Now",
     "habits": "Habits",
-    "settings": "Settings",
-    "day": "Day {{count}}"
+    "settings": "Settings"
   },
   "loading": {
     "subtitle": "Please be patient.",
@@ -54,7 +53,7 @@
     "disabled": "Disabled",
     "repetition-counters": "Repetitions",
     "reset-counters": "Reset",
-    "day-is-1": "Day 1",
+    "no-data": "No data",
     "tips": "Tips",
     "restore-tips": "Restore",
     "tips-restored": "Restored",
@@ -215,6 +214,10 @@
     "7": {
       "habitName": "Go to bed early"
     }
+  },
+  "streak": {
+    "reminder-title": "Keep your streak going! 🔥",
+    "reminder-body": "Remember your habits, open Dooit and make it count."
   },
   "motivation": {
     "notification": [

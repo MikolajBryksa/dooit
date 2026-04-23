@@ -18,7 +18,8 @@ export const getSettings = () => {
       currentDay: settings.currentDay,
       notifications: settings.notifications,
       dismissedTips: [...(settings.dismissedTips || [])],
-      onboardingDate: settings.onboardingDate ?? null,
+      streakCount: settings.streakCount ?? 0,
+      lastStreakDate: settings.lastStreakDate ?? null,
     };
   } catch (e) {
     console.error('[settings.getSettings]', e?.message);
@@ -30,7 +31,11 @@ export const updateSettings = updates => {
   try {
     let updatedSettings;
     realm.write(() => {
-      updatedSettings = realm.create('Settings', {id: 1, ...updates}, 'modified');
+      updatedSettings = realm.create(
+        'Settings',
+        {id: 1, ...updates},
+        'modified',
+      );
     });
 
     return {
@@ -45,12 +50,22 @@ export const updateSettings = updates => {
       currentDay: updatedSettings.currentDay,
       notifications: updatedSettings.notifications,
       dismissedTips: [...(updatedSettings.dismissedTips || [])],
-      onboardingDate: updatedSettings.onboardingDate ?? null,
+      streakCount: updatedSettings.streakCount ?? 0,
+      lastStreakDate: updatedSettings.lastStreakDate ?? null,
     };
   } catch (e) {
     console.error('[settings.updateSettings]', e?.message);
     return null;
   }
+};
+
+export const updateStreakIfNeeded = today => {
+  const settings = getSettings();
+  if (!settings || settings.lastStreakDate === today) return null;
+  return updateSettings({
+    streakCount: (settings.streakCount || 0) + 1,
+    lastStreakDate: today,
+  });
 };
 
 export const dismissTip = (tipId, currentSettings) => {
@@ -96,6 +111,8 @@ export const deleteAllLocalData = async () => {
           currentDay: null,
           notifications: false,
           dismissedTips: [],
+          streakCount: 0,
+          lastStreakDate: null,
         },
         'modified',
       );
@@ -108,6 +125,9 @@ export const deleteAllLocalData = async () => {
   try {
     await AsyncStorage.removeItem('LAST_RESET_DATE');
   } catch (e) {
-    console.error('[settings.deleteAllLocalData] AsyncStorage error:', e?.message);
+    console.error(
+      '[settings.deleteAllLocalData] AsyncStorage error:',
+      e?.message,
+    );
   }
 };

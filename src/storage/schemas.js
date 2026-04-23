@@ -48,7 +48,8 @@ Settings.schema = {
     currentDay: 'string?',
     notifications: 'bool',
     dismissedTips: 'string[]',
-    onboardingDate: 'string?',
+    streakCount: 'int?',
+    lastStreakDate: 'string?',
   },
 };
 
@@ -80,8 +81,8 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 34,
-  deleteRealmIfMigrationNeeded: true,
+  schemaVersion: 35,
+  migration: () => {},
 };
 
 const realm = new Realm(realmConfig);
