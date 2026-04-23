@@ -60,6 +60,16 @@ export const updateSettings = updates => {
   }
 };
 
+export const checkStreakBreak = today => {
+  const settings = getSettings();
+  if (!settings || !settings.lastStreakDate || settings.streakCount === 0)
+    return null;
+  if (settings.lastStreakDate === today) return null;
+  const yesterday = subtractDays(today, 1);
+  if (settings.lastStreakDate === yesterday) return null;
+  return updateSettings({streakCount: 0});
+};
+
 export const updateStreakIfNeeded = today => {
   const settings = getSettings();
   if (!settings || settings.lastStreakDate === today) return null;

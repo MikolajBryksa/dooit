@@ -13,7 +13,10 @@ import {
 } from '@/hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
-import {updateStreakIfNeeded} from '@/services/settings.service';
+import {
+  updateStreakIfNeeded,
+  checkStreakBreak,
+} from '@/services/settings.service';
 import {syncUserData} from '@/services/supabase.service';
 import {
   scheduleHabitNotifications,
@@ -85,9 +88,10 @@ const NowView = () => {
   }, [refreshHabits, dispatch]);
 
   useEffect(() => {
-    // On mount: auto-skip past habits and load habits immediately
     rebuildTodayHabits();
-  }, [rebuildTodayHabits]);
+    const updated = checkStreakBreak(todayKey);
+    if (updated) dispatch(setSettings(updated));
+  }, [rebuildTodayHabits, todayKey, dispatch]);
 
   useEffect(() => {
     // Show a short loading indicator when opening the screen
