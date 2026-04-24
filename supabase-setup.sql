@@ -33,10 +33,6 @@ CREATE TABLE IF NOT EXISTS public.users (
     streak INTEGER NOT NULL DEFAULT 0
 );
 
--- Migration: add streak to existing installs
--- Safe to run multiple times, ignored if column already exists
-ALTER TABLE public.users ADD COLUMN IF NOT EXISTS streak INTEGER NOT NULL DEFAULT 0;
-
 -- errors table - stores application errors for tracking
 CREATE TABLE IF NOT EXISTS public.errors (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
