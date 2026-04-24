@@ -103,7 +103,7 @@ function AppContent() {
   useEffect(() => {
     return setupNotificationSync(settings, loading, dispatch, setSettings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, settings?.notifications]);
+  }, [loading, settings]);
 
   if (loading) return <LoadingView />;
 

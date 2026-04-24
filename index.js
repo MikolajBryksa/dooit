@@ -11,10 +11,7 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
       const {notification, pressAction} = detail;
       const data = notification?.data;
 
-      if (
-        data &&
-        (pressAction.id === 'done' || pressAction.id === 'skip')
-      ) {
+      if (data && (pressAction.id === 'done' || pressAction.id === 'skip')) {
         const status = pressAction.id === 'done' ? 'done' : 'skipped';
         recordExecutionChoice(
           parseInt(data.habitId, 10),
@@ -34,7 +31,8 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
 // LogBox.ignoreLogs([
 //   'Tried to modify key `current` of an object which has been already passed to a worklet',
 // ]);
-LogBox.ignoreAllLogs(true);
-console.warn = () => {};
+
+// LogBox.ignoreAllLogs(true);
+// console.warn = () => {};
 
 AppRegistry.registerComponent('Dooit', () => App);
