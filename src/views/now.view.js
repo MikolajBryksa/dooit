@@ -21,10 +21,7 @@ import {
   checkStreakBreak,
 } from '@/services/settings.service';
 import {syncUserData} from '@/services/supabase.service';
-import {
-  scheduleHabitNotifications,
-  scheduleStreakReminder,
-} from '@/services/notifications.service';
+import {scheduleHabitNotifications} from '@/services/notifications.service';
 import {setHabits, setHabitsLoading, setSettings} from '@/redux/actions';
 import {Icon, Text} from 'react-native-paper';
 import NowCard from '@/cards/now.card';
@@ -160,10 +157,7 @@ const NowView = () => {
   }, [showSummary]);
 
   useEffect(() => {
-    (async () => {
-      await scheduleHabitNotifications(habits, t);
-      scheduleStreakReminder(lastStreakDate, t);
-    })();
+    scheduleHabitNotifications(habits, t, lastStreakDate);
   }, [habits, t, lastStreakDate]);
 
   return (

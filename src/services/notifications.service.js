@@ -1,4 +1,4 @@
-import notifee, {TriggerType} from '@notifee/react-native';
+import notifee, {TriggerType, AndroidImportance} from '@notifee/react-native';
 import {dateToWeekday, getLocalDateKey} from '@/utils';
 import {AppState} from 'react-native';
 import {updateSettingValue} from './settings.service';
@@ -73,64 +73,62 @@ export function setupNotificationSync(
   }
 }
 
-const STREAK_REMINDER_ID = 'streak-reminder';
+async function ensureChannel() {
+  await notifee.createChannel({
+    id: 'default',
+    name: 'Dooit Channel',
+    importance: AndroidImportance.HIGH,
+    sound: 'default',
+  });
+}
 
-export async function scheduleStreakReminder(lastStreakDate, t) {
+// Cancels all scheduled (trigger) notifications without dismissing already-displayed ones
+async function cancelScheduledNotifications() {
+  const ids = await notifee.getTriggerNotificationIds();
+  await Promise.all(ids.map(id => notifee.cancelNotification(id)));
+}
+
+const STREAK_REMINDER_PREFIX = 'streak-reminder-';
+
+// Mutex: prevents concurrent rescheduling; keeps only the latest pending call
+let _isScheduling = false;
+let _pendingSchedule = null;
+
+export async function scheduleHabitNotifications(habits, t, lastStreakDate) {
+  if (_isScheduling) {
+    _pendingSchedule = {habits, t, lastStreakDate};
+    return;
+  }
+
+  _isScheduling = true;
   try {
-    const today = getLocalDateKey();
-    await notifee.cancelNotification(STREAK_REMINDER_ID);
+    await _doScheduleHabitNotifications(habits, t, lastStreakDate);
 
-    if (lastStreakDate === today) return;
-
-    const now = new Date();
-    const triggerDate = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      18,
-      0,
-      0,
-      0,
-    );
-
-    if (triggerDate <= now) return;
-
-    await notifee.createChannel({id: 'default', name: 'Dooit Channel'});
-
-    await notifee.createTriggerNotification(
-      {
-        id: STREAK_REMINDER_ID,
-        title: t('streak.reminder-title'),
-        body: t('streak.reminder-body'),
-        android: {
-          channelId: 'default',
-          smallIcon: 'ic_notification',
-          pressAction: {id: 'default', launchActivity: 'default'},
-        },
-      },
-      {
-        type: TriggerType.TIMESTAMP,
-        timestamp: triggerDate.getTime(),
-      },
-    );
-  } catch (error) {
-    logError(error, 'scheduleStreakReminder');
+    while (_pendingSchedule) {
+      const next = _pendingSchedule;
+      _pendingSchedule = null;
+      await _doScheduleHabitNotifications(
+        next.habits,
+        next.t,
+        next.lastStreakDate,
+      );
+    }
+  } finally {
+    _isScheduling = false;
   }
 }
 
-export async function scheduleHabitNotifications(habits, t) {
-  // Schedules notifications for habits over the next 3 days
-  // Skips notifications for already completed executions today
+async function _doScheduleHabitNotifications(habits, t, lastStreakDate) {
+  // Schedules habit notifications and streak reminders over the next 3 days.
+  // Streak reminder is skipped for days where the streak is already maintained.
   try {
+    await cancelScheduledNotifications();
+
     if (!habits || habits.length === 0) {
-      await notifee.cancelAllNotifications();
       return;
     }
 
-    await notifee.createChannel({
-      id: 'default',
-      name: 'Dooit Channel',
-    });
+    await ensureChannel();
 
     await notifee.setNotificationCategories([
       {
@@ -149,11 +147,8 @@ export async function scheduleHabitNotifications(habits, t) {
       },
     ]);
 
-    await notifee.cancelAllNotifications();
-
     const now = new Date();
     const todayDateKey = getLocalDateKey();
-    let scheduledCount = 0;
 
     for (let daysAhead = 0; daysAhead < 3; daysAhead++) {
       const targetDate = new Date(now);
@@ -161,6 +156,42 @@ export async function scheduleHabitNotifications(habits, t) {
 
       const targetDateKey = getLocalDateKey(targetDate);
       const weekdayKey = dateToWeekday(targetDateKey);
+
+      // Streak reminder at 18:00 for days where streak isn't maintained yet
+      const streakAlreadyMaintained = lastStreakDate === targetDateKey;
+      if (!streakAlreadyMaintained) {
+        const streakTriggerDate = new Date(
+          targetDate.getFullYear(),
+          targetDate.getMonth(),
+          targetDate.getDate(),
+          18,
+          0,
+          0,
+          0,
+        );
+
+        if (streakTriggerDate > now) {
+          await notifee.createTriggerNotification(
+            {
+              id: `${STREAK_REMINDER_PREFIX}${targetDateKey}`,
+              title: t('streak.reminder-title'),
+              body: t('streak.reminder-body'),
+              android: {
+                channelId: 'default',
+                smallIcon: 'ic_notification',
+                pressAction: {id: 'default', launchActivity: 'default'},
+              },
+              ios: {
+                sound: 'default',
+              },
+            },
+            {
+              type: TriggerType.TIMESTAMP,
+              timestamp: streakTriggerDate.getTime(),
+            },
+          );
+        }
+      }
 
       const dayHabits = habits.filter(habit =>
         habit.repeatDays.includes(weekdayKey),
@@ -228,6 +259,7 @@ export async function scheduleHabitNotifications(habits, t) {
                 },
                 ios: {
                   categoryId: 'habit-actions',
+                  sound: 'default',
                 },
               },
               {
@@ -235,12 +267,11 @@ export async function scheduleHabitNotifications(habits, t) {
                 timestamp: triggerDate.getTime(),
               },
             );
-            scheduledCount++;
           }
         }
       }
     }
   } catch (error) {
-    logError(error, 'scheduleHabitNotifications');
+    logError(error, '_doScheduleHabitNotifications');
   }
 }

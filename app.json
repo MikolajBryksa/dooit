@@ -1,4 +1,7 @@
 {
   "name": "Dooit",
-  "displayName": "Dooit"
+  "displayName": "Dooit",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8296952085915343~7738523868"
+  }
 }
