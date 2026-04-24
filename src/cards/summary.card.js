@@ -86,6 +86,9 @@ const pickSummaryInputs = habitsWithStats => {
   lastBestHabitId = bestHabit.id;
 
   if (withTargets.length <= 1) {
+    if (bestHabit.todayPercentage === 0) {
+      return {bestHabit: null, worstHabit: bestHabit};
+    }
     return {bestHabit, worstHabit: null};
   }
 

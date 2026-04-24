@@ -10,12 +10,13 @@ export const generateTemplateSummary = (t, bestHabit, worstHabit) => {
 
   const intro = pickRandomMessage(t, 'intro').replace('{{userName}}', userName);
 
-  const middle = pickRandomMessage(t, 'praise').replace(
-    '{{bestHabit}}',
-    bestHabitName,
-  );
+  const parts = [intro];
 
-  const parts = [intro, middle];
+  if (bestHabit) {
+    parts.push(
+      pickRandomMessage(t, 'praise').replace('{{bestHabit}}', bestHabitName),
+    );
+  }
 
   if (worstHabit) {
     parts.push(
