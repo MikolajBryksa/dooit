@@ -170,7 +170,6 @@ const NowView = () => {
             </Text>
           </View>
         )}
-        {/* <Topbar.Action icon="refresh" onPress={rebuildTodayHabits} /> */}
       </Topbar>
 
       <ScrollView style={styles.container}>

@@ -35,8 +35,12 @@ const PieCircle = ({
     tickArcLen = 1;
   }
 
-  const _iconColor = isGoalReached ? theme?.colors?.success : theme?.colors?.primary;
-  const _progressColor = isGoalReached ? theme?.colors?.success : theme?.colors?.primary;
+  const _iconColor = isGoalReached
+    ? theme?.colors?.success
+    : theme?.colors?.primary;
+  const _progressColor = isGoalReached
+    ? theme?.colors?.success
+    : theme?.colors?.primary;
   const _trackColor = theme?.colors?.surfaceVariant;
   const _tickColor = theme?.colors?.surface;
 
@@ -202,11 +206,13 @@ const PieCircle = ({
         {showCounter && target > 0 ? (
           <>
             <Text
+              variant="headlineSmall"
               style={[
                 styles.circle__flashText,
                 {
                   color: _progressColor,
                   fontSize: Math.min(32, size * 0.24),
+                  lineHeight: Math.min(32, size * 0.24) * 1.25,
                 },
               ]}>
               {displayedCount}

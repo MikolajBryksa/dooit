@@ -291,8 +291,10 @@ export const useStyles = () => {
       justifyContent: 'center',
     },
     circle__flashText: {
-      fontWeight: '800',
+      fontFamily: 'Nunito-Bold',
+      fontWeight: 'normal',
       letterSpacing: 0.5,
+      marginTop: 4,
     },
     tip: {
       backgroundColor: theme.colors.surface,
