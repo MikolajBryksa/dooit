@@ -150,6 +150,30 @@ export function useActiveHabit(todayHabits, todayKey) {
         setActiveKey(null);
         setAllCompleted(true);
       }
+    } else if (activeKeyCandidate && activeKeyCandidate !== activeKey) {
+      // Current habit still exists but a different candidate appeared.
+      // Only auto-switch when the candidate is at an EARLIER hour — this covers
+      // adding a new earlier habit or unchecking a past execution.
+      // We deliberately don't switch when the candidate is later (e.g. user just
+      // marked the current habit done and is seeing the celebration screen).
+      const toMinutes = h => {
+        if (!h) return Infinity;
+        const [hrs, mins] = h.split(':').map(Number);
+        return hrs * 60 + (mins || 0);
+      };
+      const currentHabit = todayHabits.find(h => h.key === activeKey);
+      const candidateHabit = todayHabits.find(
+        h => h.key === activeKeyCandidate,
+      );
+      if (
+        currentHabit &&
+        candidateHabit &&
+        toMinutes(candidateHabit.selectedHour) <
+          toMinutes(currentHabit.selectedHour)
+      ) {
+        setActiveKey(activeKeyCandidate);
+      }
+      setAllCompleted(false);
     } else {
       setAllCompleted(false);
     }
