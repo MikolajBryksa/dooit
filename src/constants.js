@@ -5,9 +5,12 @@ export const MAX_HABITS = 50;
 export const habitIcons = [
   'water',
   'run',
+  'scale-bathroom',
   'food-apple',
+  'pill',
   'book-open',
   'school',
   'meditation',
+  'phone-in-talk',
   'power-sleep',
 ];

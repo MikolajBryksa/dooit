@@ -48,6 +48,9 @@ const OnboardingView = ({setShowOnboarding}) => {
     5: false,
     6: false,
     7: false,
+    8: false,
+    9: false,
+    10: false,
   });
 
   useDoubleBackExit(step === 1);
@@ -80,9 +83,12 @@ const OnboardingView = ({setShowOnboarding}) => {
       5: false,
       6: false,
       7: false,
+      8: false,
+      9: false,
+      10: false,
     };
     existingHabits.forEach(habit => {
-      if (habit.id >= 1 && habit.id <= 7) {
+      if (habit.id >= 1 && habit.id <= 10) {
         restoredSelection[habit.id] = true;
       }
     });
@@ -105,7 +111,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     setSelectedCustomHabits(prev => {
       const next = {...prev};
       updatedHabits
-        .filter(h => h.id > 7)
+        .filter(h => h.id > 10)
         .forEach(h => {
           if (next[h.id] === undefined) next[h.id] = true;
         });
@@ -132,7 +138,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   };
 
   function handleStep2() {
-    [1, 2, 3, 4, 5, 6, 7].forEach(habitId => {
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach(habitId => {
       const isSelected = selectedHabits[habitId];
       const existingHabit = getHabitById(habitId);
 
@@ -157,7 +163,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     setShowOnboarding(false);
   }
 
-  const customHabits = habits.filter(h => h.id > 7);
+  const customHabits = habits.filter(h => h.id > 10);
   const hasSelectedHabits = Object.values(selectedHabits).some(Boolean);
   const canProceedStep2 =
     hasSelectedHabits || customHabits.some(h => selectedCustomHabits[h.id]);
@@ -230,7 +236,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <TipComponent tipId="onboarding_habit_mindset">
             {t('tip.onboarding-habit-mindset')}
           </TipComponent>
-          {[1, 2, 3, 4, 5, 6, 7].map(habitId => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(habitId => (
             <View
               key={habitId}
               style={{opacity: selectedHabits[habitId] ? 1 : 0.6}}>
@@ -330,7 +336,7 @@ const OnboardingView = ({setShowOnboarding}) => {
             {t('tip.onboarding-same-time')}
           </TipComponent>
           {habits
-            .filter(h => h.id <= 7 || selectedCustomHabits[h.id])
+            .filter(h => h.id <= 10 || selectedCustomHabits[h.id])
             .map(habit => (
               <HabitComponent
                 key={habit.id}
@@ -363,9 +369,12 @@ const OnboardingView = ({setShowOnboarding}) => {
                   5: false,
                   6: false,
                   7: false,
+                  8: false,
+                  9: false,
+                  10: false,
                 };
                 currentHabits.forEach(habit => {
-                  if (habit.id >= 1 && habit.id <= 7) {
+                  if (habit.id >= 1 && habit.id <= 10) {
                     updatedSelectedHabits[habit.id] = true;
                   }
                 });

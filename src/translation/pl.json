@@ -199,18 +199,27 @@
       "habitName": "Wyjdź na siłownię"
     },
     "3": {
-      "habitName": "Umyj owoc"
+      "habitName": "Wejdź na wagę"
     },
     "4": {
-      "habitName": "Otwórz książkę"
+      "habitName": "Umyj owoc"
     },
     "5": {
-      "habitName": "Zacznij lekcję"
+      "habitName": "Weź tabletki"
     },
     "6": {
-      "habitName": "Weź głęboki oddech"
+      "habitName": "Otwórz książkę"
     },
     "7": {
+      "habitName": "Zacznij lekcję"
+    },
+    "8": {
+      "habitName": "Weź głęboki oddech"
+    },
+    "9": {
+      "habitName": "Zadzwoń do bliskich"
+    },
+    "10": {
       "habitName": "Połóż się wcześnie"
     }
   },

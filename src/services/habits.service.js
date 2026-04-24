@@ -30,8 +30,8 @@ export const addHabit = (
 
     if (id === null) {
       const lastItem = realm.objects('Habit').sorted('id', true)[0];
-      const nextId = lastItem ? lastItem.id + 1 : 8;
-      id = Math.max(8, nextId);
+      const nextId = lastItem ? lastItem.id + 1 : 11;
+      id = Math.max(11, nextId);
     }
 
     const resolvedGoal =
@@ -182,32 +182,50 @@ const DEFAULT_HABITS_DATA = [
   {
     id: 3,
     repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
-    repeatHours: ['07:30', '13:00', '18:30'],
+    repeatHours: ['06:45'],
     icon: habitIcons[2],
   },
   {
     id: 4,
-    repeatDays: ['mon', 'tue', 'wed', 'thu'],
-    repeatHours: ['22:00'],
+    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri'],
+    repeatHours: ['07:30', '13:00', '18:30'],
     icon: habitIcons[3],
   },
   {
     id: 5,
-    repeatDays: ['mon', 'wed'],
-    repeatHours: ['09:00'],
+    repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+    repeatHours: ['07:45'],
     icon: habitIcons[4],
   },
   {
     id: 6,
     repeatDays: ['mon', 'tue', 'wed', 'thu'],
-    repeatHours: ['21:30'],
+    repeatHours: ['22:00'],
     icon: habitIcons[5],
   },
   {
     id: 7,
+    repeatDays: ['mon', 'wed'],
+    repeatHours: ['09:00'],
+    icon: habitIcons[6],
+  },
+  {
+    id: 8,
+    repeatDays: ['mon', 'tue', 'wed', 'thu'],
+    repeatHours: ['21:30'],
+    icon: habitIcons[7],
+  },
+  {
+    id: 9,
+    repeatDays: ['sun'],
+    repeatHours: ['10:00'],
+    icon: habitIcons[8],
+  },
+  {
+    id: 10,
     repeatDays: ['mon', 'tue', 'wed', 'thu'],
     repeatHours: ['22:30'],
-    icon: habitIcons[6],
+    icon: habitIcons[9],
   },
 ];
 
@@ -229,7 +247,7 @@ export const createDefaultHabit = habitId => {
 
 export const translateDefaultHabits = (oldLanguage, newLanguage) => {
   try {
-    const defaultHabitIds = [1, 2, 3, 4, 5, 6, 7];
+    const defaultHabitIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const oldTranslations = {};
     const newTranslations = {};

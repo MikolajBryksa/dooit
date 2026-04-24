@@ -199,18 +199,27 @@
       "habitName": "Go to the gym"
     },
     "3": {
-      "habitName": "Wash a fruit"
+      "habitName": "Step on the scale"
     },
     "4": {
-      "habitName": "Open a book"
+      "habitName": "Wash a fruit"
     },
     "5": {
-      "habitName": "Start a lesson"
+      "habitName": "Take your pills"
     },
     "6": {
-      "habitName": "Take a deep breath"
+      "habitName": "Open a book"
     },
     "7": {
+      "habitName": "Start a lesson"
+    },
+    "8": {
+      "habitName": "Take a deep breath"
+    },
+    "9": {
+      "habitName": "Call your loved ones"
+    },
+    "10": {
       "habitName": "Go to bed early"
     }
   },
