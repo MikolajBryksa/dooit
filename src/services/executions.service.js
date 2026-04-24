@@ -261,6 +261,35 @@ export const backfillMissedExecutions = (habits, maxDaysBack) => {
   }
 };
 
+export const backfillTodaySkippedExecutions = habits => {
+  if (!habits || habits.length === 0) return;
+
+  try {
+    const today = getLocalDateKey();
+    const weekday = dateToWeekday(today);
+
+    realm.write(() => {
+      habits.forEach(habit => {
+        if (!habit.repeatDays.includes(weekday)) return;
+
+        habit.repeatHours.forEach((hour, slotIndex) => {
+          const executionExists = hasExecutionOrDeleted(
+            habit.id,
+            today,
+            slotIndex,
+          );
+
+          if (!executionExists) {
+            addExecutionInWrite(habit.id, today, slotIndex, hour, 'skipped');
+          }
+        });
+      });
+    });
+  } catch (e) {
+    logError(e, 'executions.backfillTodaySkippedExecutions');
+  }
+};
+
 export const getExecutionStatsForDate = (habitId, date) => {
   try {
     const executions = realm

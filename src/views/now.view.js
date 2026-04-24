@@ -1,4 +1,4 @@
-import React, {useMemo, useEffect, useState, useCallback} from 'react';
+import React, {useMemo, useEffect, useRef, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
@@ -13,6 +13,7 @@ import {
 } from '@/hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {getHabits, getTodayHabits} from '@/services/habits.service';
+import {backfillTodaySkippedExecutions} from '@/services/executions.service';
 import {
   updateStreakIfNeeded,
   checkStreakBreak,
@@ -129,6 +130,13 @@ const NowView = () => {
       }
     })();
   }, [todayKey, rebuildTodayHabits]);
+
+  const endDayBackfillDoneRef = useRef(null);
+  useEffect(() => {
+    if (!isEndDay || endDayBackfillDoneRef.current === todayKey) return;
+    endDayBackfillDoneRef.current = todayKey;
+    backfillTodaySkippedExecutions(habits);
+  }, [isEndDay, todayKey, habits]);
 
   const todayHabits = useMemo(
     () => getTodayHabits(habits, weekdayKey),
