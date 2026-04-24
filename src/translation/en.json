@@ -24,17 +24,19 @@
     "support": "Coffee",
     "filter": "Filter habits",
     "history": "History",
-    "terms": "Terms of Service"
+    "terms": "Privacy Policy"
   },
   "terms": {
     "s1-title": "Data Collection",
     "s1-body": "Dooit collects data related to your habits. The collected data includes habit names, frequency of completion, and progress statistics. This data is used solely to analyze which habits users build most often and in what quantity. This analysis helps improve the app in line with users’ real needs.",
     "s2-title": "Your Privacy",
-    "s2-body": "All data is collected anonymously. Your username is not transmitted or stored outside your device. Habit data is labeled with a randomly generated identifier. Your data is not sold or shared with third parties.",
+    "s2-body": "Your username is not transmitted or stored outside your device. Habit data is labeled with a randomly generated identifier and collected anonymously. Ad-related data is processed by Google in accordance with Google's Privacy Policy.",
     "s3-title": "Data Deletion",
-    "s3-body": "You can permanently delete all your data at any time in the Settings tab. The data will be removed both from your device and from the Dooit database. Data deletion is irreversible.",
+    "s3-body": "You can permanently delete all your data at any time in the Settings tab. The data will be removed both from your device and from the Dooit database. Data deletion is irreversible. Note: deleting your Dooit data does not affect data previously collected by Google AdMob.",
     "s4-title": "License",
-    "s4-body": "Dooit is free to use. The only official version is available on Google Play. The source code is publicly available under the CC BY-NC 4.0 license — you are free to view and use it for non-commercial purposes, but commercial use is strictly prohibited."
+    "s4-body": "Dooit is free to use. The only official version is available on Google Play. The source code is publicly available under the CC BY-NC 4.0 license — you are free to view and use it for non-commercial purposes, but commercial use is strictly prohibited.",
+    "s5-title": "Advertising",
+    "s5-body": "Dooit displays ads provided by Google AdMob. To serve ads, Google AdMob may collect and process certain data from your device, including your advertising ID, IP address, and device information. If you consent to personalized ads, this data may also be used to show ads tailored to your interests."
   },
   "settings": {
     "version": "Version",
@@ -58,6 +60,8 @@
     "tips-restored": "Restored",
     "data": "Account data",
     "delete": "Delete",
+    "ads": "Advertisements",
+    "manage-ads": "Manage",
     "test-connection": "Test connection",
     "test": "Test",
     "connection-ok": "Connected",
@@ -76,7 +80,7 @@
     "change-goal": "Do you want to change the goal?\nBy default, it is set as the number of repetitions to be done within 4 weeks.",
     "goal-reached": "You've reached your goal! Want to push further and increase the limit to build an even stronger habit?",
     "contact": "Fill out the form to contact the app's author.",
-    "support": "Hi, {{userName}}!\n\nI’m building Dooit on my own, with strong belief that it can truly improve everyday life. Every line of code was written to help you build habits that make a real difference.\n\nIf you feel that Dooit has supported you in some way, I’d appreciate it a lot if you contributed to its development - even with a virtual coffee. It’s a sign for me that what I’m doing matters.\n\n~ Mikołaj Bryksa"
+    "support": "Hi, {{userName}}!\n\nI build Dooit on my own. If the app is helping you build habits, you can support its further development.\n\nAll it takes is watching a short ad or buying me a virtual coffee.\n\nI’d really appreciate it.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Delete",
@@ -102,7 +106,9 @@
     "offline": "Offline",
     "finish": "Finish",
     "deleting": "Deleting",
-    "understand": "Got it"
+    "understand": "Got it",
+    "watch": "Watch",
+    "thanks": "Thank you!"
   },
   "contact": {
     "email": "Your e-mail",
@@ -149,7 +155,7 @@
     "now-first-habit": "Focus only on what you see below, {{userName}}, then mark if you completed it.",
     "summary-daily-recap": "At the end of the day, Dooit summarizes your repetitions and gives a short analysis.",
     "habits-edit-and-goal": "You can edit any habit anytime. The default goal is based on 28 days of repetitions.",
-    "settings-overview": "Here you can update your name, change the language, switch the mode, and manage notifications."
+    "settings-overview": "Here you can update your name, change the language, switch the mode, and manage notifications and ads."
   },
   "onboarding": {
     "step1": {
@@ -157,7 +163,7 @@
       "subtitle": "your partner in building habits",
       "name": "Enter your name",
       "terms-prefix": "I accept the",
-      "terms-link": "Terms of Service"
+      "terms-link": "Privacy Policy"
     },
     "features": [
       {

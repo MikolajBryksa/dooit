@@ -38,6 +38,15 @@ const TermsDialog = ({visible, onDismiss}) => {
 
           <View style={styles.terms__section}>
             <Text variant="bodyMedium" style={styles.terms__title}>
+              {t('terms.s5-title')}
+            </Text>
+            <Text variant="bodySmall" style={styles.terms__body}>
+              {t('terms.s5-body')}
+            </Text>
+          </View>
+
+          <View style={styles.terms__section}>
+            <Text variant="bodyMedium" style={styles.terms__title}>
               {t('terms.s3-title')}
             </Text>
             <Text variant="bodySmall" style={styles.terms__body}>

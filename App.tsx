@@ -23,6 +23,7 @@ import {getTheme} from './src/theme/theme';
 import OnboardingView from './src/views/onboarding.view';
 import {setupNotificationSync} from './src/services/notifications.service';
 import {setupErrorTracking, logError} from '@/services/errors.service';
+import mobileAds from 'react-native-google-mobile-ads';
 import {getHabits} from '@/services/habits.service';
 import {backfillMissedExecutions} from '@/services/executions.service';
 
@@ -144,6 +145,10 @@ function AppContent() {
 
           if (localSettings.firstLaunch) {
             setShowOnboarding(true);
+          } else {
+            mobileAds()
+              .initialize()
+              .catch(e => logError(e, 'mobileAds.initialize'));
           }
 
           const newLocale = localSettings.language as string;

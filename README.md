@@ -2,7 +2,7 @@
 
 A **management tool** designed to help you create and maintain a system of good habits. With Dooit, you can easily track your daily progress of any activity. With just a few clicks, you can define your new goal.  
 https://dooit-one-focus.lovable.app/  
-https://play.google.com/store/apps/details?id=com.dooit.bryksa  
+https://play.google.com/store/apps/details?id=com.dooit.bryksa
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <img src="https://github.com/user-attachments/assets/eaf3437e-c7fb-4abb-822b-9b04fd277a25" width="13%" alt="01 Create a habit system" />
@@ -24,7 +24,7 @@ https://play.google.com/store/apps/details?id=com.dooit.bryksa
 ## Features
 
 - **No account**. Start instantly without registration.
-- **Free**. No subscriptions, no ads.
+- **Free**. No subscriptions, minimal ads.
 - **Offline**. Works without internet.
 - **Custom schedules**. Your habits, your rhythm.
 - **Progress tracking**. See how your habits grow.

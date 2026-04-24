@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, FlatList, useWindowDimensions} from 'react-native';
+import {View, Animated, PanResponder, useWindowDimensions} from 'react-native';
 import {Text, Icon, useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -10,129 +10,197 @@ const FEATURE_ICONS = [
   'tune-variant',
   'rocket-launch',
 ];
-const AUTOPLAY_INTERVAL = 3500;
-const REPEAT_COUNT = 50;
+const AUTOPLAY_INTERVAL_MS = 3500;
+const SLIDE_ANIMATION_DURATION = 300;
+const SWIPE_THRESHOLD_RATIO = 1 / 3;
 
-const Benefits = () => {
+const Benefits = ({paused = false}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const theme = useTheme();
-  const {width} = useWindowDimensions();
-  const flatListRef = useRef(null);
-  const timerRef = useRef(null);
-  const isPaused = useRef(false);
-  const isDragging = useRef(false);
+  const {width: screenWidth} = useWindowDimensions();
 
   const features = t('onboarding.features', {returnObjects: true});
   const cardCount = features.length;
 
-  // Repeat features many times so forward scrolling never hits the end.
-  // Starting from the middle means ~100 swipes in either direction before edge.
-  const extendedData = useRef(
-    Array.from({length: REPEAT_COUNT}, () => features).flat(),
-  ).current;
+  const extendedCards = useRef([
+    features[cardCount - 1],
+    ...features,
+    features[0],
+  ]).current;
 
-  const startIndex = Math.floor(REPEAT_COUNT / 2) * cardCount;
-  const [scrollIndex, setScrollIndex] = useState(startIndex);
-  const activeIndex = scrollIndex % cardCount;
+  const [dotIndex, setDotIndex] = useState(0);
+  const translateX = useRef(new Animated.Value(-screenWidth)).current;
 
-  const resetTimer = () => {
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      if (!isPaused.current) {
-        setScrollIndex(prev => {
-          const next = prev + 1;
-          flatListRef.current?.scrollToIndex({index: next, animated: true});
-          return next;
-        });
-      }
-    }, AUTOPLAY_INTERVAL);
-  };
+  const activeIndexRef = useRef(0);
+  const isAnimatingRef = useRef(false);
+  const autoplayTimerRef = useRef(null);
+  const screenWidthRef = useRef(screenWidth);
+  const cardCountRef = useRef(cardCount);
 
   useEffect(() => {
-    resetTimer();
-    return () => clearInterval(timerRef.current);
-  }, []);
+    screenWidthRef.current = screenWidth;
+  }, [screenWidth]);
 
-  const handleTouchStart = () => {
-    isPaused.current = true;
+  const positionForIndex = index => -(index + 1) * screenWidthRef.current;
+
+  const slideTo = useRef(null);
+  slideTo.current = (targetX, onComplete) => {
+    isAnimatingRef.current = true;
+    Animated.timing(translateX, {
+      toValue: targetX,
+      duration: SLIDE_ANIMATION_DURATION,
+      useNativeDriver: true,
+    }).start(({finished}) => {
+      if (finished) onComplete?.();
+      isAnimatingRef.current = false;
+    });
   };
 
-  const handleTouchEnd = () => {
-    // Only resume if user isn't mid-swipe — momentum scroll handles that case
-    if (!isDragging.current) {
-      isPaused.current = false;
+  const wrapToFirstCard = useRef(null);
+  wrapToFirstCard.current = () => {
+    const width = screenWidthRef.current;
+    const count = cardCountRef.current;
+    slideTo.current(-(count + 1) * width, () => {
+      translateX.setValue(-width);
+      activeIndexRef.current = 0;
+      setDotIndex(0);
+    });
+  };
+
+  const wrapToLastCard = useRef(null);
+  wrapToLastCard.current = () => {
+    const width = screenWidthRef.current;
+    const count = cardCountRef.current;
+    slideTo.current(0, () => {
+      translateX.setValue(-count * width);
+      activeIndexRef.current = count - 1;
+      setDotIndex(count - 1);
+    });
+  };
+
+  const advanceToNextCard = useRef(null);
+  advanceToNextCard.current = () => {
+    const nextIndex = (activeIndexRef.current + 1) % cardCountRef.current;
+    if (nextIndex === 0) {
+      wrapToFirstCard.current();
+    } else {
+      slideTo.current(positionForIndex(nextIndex), () => {
+        activeIndexRef.current = nextIndex;
+        setDotIndex(nextIndex);
+      });
     }
   };
 
-  const handleScrollBeginDrag = () => {
-    isDragging.current = true;
-    isPaused.current = true;
+  const goToPreviousCard = useRef(null);
+  goToPreviousCard.current = () => {
+    const currentIndex = activeIndexRef.current;
+    if (currentIndex === 0) {
+      wrapToLastCard.current();
+    } else {
+      const previousIndex = currentIndex - 1;
+      slideTo.current(positionForIndex(previousIndex), () => {
+        activeIndexRef.current = previousIndex;
+        setDotIndex(previousIndex);
+      });
+    }
   };
 
-  const handleMomentumScrollEnd = event => {
-    const index = Math.round(event.nativeEvent.contentOffset.x / width);
-    setScrollIndex(index);
-    isDragging.current = false;
-    isPaused.current = false;
-    resetTimer();
+  const startAutoplay = useRef(null);
+  startAutoplay.current = () => {
+    clearInterval(autoplayTimerRef.current);
+    autoplayTimerRef.current = setInterval(() => {
+      if (!isAnimatingRef.current) {
+        advanceToNextCard.current();
+      }
+    }, AUTOPLAY_INTERVAL_MS);
   };
 
-  const handleScrollEndDrag = event => {
-    const index = Math.round(event.nativeEvent.contentOffset.x / width);
-    setScrollIndex(index);
-    isDragging.current = false;
-    isPaused.current = false;
-    resetTimer();
-  };
+  useEffect(() => {
+    startAutoplay.current();
+    return () => clearInterval(autoplayTimerRef.current);
+  }, []);
 
-  const renderItem = ({item, index}) => (
-    <View style={[styles.center, {width}]}>
-      <View style={styles.carousel__card__inner}>
-        <Icon
-          source={FEATURE_ICONS[index % cardCount]}
-          size={32}
-          color={theme.colors.primary}
-        />
-        <Text variant="titleMedium" style={styles.carousel__card__title}>
-          {item.title}
-        </Text>
-        <Text variant="bodySmall" style={styles.carousel__card__body}>
-          {item.body}
-        </Text>
-      </View>
-    </View>
-  );
+  useEffect(() => {
+    if (paused) {
+      clearInterval(autoplayTimerRef.current);
+    } else {
+      startAutoplay.current();
+    }
+  }, [paused]);
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, {dx, dy}) =>
+        !isAnimatingRef.current &&
+        Math.abs(dx) > Math.abs(dy) &&
+        Math.abs(dx) > 5,
+      onPanResponderGrant: () => {
+        clearInterval(autoplayTimerRef.current);
+      },
+      onPanResponderMove: (_, {dx}) => {
+        const dragBasePosition =
+          -(activeIndexRef.current + 1) * screenWidthRef.current;
+        translateX.setValue(dragBasePosition + dx);
+      },
+      onPanResponderRelease: (_, {dx}) => {
+        const swipeThreshold = screenWidthRef.current * SWIPE_THRESHOLD_RATIO;
+
+        if (dx < -swipeThreshold) {
+          advanceToNextCard.current();
+        } else if (dx > swipeThreshold) {
+          goToPreviousCard.current();
+        } else {
+          Animated.spring(translateX, {
+            toValue: -(activeIndexRef.current + 1) * screenWidthRef.current,
+            useNativeDriver: true,
+          }).start();
+        }
+
+        startAutoplay.current();
+      },
+    }),
+  ).current;
+
+  const iconForExtendedIndex = extendedIndex =>
+    FEATURE_ICONS[(extendedIndex - 1 + cardCount) % cardCount];
 
   return (
     <View style={styles.carousel}>
-      <FlatList
-        ref={flatListRef}
-        data={extendedData}
-        horizontal
-        pagingEnabled
-        initialScrollIndex={startIndex}
-        showsHorizontalScrollIndicator={false}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
-        onScrollBeginDrag={handleScrollBeginDrag}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
-        onScrollEndDrag={handleScrollEndDrag}
-        renderItem={renderItem}
-        keyExtractor={(_, i) => String(i)}
-        getItemLayout={(_, i) => ({length: width, offset: width * i, index: i})}
-        scrollEventThrottle={16}
-        bounces={false}
-        style={styles.carousel__list}
-      />
+      <View style={[styles.carousel__list, {overflow: 'hidden'}]}>
+        <Animated.View
+          {...panResponder.panHandlers}
+          style={{flexDirection: 'row', transform: [{translateX}]}}>
+          {extendedCards.map((card, extendedIndex) => (
+            <View
+              key={extendedIndex}
+              style={[styles.center, {width: screenWidth}]}>
+              <View style={styles.carousel__card__inner}>
+                <Icon
+                  source={iconForExtendedIndex(extendedIndex)}
+                  size={32}
+                  color={theme.colors.primary}
+                />
+                <Text
+                  variant="titleMedium"
+                  style={styles.carousel__card__title}>
+                  {card.title}
+                </Text>
+                <Text variant="bodySmall" style={styles.carousel__card__body}>
+                  {card.body}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </Animated.View>
+      </View>
       <View style={styles.carousel__dots}>
-        {features.map((_, i) => (
+        {features.map((_, index) => (
           <View
-            key={i}
+            key={index}
             style={[
               styles.carousel__dot,
-              i === activeIndex
+              index === dotIndex
                 ? styles.carousel__dot__active
                 : styles.carousel__dot__inactive,
             ]}

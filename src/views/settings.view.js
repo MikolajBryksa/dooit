@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {ScrollView, View, Linking} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, Linking, ActivityIndicator} from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
@@ -30,6 +31,7 @@ import SettingComponent from '@/components/setting.component';
 import {testErrorLogging, logError} from '@/services/errors.service';
 import Topbar from '@/components/topbar.component';
 import TipComponent from '@/components/tip.component';
+import {AdsConsent} from 'react-native-google-mobile-ads';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -43,6 +45,15 @@ const SettingsView = () => {
   const [visibleNameModal, setVisibleNameModal] = useState(false);
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
   const [visibleResetDataDialog, setVisibleResetDataDialog] = useState(false);
+  const [adsLoading, setAdsLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(!!state.isConnected);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [language, setLanguage] = useState(settings.language);
   const [clockFormat, setClockFormat] = useState(settings.clockFormat);
@@ -173,6 +184,20 @@ const SettingsView = () => {
     await notifee.openNotificationSettings();
   }
 
+  async function handleAdsConsent() {
+    setAdsLoading(true);
+    try {
+      const consentInfo = await AdsConsent.requestInfoUpdate();
+      if (consentInfo.isConsentFormAvailable) {
+        await AdsConsent.showForm();
+      }
+    } catch (e) {
+      logError(e, 'settings.handleAdsConsent');
+    } finally {
+      setAdsLoading(false);
+    }
+  }
+
   function handleClockFormat() {
     const newClockFormat = clockFormat === '24 h' ? '12 h' : '24 h';
     setClockFormat(newClockFormat);
@@ -272,6 +297,22 @@ const SettingsView = () => {
         />
 
         <SettingComponent
+          label={t('settings.ads')}
+          value={t('settings.manage-ads')}
+          icon={
+            adsLoading
+              ? ({size, color}) => (
+                  <ActivityIndicator size={size} color={color} />
+                )
+              : !isConnected
+              ? 'wifi-off'
+              : 'tune-variant'
+          }
+          disabled={adsLoading || !isConnected}
+          onPress={handleAdsConsent}
+        />
+
+        <SettingComponent
           label={t('settings.repetition-counters')}
           value={t(canReset ? 'settings.reset-counters' : 'settings.no-data')}
           icon="calendar-refresh-outline"
@@ -282,7 +323,8 @@ const SettingsView = () => {
         <SettingComponent
           label={t('settings.data')}
           value={t('settings.delete')}
-          icon="delete-outline"
+          icon={isConnected ? 'delete-outline' : 'wifi-off'}
+          disabled={!isConnected}
           onPress={handleDeleteDataDialog}
         />
 

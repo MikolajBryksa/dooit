@@ -18,6 +18,7 @@ import {
   getHabitById,
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
+import mobileAds, {AdsConsent} from 'react-native-google-mobile-ads';
 import {habitIcons} from '@/constants';
 import AddModal from '@/modals/add.modal';
 import SettingComponent from '@/components/setting.component';
@@ -38,6 +39,7 @@ const OnboardingView = ({setShowOnboarding}) => {
   const [selectedCustomHabits, setSelectedCustomHabits] = useState({});
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
+  const [step1Loading, setStep1Loading] = useState(false);
   const theme = useTheme();
 
   const [selectedHabits, setSelectedHabits] = useState({
@@ -95,13 +97,23 @@ const OnboardingView = ({setShowOnboarding}) => {
     setSelectedHabits(restoredSelection);
   }, [settings]);
 
-  function handleStep1() {
+  async function handleStep1() {
     let updatedSettings = {...settings};
     if (name.trim()) {
       updateSettingValue('userName', name.trim());
       updatedSettings = {...updatedSettings, userName: name.trim()};
     }
     dispatch(setSettings(updatedSettings));
+
+    setStep1Loading(true);
+    try {
+      const consentInfo = await AdsConsent.requestInfoUpdate();
+      if (consentInfo.isConsentFormAvailable) {
+        await AdsConsent.showForm();
+      }
+    } catch (_e) {}
+    setStep1Loading(false);
+
     setStep(2);
   }
 
@@ -154,12 +166,15 @@ const OnboardingView = ({setShowOnboarding}) => {
     setStep(3);
   }
 
-  function handleStep3() {
+  async function handleStep3() {
     Object.entries(selectedCustomHabits).forEach(([id, selected]) => {
       if (!selected) deleteHabit(Number(id));
     });
     dispatch(setHabits(getHabits() || []));
-    requestNotificationPermission(settings, dispatch, setSettings);
+    await requestNotificationPermission(settings, dispatch, setSettings);
+    mobileAds()
+      .initialize()
+      .catch(() => {});
     setShowOnboarding(false);
   }
 
@@ -176,7 +191,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
         </View>
 
-        <Benefits />
+        <Benefits paused={visibleTermsDialog} />
 
         <TextInput
           mode="outlined"
@@ -212,8 +227,13 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Button
             mode="contained"
             onPress={handleStep1}
-            disabled={!name.trim() || !termsAccepted}
-            icon={!name.trim() || !termsAccepted ? 'lock' : 'check'}>
+            disabled={!name.trim() || !termsAccepted || step1Loading}
+            loading={step1Loading}
+            icon={
+              step1Loading || !name.trim() || !termsAccepted
+                ? undefined
+                : 'check'
+            }>
             {t('button.save')}
           </Button>
         </View>

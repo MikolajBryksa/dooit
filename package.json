@@ -31,6 +31,7 @@
     "react-native-config": "^1.6.1",
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-gesture-handler": "^2.20.0",
+    "react-native-google-mobile-ads": "^14.11.0",
     "react-native-keychain": "^10.0.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^3.4.1",

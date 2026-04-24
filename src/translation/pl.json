@@ -24,17 +24,19 @@
     "support": "Kawusia",
     "filter": "Filtruj nawyki",
     "history": "Historia",
-    "terms": "Regulamin"
+    "terms": "Polityka prywatności"
   },
   "terms": {
     "s1-title": "Zbieranie danych",
     "s1-body": "Dooit zbiera dane dotyczące Twoich nawyków. Zbierane dane obejmują nazwy nawyków, częstotliwość ich wykonywania oraz statystyki postępów. Dane te są wykorzystywane wyłącznie do analizy, jakie nawyki użytkownicy najczęściej budują oraz w jakiej liczbie. Analiza ta pozwala rozwijać aplikację zgodnie z rzeczywistymi potrzebami użytkowników.",
     "s2-title": "Twoja prywatność",
-    "s2-body": "Wszystkie dane są zbierane anonimowo. Nazwa użytkownika nie jest przesyłana ani przechowywana poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem. Dane nie są sprzedawane ani udostępniane podmiotom trzecim.",
+    "s2-body": "Twoje imię nie jest przesyłane ani przechowywane poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem i zbierane anonimowo. Dane związane z reklamami są przetwarzane przez Google zgodnie z Polityką Prywatności Google.",
     "s3-title": "Usuwanie danych",
-    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne.",
+    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne. Uwaga: usunięcie danych Dooit nie wpływa na dane wcześniej zebrane przez Google AdMob.",
     "s4-title": "Licencja",
-    "s4-body": "Dooit jest bezpłatny. Oficjalna wersja aplikacji jest dostępna w Google Play. Kod źródłowy jest publicznie dostępny na licencji CC BY-NC 4.0 — możesz go przeglądać i wykorzystywać w celach niekomercyjnych, jednak jego komercyjne użycie jest zabronione."
+    "s4-body": "Dooit jest bezpłatny. Oficjalna wersja aplikacji jest dostępna w Google Play. Kod źródłowy jest publicznie dostępny na licencji CC BY-NC 4.0 — możesz go przeglądać i wykorzystywać w celach niekomercyjnych, jednak jego komercyjne użycie jest zabronione.",
+    "s5-title": "Reklamy",
+    "s5-body": "Dooit wyświetla reklamy dostarczane przez Google AdMob. W celu wyświetlania reklam Google AdMob może zbierać i przetwarzać określone dane z Twojego urządzenia, w tym identyfikator reklamowy, adres IP oraz informacje o urządzeniu. Jeśli wyrazisz zgodę na spersonalizowane reklamy, dane te mogą być również wykorzystywane do wyświetlania reklam dopasowanych do Twoich zainteresowań."
   },
   "settings": {
     "version": "Wersja",
@@ -58,6 +60,8 @@
     "tips-restored": "Przywrócono",
     "data": "Dane konta",
     "delete": "Usuń",
+    "ads": "Reklamy",
+    "manage-ads": "Zarządzaj",
     "test-connection": "Test połączenia",
     "test": "Testuj",
     "connection-ok": "Połączony",
@@ -76,7 +80,7 @@
     "change-goal": "Czy chcesz zmienić cel?\nDomyślnie cel jest ustawiany jako liczba powtórzeń do zrobienia w ciągu 4 tygodni.",
     "goal-reached": "Osiągnąłeś swój cel! Chcesz pójść dalej i zwiększyć limit, żeby jeszcze mocniej budować nawyk?",
     "contact": "Wypełnij formularz, aby skontaktować się z autorem aplikacji.",
-    "support": "Cześć, {{userName}}!\n\nTworzę Dooit samodzielnie, z dużą wiarą, że może realnie poprawiać codzienne życie. Każda linijka kodu powstała z myślą o tym, by pomagać budować nawyki, które naprawdę coś zmieniają.\n\nJeśli czujesz, że Dooit już Ci w czymś pomógł, będzie mi ogromnie miło, jeśli wesprzesz dalszy rozwój tej aplikacji - choćby stawiając mi wirtualną kawę. To dla mnie sygnał, że to, co robię, ma sens.\n\n~ Mikołaj Bryksa"
+    "support": "Cześć, {{userName}}!\n\nTworzę Dooit samodzielnie. Jeśli aplikacja pomaga Ci budować nawyki, możesz wesprzeć jej dalszy rozwój.\n\nWystarczy, że obejrzysz krótką reklamę lub postawisz mi wirtualną kawę.\n\nBędzie mi naprawdę bardzo miło.\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Usuń",
@@ -102,7 +106,9 @@
     "offline": "Offline",
     "finish": "Zakończ",
     "deleting": "Usuwanie",
-    "understand": "Rozumiem"
+    "understand": "Rozumiem",
+    "watch": "Obejrzyj",
+    "thanks": "Dziękuję!"
   },
   "contact": {
     "email": "Twój e-mail",
@@ -149,7 +155,7 @@
     "now-first-habit": "Skoncentruj się tylko na tym, co widzisz poniżej, {{userName}}, a następnie zaznacz, czy się udało.",
     "summary-daily-recap": "Na koniec dnia Dooit podsumowuje liczbę wykonanych powtórzeń i przedstawia krótką analizę.",
     "habits-edit-and-goal": "Każdy nawyk możesz w dowolnej chwili edytować. Domyślny cel to liczba powtórzeń obliczona na 28 dni.",
-    "settings-overview": "Tutaj możesz zaktualizować swoje imię, zmienić język, przełączyć motyw oraz zarządzać powiadomieniami."
+    "settings-overview": "Tutaj możesz zaktualizować swoje imię, zmienić język, przełączyć motyw oraz zarządzać powiadomieniami i reklamami."
   },
   "onboarding": {
     "step1": {
@@ -157,7 +163,7 @@
       "subtitle": "który pomoże Ci budować nawyki",
       "name": "Wpisz swoje imię",
       "terms-prefix": "Akceptuję",
-      "terms-link": "Regulamin"
+      "terms-link": "Politykę prywatności"
     },
     "features": [
       {
