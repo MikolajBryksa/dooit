@@ -38,6 +38,8 @@ export const supabase = createClient(
 let initAuthPromise = null;
 
 export const initializeAnonymousAuth = () => {
+  if (__DEV__)
+    return Promise.resolve({success: true, userId: null, error: null});
   if (initAuthPromise) return initAuthPromise;
 
   initAuthPromise = (async () => {
@@ -94,6 +96,7 @@ export const deleteUserData = async () => {
 };
 
 export const syncUserData = async (habits, streak) => {
+  if (__DEV__) return;
   try {
     await initializeAnonymousAuth();
     const {
