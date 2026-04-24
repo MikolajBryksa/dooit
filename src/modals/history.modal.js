@@ -54,10 +54,16 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
   }, [visible, habitId, loadHistory]);
 
   const handleStatusChange = (executionId, newStatus) => {
-    setChanges(prev => ({
-      ...prev,
-      [executionId]: newStatus,
-    }));
+    const original = executions.find(e => e.id === executionId)?.status;
+    setChanges(prev => {
+      const next = {...prev};
+      if (newStatus === original) {
+        delete next[executionId];
+      } else {
+        next[executionId] = newStatus;
+      }
+      return next;
+    });
   };
 
   const handleSave = () => {
@@ -93,6 +99,19 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
     return changes[exec.id] !== undefined ? changes[exec.id] : exec.status;
   };
 
+  const doneCount = executions.filter(
+    e => getCurrentStatus(e) === 'done',
+  ).length;
+  const firstExecDate =
+    executions.length > 0 ? executions[executions.length - 1].date : null;
+  const daysSinceFirst = firstExecDate
+    ? Math.floor(
+        (new Date(`${getLocalDateKey()}T00:00:00`) -
+          new Date(`${firstExecDate}T00:00:00`)) /
+          (24 * 60 * 60 * 1000),
+      ) + 1
+    : 0;
+
   const openDelete = exec => {
     setExecutionToDelete(exec);
     setDeleteExecutionDialogVisible(true);
@@ -106,6 +125,11 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
         title={t('title.history')}>
         <Card.Content>
           <Text variant="bodyMedium">{habitName}</Text>
+          {executions.length > 0 && (
+            <Text variant="bodySmall" style={{marginTop: 4}}>
+              {t('history.summary', {count: doneCount, days: daysSinceFirst})}
+            </Text>
+          )}
           <View style={[styles.card__divider, {marginTop: 16}]} />
           <ScrollView style={{maxHeight: 300}}>
             {executions.map(exec => {
@@ -118,7 +142,7 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    paddingVertical: 8,
+                    paddingVertical: 4,
                   }}>
                   <View style={{flex: 1}}>
                     <Text variant="bodySmall">

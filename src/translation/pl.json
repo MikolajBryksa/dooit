@@ -214,6 +214,9 @@
       "habitName": "Połóż się wcześnie"
     }
   },
+  "history": {
+    "summary": "{{count}} powtórzeń w ciągu {{days}} dni"
+  },
   "streak": {
     "reminder-title": "Utrzymaj serię! 🔥",
     "reminder-body": "Pamiętaj o nawykach, otwórz Dooit i nie przerywaj serii."

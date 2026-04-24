@@ -214,6 +214,9 @@
       "habitName": "Go to bed early"
     }
   },
+  "history": {
+    "summary": "{{count}} repetitions over {{days}} days"
+  },
   "streak": {
     "reminder-title": "Keep your streak going! 🔥",
     "reminder-body": "Remember your habits, open Dooit and make it count."
