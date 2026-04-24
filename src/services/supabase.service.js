@@ -75,6 +75,10 @@ export const getCurrentUserToken = async () => {
 };
 
 export const deleteUserData = async () => {
+  if (__DEV__) {
+    initAuthPromise = null;
+    return;
+  }
   try {
     const {
       data: {session},

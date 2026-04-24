@@ -11,7 +11,7 @@ const FEATURE_ICONS = [
   'rocket-launch',
 ];
 const AUTOPLAY_INTERVAL_MS = 3500;
-const SLIDE_ANIMATION_DURATION = 300;
+const SLIDE_ANIMATION_DURATION = 500;
 const SWIPE_THRESHOLD_RATIO = 1 / 3;
 
 const Benefits = ({paused = false}) => {

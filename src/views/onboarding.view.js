@@ -69,14 +69,14 @@ const OnboardingView = ({setShowOnboarding}) => {
     return () => backHandler.remove();
   }, [step]);
 
-  // Initialize state from existing habits if user returns to onboarding
   useEffect(() => {
     if (settings?.userName) {
       setName(settings.userName);
     }
+  }, [settings?.userName]);
 
+  useEffect(() => {
     const existingHabits = getHabits() || [];
-
     const restoredSelection = {
       1: false,
       2: false,
@@ -95,7 +95,7 @@ const OnboardingView = ({setShowOnboarding}) => {
       }
     });
     setSelectedHabits(restoredSelection);
-  }, [settings]);
+  }, []);
 
   async function handleStep1() {
     let updatedSettings = {...settings};
@@ -191,7 +191,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           <Text variant="bodyLarge">{t('onboarding.step1.subtitle')}</Text>
         </View>
 
-        <Benefits paused={visibleTermsDialog} />
+        <Benefits paused={visibleTermsDialog || step1Loading} />
 
         <TextInput
           mode="outlined"

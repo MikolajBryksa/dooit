@@ -95,6 +95,12 @@ function AppContent() {
   }, [dispatch]);
 
   useEffect(() => {
+    if (!loading && settings?.firstLaunch) {
+      setShowOnboarding(true);
+    }
+  }, [settings?.firstLaunch, loading]);
+
+  useEffect(() => {
     return setupNotificationSync(settings, loading, dispatch, setSettings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, settings?.notifications]);
