@@ -58,6 +58,7 @@ export function setupNotificationSync(
     const handleAppStateChange = nextAppState => {
       if (nextAppState === 'active') {
         syncNotificationStatus(settings, dispatch, setSettings);
+        notifee.cancelDisplayedNotifications();
       }
     };
 
