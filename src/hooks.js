@@ -1,6 +1,6 @@
 import {getLocalDateKey} from '@/utils';
 import {useState, useEffect, useMemo, useCallback, useRef} from 'react';
-import {BackHandler} from 'react-native';
+import {BackHandler, Animated, Easing} from 'react-native';
 import {logError} from '@/services/errors.service';
 import NetInfo from '@react-native-community/netinfo';
 import {hasExecutionOrDeleted} from '@/services/executions.service';
@@ -105,6 +105,151 @@ export const useNetworkStatus = (enableMonitoring = false) => {
     isChecking,
   };
 };
+
+const CHOICE_EFFECT_PARTICLE_COUNT = 10;
+const CHOICE_EFFECT_ANGLES = Array.from(
+  {length: CHOICE_EFFECT_PARTICLE_COUNT},
+  (_, i) => (i / CHOICE_EFFECT_PARTICLE_COUNT) * 2 * Math.PI,
+);
+
+export function useChoiceEffect() {
+  const [effectType, setEffectType] = useState(null);
+
+  const cardShakeX = useRef(new Animated.Value(0)).current;
+  const cardFlashOpacity = useRef(new Animated.Value(0)).current;
+  const particleAnims = useRef(
+    CHOICE_EFFECT_ANGLES.map(() => ({
+      opacity: new Animated.Value(0),
+      scale: new Animated.Value(0),
+      translateX: new Animated.Value(0),
+      translateY: new Animated.Value(0),
+    })),
+  ).current;
+
+  useEffect(() => {
+    if (effectType === null) return;
+
+    particleAnims.forEach(anim => {
+      anim.opacity.setValue(effectType === 'done' ? 1 : 0.9);
+      anim.scale.setValue(effectType === 'done' ? 0.2 : 1.2);
+      anim.translateX.setValue(0);
+      anim.translateY.setValue(0);
+    });
+
+    cardFlashOpacity.setValue(0);
+    Animated.sequence([
+      Animated.timing(cardFlashOpacity, {
+        toValue: effectType === 'done' ? 0.18 : 0.14,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardFlashOpacity, {
+        toValue: 0,
+        duration: 700,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    const particleAnimations = particleAnims.map((anim, i) => {
+      const distance =
+        effectType === 'done'
+          ? 65 + Math.random() * 45
+          : 50 + Math.random() * 30;
+
+      return Animated.parallel([
+        Animated.timing(anim.opacity, {
+          toValue: 0,
+          duration: effectType === 'done' ? 950 : 700,
+          easing:
+            effectType === 'done'
+              ? Easing.out(Easing.cubic)
+              : Easing.in(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim.scale, {
+          toValue: effectType === 'done' ? 1.5 : 0.1,
+          duration: effectType === 'done' ? 950 : 700,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim.translateX, {
+          toValue: Math.cos(CHOICE_EFFECT_ANGLES[i]) * distance,
+          duration: effectType === 'done' ? 950 : 700,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim.translateY, {
+          toValue: Math.sin(CHOICE_EFFECT_ANGLES[i]) * distance,
+          duration: effectType === 'done' ? 950 : 700,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+      ]);
+    });
+
+    if (effectType === 'skipped') {
+      Animated.sequence([
+        Animated.timing(cardShakeX, {
+          toValue: -10,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardShakeX, {
+          toValue: 10,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardShakeX, {
+          toValue: -7,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardShakeX, {
+          toValue: 7,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardShakeX, {
+          toValue: -3,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardShakeX, {
+          toValue: 0,
+          duration: 65,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+
+    Animated.parallel(particleAnimations).start(() => setEffectType(null));
+  }, [effectType, cardFlashOpacity, cardShakeX, particleAnims]);
+
+  const triggerEffect = useCallback(type => {
+    setEffectType(type);
+  }, []);
+
+  const resetEffect = useCallback(() => {
+    setEffectType(null);
+    cardShakeX.setValue(0);
+    cardFlashOpacity.setValue(0);
+    particleAnims.forEach(anim => {
+      anim.opacity.setValue(0);
+      anim.scale.setValue(0);
+      anim.translateX.setValue(0);
+      anim.translateY.setValue(0);
+    });
+  }, [cardShakeX, cardFlashOpacity, particleAnims]);
+
+  return {
+    triggerEffect,
+    resetEffect,
+    effectType,
+    cardShakeX,
+    cardFlashOpacity,
+    particleAnims,
+  };
+}
 
 export function useActiveHabit(todayHabits, todayKey) {
   const [activeKey, setActiveKey] = useState(null);

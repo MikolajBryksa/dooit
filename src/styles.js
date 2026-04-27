@@ -322,5 +322,16 @@ export const useStyles = () => {
       marginBottom: theme.dimensions.gap,
       color: theme.colors.onSurface,
     },
+    cardWrapper: {
+      position: 'relative',
+    },
+    iconWrapper: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'visible',
+    },
+    particle: {
+      position: 'absolute',
+    },
   });
 };

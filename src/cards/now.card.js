@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
 import {pickRandomMessage, getLocalDateKey} from '@/utils';
-import {useCurrentTime} from '@/hooks';
+import {useCurrentTime, useChoiceEffect} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
 import GoalReachedDialog from '@/dialogs/goal-reached.dialog';
@@ -49,6 +49,15 @@ const NowCard = ({
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const currentTime = useCurrentTime();
 
+  const {
+    triggerEffect,
+    resetEffect,
+    effectType,
+    cardShakeX,
+    cardFlashOpacity,
+    particleAnims,
+  } = useChoiceEffect();
+
   const isSelectedHourLater = useMemo(() => {
     if (!selectedHour || !currentTime) return false;
 
@@ -70,6 +79,7 @@ const NowCard = ({
     setMotivation(pickRandomMessage(t, 'notification'));
     setLiveDoneCount(currentStats.doneCount || 0);
     setLiveSkippedCount(currentStats.skippedCount || 0);
+    resetEffect();
 
     cardOpacity.setValue(0);
     Animated.timing(cardOpacity, {
@@ -77,7 +87,7 @@ const NowCard = ({
       duration: 400,
       useNativeDriver: true,
     }).start();
-  }, [id, selectedHour, t, cardOpacity]);
+  }, [id, selectedHour, t, cardOpacity, resetEffect]);
 
   const today = getLocalDateKey();
   const isCompleted = hasExecutionOrDeleted(id, today, slotIndex);
@@ -132,6 +142,7 @@ const NowCard = ({
     goal > 0 ? Math.max(goal + 1, Math.ceil(goal * 1.2)) : 0;
 
   const addGoodChoice = () => {
+    triggerEffect('done');
     setChoice('done');
     setMotivation(pickRandomMessage(t, 'done'));
     handleChoice('done');
@@ -148,6 +159,7 @@ const NowCard = ({
   };
 
   const addBadChoice = () => {
+    triggerEffect('skipped');
     setChoice('skipped');
     setMotivation(pickRandomMessage(t, 'skipped'));
     handleChoice('skipped');
@@ -173,65 +185,116 @@ const NowCard = ({
     return theme.colors.onSurface;
   };
 
+  const particleIsDone = effectType === 'done';
+
   return (
     <>
-      <NowComponent
-        animatedStyle={{opacity: cardOpacity}}
-        iconContent={
-          <PieCircle
-            icon={icon}
-            goalCount={stats.goalCount}
-            doneCount={stats.doneCount}
-            opacity={isLocked ? 0.5 : 1}
-            showCounter={true}
-            isGoalReached={isGoalReached}
+      <View style={styles.cardWrapper}>
+        <Animated.View style={{transform: [{translateX: cardShakeX}]}}>
+          <NowComponent
+            animatedStyle={{opacity: cardOpacity}}
+            iconContent={
+              <View style={styles.iconWrapper}>
+                <PieCircle
+                  icon={icon}
+                  goalCount={stats.goalCount}
+                  doneCount={stats.doneCount}
+                  opacity={isLocked ? 0.5 : 1}
+                  showCounter={true}
+                  isGoalReached={isGoalReached}
+                />
+                {particleAnims.map((anim, i) => (
+                  <Animated.View
+                    key={`p-${i}`}
+                    pointerEvents="none"
+                    style={[
+                      styles.particle,
+                      {
+                        width: particleIsDone ? 8 : 11,
+                        height: particleIsDone ? 8 : 6,
+                        borderRadius: particleIsDone ? 4 : 2,
+                        backgroundColor: particleIsDone
+                          ? theme.colors.success
+                          : theme.colors.background,
+                        transform: [
+                          {translateX: anim.translateX},
+                          {translateY: anim.translateY},
+                          {scale: anim.scale},
+                        ],
+                        opacity: anim.opacity,
+                      },
+                    ]}
+                  />
+                ))}
+              </View>
+            }
+            subtitleContent={
+              <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
+                {step === 1 ? selectedHour : motivation}
+              </Text>
+            }
+            titleContent={
+              <Text
+                variant="titleLarge"
+                numberOfLines={2}
+                opacity={isLocked ? 0.5 : 1}
+                style={{color: getChoiceTextColor()}}>
+                {step === 1 ? habitName : choiceLabel}
+              </Text>
+            }
+            buttonsContent={
+              <View style={styles.buttons}>
+                {step === 1 ? (
+                  isLocked ? (
+                    <Button
+                      mode="contained"
+                      icon="lock-open-variant"
+                      onPress={handleUnlock}>
+                      {t('button.unlock')}
+                    </Button>
+                  ) : (
+                    <>
+                      <Button mode="outlined" icon="close" onPress={selectSkip}>
+                        {t('button.skip')}
+                      </Button>
+                      <Button
+                        mode="contained"
+                        icon="check"
+                        onPress={addGoodChoice}>
+                        {t('button.done')}
+                      </Button>
+                    </>
+                  )
+                ) : (
+                  <Button
+                    mode="contained"
+                    icon={isLastHabit ? 'check' : 'arrow-right'}
+                    onPress={handleNext}>
+                    {isLastHabit ? t('button.finish') : t('button.next')}
+                  </Button>
+                )}
+              </View>
+            }
           />
-        }
-        subtitleContent={
-          <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
-            {step === 1 ? selectedHour : motivation}
-          </Text>
-        }
-        titleContent={
-          <Text
-            variant="titleLarge"
-            numberOfLines={2}
-            opacity={isLocked ? 0.5 : 1}
-            style={{color: getChoiceTextColor()}}>
-            {step === 1 ? habitName : choiceLabel}
-          </Text>
-        }
-        buttonsContent={
-          <View style={styles.buttons}>
-            {step === 1 ? (
-              isLocked ? (
-                <Button
-                  mode="contained"
-                  icon="lock-open-variant"
-                  onPress={handleUnlock}>
-                  {t('button.unlock')}
-                </Button>
-              ) : (
-                <>
-                  <Button mode="outlined" icon="close" onPress={selectSkip}>
-                    {t('button.skip')}
-                  </Button>
-                  <Button mode="contained" icon="check" onPress={addGoodChoice}>
-                    {t('button.done')}
-                  </Button>
-                </>
-              )
-            ) : (
-              <Button
-                mode="contained"
-                icon={isLastHabit ? 'check' : 'arrow-right'}
-                onPress={handleNext}>
-                {isLastHabit ? t('button.finish') : t('button.next')}
-              </Button>
-            )}
-          </View>
-        }
-      />
+        </Animated.View>
+
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: theme.dimensions.gap,
+            borderRadius: 12,
+            backgroundColor:
+              effectType === 'skipped'
+                ? theme.colors.error
+                : theme.colors.success,
+            opacity: cardFlashOpacity,
+          }}
+        />
+      </View>
 
       <GoalReachedDialog
         visible={showGoalReachedDialog}
