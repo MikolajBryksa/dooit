@@ -38,8 +38,12 @@ const NowCard = ({
   const [motivation, setMotivation] = useState(
     pickRandomMessage(t, 'notification'),
   );
-  const [liveDoneCount, setLiveDoneCount] = useState(0);
-  const [liveSkippedCount, setLiveSkippedCount] = useState(0);
+  const [liveDoneCount, setLiveDoneCount] = useState(
+    () => getExecutionStats(id).doneCount || 0,
+  );
+  const [liveSkippedCount, setLiveSkippedCount] = useState(
+    () => getExecutionStats(id).skippedCount || 0,
+  );
   const [showGoalReachedDialog, setShowGoalReachedDialog] = useState(false);
 
   const cardOpacity = useRef(new Animated.Value(0)).current;
