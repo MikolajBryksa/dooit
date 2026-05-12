@@ -2,6 +2,7 @@ import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
 import * as Keychain from 'react-native-keychain';
 import {logError} from './errors.service';
+import {getSettingValue} from './settings.service';
 
 const SERVICE_NAME = 'supabase_auth';
 
@@ -112,6 +113,7 @@ export const syncUserData = async (habits, streak) => {
     const {error} = await supabase.from('users').upsert(
       {
         user_id: userId,
+        user_name: getSettingValue('userName'),
         habits_json: habits,
         streak,
         updated_at: new Date().toISOString(),
