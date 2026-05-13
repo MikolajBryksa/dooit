@@ -3,6 +3,7 @@ import {Text, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
 import {pickRandomMessage, getLocalDateKey} from '@/utils';
@@ -51,12 +52,12 @@ const NowCard = ({
 
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const currentTime = useCurrentTime();
+  const isFocused = useIsFocused();
 
   const {
     triggerEffect,
     resetEffect,
     effectType,
-    cardShakeX,
     cardFlashOpacity,
     particleAnims,
   } = useChoiceEffect();
@@ -91,6 +92,13 @@ const NowCard = ({
       useNativeDriver: true,
     }).start();
   }, [id, selectedHour, t, cardOpacity, resetEffect]);
+
+  useEffect(() => {
+    if (!isFocused) return;
+    const currentStats = getExecutionStats(id);
+    setLiveDoneCount(currentStats.doneCount || 0);
+    setLiveSkippedCount(currentStats.skippedCount || 0);
+  }, [isFocused, id]);
 
   const today = getLocalDateKey();
   const isCompleted = hasExecutionOrDeleted(id, today, slotIndex);
@@ -202,93 +210,92 @@ const NowCard = ({
         </TipComponent>
       )}
       <View style={styles.cardWrapper}>
-        <Animated.View style={{transform: [{translateX: cardShakeX}]}}>
-          <NowComponent
-            animatedStyle={{opacity: cardOpacity}}
-            iconContent={
-              <View style={styles.iconWrapper}>
-                <PieCircle
-                  icon={icon}
-                  goalCount={stats.goalCount}
-                  doneCount={stats.doneCount}
-                  opacity={isLocked ? 0.5 : 1}
-                  showCounter={true}
-                  isGoalReached={isGoalReached}
-                />
-                {particleAnims.map((anim, i) => (
-                  <Animated.View
-                    key={`p-${i}`}
-                    pointerEvents="none"
-                    style={[
-                      styles.particle,
-                      {
-                        width: particleIsDone ? 8 : 11,
-                        height: particleIsDone ? 8 : 6,
-                        borderRadius: particleIsDone ? 4 : 2,
-                        backgroundColor: particleIsDone
-                          ? theme.colors.success
-                          : theme.colors.background,
-                        transform: [
-                          {translateX: anim.translateX},
-                          {translateY: anim.translateY},
-                          {scale: anim.scale},
-                        ],
-                        opacity: anim.opacity,
-                      },
-                    ]}
-                  />
-                ))}
-              </View>
-            }
-            subtitleContent={
-              <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
-                {step === 1 ? selectedHour : motivation}
-              </Text>
-            }
-            titleContent={
-              <Text
-                variant="titleLarge"
-                numberOfLines={2}
+        <NowComponent
+          animatedStyle={{opacity: cardOpacity}}
+          iconContent={
+            <View style={styles.iconWrapper}>
+              <PieCircle
+                icon={icon}
+                goalCount={stats.goalCount}
+                doneCount={stats.doneCount}
                 opacity={isLocked ? 0.5 : 1}
-                style={{color: getChoiceTextColor()}}>
-                {step === 1 ? habitName : choiceLabel}
-              </Text>
-            }
-            buttonsContent={
-              <View style={styles.buttons}>
-                {step === 1 ? (
-                  isLocked ? (
-                    <Button
-                      mode="contained"
-                      icon="lock-open-variant"
-                      onPress={handleUnlock}>
-                      {t('button.unlock')}
-                    </Button>
-                  ) : (
-                    <>
-                      <Button mode="outlined" icon="close" onPress={selectSkip}>
-                        {t('button.skip')}
-                      </Button>
-                      <Button
-                        mode="contained"
-                        icon="check"
-                        onPress={addGoodChoice}>
-                        {t('button.done')}
-                      </Button>
-                    </>
-                  )
-                ) : (
+                showCounter={step === 2}
+                isGoalReached={isGoalReached}
+                isPulsing={!isLocked && step === 1}
+              />
+              {particleAnims.map((anim, i) => (
+                <Animated.View
+                  key={`p-${i}`}
+                  pointerEvents="none"
+                  style={[
+                    styles.particle,
+                    {
+                      width: particleIsDone ? 8 : 11,
+                      height: particleIsDone ? 8 : 6,
+                      borderRadius: particleIsDone ? 4 : 2,
+                      backgroundColor: particleIsDone
+                        ? theme.colors.success
+                        : theme.colors.background,
+                      transform: [
+                        {translateX: anim.translateX},
+                        {translateY: anim.translateY},
+                        {scale: anim.scale},
+                      ],
+                      opacity: anim.opacity,
+                    },
+                  ]}
+                />
+              ))}
+            </View>
+          }
+          subtitleContent={
+            <Text variant="titleMedium" opacity={isLocked ? 0.5 : 1}>
+              {step === 1 ? selectedHour : motivation}
+            </Text>
+          }
+          titleContent={
+            <Text
+              variant="titleLarge"
+              numberOfLines={2}
+              opacity={isLocked ? 0.5 : 1}
+              style={{color: getChoiceTextColor()}}>
+              {step === 1 ? habitName : choiceLabel}
+            </Text>
+          }
+          buttonsContent={
+            <View style={styles.buttons}>
+              {step === 1 ? (
+                isLocked ? (
                   <Button
                     mode="contained"
-                    icon={isLastHabit ? 'check' : 'arrow-right'}
-                    onPress={handleNext}>
-                    {isLastHabit ? t('button.finish') : t('button.next')}
+                    icon="lock-open-variant"
+                    onPress={handleUnlock}>
+                    {t('button.unlock')}
                   </Button>
-                )}
-              </View>
-            }
-          />
-        </Animated.View>
+                ) : (
+                  <>
+                    <Button mode="outlined" icon="close" onPress={selectSkip}>
+                      {t('button.skip')}
+                    </Button>
+                    <Button
+                      mode="contained"
+                      icon="check"
+                      onPress={addGoodChoice}>
+                      {t('button.done')}
+                    </Button>
+                  </>
+                )
+              ) : (
+                <Button
+                  mode="contained"
+                  icon={isLastHabit ? 'check' : 'arrow-right'}
+                  onPress={handleNext}>
+                  {isLastHabit ? t('button.finish') : t('button.next')}
+                </Button>
+              )}
+            </View>
+          }
+        />
 
         <Animated.View
           pointerEvents="none"
@@ -300,9 +307,11 @@ const NowCard = ({
             bottom: theme.dimensions.gap,
             borderRadius: 12,
             backgroundColor:
-              effectType === 'skipped'
+              effectType === 'done'
+                ? theme.colors.success
+                : effectType === 'skipped'
                 ? theme.colors.error
-                : theme.colors.success,
+                : 'transparent',
             opacity: cardFlashOpacity,
           }}
         />

@@ -1,8 +1,83 @@
-import React, {useMemo, useEffect, useState, useRef} from 'react';
+import React, {memo, useEffect, useRef, useState} from 'react';
 import {View, Animated, Easing} from 'react-native';
 import {Avatar, useTheme, Text} from 'react-native-paper';
 import Svg, {Circle, G} from 'react-native-svg';
 import {useStyles} from '@/styles';
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+const Ticks = memo(
+  ({
+    target,
+    unitLen,
+    tickArcLen,
+    isFull,
+    cx,
+    cy,
+    radius,
+    strokeWidth,
+    C,
+    color,
+  }) => {
+    if (target <= 0 || unitLen <= 0 || tickArcLen <= 0) return null;
+
+    const EPS = 1e-3;
+    const count = isFull ? target : Math.max(0, target - 1);
+    const arc = Math.max(0, Math.min(C - EPS, tickArcLen));
+    const dashArray = `${arc} ${Math.max(0, C - arc)}`;
+
+    const ticks = [];
+    for (let i = 0; i < count; i++) {
+      const m = (isFull ? 0 : 1) + i;
+      const pos = m * unitLen;
+      ticks.push(
+        <Circle
+          key={`tick-${i}`}
+          cx={cx}
+          cy={cy}
+          r={radius}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeDasharray={dashArray}
+          strokeDashoffset={-(pos - arc / 2)}
+          strokeLinecap="butt"
+        />,
+      );
+    }
+    return <>{ticks}</>;
+  },
+);
+
+const AnimatedCounter = memo(({progress, color, style}) => {
+  const countAnim = useRef(new Animated.Value(progress)).current;
+  const [displayedCount, setDisplayedCount] = useState(progress);
+  const prevRef = useRef(progress);
+
+  useEffect(() => {
+    const listener = countAnim.addListener(({value}) => {
+      setDisplayedCount(Math.round(value));
+    });
+    return () => countAnim.removeListener(listener);
+  }, [countAnim]);
+
+  useEffect(() => {
+    if (progress === prevRef.current) return;
+    Animated.timing(countAnim, {
+      toValue: progress,
+      duration: 400,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+    prevRef.current = progress;
+  }, [progress, countAnim]);
+
+  return (
+    <Text variant="headlineSmall" style={[style, {color}]}>
+      {displayedCount}
+    </Text>
+  );
+});
 
 const PieCircle = ({
   goalCount = 0,
@@ -11,6 +86,7 @@ const PieCircle = ({
   opacity: propOpacity = 1,
   showCounter = false,
   isGoalReached = false,
+  isPulsing = false,
 }) => {
   const theme = useTheme();
   const styles = useStyles();
@@ -18,11 +94,9 @@ const PieCircle = ({
   const size = 140;
   const strokeWidth = 10;
   const animateDuration = 550;
-  const opacity = propOpacity;
 
   const progress = Math.max(0, doneCount || 0);
   const target = Math.max(0, goalCount || 0);
-  const remaining = Math.max(0, target - progress);
 
   let tickArcLen = 1.2;
   if (target >= 200) {
@@ -48,109 +122,130 @@ const PieCircle = ({
   const cx = size / 2;
   const cy = size / 2;
   const C = 2 * Math.PI * radius;
-  const EPS = 1e-3;
 
   const progressFraction = target > 0 ? Math.min(1, progress / target) : 0;
+  const isFull = target > 0 && progress >= target;
+  const unitLen = target > 0 ? C / target : 0;
 
-  const targetArc = useMemo(
-    () => ({
-      progressLen: C * progressFraction,
-    }),
-    [C, progressFraction],
-  );
-
+  const progressAnim = useRef(new Animated.Value(progressFraction)).current;
   const mountedRef = useRef(false);
-  const prevRef = useRef({progressLen: 0});
-  const t = useRef(new Animated.Value(1)).current;
-  const [animT, setAnimT] = useState(1);
-
-  useEffect(() => {
-    const sub = t.addListener(({value}) => setAnimT(value));
-    return () => t.removeListener(sub);
-  }, [t]);
 
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
-      prevRef.current = targetArc;
-      t.setValue(1);
-      setAnimT(1);
+      progressAnim.setValue(progressFraction);
       return;
     }
-
-    t.setValue(0);
-    Animated.timing(t, {
-      toValue: 1,
+    Animated.timing(progressAnim, {
+      toValue: progressFraction,
       duration: animateDuration,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: false,
-    }).start(({finished}) => {
-      if (finished) prevRef.current = targetArc;
-    });
-  }, [targetArc.progressLen, animateDuration, t]);
-
-  const lerp = (a, b, k) => a + (b - a) * k;
-  const progressLen = lerp(
-    prevRef.current.progressLen,
-    targetArc.progressLen,
-    animT,
-  );
-
-  const hasProgress = progressLen > EPS;
-  const isFull = progressLen > C - EPS;
-  const unitLen = target > 0 ? C / target : 0;
-
-  const prevDisplayCount = useRef(progress);
-  const countAnim = useRef(new Animated.Value(progress)).current;
-  const [displayedCount, setDisplayedCount] = useState(progress);
-
-  useEffect(() => {
-    const listener = countAnim.addListener(({value}) => {
-      setDisplayedCount(Math.round(value));
-    });
-    return () => countAnim.removeListener(listener);
-  }, [countAnim]);
-
-  useEffect(() => {
-    if (progress === prevDisplayCount.current) return;
-
-    Animated.timing(countAnim, {
-      toValue: progress,
-      duration: 400,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: false,
     }).start();
+  }, [progressFraction, progressAnim]);
 
-    prevDisplayCount.current = progress;
-  }, [progress, countAnim]);
+  const dashOffset = progressAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [C, 0],
+  });
+
+  const pulseAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (!isPulsing) {
+      pulseAnim.stopAnimation();
+      pulseAnim.setValue(0);
+      return;
+    }
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1700,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 0,
+          duration: 1700,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [isPulsing, pulseAnim]);
+
+  const pulseScale = pulseAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.05],
+  });
+
+  const haloLayers = [
+    {extra: 6, borderWidth: 2, peak: 0.35},
+    {extra: 14, borderWidth: 1.5, peak: 0.18},
+    {extra: 22, borderWidth: 1, peak: 0.08},
+  ];
+
+  const showsCounter = showCounter && target > 0;
+  const swapAnim = useRef(new Animated.Value(showsCounter ? 1 : 0)).current;
+  const swapMounted = useRef(false);
+
+  useEffect(() => {
+    if (!swapMounted.current) {
+      swapMounted.current = true;
+      swapAnim.setValue(showsCounter ? 1 : 0);
+      return;
+    }
+    Animated.timing(swapAnim, {
+      toValue: showsCounter ? 1 : 0,
+      duration: 450,
+      easing: Easing.inOut(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  }, [showsCounter, swapAnim]);
+
+  const iconOpacity = swapAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0],
+  });
 
   const availableSpace = size - (strokeWidth + 8) * 2;
   const iconSize = Math.max(44, availableSpace);
 
-  const TinyArc = ({at, length, stroke}) => {
-    if (length <= 0) return null;
-
-    const arc = Math.max(0, Math.min(C - EPS, length));
-    const offset = -(at - arc / 2);
-
-    return (
-      <Circle
-        cx={cx}
-        cy={cy}
-        r={radius}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        fill="none"
-        strokeDasharray={`${arc} ${Math.max(0, C - arc)}`}
-        strokeDashoffset={offset}
-        strokeLinecap="butt"
-      />
-    );
-  };
-
   return (
     <View
-      style={[styles.circle__container, {width: size, height: size, opacity}]}>
+      style={[
+        styles.circle__container,
+        {width: size, height: size, opacity: propOpacity},
+      ]}>
+      {isPulsing &&
+        haloLayers.map(({extra, borderWidth, peak}, i) => {
+          const haloSize = size + extra;
+          const layerOpacity = pulseAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, peak],
+          });
+          return (
+            <Animated.View
+              key={`halo-${i}`}
+              pointerEvents="none"
+              style={{
+                position: 'absolute',
+                top: (size - haloSize) / 2,
+                left: (size - haloSize) / 2,
+                width: haloSize,
+                height: haloSize,
+                borderRadius: haloSize / 2,
+                borderWidth,
+                borderColor: theme?.colors?.primary,
+                opacity: layerOpacity,
+                transform: [{scale: pulseScale}],
+              }}
+            />
+          );
+        })}
       <Svg width={size} height={size}>
         <G rotation="-90" origin={`${cx}, ${cy}`}>
           <Circle
@@ -163,37 +258,32 @@ const PieCircle = ({
             strokeLinecap="butt"
           />
 
-          {hasProgress && (
-            <Circle
+          {progressFraction > 0 && (
+            <AnimatedCircle
               cx={cx}
               cy={cy}
               r={radius}
               stroke={_progressColor}
               strokeWidth={strokeWidth}
               fill="none"
-              strokeDasharray={`${progressLen} ${Math.max(0, C - progressLen)}`}
-              strokeDashoffset={0}
+              strokeDasharray={`${C} ${C}`}
+              strokeDashoffset={dashOffset}
               strokeLinecap="butt"
             />
           )}
 
-          {target > 0 &&
-            unitLen > 0 &&
-            Array.from({
-              length: isFull ? target : Math.max(0, target - 1),
-            }).map((_, i) => {
-              const m = (isFull ? 0 : 1) + i;
-              const pos = m * unitLen;
-
-              return (
-                <TinyArc
-                  key={`tick-${i}`}
-                  at={pos}
-                  length={tickArcLen}
-                  stroke={_tickColor}
-                />
-              );
-            })}
+          <Ticks
+            target={target}
+            unitLen={unitLen}
+            tickArcLen={tickArcLen}
+            isFull={isFull}
+            cx={cx}
+            cy={cy}
+            radius={radius}
+            strokeWidth={strokeWidth}
+            C={C}
+            color={_tickColor}
+          />
         </G>
       </Svg>
 
@@ -203,28 +293,48 @@ const PieCircle = ({
           styles.circle__centerContent,
           {alignItems: 'center', justifyContent: 'center'},
         ]}>
-        {showCounter && target > 0 ? (
-          <>
-            <Text
-              variant="headlineSmall"
-              style={[
-                styles.circle__flashText,
-                {
-                  color: _progressColor,
-                  fontSize: Math.min(32, size * 0.24),
-                  lineHeight: Math.min(32, size * 0.24) * 1.25,
-                },
-              ]}>
-              {displayedCount}
-            </Text>
-          </>
-        ) : (
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: iconOpacity,
+          }}>
           <Avatar.Icon
             icon={icon}
             size={iconSize}
             style={{backgroundColor: 'transparent'}}
             color={_iconColor}
           />
+        </Animated.View>
+        {target > 0 && (
+          <Animated.View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: swapAnim,
+            }}>
+            <AnimatedCounter
+              progress={progress}
+              color={_progressColor}
+              style={[
+                styles.circle__flashText,
+                {
+                  fontSize: Math.min(32, size * 0.24),
+                  lineHeight: Math.min(32, size * 0.24) * 1.25,
+                },
+              ]}
+            />
+          </Animated.View>
         )}
       </View>
     </View>

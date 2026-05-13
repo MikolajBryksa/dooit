@@ -261,13 +261,6 @@ const SettingsView = () => {
         />
 
         <SettingComponent
-          label={t('settings.language')}
-          value={t(`settings.${language}`)}
-          icon="translate"
-          onPress={handleLanguage}
-        />
-
-        <SettingComponent
           label={t('settings.notifications')}
           value={
             settings.notifications
@@ -276,6 +269,20 @@ const SettingsView = () => {
           }
           icon={settings.notifications ? 'bell-outline' : 'bell-off-outline'}
           onPress={handleNotifications}
+        />
+
+        <SettingComponent
+          label={t('settings.language')}
+          value={t(`settings.${language}`)}
+          icon="translate"
+          onPress={handleLanguage}
+        />
+
+        <SettingComponent
+          label={t('settings.theme')}
+          value={t(`settings.${currentTheme}`)}
+          icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
+          onPress={handleCurrentTheme}
         />
 
         <SettingComponent
@@ -290,13 +297,6 @@ const SettingsView = () => {
           value={t(`date.${firstDay === 'mon' ? 'monday' : 'sunday'}`)}
           icon="calendar"
           onPress={handleFirstDay}
-        />
-
-        <SettingComponent
-          label={t('settings.theme')}
-          value={t(`settings.${currentTheme}`)}
-          icon={currentTheme === 'dark' ? 'weather-night' : 'weather-sunny'}
-          onPress={handleCurrentTheme}
         />
 
         <SettingComponent
@@ -328,18 +328,18 @@ const SettingsView = () => {
         />
 
         <SettingComponent
+          label={t('settings.terms')}
+          value={t('settings.show')}
+          icon="file-document-outline"
+          onPress={handleTermsDialog}
+        />
+
+        <SettingComponent
           label={t('settings.repetition-counters')}
           value={t(canReset ? 'settings.reset-counters' : 'settings.no-data')}
           icon="calendar-refresh-outline"
           onPress={handleResetDataDialog}
           disabled={!canReset}
-        />
-
-        <SettingComponent
-          label={t('settings.terms')}
-          value={t('settings.show')}
-          icon="file-document-outline"
-          onPress={handleTermsDialog}
         />
 
         <SettingComponent

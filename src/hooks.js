@@ -115,7 +115,6 @@ const CHOICE_EFFECT_ANGLES = Array.from(
 export function useChoiceEffect() {
   const [effectType, setEffectType] = useState(null);
 
-  const cardShakeX = useRef(new Animated.Value(0)).current;
   const cardFlashOpacity = useRef(new Animated.Value(0)).current;
   const particleAnims = useRef(
     CHOICE_EFFECT_ANGLES.map(() => ({
@@ -139,27 +138,32 @@ export function useChoiceEffect() {
     cardFlashOpacity.setValue(0);
     Animated.sequence([
       Animated.timing(cardFlashOpacity, {
-        toValue: effectType === 'done' ? 0.18 : 0.14,
-        duration: 100,
+        toValue: effectType === 'done' ? 0.14 : 0.11,
+        duration: 450,
+        easing: Easing.inOut(Easing.quad),
         useNativeDriver: true,
       }),
       Animated.timing(cardFlashOpacity, {
         toValue: 0,
-        duration: 700,
+        duration: 1300,
+        easing: Easing.inOut(Easing.quad),
         useNativeDriver: true,
       }),
-    ]).start();
+    ]).start(({finished}) => {
+      if (finished) setEffectType(null);
+    });
 
     const particleAnimations = particleAnims.map((anim, i) => {
       const distance =
         effectType === 'done'
           ? 65 + Math.random() * 45
           : 50 + Math.random() * 30;
+      const particleDuration = effectType === 'done' ? 1500 : 1150;
 
       return Animated.parallel([
         Animated.timing(anim.opacity, {
           toValue: 0,
-          duration: effectType === 'done' ? 950 : 700,
+          duration: particleDuration,
           easing:
             effectType === 'done'
               ? Easing.out(Easing.cubic)
@@ -168,62 +172,27 @@ export function useChoiceEffect() {
         }),
         Animated.timing(anim.scale, {
           toValue: effectType === 'done' ? 1.5 : 0.1,
-          duration: effectType === 'done' ? 950 : 700,
+          duration: particleDuration,
           easing: Easing.out(Easing.quad),
           useNativeDriver: true,
         }),
         Animated.timing(anim.translateX, {
           toValue: Math.cos(CHOICE_EFFECT_ANGLES[i]) * distance,
-          duration: effectType === 'done' ? 950 : 700,
+          duration: particleDuration,
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }),
         Animated.timing(anim.translateY, {
           toValue: Math.sin(CHOICE_EFFECT_ANGLES[i]) * distance,
-          duration: effectType === 'done' ? 950 : 700,
+          duration: particleDuration,
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }),
       ]);
     });
 
-    if (effectType === 'skipped') {
-      Animated.sequence([
-        Animated.timing(cardShakeX, {
-          toValue: -10,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-        Animated.timing(cardShakeX, {
-          toValue: 10,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-        Animated.timing(cardShakeX, {
-          toValue: -7,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-        Animated.timing(cardShakeX, {
-          toValue: 7,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-        Animated.timing(cardShakeX, {
-          toValue: -3,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-        Animated.timing(cardShakeX, {
-          toValue: 0,
-          duration: 65,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-
-    Animated.parallel(particleAnimations).start(() => setEffectType(null));
-  }, [effectType, cardFlashOpacity, cardShakeX, particleAnims]);
+    Animated.parallel(particleAnimations).start();
+  }, [effectType, cardFlashOpacity, particleAnims]);
 
   const triggerEffect = useCallback(type => {
     setEffectType(type);
@@ -231,7 +200,6 @@ export function useChoiceEffect() {
 
   const resetEffect = useCallback(() => {
     setEffectType(null);
-    cardShakeX.setValue(0);
     cardFlashOpacity.setValue(0);
     particleAnims.forEach(anim => {
       anim.opacity.setValue(0);
@@ -239,13 +207,12 @@ export function useChoiceEffect() {
       anim.translateX.setValue(0);
       anim.translateY.setValue(0);
     });
-  }, [cardShakeX, cardFlashOpacity, particleAnims]);
+  }, [cardFlashOpacity, particleAnims]);
 
   return {
     triggerEffect,
     resetEffect,
     effectType,
-    cardShakeX,
     cardFlashOpacity,
     particleAnims,
   };
