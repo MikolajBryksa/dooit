@@ -332,6 +332,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           visible={visibleAddModal}
           onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
+          skipDefaultsPicker={true}
         />
       </SafeAreaView>
     );
@@ -427,6 +428,7 @@ const OnboardingView = ({setShowOnboarding}) => {
           visible={visibleAddModal}
           onDismiss={() => setVisibleAddModal(false)}
           fetchAllHabits={fetchAllHabits}
+          skipDefaultsPicker={true}
         />
       </SafeAreaView>
     );

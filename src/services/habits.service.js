@@ -166,7 +166,7 @@ export const updateHabitValues = (id, updates) => {
   return updateHabit(id, updates);
 };
 
-const DEFAULT_HABITS_DATA = [
+export const DEFAULT_HABITS_DATA = [
   {
     id: 1,
     repeatDays: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],

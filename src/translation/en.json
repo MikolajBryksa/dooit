@@ -149,6 +149,7 @@
     "sunday": "Sunday"
   },
   "addStep": {
+    "customHabit": "Custom habit",
     "habitName": "What do you want to do regularly?",
     "repeatDays": "On what days you want to do it?",
     "repeatHours": "What time do you want to do it?"

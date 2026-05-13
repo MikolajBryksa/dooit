@@ -1,20 +1,27 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView} from 'react-native';
 import {Card, Button, Text, TextInput, ProgressBar} from 'react-native-paper';
-import {addHabit} from '@/services/habits.service';
+import {addHabit, DEFAULT_HABITS_DATA} from '@/services/habits.service';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import DaysSelector from '@/selectors/days.selector';
 import HoursSelector from '@/selectors/hours.selector';
 import IconSelector from '@/selectors/icon.selector';
+import SettingComponent from '@/components/setting.component';
 import {logError} from '@/services/errors.service.js';
 import ModalComponent from '@/components/modal.component';
 
-const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
+const AddModal = ({
+  visible,
+  onDismiss,
+  fetchAllHabits,
+  skipDefaultsPicker = false,
+}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const [step, setStep] = useState(1);
+  const initialStep = skipDefaultsPicker ? 1 : 0;
+  const [step, setStep] = useState(initialStep);
   const [progressBarValue, setProgressBarValue] = useState(0);
 
   const [habitName, setHabitName] = useState('');
@@ -29,8 +36,12 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
     setRepeatDays([]);
     setRepeatHours([]);
     setSelectedIcon('infinity');
-    setStep(1);
+    setStep(initialStep);
   };
+
+  useEffect(() => {
+    if (visible) setStep(initialStep);
+  }, [visible, initialStep]);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -51,6 +62,14 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
     } catch (error) {
       logError(error, 'handleSave');
     }
+  };
+
+  const handlePickDefault = habitId => {
+    const data = DEFAULT_HABITS_DATA.find(h => h.id === habitId);
+    if (!data) return;
+    setHabitName(t(`default-habits.${habitId}.habitName`));
+    setSelectedIcon(data.icon);
+    setStep(1);
   };
 
   useEffect(() => {
@@ -77,10 +96,37 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
       title={t('title.add')}
       onClose={() => {
         onDismiss();
-        resetInputs();
+        setTimeout(() => {
+          resetInputs();
+        }, 500);
       }}>
       <Card.Content>
-        <ProgressBar style={styles.progress__bar} progress={progressBarValue} />
+        {step > 0 && (
+          <ProgressBar
+            style={styles.progress__bar}
+            progress={progressBarValue}
+          />
+        )}
+
+        {step === 0 && (
+          <ScrollView style={{maxHeight: 400, marginHorizontal: -16}}>
+            <SettingComponent
+              label={t('addStep.customHabit')}
+              leftIcon="plus"
+              onPress={() => setStep(1)}
+              showChip={false}
+            />
+            {DEFAULT_HABITS_DATA.map(h => (
+              <SettingComponent
+                key={h.id}
+                label={t(`default-habits.${h.id}.habitName`)}
+                leftIcon={h.icon}
+                onPress={() => handlePickDefault(h.id)}
+                showChip={false}
+              />
+            ))}
+          </ScrollView>
+        )}
 
         {step === 1 && (
           <>
@@ -124,28 +170,36 @@ const AddModal = ({visible, onDismiss, fetchAllHabits}) => {
 
         <View style={styles.gap} />
 
-        <Card.Actions>
-          {step > 1 && (
-            <Button mode="outlined" onPress={handlePrevStep} icon="arrow-left">
-              {t('button.back')}
-            </Button>
-          )}
+        {step > 0 && (
+          <Card.Actions>
+            {step > initialStep && (
+              <Button
+                mode="outlined"
+                onPress={handlePrevStep}
+                icon="arrow-left">
+                {t('button.back')}
+              </Button>
+            )}
 
-          {step < maxSteps && (
-            <Button
-              onPress={handleNextStep}
-              disabled={!canProceed()}
-              icon="arrow-right">
-              {t('button.next')}
-            </Button>
-          )}
+            {step < maxSteps && (
+              <Button
+                onPress={handleNextStep}
+                disabled={!canProceed()}
+                icon="arrow-right">
+                {t('button.next')}
+              </Button>
+            )}
 
-          {step === maxSteps && (
-            <Button onPress={handleSave} disabled={!canProceed()} icon="check">
-              {t('button.save')}
-            </Button>
-          )}
-        </Card.Actions>
+            {step === maxSteps && (
+              <Button
+                onPress={handleSave}
+                disabled={!canProceed()}
+                icon="check">
+                {t('button.save')}
+              </Button>
+            )}
+          </Card.Actions>
+        )}
       </Card.Content>
     </ModalComponent>
   );
