@@ -23,7 +23,7 @@ import {
 import {syncUserData} from '@/services/supabase.service';
 import {scheduleHabitNotifications} from '@/services/notifications.service';
 import {setHabits, setHabitsLoading, setSettings} from '@/redux/actions';
-import {Icon, Text} from 'react-native-paper';
+import {Icon, Text, useTheme} from 'react-native-paper';
 import NowCard from '@/cards/now.card';
 import SummaryCard from '@/cards/summary.card';
 import EmptyCard from '@/cards/empty.card';
@@ -38,6 +38,7 @@ const NowView = () => {
   const isFocused = useIsFocused();
   useDoubleBackExit(isFocused);
   const styles = useStyles();
+  const theme = useTheme();
   const dispatch = useDispatch();
 
   const habits = useSelector(state => state.habits);
@@ -162,19 +163,33 @@ const NowView = () => {
     <>
       <Topbar>
         <Topbar.Content title={t('view.now')} />
-        {streakCount > 0 && (
-          <View
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 16,
+          }}>
+          <Icon
+            source="fire"
+            size={24}
+            color={
+              streakCount > 0
+                ? theme.colors.onSurface
+                : theme.colors.onSurfaceDisabled
+            }
+          />
+          <Text
+            variant="titleMedium"
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginRight: 16,
+              marginLeft: 4,
+              color:
+                streakCount > 0
+                  ? theme.colors.onSurface
+                  : theme.colors.onSurfaceDisabled,
             }}>
-            <Icon source="fire" size={24} />
-            <Text variant="titleMedium" style={{marginLeft: 4}}>
-              {streakCount}
-            </Text>
-          </View>
-        )}
+            {streakCount}
+          </Text>
+        </View>
       </Topbar>
 
       <ScrollView style={styles.container}>

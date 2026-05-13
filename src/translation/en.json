@@ -22,6 +22,7 @@
     "goal-reached": "Goal reached!",
     "contact": "Contact",
     "support": "Coffee",
+    "thanks-support": "Thank you!",
     "filter": "Filter habits",
     "history": "History",
     "terms": "Privacy Policy"
@@ -82,7 +83,8 @@
     "change-goal": "Do you want to change the goal?\nBy default, it is set as the number of repetitions to be done within 4 weeks.",
     "goal-reached": "You've reached your goal! Want to push further and increase the limit to build an even stronger habit?",
     "contact": "Fill out the form to contact the app's author.",
-    "support": "Hi, {{userName}}!\n\nI build Dooit on my own. If the app is helping you build habits, you can support its further development.\n\nAll it takes is watching a short ad or buying me a virtual coffee.\n\nI’d really appreciate it.\n~ Miki Bryksa"
+    "support": "Hi, {{userName}}!\n\nI build Dooit on my own. If the app is helping you build habits, you can support its further development.\n\nAll it takes is watching a short ad or buying me a virtual coffee. I’d really appreciate it.\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}, your support truly means a lot to me!\n\nYou make it possible for Dooit to continue growing and help more people build better habits. Take care and good luck achieving your goals!\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Delete",
@@ -110,7 +112,6 @@
     "deleting": "Deleting",
     "understand": "Got it",
     "watch": "Watch",
-    "thanks": "Thank you!",
     "update": "Update"
   },
   "contact": {
