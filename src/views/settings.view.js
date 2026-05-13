@@ -24,6 +24,7 @@ import SupportDialog from '@/dialogs/support.dialog';
 import DeleteDataDialog from '@/dialogs/delete-data.dialog';
 import ResetDataDialog from '@/dialogs/reset-counters.dialog';
 import NameModal from '@/modals/name.modal';
+import TermsDialog from '@/dialogs/terms.dialog';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
@@ -45,6 +46,7 @@ const SettingsView = () => {
   const [visibleNameModal, setVisibleNameModal] = useState(false);
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
   const [visibleResetDataDialog, setVisibleResetDataDialog] = useState(false);
+  const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
   const [adsLoading, setAdsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
 
@@ -105,6 +107,7 @@ const SettingsView = () => {
   const handleSupportDialog = () => setVisibleSupportDialog(v => !v);
   const handleNameModal = () => setVisibleNameModal(v => !v);
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
+  const handleTermsDialog = () => setVisibleTermsDialog(v => !v);
 
   const canReset = hasAnyExecutions() || settings.streakCount > 0;
 
@@ -321,6 +324,13 @@ const SettingsView = () => {
         />
 
         <SettingComponent
+          label={t('settings.terms')}
+          value={t('settings.show')}
+          icon="file-document-outline"
+          onPress={handleTermsDialog}
+        />
+
+        <SettingComponent
           label={t('settings.data')}
           value={t('settings.delete')}
           icon={isConnected ? 'delete-outline' : 'wifi-off'}
@@ -400,6 +410,8 @@ const SettingsView = () => {
         onDismiss={handleDeleteDataDialog}
         onConfirm={handleDeleteData}
       />
+
+      <TermsDialog visible={visibleTermsDialog} onDismiss={handleTermsDialog} />
     </>
   );
 };

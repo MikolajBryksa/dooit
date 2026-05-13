@@ -27,16 +27,16 @@
     "terms": "Polityka prywatności"
   },
   "terms": {
-    "s1-title": "Zbieranie danych",
-    "s1-body": "Dooit zbiera dane dotyczące Twoich nawyków. Zbierane dane obejmują nazwy nawyków, częstotliwość ich wykonywania oraz statystyki postępów. Dane te są wykorzystywane wyłącznie do analizy, jakie nawyki użytkownicy najczęściej budują oraz w jakiej liczbie. Analiza ta pozwala rozwijać aplikację zgodnie z rzeczywistymi potrzebami użytkowników.",
-    "s2-title": "Twoja prywatność",
-    "s2-body": "Twoje imię nie jest przesyłane ani przechowywane poza Twoim urządzeniem. Dane dotyczące nawyków są oznaczane losowo wygenerowanym identyfikatorem i zbierane anonimowo. Dane związane z reklamami są przetwarzane przez Google zgodnie z Polityką Prywatności Google.",
-    "s3-title": "Usuwanie danych",
-    "s3-body": "W każdej chwili możesz trwale usunąć wszystkie swoje dane w zakładce Ustawienia. Dane zostaną usunięte zarówno z Twojego urządzenia, jak i z bazy danych Dooit. Usunięcie danych jest nieodwracalne. Uwaga: usunięcie danych Dooit nie wpływa na dane wcześniej zebrane przez Google AdMob.",
-    "s4-title": "Licencja",
-    "s4-body": "Dooit jest bezpłatny. Oficjalna wersja aplikacji jest dostępna w Google Play. Kod źródłowy jest publicznie dostępny na licencji CC BY-NC 4.0 — możesz go przeglądać i wykorzystywać w celach niekomercyjnych, jednak jego komercyjne użycie jest zabronione.",
-    "s5-title": "Reklamy",
-    "s5-body": "Dooit wyświetla reklamy dostarczane przez Google AdMob. W celu wyświetlania reklam Google AdMob może zbierać i przetwarzać określone dane z Twojego urządzenia, w tym identyfikator reklamowy, adres IP oraz informacje o urządzeniu. Jeśli wyrazisz zgodę na spersonalizowane reklamy, dane te mogą być również wykorzystywane do wyświetlania reklam dopasowanych do Twoich zainteresowań."
+    "last-updated": "Ostatnia aktualizacja: 13 maja 2026",
+    "intro": "Dooit to aplikacja stworzona i utrzymywana przez Mikołaja Bryksę. Niniejsza polityka wyjaśnia, jakie dane aplikacja zbiera, w jakim celu, jak długo są przechowywane oraz co możesz z nimi zrobić. W sprawach dotyczących prywatności skorzystaj z formularza kontaktowego w aplikacji.",
+    "s1-title": "1. Zbierane dane",
+    "s1-body": "• Konto — przy pierwszym uruchomieniu aplikacji tworzone jest anonimowe konto, dzięki czemu Twoje dane mogą być zapisywane i synchronizowane.\n• Imię — imię, które wpisujesz na początku lub zmieniasz później w Ustawieniach. Jest przechowywane na Twoim urządzeniu i w bazie danych aplikacji, powiązane z Twoim kontem. Możesz wpisać dowolne imię, także pseudonim.\n• Dane nawyków — nawyki, które tworzysz, historia ich wykonywania oraz statystyki serii, powiązane z Twoim kontem.\n• Zgłoszenia błędów — jeśli aplikacja się zawiesi lub napotka błąd, zapisywany jest komunikat błędu, wersja aplikacji oraz ekran, na którym wystąpił.\n• Wiadomości kontaktowe — jeśli skorzystasz z formularza kontaktowego w aplikacji, podany adres e-mail i wiadomość są zapisywane, aby autor mógł odpowiedzieć. Powoduje to powiązanie Twojego adresu e-mail z kontem na czas przechowywania wiadomości.\n• Dane reklamowe — reklamy są dostarczane przez Google AdMob, który może zbierać Twój identyfikator reklamowy, adres IP oraz informacje o urządzeniu. Reguluje to Polityka prywatności Google: https://policies.google.com/privacy \n\nAplikacja nie zbiera numerów telefonów, dokładnej lokalizacji, kontaktów, zdjęć ani danych biometrycznych.\n\nBaza danych aplikacji jest utrzymywana przez Supabase (https://supabase.com/privacy). Niektóre dane mogą być przetwarzane poza Twoim krajem przez tego dostawcę, z zachowaniem standardowych zabezpieczeń ochrony danych. Dane są szyfrowane podczas przesyłania, a każde konto ma dostęp wyłącznie do swoich danych.",
+    "s2-title": "2. Jak są wykorzystywane dane",
+    "s2-body": "Wszystkie dane są wykorzystywane, aby pomóc Ci budować nawyki — to jest główny cel aplikacji. Konkretnie dane są wykorzystywane do:\n• Zapisywania Twoich nawyków i postępów między sesjami.\n• Personalizacji interfejsu poprzez Twoje imię.\n• Diagnozowania i naprawiania błędów.\n• Odpowiadania na wiadomości z formularza kontaktowego.\n• Wyświetlania reklam (za pośrednictwem Google AdMob).\n\nAutor nie sprzedaje Twoich danych ani nie udostępnia ich pośrednikom danych. Niektóre dane reklamowe zbierane przez Google AdMob mogą być udostępniane partnerom reklamowym w celu dostarczania reklam — można to kontrolować w oknie zgody wyświetlanym przez AdMob przy pierwszym uruchomieniu oraz w Ustawieniach.",
+    "s3-title": "3. Twoje prawa",
+    "s3-body": "Masz prawo do:\n• Wglądu w dane, które są o Tobie przechowywane.\n• Poprawienia nieprawidłowych danych.\n• Usunięcia swoich danych.\n• Ograniczenia lub sprzeciwu wobec przetwarzania.\n• Złożenia skargi do lokalnego organu ochrony danych osobowych.\n• Rezygnacji z udostępniania danych osobowych do celów reklamowych — można to kontrolować w oknie zgody wyświetlanym przez Google AdMob.\n\nAby skorzystać z któregokolwiek z tych praw, skontaktuj się przez formularz Kontakt w aplikacji. Odpowiedź otrzymasz w ciągu 30 dni.",
+    "s4-title": "4. Usuwanie danych",
+    "s4-body": "Możesz trwale usunąć wszystkie swoje dane w dowolnym momencie z poziomu Ustawień. Spowoduje to usunięcie nawyków, serii, imienia, zgłoszeń błędów oraz wiadomości kontaktowych zarówno z bazy danych, jak i z Twojego urządzenia. Operacja jest nieodwracalna.\n\nWszystkie dane są również automatycznie usuwane po 12 miesiącach bezczynności.\n\nUsunięcie danych Dooit nie wpływa na dane wcześniej zebrane przez Google AdMob. Aby zarządzać danymi Google, odwiedź: https://myaccount.google.com/data-and-privacy"
   },
   "settings": {
     "version": "Wersja",
@@ -58,6 +58,8 @@
     "tips": "Wskazówki",
     "restore-tips": "Przywróć",
     "tips-restored": "Przywrócono",
+    "terms": "Polityka prywatności",
+    "show": "Pokaż",
     "data": "Dane konta",
     "delete": "Usuń",
     "ads": "Reklamy",
