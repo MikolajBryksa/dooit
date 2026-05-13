@@ -30,6 +30,7 @@ import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
 import SettingComponent from '@/components/setting.component';
 import {testErrorLogging, logError} from '@/services/errors.service';
+import {checkForUpdate} from '@/services/update.service';
 import Topbar from '@/components/topbar.component';
 import TipComponent from '@/components/tip.component';
 import {AdsConsent} from 'react-native-google-mobile-ads';
@@ -49,12 +50,23 @@ const SettingsView = () => {
   const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
   const [adsLoading, setAdsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
+  const [updateHandler, setUpdateHandler] = useState(null);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       setIsConnected(!!state.isConnected);
     });
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    checkForUpdate().then(handler => {
+      if (!cancelled && handler) setUpdateHandler(() => handler);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const [language, setLanguage] = useState(settings.language);
@@ -236,9 +248,9 @@ const SettingsView = () => {
         </TipComponent>
         <SettingComponent
           label={t('settings.version')}
-          value={packageJson.version}
-          icon="information-outline"
-          onPress={handleVersion}
+          value={updateHandler ? t('button.update') : packageJson.version}
+          icon={updateHandler ? 'download-outline' : 'information-outline'}
+          onPress={updateHandler || handleVersion}
         />
 
         <SettingComponent

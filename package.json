@@ -47,7 +47,8 @@
     "react-native-uuid": "^2.0.3",
     "react-native-vector-icons": "^10.3.0",
     "react-redux": "^9.2.0",
-    "realm": "^20.0.0"
+    "realm": "^20.0.0",
+    "sp-react-native-in-app-updates": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
