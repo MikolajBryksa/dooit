@@ -32,7 +32,6 @@ import StartCard from '@/cards/start.card';
 import {logError} from '@/services/errors.service';
 import AddModal from '@/modals/add.modal';
 import Topbar from '@/components/topbar.component';
-import TipComponent from '@/components/tip.component';
 
 const NowView = () => {
   const {t} = useTranslation();
@@ -44,7 +43,6 @@ const NowView = () => {
   const habits = useSelector(state => state.habits);
   const habitsLoading = useSelector(state => state.habitsLoading);
   const firstLaunch = useSelector(state => state.settings.firstLaunch);
-  const userName = useSelector(state => state.settings.userName);
   const streakCount = useSelector(state => state.settings.streakCount ?? 0);
   const lastStreakDate = useSelector(state => state.settings.lastStreakDate);
 
@@ -189,25 +187,20 @@ const NowView = () => {
         ) : allCompleted || isEndDay ? (
           <SummaryCard weekdayKey={weekdayKey} />
         ) : activeHabit ? (
-          <>
-            <TipComponent tipId="now_first_habit">
-              {t('tip.now-first-habit', {userName})}
-            </TipComponent>
-            <NowCard
-              key={activeHabit.key}
-              id={activeHabit.id}
-              habitName={activeHabit.habitName}
-              selectedHour={activeHabit.selectedHour}
-              slotIndex={activeHabit.slotIndex}
-              icon={activeHabit.icon}
-              goal={activeHabit.goal}
-              isNext={true}
-              isLastHabit={isLastHabit}
-              onUpdated={refreshHabits}
-              onDone={handleDone}
-              onNext={goToNextHabit}
-            />
-          </>
+          <NowCard
+            key={activeHabit.key}
+            id={activeHabit.id}
+            habitName={activeHabit.habitName}
+            selectedHour={activeHabit.selectedHour}
+            slotIndex={activeHabit.slotIndex}
+            icon={activeHabit.icon}
+            goal={activeHabit.goal}
+            isNext={true}
+            isLastHabit={isLastHabit}
+            onUpdated={refreshHabits}
+            onDone={handleDone}
+            onNext={goToNextHabit}
+          />
         ) : null}
       </ScrollView>
 

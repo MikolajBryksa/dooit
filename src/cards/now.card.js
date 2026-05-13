@@ -2,12 +2,14 @@ import React, {useEffect, useRef, useState, useMemo, useCallback} from 'react';
 import {Text, Button} from 'react-native-paper';
 import {View, Animated} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
 import {useStyles} from '@/styles';
 import {useTheme} from 'react-native-paper';
 import {pickRandomMessage, getLocalDateKey} from '@/utils';
 import {useCurrentTime, useChoiceEffect} from '@/hooks';
 import PieCircle from '../circles/pie.circle';
 import NowComponent from '../components/now.component';
+import TipComponent from '../components/tip.component';
 import GoalReachedDialog from '@/dialogs/goal-reached.dialog';
 import {
   hasExecutionOrDeleted,
@@ -32,6 +34,7 @@ const NowCard = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const theme = useTheme();
+  const userName = useSelector(state => state.settings.userName);
   const [step, setStep] = useState(1);
   const [isManuallyUnlocked, setIsManuallyUnlocked] = useState(false);
   const [choice, setChoice] = useState(null);
@@ -189,6 +192,15 @@ const NowCard = ({
 
   return (
     <>
+      {isLocked ? (
+        <TipComponent tipId="now_locked_habit">
+          {t('tip.now-locked-habit')}
+        </TipComponent>
+      ) : (
+        <TipComponent tipId="now_first_habit">
+          {t('tip.now-first-habit', {userName})}
+        </TipComponent>
+      )}
       <View style={styles.cardWrapper}>
         <Animated.View style={{transform: [{translateX: cardShakeX}]}}>
           <NowComponent

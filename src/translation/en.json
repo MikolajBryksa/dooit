@@ -155,6 +155,7 @@
     "onboarding-same-time": "Habits stick best when you repeat them at the same time on the same days.",
     "now-repetitions-matter": "In Dooit, only repetitions matter. No calories, liters, kilograms, or minutes.",
     "now-first-habit": "Focus only on what you see below, {{userName}}, then mark if you completed it.",
+    "now-locked-habit": "This habit is scheduled for later. If you want to do it right now, tap unlock.",
     "summary-daily-recap": "At the end of the day, Dooit summarizes your repetitions and gives a short analysis.",
     "habits-edit-and-goal": "You can edit any habit anytime. The default goal is based on 28 days of repetitions.",
     "settings-overview": "Here you can update your name, change the language, switch the mode, and manage notifications and ads."
