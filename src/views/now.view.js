@@ -2,8 +2,8 @@ import React, {useMemo, useEffect, useRef, useState, useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {ScrollView, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {BannerAd, BannerAdSize} from 'react-native-google-mobile-ads';
 import {AD_UNITS} from '@/services/ads.service';
+import Banner from '@/components/banner.component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useStyles} from '@/styles';
 import {dateToWeekday} from '@/utils';
@@ -48,7 +48,6 @@ const NowView = () => {
   const lastStreakDate = useSelector(state => state.settings.lastStreakDate);
 
   const [visibleAddModal, setVisibleAddModal] = useState(false);
-  const [bannerLoaded, setBannerLoaded] = useState(false);
 
   const handleAddModal = () => {
     setVisibleAddModal(!visibleAddModal);
@@ -152,10 +151,6 @@ const NowView = () => {
     (allCompleted || isEndDay);
 
   useEffect(() => {
-    if (showSummary) setBannerLoaded(false);
-  }, [showSummary]);
-
-  useEffect(() => {
     scheduleHabitNotifications(habits, t, lastStreakDate);
   }, [habits, t, lastStreakDate]);
 
@@ -219,16 +214,7 @@ const NowView = () => {
         ) : null}
       </ScrollView>
 
-      {showSummary && (
-        <View style={{minHeight: bannerLoaded ? 50 : 0}}>
-          <BannerAd
-            unitId={AD_UNITS.BANNER_NOW}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            onAdLoaded={() => setBannerLoaded(true)}
-            onAdFailedToLoad={() => setBannerLoaded(false)}
-          />
-        </View>
-      )}
+      <Banner unitId={AD_UNITS.BANNER_SUMMARY} enabled={showSummary} />
 
       <AddModal
         visible={visibleAddModal}

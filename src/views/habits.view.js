@@ -13,6 +13,8 @@ import {useStyles} from '@/styles';
 import Topbar from '@/components/topbar.component';
 import {MAX_HABITS} from '@/constants';
 import TipComponent from '@/components/tip.component';
+import {AD_UNITS} from '@/services/ads.service';
+import Banner from '@/components/banner.component';
 
 const HabitsView = () => {
   const {t} = useTranslation();
@@ -105,6 +107,11 @@ const HabitsView = () => {
         )}
         <View style={styles.gap} />
       </ScrollView>
+
+      <Banner
+        unitId={AD_UNITS.BANNER_HABITS}
+        enabled={sortedHabits.length > 0}
+      />
 
       <AddModal
         visible={visibleAddModal}

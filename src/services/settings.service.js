@@ -2,6 +2,8 @@ import realm from '@/storage/schemas';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {subtractDays} from '@/utils';
 
+const ADS_GRACE_PERIOD_DAYS = 3;
+
 export const getSettings = () => {
   try {
     const settings = realm.objects('Settings')[0];
@@ -21,6 +23,7 @@ export const getSettings = () => {
       dismissedTips: [...(settings.dismissedTips || [])],
       streakCount: settings.streakCount ?? 0,
       lastStreakDate: settings.lastStreakDate ?? null,
+      adsEnabled: settings.adsEnabled ?? false,
     };
   } catch (e) {
     console.error('[settings.getSettings]', e?.message);
@@ -53,6 +56,7 @@ export const updateSettings = updates => {
       dismissedTips: [...(updatedSettings.dismissedTips || [])],
       streakCount: updatedSettings.streakCount ?? 0,
       lastStreakDate: updatedSettings.lastStreakDate ?? null,
+      adsEnabled: updatedSettings.adsEnabled ?? false,
     };
   } catch (e) {
     console.error('[settings.updateSettings]', e?.message);
@@ -103,6 +107,22 @@ export const updateSettingValue = (key, value) => {
   return updateSettings(updates);
 };
 
+export const enableAdsIfDue = createdAt => {
+  try {
+    const settings = getSettings();
+    if (!settings || settings.adsEnabled || !createdAt) return null;
+
+    const ageMs = Date.now() - new Date(createdAt).getTime();
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+    if (ageDays < ADS_GRACE_PERIOD_DAYS) return null;
+
+    return updateSettings({adsEnabled: true});
+  } catch (e) {
+    console.error('[settings.enableAdsIfDue]', e?.message);
+    return null;
+  }
+};
+
 export const deleteAllLocalData = async () => {
   try {
     realm.write(() => {
@@ -126,6 +146,7 @@ export const deleteAllLocalData = async () => {
           dismissedTips: [],
           streakCount: 0,
           lastStreakDate: null,
+          adsEnabled: false,
         },
         'modified',
       );

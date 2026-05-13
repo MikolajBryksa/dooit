@@ -2,7 +2,9 @@ import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
 import * as Keychain from 'react-native-keychain';
 import {logError} from './errors.service';
-import {getSettingValue} from './settings.service';
+import {getSettingValue, enableAdsIfDue} from './settings.service';
+import store from '@/redux/store';
+import {setSettings} from '@/redux/actions';
 
 const SERVICE_NAME = 'supabase_auth';
 
@@ -122,6 +124,9 @@ export const syncUserData = async (habits, streak) => {
     );
 
     if (error) logError(error, 'syncUserData');
+
+    const updated = enableAdsIfDue(session?.user?.created_at);
+    if (updated) store.dispatch(setSettings(updated));
   } catch (error) {
     logError(error, 'syncUserData');
   }

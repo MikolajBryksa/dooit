@@ -34,6 +34,8 @@ import {checkForUpdate} from '@/services/update.service';
 import Topbar from '@/components/topbar.component';
 import TipComponent from '@/components/tip.component';
 import {AdsConsent} from 'react-native-google-mobile-ads';
+import {AD_UNITS} from '@/services/ads.service';
+import Banner from '@/components/banner.component';
 
 const SettingsView = () => {
   const {t} = useTranslation();
@@ -160,6 +162,7 @@ const SettingsView = () => {
           notifications: false,
           streakCount: 0,
           lastStreakDate: null,
+          adsEnabled: false,
         }),
       );
     } catch (e) {
@@ -392,11 +395,30 @@ const SettingsView = () => {
               icon="alert-octagon-outline"
               onPress={() => setTriggerCrash(true)}
             />
+
+            <SettingComponent
+              label={t('settings.test-ads')}
+              value={
+                settings.adsEnabled
+                  ? t('settings.enabled')
+                  : t('settings.disabled')
+              }
+              icon={settings.adsEnabled ? 'toggle-switch' : 'toggle-switch-off'}
+              onPress={() => {
+                const updated = updateSettingValue(
+                  'adsEnabled',
+                  !settings.adsEnabled,
+                );
+                if (updated) dispatch(setSettings(updated));
+              }}
+            />
           </>
         )}
 
         <View style={styles.gap} />
       </ScrollView>
+
+      <Banner unitId={AD_UNITS.BANNER_SETTINGS} />
 
       <ContactModal
         visible={visibleContactModal}

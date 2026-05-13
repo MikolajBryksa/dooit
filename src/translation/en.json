@@ -73,7 +73,8 @@
     "error-logged": "Error logged",
     "log-error": "Log error",
     "test-crash": "Test crash",
-    "crash-app": "Crash app"
+    "crash-app": "Crash app",
+    "test-ads": "Test ads"
   },
   "message": {
     "delete-habit": "Are you sure to remove the habit:",
@@ -84,7 +85,7 @@
     "goal-reached": "You've reached your goal! Want to push further and increase the limit to build an even stronger habit?",
     "contact": "Fill out the form to contact the app's author.",
     "support": "Hi, {{userName}}!\n\nI build Dooit on my own. If the app is helping you build habits, you can support its further development.\n\nAll it takes is watching a short ad or buying me a virtual coffee. I’d really appreciate it.\n\n~ Mikołaj Bryksa",
-    "thanks-support": "{{userName}}, your support truly means a lot to me!\n\nYou make it possible for Dooit to continue growing and help more people build better habits. Take care and good luck achieving your goals!\n\n~ Mikołaj Bryksa"
+    "thanks-support": "{{userName}}, your support truly means a lot!\n\nYou make it possible for Dooit to continue growing and help more people build better habits. Take care and good luck achieving your goals!\n\n~ Mikołaj Bryksa"
   },
   "button": {
     "delete": "Delete",

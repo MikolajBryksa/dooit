@@ -50,6 +50,7 @@ Settings.schema = {
     dismissedTips: 'string[]',
     streakCount: 'int?',
     lastStreakDate: 'string?',
+    adsEnabled: 'bool?',
   },
 };
 
@@ -81,7 +82,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 35,
+  schemaVersion: 36,
   migration: () => {},
 };
 
