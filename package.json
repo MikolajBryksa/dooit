@@ -29,6 +29,7 @@
     "react-native": "^0.75.3",
     "react-native-calendars": "^1.1314.0",
     "react-native-config": "^1.6.1",
+    "react-native-device-info": "^15.0.2",
     "react-native-draggable-flatlist": "^4.0.3",
     "react-native-gesture-handler": "^2.20.0",
     "react-native-google-mobile-ads": "^14.11.0",
