@@ -24,6 +24,7 @@ export const getSettings = () => {
       streakCount: settings.streakCount ?? 0,
       lastStreakDate: settings.lastStreakDate ?? null,
       adsEnabled: settings.adsEnabled ?? false,
+      pendingAdsConsent: settings.pendingAdsConsent ?? false,
     };
   } catch (e) {
     console.error('[settings.getSettings]', e?.message);
@@ -57,6 +58,7 @@ export const updateSettings = updates => {
       streakCount: updatedSettings.streakCount ?? 0,
       lastStreakDate: updatedSettings.lastStreakDate ?? null,
       adsEnabled: updatedSettings.adsEnabled ?? false,
+      pendingAdsConsent: updatedSettings.pendingAdsConsent ?? false,
     };
   } catch (e) {
     console.error('[settings.updateSettings]', e?.message);
@@ -147,6 +149,7 @@ export const deleteAllLocalData = async () => {
           streakCount: 0,
           lastStreakDate: null,
           adsEnabled: false,
+          pendingAdsConsent: false,
         },
         'modified',
       );

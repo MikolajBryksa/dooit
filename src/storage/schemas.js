@@ -51,6 +51,7 @@ Settings.schema = {
     streakCount: 'int?',
     lastStreakDate: 'string?',
     adsEnabled: 'bool?',
+    pendingAdsConsent: 'bool?',
   },
 };
 
@@ -82,7 +83,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 36,
+  schemaVersion: 37,
   migration: () => {},
 };
 

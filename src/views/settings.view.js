@@ -33,7 +33,7 @@ import {testErrorLogging, logError} from '@/services/errors.service';
 import {checkForUpdate} from '@/services/update.service';
 import Topbar from '@/components/topbar.component';
 import TipComponent from '@/components/tip.component';
-import {AdsConsent} from 'react-native-google-mobile-ads';
+import {showAdsConsentForm} from '@/services/consent.service';
 import {AD_UNITS} from '@/services/ads.service';
 import Banner from '@/components/banner.component';
 
@@ -205,10 +205,7 @@ const SettingsView = () => {
   async function handleAdsConsent() {
     setAdsLoading(true);
     try {
-      const consentInfo = await AdsConsent.requestInfoUpdate();
-      if (consentInfo.isConsentFormAvailable) {
-        await AdsConsent.showForm();
-      }
+      await showAdsConsentForm();
     } catch (e) {
       logError(e, 'settings.handleAdsConsent');
     } finally {

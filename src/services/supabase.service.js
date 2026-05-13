@@ -3,6 +3,7 @@ import Config from 'react-native-config';
 import * as Keychain from 'react-native-keychain';
 import {logError} from './errors.service';
 import {getSettingValue, enableAdsIfDue} from './settings.service';
+import {tryShowPendingAdsConsent} from './consent.service';
 import store from '@/redux/store';
 import {setSettings} from '@/redux/actions';
 
@@ -123,7 +124,11 @@ export const syncUserData = async (habits, streak) => {
       {onConflict: 'user_id'},
     );
 
-    if (error) logError(error, 'syncUserData');
+    if (error) {
+      logError(error, 'syncUserData');
+    } else if (getSettingValue('pendingAdsConsent')) {
+      await tryShowPendingAdsConsent();
+    }
 
     const updated = enableAdsIfDue(session?.user?.created_at);
     if (updated) store.dispatch(setSettings(updated));

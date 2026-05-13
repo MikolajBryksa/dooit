@@ -18,7 +18,8 @@ import {
   getHabitById,
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
-import mobileAds, {AdsConsent} from 'react-native-google-mobile-ads';
+import mobileAds from 'react-native-google-mobile-ads';
+import {requestAdsConsentWithNetworkCheck} from '@/services/consent.service';
 import {habitIcons} from '@/constants';
 import AddModal from '@/modals/add.modal';
 import SettingComponent from '@/components/setting.component';
@@ -106,12 +107,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     dispatch(setSettings(updatedSettings));
 
     setStep1Loading(true);
-    try {
-      const consentInfo = await AdsConsent.requestInfoUpdate();
-      if (consentInfo.isConsentFormAvailable) {
-        await AdsConsent.showForm();
-      }
-    } catch (_e) {}
+    await requestAdsConsentWithNetworkCheck();
     setStep1Loading(false);
 
     setStep(2);
