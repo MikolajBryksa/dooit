@@ -4,8 +4,9 @@ import * as RNLocalize from 'react-native-localize';
 import en from './translation/en.json';
 import pl from './translation/pl.json';
 import de from './translation/de.json';
+import es from './translation/es.json';
 
-export const SUPPORTED_LANGUAGES = ['en', 'pl', 'de'];
+export const SUPPORTED_LANGUAGES = ['en', 'pl', 'de', 'es'];
 
 export const detectDeviceLanguage = () => {
   const deviceLocales = RNLocalize.getLocales();
@@ -21,6 +22,7 @@ i18next.use(initReactI18next).init({
     en: {translation: en},
     pl: {translation: pl},
     de: {translation: de},
+    es: {translation: es},
   },
 });
 

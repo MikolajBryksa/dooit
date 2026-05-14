@@ -3,13 +3,14 @@ import {View, ScrollView} from 'react-native';
 import {Chip, useTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {en, pl, de, registerTranslation} from 'react-native-paper-dates';
+import {en, pl, de, es, registerTranslation} from 'react-native-paper-dates';
 import {useStyles} from '@/styles';
 import CustomHourDialog from '@/dialogs/custom-hour.dialog';
 
 registerTranslation('en', en);
 registerTranslation('pl', pl);
 registerTranslation('de', de);
+registerTranslation('es', es);
 
 const SLOT_START_HOUR = 5;
 const SLOT_END_HOUR = 23;
