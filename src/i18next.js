@@ -8,8 +8,9 @@ import es from './translation/es.json';
 import fr from './translation/fr.json';
 import nl from './translation/nl.json';
 import it from './translation/it.json';
+import uk from './translation/uk.json';
 
-export const SUPPORTED_LANGUAGES = ['en', 'pl', 'de', 'es', 'fr', 'nl', 'it'];
+export const SUPPORTED_LANGUAGES = ['en', 'pl', 'de', 'es', 'fr', 'nl', 'it', 'uk'];
 
 export const detectDeviceLanguage = () => {
   const deviceLocales = RNLocalize.getLocales();
@@ -29,6 +30,7 @@ i18next.use(initReactI18next).init({
     fr: {translation: fr},
     nl: {translation: nl},
     it: {translation: it},
+    uk: {translation: uk},
   },
 });
 
