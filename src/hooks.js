@@ -47,16 +47,21 @@ export function useTodayKey() {
 }
 
 export function useCurrentTime() {
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    return now;
-  });
+  const [currentTime, setCurrentTime] = useState(() => new Date());
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(id);
+    let timeoutId;
+    const scheduleNextMinute = () => {
+      const now = new Date();
+      const msUntilNextMinute =
+        60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+      timeoutId = setTimeout(() => {
+        setCurrentTime(new Date());
+        scheduleNextMinute();
+      }, msUntilNextMinute);
+    };
+    scheduleNextMinute();
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return currentTime;
