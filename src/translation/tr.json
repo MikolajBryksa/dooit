@@ -1,0 +1,315 @@
+{
+  "view": {
+    "now": "Şimdi",
+    "habits": "Alışkanlıklar",
+    "settings": "Ayarlar"
+  },
+  "loading": {
+    "subtitle": "Lütfen biraz bekle.",
+    "title": "Yükleniyor"
+  },
+  "empty": {
+    "subtitle": "Bugün için alışkanlık yok.",
+    "title": "Alışkanlık yok"
+  },
+  "title": {
+    "add": "Alışkanlık ekle",
+    "delete-habit": "Alışkanlığı sil",
+    "delete-execution": "Tekrarı sil",
+    "delete-data": "Tüm verileri sil",
+    "reset-counters": "Sayaçları sıfırla",
+    "change-goal": "Hedefi değiştir",
+    "goal-reached": "Hedefe ulaşıldı!",
+    "contact": "İletişim",
+    "support": "Kahve",
+    "thanks-support": "Teşekkürler!",
+    "filter": "Alışkanlıkları filtrele",
+    "history": "Geçmiş",
+    "terms": "Gizlilik Politikası",
+    "customHour": "Özel saat"
+  },
+  "terms": {
+    "last-updated": "Son güncelleme: 13 Mayıs 2026",
+    "intro": "Dooit, Mikołaj Bryksa tarafından geliştirilen ve sürdürülen bir uygulamadır. Bu politika; uygulamanın hangi verileri topladığını, neden topladığını, ne kadar süre sakladığını ve bu konuda neler yapabileceğini açıklar. Gizlilikle ilgili her türlü soru için uygulamadaki iletişim formunu kullan.",
+    "s1-title": "1. Toplanan veriler",
+    "s1-body": "• Hesap — uygulamayı ilk açtığında verilerinin kaydedilebilmesi ve eşitlenebilmesi için anonim bir hesap oluşturulur.\n• Kullanıcı adı — tanıtım sırasında girdiğin ya da daha sonra Ayarlar’dan değiştirdiğin ad. Cihazında ve uygulamanın veritabanında, hesabına bağlı olarak saklanır. Takma ad dâhil istediğin adı kullanabilirsin.\n• Alışkanlık verileri — oluşturduğun alışkanlıklar, tamamlama geçmişi ve seri istatistikleri, hesabına bağlıdır.\n• Hata raporları — uygulama çökerse veya bir hatayla karşılaşırsa hata mesajı, uygulama sürümü ve hatanın oluştuğu ekran kaydedilir.\n• İletişim mesajları — uygulamadaki iletişim formunu kullanırsan, yanıt verilebilmesi için e-posta adresin ve mesajın saklanır. Bu, mesaj saklandığı sürece e-postanı hesabına bağlar.\n• Reklam verileri — reklamlar Google AdMob tarafından sunulur; bu hizmet reklam kimliğini, IP adresini ve cihaz bilgilerini toplayabilir. Bu konu Google Gizlilik Politikası’na tabidir: https://policies.google.com/privacy \n\nUygulama; telefon numarası, hassas konum, kişi, fotoğraf veya biyometrik veri toplamaz.\n\nUygulamanın veritabanı Supabase tarafından barındırılmaktadır (https://supabase.com/privacy). Bazı veriler, standart veri koruma güvenceleri kapsamında bu sağlayıcı tarafından ülken dışında işlenebilir. Veriler aktarım sırasında şifrelenir ve her hesap yalnızca kendi kayıtlarına erişir.",
+    "s2-title": "2. Verilerin nasıl kullanıldığı",
+    "s2-body": "Tüm veriler; alışkanlıklar oluşturmana yardımcı olmak için kullanılır — uygulamanın asıl amacı budur. Veriler özellikle şu amaçlarla kullanılır:\n• Oturumlar arasında alışkanlıklarını ve ilerlemeni kaydetmek.\n• Arayüzü, seçtiğin kullanıcı adıyla kişiselleştirmek.\n• Hataları tespit etmek ve düzeltmek.\n• İletişim formuyla gelen mesajlara yanıt vermek.\n• Reklam göstermek (Google AdMob aracılığıyla).\n\nYazar verilerini satmaz ve veri aracılarıyla paylaşmaz. Google AdMob tarafından toplanan bazı reklam verileri, reklam sunumu için iş ortaklarıyla paylaşılabilir — bu durum, AdMob’un ilk açılışta gösterdiği onay penceresinden ve Ayarlar’dan yönetilebilir.",
+    "s3-title": "3. Haklarınız",
+    "s3-body": "Şu haklara sahipsin:\n• Hakkında tutulan verilere erişmek.\n• Yanlış verileri düzeltmek.\n• Verilerini silmek.\n• İşlemeyi kısıtlamak veya itiraz etmek.\n• Yerel veri koruma kurumuna şikâyette bulunmak.\n• Reklam amaçlı veri paylaşımına itiraz etmek — bu durum, Google AdMob’un gösterdiği onay penceresinden yönetilebilir.\n\nBu haklardan herhangi birini kullanmak için uygulamadaki iletişim formunu kullan. Talepler 30 gün içinde yanıtlanır.",
+    "s4-title": "4. Veri silme",
+    "s4-body": "Tüm verilerini istediğin zaman Ayarlar üzerinden kalıcı olarak silebilirsin. Bu işlem alışkanlıklarını, serini, adını, hata raporlarını ve iletişim mesajlarını hem veritabanından hem de cihazından kaldırır. İşlem geri alınamaz.\n\nTüm veriler ayrıca 12 ay etkinlik olmaması durumunda otomatik olarak silinir.\n\nDooit verilerini silmek, Google AdMob tarafından önceden toplanmış verileri etkilemez. Google verilerini yönetmek için https://myaccount.google.com/data-and-privacy adresini ziyaret et."
+  },
+  "settings": {
+    "version": "Sürüm",
+    "user-name": "Adın",
+    "language": "Dil",
+    "clock-format": "Saat biçimi",
+    "first-day": "İlk gün",
+    "theme": "Mod",
+    "dark": "Koyu",
+    "light": "Açık",
+    "notifications": "Bildirimler",
+    "enabled": "Açık",
+    "disabled": "Kapalı",
+    "repetition-counters": "Tekrarlar",
+    "reset-counters": "Sıfırla",
+    "no-data": "Veri yok",
+    "tips": "İpuçları",
+    "restore-tips": "Geri yükle",
+    "tips-restored": "Geri yüklendi",
+    "terms": "Gizlilik Politikası",
+    "show": "Göster",
+    "data": "Hesap verileri",
+    "delete": "Sil",
+    "ads": "Reklamlar",
+    "manage-ads": "Yönet",
+    "test-connection": "Bağlantıyı sına",
+    "test": "Sına",
+    "connection-ok": "Çevrimiçi",
+    "connection-fail": "Çevrimdışı",
+    "test-error-logging": "Hata sına",
+    "error-logged": "Hata kaydedildi",
+    "log-error": "Hata gönder",
+    "test-crash": "Çökme sına",
+    "crash-app": "Uygulamayı çökert",
+    "test-ads": "Reklam sına"
+  },
+  "message": {
+    "delete-habit": "Alışkanlığı silmek istiyor musun:",
+    "delete-execution": "Bu tekrarı silmek istiyor musun?",
+    "delete-data": "Emin misin? Bu işlem tüm alışkanlıklarını, geçmişini ve hesap verilerini kalıcı olarak siler. İşlem geri alınamaz.",
+    "reset-counters": "Emin misin? Bu işlem tüm tekrar geçmişini sıfırlar. Alışkanlıkların ve ayarların aynı kalır.",
+    "change-goal": "Hedefi değiştirmek istiyor musun?\nVarsayılan olarak 4 hafta içinde yapılacak tekrar sayısına eşittir.",
+    "goal-reached": "Hedefine ulaştın! Alışkanlığı daha da güçlendirmek için sınırı artırıp daha ileri gitmek ister misin?",
+    "contact": "Uygulama yazarına ulaşmak için formu doldur.",
+    "support": "Selam, {{userName}}!\n\nDooit’i tek başıma geliştiriyorum. Uygulama alışkanlık kurmana yardımcı oluyorsa gelişimine destek olabilirsin.\n\nKısa bir reklamı izlemen ya da bana sanal bir kahve ısmarlaman yeterli. Bunu gerçekten çok takdir ederim.\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}, desteğin gerçekten çok değerli!\n\nSayende Dooit büyümeye ve daha fazla kişiye daha iyi alışkanlıklar kurmada yardımcı olmaya devam edebilir. Kendine iyi bak ve hedeflerinde bol şans!\n\n~ Mikołaj Bryksa"
+  },
+  "button": {
+    "delete": "Sil",
+    "cancel": "İptal",
+    "close": "Kapat",
+    "contact": "İletişim",
+    "buy": "Satın al",
+    "add": "Ekle",
+    "start": "Başla",
+    "save": "Kaydet",
+    "back": "Geri",
+    "next": "İleri",
+    "skip": "Atla",
+    "skipped": "Atlandı",
+    "done": "Tamam",
+    "reset": "Sıfırla",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "unlock": "Kilidi aç",
+    "send": "Gönder",
+    "sent": "Gönderildi",
+    "offline": "Çevrimdışı",
+    "finish": "Bitir",
+    "deleting": "Siliniyor",
+    "understand": "Anladım",
+    "watch": "İzle",
+    "update": "Güncelle",
+    "customHour": "Özel saat"
+  },
+  "contact": {
+    "email": "E-postan",
+    "message": "Mesaj",
+    "rate-limit": "Günlük sınıra ulaştın (3 mesaj)."
+  },
+  "card": {
+    "habitName": "Alışkanlık adı",
+    "repeatDays": "Tekrar günleri",
+    "repeatHours": "Tekrar saatleri",
+    "goal": "Mevcut hedef",
+    "newGoal": "Önerilen hedef",
+    "noRepetitions": "Tekrar yok",
+    "repetitions": "tekrar"
+  },
+  "date": {
+    "daily": "Her gün",
+    "workdays": "Hafta içi",
+    "weekend": "Hafta sonu",
+    "mon": "Pzt",
+    "tue": "Sal",
+    "wed": "Çar",
+    "thu": "Per",
+    "fri": "Cum",
+    "sat": "Cmt",
+    "sun": "Paz",
+    "monday": "Pazartesi",
+    "tuesday": "Salı",
+    "wednesday": "Çarşamba",
+    "thursday": "Perşembe",
+    "friday": "Cuma",
+    "saturday": "Cumartesi",
+    "sunday": "Pazar"
+  },
+  "addStep": {
+    "customHabit": "Özel alışkanlık",
+    "habitName": "Düzenli olarak ne yapmak istiyorsun?",
+    "repeatDays": "Hangi günlerde yapmak istiyorsun?",
+    "repeatHours": "Hangi saatte yapmak istiyorsun?"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "Alışkanlığı büyük bir görev olarak değil, gerektirdiği ilk küçük adım olarak düşün.",
+    "onboarding-same-time": "Alışkanlıklar; aynı günlerde, aynı saatte tekrarlandığında en iyi yerleşir.",
+    "now-repetitions-matter": "Dooit’te yalnızca tekrarlar sayılır. Kalori, litre, kilogram veya dakika yok.",
+    "now-first-habit": "Yalnızca aşağıda gördüğüne odaklan, {{userName}}, sonra tamamlandı mı işaretle.",
+    "now-locked-habit": "Bu alışkanlık daha sonrası için planlanmış. Şimdi yapmak istersen, kilidi aç’a dokun.",
+    "summary-daily-recap": "Gün sonunda Dooit tekrarlarını özetler ve kısa bir değerlendirme verir.",
+    "habits-edit-and-goal": "Her alışkanlığı dilediğin zaman düzenleyebilirsin. Varsayılan hedef 28 günlük tekrar üzerinden hesaplanır.",
+    "settings-overview": "Buradan adını güncelleyebilir, dili değiştirebilir, modu değiştirebilir, bildirim ve reklamları yönetebilirsin."
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Dooit’e hoş geldin",
+      "subtitle": "alışkanlık kurmada ortağın",
+      "name": "Adını yaz",
+      "terms-prefix": "Şunu kabul ediyorum:",
+      "terms-link": "Gizlilik Politikası"
+    },
+    "features": [
+      {
+        "title": "Kullanımı kolay",
+        "body": "Saniyeler içinde bir alışkanlık oluştur ve hemen başla."
+      },
+      {
+        "title": "Görünür ilerleme",
+        "body": "Başarılara değil, tekrarlara odaklan."
+      },
+      {
+        "title": "Tam kişiselleştirme",
+        "body": "Alışkanlıkları günlük temana göre uyarla."
+      },
+      {
+        "title": "Her seferinde bir adım",
+        "body": "Tüm listeyi değil, yalnızca sıradakini gör."
+      }
+    ],
+    "step2": {
+      "choose": "Seç",
+      "which-habits": "hangi alışkanlıkları kurmak istediğini"
+    },
+    "step3": {
+      "select-repetition": "Özelleştir",
+      "accept-default": "ya da varsayılan tekrar ayarlarını koru"
+    },
+    "start": {
+      "subtitle": "Selam, {{userName}}",
+      "title": "Hadi başlayalım",
+      "text": "Her alışkanlık için\ntek bir karar ver:\nyap ya da atla."
+    }
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "Bir bardak su koy"
+    },
+    "2": {
+      "habitName": "Spor salonuna git"
+    },
+    "3": {
+      "habitName": "Tartıya çık"
+    },
+    "4": {
+      "habitName": "Bir meyve yıka"
+    },
+    "5": {
+      "habitName": "İlaçlarını al"
+    },
+    "6": {
+      "habitName": "Bir kitap aç"
+    },
+    "7": {
+      "habitName": "Bir derse başla"
+    },
+    "8": {
+      "habitName": "Derin bir nefes al"
+    },
+    "9": {
+      "habitName": "Sevdiklerini ara"
+    },
+    "10": {
+      "habitName": "Erken yat"
+    }
+  },
+  "history": {
+    "summary": "{{days}} gün içinde {{count}} tekrar"
+  },
+  "streak": {
+    "reminder-title": "Serini koru! 🔥",
+    "reminder-body": "Alışkanlıklarını unutma, Dooit’i aç ve bunu sayılı hale getir."
+  },
+  "motivation": {
+    "notification": [
+      "Küçük adım, büyük ilerleme.",
+      "Alışkanlıkların geleceğini şekillendirir.",
+      "Her seferinde bir alışkanlık.",
+      "İlerleme, mükemmellik değil.",
+      "Küçük alışkanlıklar, büyük etki.",
+      "Tutarlılık sonuç getirir.",
+      "Az çaba, kalıcı değişim."
+    ],
+    "done": [
+      "Bir iyi alışkanlık bir diğerini getirir.",
+      "Bağlılığını gösteriyorsun.",
+      "Adım adım dönüşüyorsun.",
+      "Devam et, ilerleme kaydediyorsun.",
+      "Disiplinin meyvesini veriyor.",
+      "Başarı duvarına bir tuğla daha.",
+      "Her eylem seni şekillendiriyor.",
+      "Kendinin en iyi versiyonunu kuruyorsun.",
+      "Kendi başarı hikâyeni yazıyorsun.",
+      "Harika seçim, rutinin işliyor."
+    ],
+    "skipped": [
+      "Bir aksaklık ilerlemeni silmez.",
+      "Bundan öğren ve yola devam et.",
+      "Bırakma, ayarla ve devam et.",
+      "Bu bir tökezleme, başarısızlık değil.",
+      "Mükemmelliğe değil ilerlemeye odaklan.",
+      "Alışkanlığın bu andan daha güçlüdür.",
+      "Şampiyonlar bile tökezler.",
+      "Bir atlama son demek değildir.",
+      "Bir mola ilerlemeni silmez.",
+      "Hâlâ doğru yoldasın.",
+      "Bu sadece bir mola, gerileme değil.",
+      "Atlamalar olur, yoluna devam et.",
+      "Molalar bile ilerlemeyi besleyebilir.",
+      "Sadece bir mola, yolculuk sürüyor."
+    ],
+    "intro": [
+      "Bir gün daha geride, {{userName}}. Dooit’i her açışın doğru yönde bir adım.",
+      "Seni yeniden görmek güzel, {{userName}}. Kalıcı alışkanlıkların anahtarı tutarlılıktır.",
+      "Alışkanlıklar gün gün kurulur, {{userName}}. Bu yüzden her gün ve her karar önemlidir.",
+      "Dooit’in günlük rutininin parçası olmasına çok seviniyorum, {{userName}}. Tutarlılık, kalıcı değişimin sırrıdır.",
+      "Ne kadar sık dönersen, {{userName}}, alışkanlıklarını o kadar hızlı kurar ve hayatını değiştirirsin."
+    ],
+    "praise": [
+      "'{{bestHabit}}' alışkanlığında tutarlılığın için harika iş! Bugün gerçekten çok iyiydi.",
+      "'{{bestHabit}}' alışkanlığında büyük ilerleme kaydediyorsun gibi görünüyor. Çok iyi gidiyor!",
+      "'{{bestHabit}}' alışkanlığını tekrarlamanın etkisini hissediyor musun? Onu hayatını değiştirecek hale getirme yolundasın.",
+      "'{{bestHabit}}' alışkanlığındaki tutarlılığın gerçekten etkileyici. Aynen devam!",
+      "'{{bestHabit}}' alışkanlığı bugünkü en büyük kazancın. Hız kesme!"
+    ],
+    "tip": [
+      "'{{worstHabit}}' alışkanlığını bir şey engelliyor gibi görünüyor. İlk adımı sadeleştirmeyi denemek ister misin?",
+      "'{{worstHabit}}' alışkanlığı günün doğru saatinde mi planlı? Farklı bir saat işe yarayabilir.",
+      "'{{worstHabit}}' alışkanlığında belki çok büyük başlıyorsun. En basit hali nasıl olurdu?",
+      "'{{worstHabit}}' alışkanlığını zaten düzenli yaptığın bir şeye bağlayabilir misin? Alışkanlıkları zincirlemek daha kolaydır.",
+      "'{{worstHabit}}' alışkanlığı planlandığı gibi gitmiyorsa bu, başarısızlık değil yalnızca stratejiyi ayarlama işaretidir."
+    ]
+  },
+  "summary": {
+    "subtitle": "Bugün her şey tamam!",
+    "title": "Günlük özet",
+    "no-actions": "Seçtiğin alışkanlığın en az bir tekrarını tamamladığında ilerleme özetin burada görünür."
+  },
+  "error-boundary": {
+    "title": "Hay aksi, bir şeyler ters gitti",
+    "body": "Hata otomatik olarak bildirildi.\nVerdiği rahatsızlıktan dolayı özür dilerim.",
+    "button": "Yeniden başlat"
+  }
+}

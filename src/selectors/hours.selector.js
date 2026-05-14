@@ -12,6 +12,7 @@ import {
   nl,
   it,
   ukUA,
+  tr,
   registerTranslation,
 } from 'react-native-paper-dates';
 import {useStyles} from '@/styles';
@@ -25,6 +26,7 @@ registerTranslation('fr', fr);
 registerTranslation('nl', nl);
 registerTranslation('it', it);
 registerTranslation('uk', ukUA);
+registerTranslation('tr', tr);
 
 const SLOT_START_HOUR = 5;
 const SLOT_END_HOUR = 23;
