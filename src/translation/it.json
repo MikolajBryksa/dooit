@@ -1,0 +1,315 @@
+{
+  "view": {
+    "now": "Adesso",
+    "habits": "Abitudini",
+    "settings": "Impostazioni"
+  },
+  "loading": {
+    "subtitle": "Attendi un momento, per favore.",
+    "title": "Caricamento"
+  },
+  "empty": {
+    "subtitle": "Nessuna abitudine per oggi.",
+    "title": "Nessuna abitudine"
+  },
+  "title": {
+    "add": "Aggiungi abitudine",
+    "delete-habit": "Elimina abitudine",
+    "delete-execution": "Elimina ripetizione",
+    "delete-data": "Elimina tutti i dati",
+    "reset-counters": "Reimposta contatori",
+    "change-goal": "Modifica obiettivo",
+    "goal-reached": "Obiettivo raggiunto!",
+    "contact": "Contatto",
+    "support": "Caffè",
+    "thanks-support": "Grazie!",
+    "filter": "Filtra abitudini",
+    "history": "Cronologia",
+    "terms": "Informativa sulla privacy",
+    "customHour": "Orario personalizzato"
+  },
+  "terms": {
+    "last-updated": "Ultimo aggiornamento: 13 maggio 2026",
+    "intro": "Dooit è un’app sviluppata e mantenuta da Mikołaj Bryksa. Questa informativa spiega quali dati raccoglie l’app, perché, per quanto tempo vengono conservati e cosa puoi fare al riguardo. Per qualsiasi questione legata alla privacy, utilizza il modulo di contatto nell’app.",
+    "s1-title": "1. Dati raccolti",
+    "s1-body": "• Account — alla prima apertura dell’app viene creato un account anonimo, in modo che i tuoi dati possano essere salvati e sincronizzati.\n• Nome utente — il nome che inserisci durante l’introduzione o modifichi in seguito nelle Impostazioni. Viene conservato sul tuo dispositivo e nel database dell’app, collegato al tuo account. Puoi usare qualsiasi nome, anche uno pseudonimo.\n• Dati delle abitudini — le abitudini che crei, la cronologia di completamento e le statistiche della serie, collegate al tuo account.\n• Segnalazioni di errore — se l’app va in crash o incontra un errore, vengono registrati il messaggio di errore, la versione dell’app e la schermata in cui è avvenuto.\n• Messaggi di contatto — se utilizzi il modulo di contatto, l’indirizzo e-mail e il messaggio forniti vengono conservati per permettere all’autore di rispondere. Ciò collega la tua e-mail al tuo account finché il messaggio è conservato.\n• Dati pubblicitari — gli annunci sono erogati da Google AdMob, che può raccogliere l’ID pubblicitario, l’indirizzo IP e informazioni sul dispositivo. Si applica l’Informativa sulla privacy di Google: https://policies.google.com/privacy \n\nL’app non raccoglie numeri di telefono, posizione precisa, contatti, foto né dati biometrici.\n\nIl database dell’app è ospitato da Supabase (https://supabase.com/privacy). Alcuni dati possono essere trattati da questo fornitore al di fuori del tuo Paese, con le consuete garanzie di protezione dei dati. I dati vengono cifrati durante la trasmissione e ogni account accede solo ai propri record.",
+    "s2-title": "2. Come vengono usati i dati",
+    "s2-body": "Tutti i dati servono ad aiutarti a costruire abitudini, lo scopo principale dell’app. In concreto, i dati vengono usati per:\n• Salvare le tue abitudini e i tuoi progressi tra una sessione e l’altra.\n• Personalizzare l’interfaccia con il nome che scegli.\n• Diagnosticare e correggere i bug.\n• Rispondere ai messaggi del modulo di contatto.\n• Mostrare annunci (tramite Google AdMob).\n\nL’autore non vende i tuoi dati e non li condivide con intermediari. Alcuni dati pubblicitari raccolti da Google AdMob possono essere condivisi con partner per la pubblicazione degli annunci — puoi gestirlo dalla finestra di consenso mostrata da AdMob al primo avvio e dalle Impostazioni.",
+    "s3-title": "3. I tuoi diritti",
+    "s3-body": "Hai il diritto di:\n• Accedere ai dati conservati su di te.\n• Correggere dati inesatti.\n• Eliminare i tuoi dati.\n• Limitare o opporti al trattamento.\n• Presentare un reclamo all’autorità locale di protezione dei dati.\n• Opporti alla condivisione dei dati personali a scopi pubblicitari — gestibile dalla finestra di consenso mostrata da Google AdMob.\n\nPer esercitare uno di questi diritti, usa il modulo di contatto nell’app. Le richieste ricevono risposta entro 30 giorni.",
+    "s4-title": "4. Eliminazione dei dati",
+    "s4-body": "Puoi eliminare in modo permanente tutti i tuoi dati in qualsiasi momento dalle Impostazioni. L’operazione rimuove abitudini, serie, nome, segnalazioni di errore e messaggi di contatto sia dal database sia dal dispositivo. L’azione è irreversibile.\n\nTutti i dati vengono inoltre eliminati automaticamente dopo 12 mesi di inattività.\n\nL’eliminazione dei dati di Dooit non riguarda i dati raccolti in precedenza da Google AdMob. Per gestire i dati di Google, visita https://myaccount.google.com/data-and-privacy"
+  },
+  "settings": {
+    "version": "Versione",
+    "user-name": "Il tuo nome",
+    "language": "Lingua",
+    "clock-format": "Formato orario",
+    "first-day": "Primo giorno",
+    "theme": "Modalità",
+    "dark": "Scuro",
+    "light": "Chiaro",
+    "notifications": "Notifiche",
+    "enabled": "Attivate",
+    "disabled": "Disattivate",
+    "repetition-counters": "Ripetizioni",
+    "reset-counters": "Reimposta",
+    "no-data": "Nessun dato",
+    "tips": "Consigli",
+    "restore-tips": "Ripristina",
+    "tips-restored": "Ripristinati",
+    "terms": "Informativa sulla privacy",
+    "show": "Mostra",
+    "data": "Dati dell’account",
+    "delete": "Elimina",
+    "ads": "Pubblicità",
+    "manage-ads": "Gestisci",
+    "test-connection": "Test connessione",
+    "test": "Prova",
+    "connection-ok": "Online",
+    "connection-fail": "Offline",
+    "test-error-logging": "Test errore",
+    "error-logged": "Errore registrato",
+    "log-error": "Segnala errore",
+    "test-crash": "Test crash",
+    "crash-app": "Fai crashare l’app",
+    "test-ads": "Test pubblicità"
+  },
+  "message": {
+    "delete-habit": "Vuoi eliminare l’abitudine:",
+    "delete-execution": "Vuoi eliminare questa ripetizione?",
+    "delete-data": "Vuoi continuare? Questa azione eliminerà definitivamente tutte le abitudini, la cronologia e i dati dell’account. L’azione non può essere annullata.",
+    "reset-counters": "Vuoi continuare? Questa azione reimposterà l’intera cronologia delle ripetizioni. Le abitudini e le impostazioni resteranno invariate.",
+    "change-goal": "Vuoi modificare l’obiettivo?\nPer impostazione predefinita corrisponde alle ripetizioni previste in 4 settimane.",
+    "goal-reached": "Hai raggiunto il tuo obiettivo! Vuoi andare oltre e aumentare il limite per consolidare ancora di più l’abitudine?",
+    "contact": "Compila il modulo per contattare l’autore dell’app.",
+    "support": "Ciao, {{userName}}!\n\nSviluppo Dooit da solo. Se l’app ti sta aiutando a costruire abitudini, puoi sostenerne lo sviluppo.\n\nBasta guardare un breve annuncio o offrirmi un caffè virtuale. Te ne sarei davvero grato.\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}, il tuo supporto significa davvero molto!\n\nGrazie a te Dooit può continuare a crescere e aiutare più persone a costruire abitudini migliori. Prenditi cura di te e buona fortuna con i tuoi obiettivi!\n\n~ Mikołaj Bryksa"
+  },
+  "button": {
+    "delete": "Elimina",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "contact": "Contatto",
+    "buy": "Acquista",
+    "add": "Aggiungi",
+    "start": "Inizia",
+    "save": "Salva",
+    "back": "Indietro",
+    "next": "Avanti",
+    "skip": "Salta",
+    "skipped": "Saltato",
+    "done": "Fatto",
+    "reset": "Reimposta",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "unlock": "Sblocca",
+    "send": "Invia",
+    "sent": "Inviato",
+    "offline": "Offline",
+    "finish": "Termina",
+    "deleting": "Eliminazione",
+    "understand": "Ho capito",
+    "watch": "Guarda",
+    "update": "Aggiorna",
+    "customHour": "Orario personalizzato"
+  },
+  "contact": {
+    "email": "La tua e-mail",
+    "message": "Messaggio",
+    "rate-limit": "Hai raggiunto il limite giornaliero (3 messaggi)."
+  },
+  "card": {
+    "habitName": "Nome dell’abitudine",
+    "repeatDays": "Giorni di ripetizione",
+    "repeatHours": "Orari di ripetizione",
+    "goal": "Obiettivo attuale",
+    "newGoal": "Obiettivo suggerito",
+    "noRepetitions": "Nessuna ripetizione",
+    "repetitions": "ripetizioni"
+  },
+  "date": {
+    "daily": "Quotidiano",
+    "workdays": "Giorni feriali",
+    "weekend": "Fine settimana",
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mer",
+    "thu": "Gio",
+    "fri": "Ven",
+    "sat": "Sab",
+    "sun": "Dom",
+    "monday": "Lunedì",
+    "tuesday": "Martedì",
+    "wednesday": "Mercoledì",
+    "thursday": "Giovedì",
+    "friday": "Venerdì",
+    "saturday": "Sabato",
+    "sunday": "Domenica"
+  },
+  "addStep": {
+    "customHabit": "Abitudine personalizzata",
+    "habitName": "Cosa vuoi fare con regolarità?",
+    "repeatDays": "In quali giorni vuoi farlo?",
+    "repeatHours": "A che ora vuoi farlo?"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "Pensa all’abitudine non come a un grande compito, ma come al primo piccolo passo che richiede.",
+    "onboarding-same-time": "Le abitudini si consolidano meglio se le ripeti alla stessa ora, negli stessi giorni.",
+    "now-repetitions-matter": "In Dooit contano solo le ripetizioni. Nessuna caloria, nessun litro, chilogrammo o minuto.",
+    "now-first-habit": "Concentrati solo su ciò che vedi qui sotto, {{userName}}, poi segna se l’hai completata.",
+    "now-locked-habit": "Questa abitudine è programmata per più tardi. Se vuoi farla subito, tocca sblocca.",
+    "summary-daily-recap": "A fine giornata Dooit riassume le tue ripetizioni e propone una breve analisi.",
+    "habits-edit-and-goal": "Puoi modificare qualsiasi abitudine in qualunque momento. L’obiettivo predefinito si basa su 28 giorni di ripetizioni.",
+    "settings-overview": "Qui puoi aggiornare il tuo nome, cambiare la lingua, alternare la modalità e gestire notifiche e pubblicità."
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Ti diamo il benvenuto in Dooit",
+      "subtitle": "il tuo partner nella costruzione delle abitudini",
+      "name": "Inserisci il tuo nome",
+      "terms-prefix": "Accetto l’",
+      "terms-link": "Informativa sulla privacy"
+    },
+    "features": [
+      {
+        "title": "Facile da usare",
+        "body": "Crea un’abitudine in pochi secondi e parti subito."
+      },
+      {
+        "title": "Progresso visibile",
+        "body": "Concentrati sulle ripetizioni, non sui trofei."
+      },
+      {
+        "title": "Personalizzazione totale",
+        "body": "Adatta le abitudini al tuo ritmo quotidiano."
+      },
+      {
+        "title": "Un passo alla volta",
+        "body": "Solo il prossimo passo, non tutto l’elenco."
+      }
+    ],
+    "step2": {
+      "choose": "Scegli",
+      "which-habits": "quali abitudini vuoi costruire"
+    },
+    "step3": {
+      "select-repetition": "Personalizza",
+      "accept-default": "o mantieni le impostazioni di ripetizione predefinite"
+    },
+    "start": {
+      "subtitle": "Ciao, {{userName}}",
+      "title": "Si parte",
+      "text": "Per ogni abitudine\nfai una sola scelta:\nfarla o saltarla."
+    }
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "Versa un bicchiere d’acqua"
+    },
+    "2": {
+      "habitName": "Vai in palestra"
+    },
+    "3": {
+      "habitName": "Sali sulla bilancia"
+    },
+    "4": {
+      "habitName": "Lava un frutto"
+    },
+    "5": {
+      "habitName": "Prendi le pastiglie"
+    },
+    "6": {
+      "habitName": "Apri un libro"
+    },
+    "7": {
+      "habitName": "Inizia una lezione"
+    },
+    "8": {
+      "habitName": "Fai un respiro profondo"
+    },
+    "9": {
+      "habitName": "Chiama i tuoi cari"
+    },
+    "10": {
+      "habitName": "Vai a letto presto"
+    }
+  },
+  "history": {
+    "summary": "{{count}} ripetizioni in {{days}} giorni"
+  },
+  "streak": {
+    "reminder-title": "Tieni viva la tua serie! 🔥",
+    "reminder-body": "Ricorda le tue abitudini, apri Dooit e falla contare."
+  },
+  "motivation": {
+    "notification": [
+      "Piccolo passo, grande progresso.",
+      "Le tue abitudini plasmano il tuo futuro.",
+      "Un’abitudine alla volta.",
+      "Progresso, non perfezione.",
+      "Piccole abitudini, grande impatto.",
+      "La costanza porta risultati.",
+      "Poco sforzo, cambiamento duraturo."
+    ],
+    "done": [
+      "Una buona abitudine porta a un’altra.",
+      "Stai dimostrando il tuo impegno.",
+      "Passo dopo passo, ti stai trasformando.",
+      "Continua così, stai facendo progressi.",
+      "La tua disciplina sta dando frutti.",
+      "Un altro mattone nel muro del successo.",
+      "Ogni azione ti modella poco a poco.",
+      "Stai costruendo la versione migliore di te.",
+      "Stai scrivendo la tua storia di successo.",
+      "Ottima scelta, la tua routine funziona."
+    ],
+    "skipped": [
+      "Una svista non cancella i tuoi progressi.",
+      "Imparane qualcosa e vai avanti.",
+      "Non arrenderti, aggiusta e prosegui.",
+      "È un inciampo, non un fallimento.",
+      "Concentrati sul progresso, non sulla perfezione.",
+      "La tua abitudine è più forte di questo momento.",
+      "Anche i campioni inciampano.",
+      "Una mancanza non è la fine.",
+      "Una pausa non cancella i progressi.",
+      "Sei ancora sulla strada giusta.",
+      "È solo una pausa, non un passo indietro.",
+      "Le pause capitano, continua ad andare avanti.",
+      "Anche le pause possono alimentare il progresso.",
+      "È solo una pausa, il tuo percorso continua."
+    ],
+    "intro": [
+      "Un altro giorno alle spalle, {{userName}}. Ogni volta che apri Dooit è un passo nella giusta direzione.",
+      "Bello rivederti, {{userName}}. La costanza è la chiave per creare abitudini durature.",
+      "Le abitudini si costruiscono giorno dopo giorno, {{userName}}. Per questo ogni giorno e ogni scelta contano.",
+      "Sono davvero contento che Dooit faccia parte della tua routine, {{userName}}. La costanza è il segreto di un cambiamento duraturo.",
+      "Più torni, {{userName}}, più velocemente costruisci le tue abitudini e cambi la tua vita."
+    ],
+    "praise": [
+      "Bravissimo lavoro con la costanza sull’abitudine '{{bestHabit}}'! Oggi è andata alla grande.",
+      "Si vede che stai facendo grandi progressi con l’abitudine '{{bestHabit}}'. Sta andando molto bene!",
+      "Senti già gli effetti del ripetere l’abitudine '{{bestHabit}}'? Sei sulla strada giusta perché diventi parte di te.",
+      "La tua costanza con l’abitudine '{{bestHabit}}' mi colpisce molto. Continua così!",
+      "L’abitudine '{{bestHabit}}' è la tua vittoria più grande oggi. Tieni il ritmo!"
+    ],
+    "tip": [
+      "Sembra che qualcosa stia bloccando l’abitudine '{{worstHabit}}'. Forse semplificare il primo passo può aiutare?",
+      "L’abitudine '{{worstHabit}}' è programmata nel momento giusto della giornata? Magari prova un altro orario.",
+      "Con l’abitudine '{{worstHabit}}' forse stai partendo troppo in grande. Quale sarebbe la versione più semplice?",
+      "Puoi collegare l’abitudine '{{worstHabit}}' a qualcosa che già fai con regolarità? Concatenare le abitudini è più facile.",
+      "Se l’abitudine '{{worstHabit}}' non procede come previsto, è solo un segnale per aggiustare la strategia, non un fallimento."
+    ]
+  },
+  "summary": {
+    "subtitle": "Tutto fatto per oggi!",
+    "title": "Riepilogo della giornata",
+    "no-actions": "Qui apparirà il riepilogo dei tuoi progressi non appena completerai almeno una ripetizione dell’abitudine scelta."
+  },
+  "error-boundary": {
+    "title": "Ops, qualcosa è andato storto",
+    "body": "L’errore è stato segnalato automaticamente.\nMi scuso per il disagio.",
+    "button": "Riavvia"
+  }
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import {ScrollView, Dimensions} from 'react-native';
 import {List} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import DialogComponent from '@/components/dialog.component';
@@ -10,6 +11,7 @@ export const LANGUAGE_NAMES = {
   es: 'Español',
   fr: 'Français',
   nl: 'Nederlands',
+  it: 'Italiano',
 };
 
 const LanguageDialog = ({visible, onDismiss, language, onSelectLanguage}) => {
@@ -26,16 +28,18 @@ const LanguageDialog = ({visible, onDismiss, language, onSelectLanguage}) => {
       onDismiss={onDismiss}
       title={t('settings.language')}>
       <DialogComponent.Content>
-        {Object.entries(LANGUAGE_NAMES).map(([lang, name]) => (
-          <List.Item
-            key={lang}
-            title={name}
-            onPress={() => handleSelect(lang)}
-            right={props =>
-              language === lang ? <List.Icon {...props} icon="check" /> : null
-            }
-          />
-        ))}
+        <ScrollView style={{maxHeight: Dimensions.get('window').height * 0.5}}>
+          {Object.entries(LANGUAGE_NAMES).map(([lang, name]) => (
+            <List.Item
+              key={lang}
+              title={name}
+              onPress={() => handleSelect(lang)}
+              right={props =>
+                language === lang ? <List.Icon {...props} icon="check" /> : null
+              }
+            />
+          ))}
+        </ScrollView>
       </DialogComponent.Content>
     </DialogComponent>
   );
