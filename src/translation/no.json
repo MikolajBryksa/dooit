@@ -1,0 +1,295 @@
+{
+  "view": {
+    "now": "Nå",
+    "habits": "Vaner",
+    "settings": "Innstillinger"
+  },
+  "loading": {
+    "subtitle": "Vennligst vent.",
+    "title": "Laster"
+  },
+  "empty": {
+    "subtitle": "Ingen vaner for i dag.",
+    "title": "Ingen vaner"
+  },
+  "title": {
+    "add": "Legg til vane",
+    "delete-habit": "Slett vane",
+    "delete-execution": "Slett utførelse",
+    "delete-data": "Slett all data",
+    "reset-counters": "Nullstill tellere",
+    "change-goal": "Endre mål",
+    "goal-reached": "Mål nådd!",
+    "contact": "Kontakt",
+    "support": "Kaffe",
+    "thanks-support": "Tusen takk!",
+    "filter": "Filtrer vaner",
+    "history": "Historikk",
+    "terms": "Personvern",
+    "customHour": "Valgfritt tidspunkt"
+  },
+  "terms": {
+    "last-updated": "Sist oppdatert: 13. mai 2026",
+    "intro": "Dooit er en app utviklet og vedlikeholdt av Mikołaj Bryksa. Denne policyen forklarer hvilke data appen samler inn, hvorfor, hvor lenge de oppbevares, og dine rettigheter. For spørsmål om personvern, vennligst bruk kontaktskjemaet i appen.",
+    "s1-title": "1. Data som samles inn",
+    "s1-body": "• Konto — når appen åpnes første gang, opprettes en anonym konto slik at data kan lagres og synkroniseres.\n• Brukernavn — navnet som oppgis under oppstart eller endres senere i innstillinger. Det lagres på enheten og i appens database, knyttet til kontoen. Valgfritt navn eller kallenavn kan brukes.\n• Vanedata — vaner som opprettes, historikk og statistikk, knyttet til kontoen.\n• Feilrapporter — ved krasj eller feil registreres feilmelding, app-versjon og skjermbildet der feilen oppsto.\n• Henvendelser — ved bruk av kontaktskjemaet lagres e-postadresse og melding for å kunne svare. Dette knytter e-posten til kontoen så lenge henvendelsen oppbevares.\n• Annonsedata — annonser leveres av Google AdMob, som kan samle inn annonse-ID, IP-adresse og enhetsinformasjon. Dette styres av Googles personvernregler: https://policies.google.com/privacy \n\nAppen samler ikke inn telefonnumre, nøyaktig posisjon, kontakter, bilder eller biometriske data.\n\nAppens database driftes av Supabase (https://supabase.com/privacy). Data kan behandles utenfor ditt land under standardiserte personverngarantier. Data krypteres under overføring, og hver konto har kun tilgang til egne poster.",
+    "s2-title": "2. Hvordan data brukes",
+    "s2-body": "All data brukes for å hjelpe deg med å bygge vaner. Spesifikt brukes data til å:\n• Lagre vaner og fremgang på tvers av økter.\n• Personliggjøre grensesnittet med valgt brukernavn.\n• Diagnostisere og fikse feil.\n• Svare på henvendelser via kontaktskjema.\n• Vise annonser (via Google AdMob).\n\nUtvikleren selger ikke data videre til tredjeparter. Enkelte annonsedata samlet inn av Google AdMob kan deles med annonsepartnere for levering av annonser — dette kan administreres via samtykkedialogen ved første oppstart og i innstillinger.",
+    "s3-title": "3. Dine rettigheter",
+    "s3-body": "Du har rett til å:\n• Innsyn i lagrede data om deg.\n• Korrigere unøyaktige data.\n• Slette dine data.\n• Begrense eller protestere mot behandling.\n• Klage til lokale datatilsynsmyndigheter.\n• Reservasjon mot deling av personopplysninger for annonsering — administreres via Google AdMob samtykkedialog.\n\nFor å utøve disse rettighetene, bruk kontaktskjemaet i appen. Forespørsler besvares innen 30 dager.",
+    "s4-title": "4. Sletting av data",
+    "s4-body": "All data kan slettes permanent når som helst under innstillinger. Dette fjerner vaner, statistikk, brukernavn, feilrapporter og henvendelser fra både databasen og enheten. Handlingen kan ikke angres.\n\nAll data slettes også automatisk etter 12 måneder med inaktivitet.\n\nSletting av Dooit-data påvirker ikke data som tidligere er samlet inn av Google AdMob. For å administrere Google-data, besøk https://myaccount.google.com/data-and-privacy"
+  },
+  "settings": {
+    "version": "Versjon",
+    "user-name": "Ditt navn",
+    "language": "Språk",
+    "clock-format": "Klokkeformat",
+    "first-day": "Første dag",
+    "theme": "Modus",
+    "dark": "Mørk",
+    "light": "Lys",
+    "notifications": "Varslinger",
+    "enabled": "Aktivert",
+    "disabled": "Deaktivert",
+    "repetition-counters": "Repetisjoner",
+    "reset-counters": "Nullstill",
+    "no-data": "Ingen data",
+    "tips": "Tips",
+    "restore-tips": "Gjenopprett",
+    "tips-restored": "Gjenopprettet",
+    "terms": "Personvern",
+    "show": "Vis",
+    "data": "Kontodata",
+    "delete": "Slett",
+    "ads": "Annonser",
+    "manage-ads": "Administrer",
+    "test-connection": "Test tilkobling",
+    "test": "Test",
+    "connection-ok": "Tilkoblet",
+    "connection-fail": "Frakoblet",
+    "test-error-logging": "Test feil",
+    "error-logged": "Feil logget",
+    "log-error": "Logg feil",
+    "test-crash": "Test krasj",
+    "crash-app": "Krasj app",
+    "test-ads": "Test annonser"
+  },
+  "message": {
+    "delete-habit": "Er du sikker på at du vil fjerne vanen:",
+    "delete-execution": "Er du sikker på at du vil slette denne utførelsen?",
+    "delete-data": "Er du sikker? Dette vil slette alle vaner, historikk og kontodata permanent. Handlingen kan ikke angres.",
+    "reset-counters": "Er du sikker? Dette vil nullstille all repetisjonshistorikk. Vaner og innstillinger forblir uendret.",
+    "change-goal": "Vil du endre målet?\nStandardvalget er antall repetisjoner som skal gjøres i løpet av 4 uker.",
+    "goal-reached": "Du har nådd målet ditt! Vil du øke grensen for å bygge en enda sterkere vane?",
+    "contact": "Fyll ut skjemaet for å kontakte appens utvikler.",
+    "support": "Hei, {{userName}}!\n\nJeg utvikler Dooit alene. Hvis appen hjelper deg med å bygge vaner, kan du støtte den videre utviklingen.\n\nAlt som kreves er å se en kort annonse eller spandere en virtuell kaffe. Jeg setter stor pris på det.\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}, støtten din betyr mye!\n\nDu gjør det mulig for Dooit å vokse videre og hjelpe flere med å bygge bedre vaner. Lykke til med målene dine!\n\n~ Mikołaj Bryksa"
+  },
+  "button": {
+    "delete": "Slett",
+    "cancel": "Avbryt",
+    "close": "Lukk",
+    "contact": "Kontakt",
+    "buy": "Kjøp",
+    "add": "Legg til",
+    "start": "Start",
+    "save": "Lagre",
+    "back": "Tilbake",
+    "next": "Neste",
+    "skip": "Hopp over",
+    "skipped": "Hoppet over",
+    "done": "Ferdig",
+    "reset": "Nullstill",
+    "today": "I dag",
+    "yesterday": "I går",
+    "unlock": "Lås opp",
+    "send": "Send",
+    "sent": "Sendt",
+    "offline": "Frakoblet",
+    "finish": "Fullfør",
+    "deleting": "Sletter",
+    "understand": "Skjønner",
+    "watch": "Se",
+    "update": "Oppdater",
+    "customHour": "Valgfri tid"
+  },
+  "contact": {
+    "email": "Din e-post",
+    "message": "Melding",
+    "rate-limit": "Du har nådd den daglige grensen (3 meldinger)."
+  },
+  "card": {
+    "habitName": "Navn på vane",
+    "repeatDays": "Gjentas dager",
+    "repeatHours": "Gjentas klokkeslett",
+    "goal": "Gjeldende mål",
+    "newGoal": "Foreslått mål",
+    "noRepetitions": "Ingen repetisjoner",
+    "repetitions": "repetisjoner"
+  },
+  "date": {
+    "daily": "Daglig",
+    "workdays": "Hverdager",
+    "weekend": "Helg",
+    "mon": "Man",
+    "tue": "Tirs",
+    "wed": "Ons",
+    "thu": "Tors",
+    "fri": "Fre",
+    "sat": "Lør",
+    "sun": "Søn",
+    "monday": "Mandag",
+    "tuesday": "Tirsdag",
+    "wednesday": "Onsdag",
+    "thursday": "Torsdag",
+    "friday": "Fredag",
+    "saturday": "Lørdag",
+    "sunday": "Søndag"
+  },
+  "addStep": {
+    "customHabit": "Egendefinert vane",
+    "habitName": "Hva ønsker du å gjøre regelmessig?",
+    "repeatDays": "Hvilke dager vil du gjøre det?",
+    "repeatHours": "Når på dagen vil du gjøre det?"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "Tenk på en vane ikke som en stor oppgave, men som det første lille steget den krever.",
+    "onboarding-same-time": "Vaner sitter best når du gjentar dem til samme tid på samme dager.",
+    "now-repetitions-matter": "I Dooit er det kun repetisjoner som teller. Ingen kalorier, liter, kilo eller minutter.",
+    "now-first-habit": "Fokuser kun på det du ser nedenfor, {{userName}}, og marker når du er ferdig.",
+    "now-locked-habit": "Denne vanen er planlagt senere. Hvis du vil gjøre den nå, trykk på lås opp.",
+    "summary-daily-recap": "På slutten av dagen oppsummerer Dooit repetisjonene dine og gir en kort analyse.",
+    "habits-edit-and-goal": "Du kan redigere alle vaner når som helst. Standardmålet er basert på 28 dager.",
+    "settings-overview": "Her kan du oppdatere navn, endre språk, bytte modus og administrere varslinger."
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Velkommen til Dooit",
+      "subtitle": "din partner for å bygge vaner",
+      "name": "Skriv inn navnet ditt",
+      "terms-prefix": "Jeg godtar",
+      "terms-link": "Personvernregler"
+    },
+    "features": [
+      {
+        "title": "Enkel i bruk",
+        "body": "Opprett en vane på sekunder og start med en gang."
+      },
+      {
+        "title": "Synlig fremgang",
+        "body": "Fokuser på repetisjoner, ikke prestasjoner."
+      },
+      {
+        "title": "Full tilpasning",
+        "body": "Juster vaner slik at de passer din daglige rytme."
+      },
+      {
+        "title": "Ett steg om gangen",
+        "body": "Kun det neste steget, ikke hele listen."
+      }
+    ],
+    "step2": {
+      "choose": "Velg",
+      "which-habits": "hvilke vaner du vil bygge"
+    },
+    "step3": {
+      "select-repetition": "Tilpass",
+      "accept-default": "eller behold standardinnstillingene"
+    },
+    "start": {
+      "subtitle": "Hei, {{userName}}",
+      "title": "La oss komme i gang",
+      "text": "For hver vane,\ngjør bare ett valg:\ngjør det eller hopp over."
+    }
+  },
+  "default-habits": {
+    "1": {"habitName": "Drikk et glass vann"},
+    "2": {"habitName": "Dra på trening"},
+    "3": {"habitName": "Gå på vekten"},
+    "4": {"habitName": "Vask en frukt"},
+    "5": {"habitName": "Ta medisiner"},
+    "6": {"habitName": "Åpne en bok"},
+    "7": {"habitName": "Start en leksjon"},
+    "8": {"habitName": "Ta et dypt pust"},
+    "9": {"habitName": "Ring dine nære"},
+    "10": {"habitName": "Legg deg tidlig"}
+  },
+  "history": {
+    "summary": "{{count}} repetisjoner over {{days}} dager"
+  },
+  "streak": {
+    "reminder-title": "Hold rekken gående! 🔥",
+    "reminder-body": "Husk vanene dine, åpne Dooit og få det til å telle."
+  },
+  "motivation": {
+    "notification": [
+      "Små steg, stor fremgang.",
+      "Vanene dine former fremtiden.",
+      "Én vane om gangen.",
+      "Fremgang, ikke perfeksjon.",
+      "Små vaner, stor effekt.",
+      "Konsistens skaper resultater.",
+      "Liten innsats, varig endring."
+    ],
+    "done": [
+      "En god vane fører til en annen.",
+      "Du beviser ditt engasjement.",
+      "Steg for steg forandrer du deg.",
+      "Fortsett slik, du har god fremgang.",
+      "Disiplinen din bærer frukter.",
+      "Nok en stein i muren mot suksess.",
+      "Hver handling former den du blir.",
+      "Du bygger den beste versjonen av deg selv.",
+      "Du skriver din egen suksesshistorie.",
+      "Godt valg, rutinene dine fungerer."
+    ],
+    "skipped": [
+      "Ett feiltrinn sletter ikke fremgangen.",
+      "Lær av det, og gå videre.",
+      "Ikke gi opp, juster og fortsett.",
+      "Det er en snubling, ikke et nederlag.",
+      "Fokus på fremgang, ikke perfeksjon.",
+      "Vanen din er sterkere enn dette øyeblikket.",
+      "Selv vinnere snubler.",
+      "Å hoppe over én gang er ikke slutten.",
+      "En pause sletter ikke fremgang.",
+      "Du er fortsatt på rett spor.",
+      "Det er bare en pause, ikke et tilbakeslag.",
+      "Det skjer at man hopper over, bare fortsett.",
+      "Pauser kan også gi ny energi.",
+      "Det er bare et opphold, reisen fortsetter."
+    ],
+    "intro": [
+      "Nok en dag er over, {{userName}}. Hver gang du åpner Dooit er et steg i riktig retning.",
+      "Hyggelig å se deg igjen, {{userName}}. Konsistens er nøkkelen til varige vaner.",
+      "Vaner bygges dag for dag, {{userName}}. Hver dag og hver avgjørelse teller.",
+      "Gleder meg over at Dooit er en del av din rutine, {{userName}}.",
+      "Jo oftere du kommer tilbake, {{userName}}, jo raskere endrer du livet ditt."
+    ],
+    "praise": [
+      "Bra jobbet med å være konsistent med '{{bestHabit}}'! Du klarte det i dag.",
+      "Det ser ut som du har god fremgang med '{{bestHabit}}'. Veldig bra!",
+      "Merker du allerede effekten av '{{bestHabit}}'? Du er på god vei.",
+      "Imponerende innsats med vanen '{{bestHabit}}'. Fortsett slik!",
+      "Vanen '{{bestHabit}}' er din største seier i dag. Hold det gående!"
+    ],
+    "tip": [
+      "Ser ut som noe hindrer vanen '{{worstHabit}}'. Kanskje forenkle det første steget?",
+      "Gjøres '{{worstHabit}}' på riktig tidspunkt? Prøv en annen tid på dagen.",
+      "Med vanen '{{worstHabit}}' starter du kanskje for stort? Hva er den enkleste versjonen?",
+      "Kan du koble '{{worstHabit}}' til noe du allerede gjør? Det er lettere å stable vaner.",
+      "Hvis '{{worstHabit}}' ikke går som planlagt, er det et signal om å justere strategien."
+    ]
+  },
+  "summary": {
+    "subtitle": "Alt ferdig for i dag!",
+    "title": "Daglig oppsummering",
+    "no-actions": "Fremgangen din vises her når du har fullført minst én repetisjon."
+  },
+  "error-boundary": {
+    "title": "Oops, noe gikk galt",
+    "body": "Feilen er rapportert automatisk.\nBeklager ulempen.",
+    "button": "Start på nytt"
+  }
+}

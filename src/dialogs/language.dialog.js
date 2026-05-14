@@ -14,6 +14,14 @@ export const LANGUAGE_NAMES = {
   it: 'Italiano',
   uk: 'Українська',
   tr: 'Türkçe',
+  sv: 'Svenska',
+  no: 'Norsk',
+  ar: 'العربية',
+  hi: 'हिन्दी',
+  th: 'ไทย',
+  ko: '한국어',
+  ja: '日本語',
+  zh: '简体中文',
 };
 
 const LanguageDialog = ({visible, onDismiss, language, onSelectLanguage}) => {

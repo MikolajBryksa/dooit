@@ -1,18 +1,6 @@
 import i18next from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import * as RNLocalize from 'react-native-localize';
-import {
-  en as enPaperDates,
-  pl as plPaperDates,
-  de as dePaperDates,
-  es as esPaperDates,
-  fr as frPaperDates,
-  nl as nlPaperDates,
-  it as itPaperDates,
-  ukUA as ukPaperDates,
-  tr as trPaperDates,
-  registerTranslation,
-} from 'react-native-paper-dates';
 import en from './translation/en.json';
 import pl from './translation/pl.json';
 import de from './translation/de.json';
@@ -22,20 +10,36 @@ import nl from './translation/nl.json';
 import it from './translation/it.json';
 import uk from './translation/uk.json';
 import tr from './translation/tr.json';
+import sv from './translation/sv.json';
+import no from './translation/no.json';
+import ar from './translation/ar.json';
+import hi from './translation/hi.json';
+import th from './translation/th.json';
+import ko from './translation/ko.json';
+import ja from './translation/ja.json';
+import zh from './translation/zh.json';
 
-const LANGUAGES = {
-  en: {translation: en, paperDates: enPaperDates},
-  pl: {translation: pl, paperDates: plPaperDates},
-  de: {translation: de, paperDates: dePaperDates},
-  es: {translation: es, paperDates: esPaperDates},
-  fr: {translation: fr, paperDates: frPaperDates},
-  nl: {translation: nl, paperDates: nlPaperDates},
-  it: {translation: it, paperDates: itPaperDates},
-  uk: {translation: uk, paperDates: ukPaperDates},
-  tr: {translation: tr, paperDates: trPaperDates},
+const TRANSLATIONS = {
+  en,
+  pl,
+  de,
+  es,
+  fr,
+  nl,
+  it,
+  uk,
+  tr,
+  sv,
+  no,
+  ar,
+  hi,
+  th,
+  ko,
+  ja,
+  zh,
 };
 
-export const SUPPORTED_LANGUAGES = Object.keys(LANGUAGES);
+export const SUPPORTED_LANGUAGES = Object.keys(TRANSLATIONS);
 
 export const detectDeviceLanguage = () => {
   const deviceLocales = RNLocalize.getLocales();
@@ -43,16 +47,12 @@ export const detectDeviceLanguage = () => {
   return SUPPORTED_LANGUAGES.includes(code) ? code : 'en';
 };
 
-Object.entries(LANGUAGES).forEach(([code, {paperDates}]) =>
-  registerTranslation(code, paperDates),
-);
-
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
   lng: 'en',
   fallbackLng: 'en',
   resources: Object.fromEntries(
-    Object.entries(LANGUAGES).map(([code, {translation}]) => [
+    Object.entries(TRANSLATIONS).map(([code, translation]) => [
       code,
       {translation},
     ]),

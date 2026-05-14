@@ -1,0 +1,315 @@
+{
+  "view": {
+    "now": "首页",
+    "habits": "习惯",
+    "settings": "设置"
+  },
+  "loading": {
+    "subtitle": "请稍候。",
+    "title": "加载中"
+  },
+  "empty": {
+    "subtitle": "今天没有习惯任务。",
+    "title": "暂无习惯"
+  },
+  "title": {
+    "add": "添加习惯",
+    "delete-habit": "删除习惯",
+    "delete-execution": "删除记录",
+    "delete-data": "删除所有数据",
+    "reset-counters": "重置计数器",
+    "change-goal": "更改目标",
+    "goal-reached": "达成目标！",
+    "contact": "联系我们",
+    "support": "请喝咖啡",
+    "thanks-support": "非常感谢！",
+    "filter": "筛选习惯",
+    "history": "历史记录",
+    "terms": "隐私政策",
+    "customHour": "自定义时间"
+  },
+  "terms": {
+    "last-updated": "最后更新：2026年5月13日",
+    "intro": "Dooit 是一款由 Mikołaj Bryksa 开发和维护的应用。本政策解释了应用收集哪些数据、原因、保留时间以及您的权利。如有任何隐私相关问题，请使用应用内的“联系我们”表单。",
+    "s1-title": "1. 数据收集",
+    "s1-body": "• 账号 — 首次打开应用时，系统会创建一个匿名账号，以便保存和同步您的数据。\n• 用户名 — 您在新手引导中输入或稍后在设置中更改的名称。它存储在您的设备和应用的数据库中，并与您的账号关联。您可以使用任何名称，包括昵称。\n• 习惯数据 — 您创建的习惯、完成历史和连续达标统计，这些数据均与您的账号关联。\n• 错误报告 — 如果应用崩溃或遇到错误，它会记录错误消息、应用版本以及发生错误的页面。\n• 联系提交 — 如果您使用应用内的联系表单，您提供的电子邮件地址和消息将被存储，以便作者回复。只要提交内容被保留，您的邮箱就会与账号关联。\n• 广告数据 — 广告由 Google AdMob 提供，它可能会收集您的广告 ID、IP 地址和设备信息。这受 Google 隐私政策约束：https://policies.google.com/privacy \n\n本应用不收集电话号码、精确位置、联系人、照片或生物识别数据。\n\n应用数据库由 Supabase (https://supabase.com/privacy) 托管。根据标准数据保护措施，某些数据可能会由该服务商在您所在国家/地区境外进行处理。数据在传输过程中经过加密，且每个账号只能访问自己的记录。",
+    "s2-title": "2. 数据用途",
+    "s2-body": "所有数据均用于帮助您养成习惯 —— 这是应用的初衷。具体用途包括：\n• 在不同设备间保存您的习惯和进度。\n• 使用您选择的用户名进行个性化界面展示。\n• 诊断并修复漏洞。\n• 回复您的联系表单提交内容。\n• 显示广告（通过 Google AdMob）。\n\n作者不会出售您的数据，也不会将其分享给数据经纪人。Google AdMob 收集的部分广告数据可能会与广告合作伙伴分享以投放广告 —— 您可以通过首次启动时的同意对话框或在设置视图中进行管理。",
+    "s3-title": "3. 您的权利",
+    "s3-body": "您有权：\n• 访问关于您的个人数据。\n• 更正不准确的数据。\n• 删除您的数据。\n• 限制或反对数据处理。\n• 向当地数据保护机构投诉。\n• 选择退出广告个人信息共享 —— 可通过 Google AdMob 显示的同意对话框管理。\n\n如需行使这些权利，请使用应用内的联系表单。我们会在 30 天内回复请求。",
+    "s4-title": "4. 数据删除",
+    "s4-body": "您可以随时在设置中永久删除所有数据。这将从数据库和您的设备中清除您的习惯、连续记录、用户名、错误报告和联系提交内容。此操作不可撤销。\n\n所有数据在 12 个月未活动后也将被自动删除。\n\n删除您的 Dooit 数据不会影响 Google AdMob 此前收集的数据。如需管理 Google 数据，请访问 https://myaccount.google.com/data-and-privacy"
+  },
+  "settings": {
+    "version": "版本",
+    "user-name": "您的名字",
+    "language": "语言",
+    "clock-format": "时间格式",
+    "first-day": "每周首日",
+    "theme": "模式",
+    "dark": "深色",
+    "light": "浅色",
+    "notifications": "通知",
+    "enabled": "开启",
+    "disabled": "关闭",
+    "repetition-counters": "重复次数",
+    "reset-counters": "重置",
+    "no-data": "无数据",
+    "tips": "小贴士",
+    "restore-tips": "还原",
+    "tips-restored": "已还原",
+    "terms": "隐私政策",
+    "show": "显示",
+    "data": "账号数据",
+    "delete": "删除",
+    "ads": "广告",
+    "manage-ads": "管理",
+    "test-connection": "测试连接",
+    "test": "测试",
+    "connection-ok": "已连接",
+    "connection-fail": "连接失败",
+    "test-error-logging": "测试错误记录",
+    "error-logged": "错误已记录",
+    "log-error": "记录错误",
+    "test-crash": "测试崩溃",
+    "crash-app": "崩溃应用",
+    "test-ads": "测试广告"
+  },
+  "message": {
+    "delete-habit": "确定要删除该习惯吗：",
+    "delete-execution": "确定要删除这条记录吗？",
+    "delete-data": "确定吗？这将永久删除您的所有习惯、历史记录和账号数据。此操作无法撤销。",
+    "reset-counters": "确定吗？这将重置所有重复次数历史。您的习惯和设置将保持不变。",
+    "change-goal": "是否要更改目标？\n默认设置为 4 周内需完成的重复次数。",
+    "goal-reached": "您已达成目标！想要更进一步，提高限制以建立更牢固的习惯吗？",
+    "contact": "填写表单以联系应用作者。",
+    "support": "您好，{{userName}}！\n\nDooit 由我个人独立开发。如果这款应用帮您养成了习惯，您可以支持它的进一步开发。\n\n只需观看一段简短的广告，或请我喝杯“虚拟咖啡”即可。我将不胜感激。\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}，您的支持对我意义重大！\n\n是您的支持让 Dooit 能够继续成长，并帮助更多人建立更好的习惯。保重，祝您早日达成目标！\n\n~ Mikołaj Bryksa"
+  },
+  "button": {
+    "delete": "删除",
+    "cancel": "取消",
+    "close": "关闭",
+    "contact": "联系",
+    "buy": "支持",
+    "add": "添加",
+    "start": "开始",
+    "save": "保存",
+    "back": "返回",
+    "next": "下一步",
+    "skip": "跳过",
+    "skipped": "已跳过",
+    "done": "完成",
+    "reset": "重置",
+    "today": "今天",
+    "yesterday": "昨天",
+    "unlock": "解锁",
+    "send": "发送",
+    "sent": "已发送",
+    "offline": "离线",
+    "finish": "结束",
+    "deleting": "删除中",
+    "understand": "知道了",
+    "watch": "观看",
+    "update": "更新",
+    "customHour": "自定义时间"
+  },
+  "contact": {
+    "email": "您的邮箱",
+    "message": "消息内容",
+    "rate-limit": "您已达到每日限制（3 条消息）。"
+  },
+  "card": {
+    "habitName": "习惯名称",
+    "repeatDays": "重复日期",
+    "repeatHours": "重复时间",
+    "goal": "当前目标",
+    "newGoal": "建议目标",
+    "noRepetitions": "暂无记录",
+    "repetitions": "次重复"
+  },
+  "date": {
+    "daily": "每天",
+    "workdays": "工作日",
+    "weekend": "周末",
+    "mon": "周一",
+    "tue": "周二",
+    "wed": "周三",
+    "thu": "周四",
+    "fri": "周五",
+    "sat": "周六",
+    "sun": "周日",
+    "monday": "星期一",
+    "tuesday": "星期二",
+    "wednesday": "星期三",
+    "thursday": "星期四",
+    "friday": "星期五",
+    "saturday": "星期六",
+    "sunday": "星期日"
+  },
+  "addStep": {
+    "customHabit": "自定义习惯",
+    "habitName": "您想定期做什么？",
+    "repeatDays": "您想在哪些日子做？",
+    "repeatHours": "您想在什么时间做？"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "不要把习惯看作一项重任，而要看作是迈出的第一步。",
+    "onboarding-same-time": "在相同日期的同一时间重复，习惯最容易养成。",
+    "now-repetitions-matter": "在 Dooit 中，只有重复次数最重要。无需关注热量、升、公斤或分钟。",
+    "now-first-habit": "{{userName}}，只需关注下方内容，完成后进行标记即可。",
+    "now-locked-habit": "该习惯计划在稍后进行。如果您想现在做，请点击解锁。",
+    "summary-daily-recap": "在一天结束时，Dooit 会汇总您的重复次数并提供简短分析。",
+    "habits-edit-and-goal": "您可以随时编辑任何习惯。默认目标基于 28 天的重复次数。",
+    "settings-overview": "您可以在此处更新姓名、更改语言、切换模式以及管理通知和广告。"
+  },
+  "onboarding": {
+    "step1": {
+      "title": "欢迎使用 Dooit",
+      "subtitle": "您习惯养成的好伙伴",
+      "name": "请输入您的名字",
+      "terms-prefix": "我接受",
+      "terms-link": "隐私政策"
+    },
+    "features": [
+      {
+        "title": "简单易用",
+        "body": "只需几秒即可创建习惯并立即开始。"
+      },
+      {
+        "title": "进度可见",
+        "body": "专注于重复次数，而非成就勋章。"
+      },
+      {
+        "title": "全面定制",
+        "body": "调整习惯以匹配您的日常节奏。"
+      },
+      {
+        "title": "专注当下",
+        "body": "只看下一步任务，而非整个清单。"
+      }
+    ],
+    "step2": {
+      "choose": "选择",
+      "which-habits": "您想要养成哪些习惯"
+    },
+    "step3": {
+      "select-repetition": "定制",
+      "accept-default": "或保持默认重复设置"
+    },
+    "start": {
+      "subtitle": "您好，{{userName}}",
+      "title": "让我们开始吧",
+      "text": "对于每个习惯，\n只需做一个选择：\n执行或跳过。"
+    }
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "喝一杯水"
+    },
+    "2": {
+      "habitName": "去健身房"
+    },
+    "3": {
+      "habitName": "称体重"
+    },
+    "4": {
+      "habitName": "洗个水果吃"
+    },
+    "5": {
+      "habitName": "服用药物"
+    },
+    "6": {
+      "habitName": "翻开一本书"
+    },
+    "7": {
+      "habitName": "开始一节课"
+    },
+    "8": {
+      "habitName": "深呼吸"
+    },
+    "9": {
+      "habitName": "给亲人打个电话"
+    },
+    "10": {
+      "habitName": "早点睡觉"
+    }
+  },
+  "history": {
+    "summary": "在 {{days}} 天内完成了 {{count}} 次重复"
+  },
+  "streak": {
+    "reminder-title": "保持您的连续记录！🔥",
+    "reminder-body": "不要忘记您的习惯，打开 Dooit 让记录生效。"
+  },
+  "motivation": {
+    "notification": [
+      "一小步，大进步。",
+      "习惯塑造您的未来。",
+      "一次养成一个习惯。",
+      "追求进步，而非完美。",
+      "微小习惯，巨大影响。",
+      "坚持带来结果。",
+      "点滴努力，长久改变。"
+    ],
+    "done": [
+      "一个好习惯会带动另一个。",
+      "您正在证明自己的承诺。",
+      "循序渐进，您正在改变。",
+      "继续加油，您进步很大。",
+      "您的自律正在产生回报。",
+      "成功之墙上的又一块砖。",
+      "每一次行动都在塑造自我。",
+      "您正在打造最好的自己。",
+      "您正在书写自己的成功故事。",
+      "很棒的选择，您的规律生活起效了。"
+    ],
+    "skipped": [
+      "偶尔一次失误不会抹除进度。",
+      "从中吸取教训，然后继续前进。",
+      "不要放弃，调整后继续。",
+      "这只是绊了一下，不是失败。",
+      "关注进步，而非完美。",
+      "您的习惯比这一刻更强大。",
+      "冠军也会有失手的时候。",
+      "跳过一次并非终结。",
+      "暂停不会抹除已有的进步。",
+      "您仍在前进的轨道上。",
+      "这只是歇一歇，不是退步。",
+      "跳过难免发生，继续前进就好。",
+      "休息也可以为进步积蓄能量。",
+      "这只是暂时的停留，旅程仍在继续。"
+    ],
+    "intro": [
+      "又是充实的一天，{{userName}}。每次打开 Dooit 都是迈向正确方向的一步。",
+      "很高兴又见到您，{{userName}}。坚持是养成持久习惯的关键。",
+      "习惯是日积月累而成的，{{userName}}。因此，每一天和每个决定都很重要。",
+      "很高兴 Dooit 能成为您日常生活的一部分，{{userName}}。坚持是长久改变的秘密。",
+      "您回来的次数越多，{{userName}}，建立习惯和改变生活的速度就越快。"
+    ],
+    "praise": [
+      "在坚持“{{bestHabit}}”习惯方面做得太棒了！今天您完成得很出色。",
+      "看起来您在“{{bestHabit}}”习惯上取得了很大进步。做得非常好！",
+      "您是否已经感受到了重复“{{bestHabit}}”带来的效果？您正走在改变生活的正确轨道上。",
+      "您对“{{bestHabit}}”习惯的坚持令我印象深刻。请继续保持！",
+      "“{{bestHabit}}”是您今天最大的胜利。请继续坚持！"
+    ],
+    "tip": [
+      "看起来“{{worstHabit}}”习惯遇到了一些阻碍。也许可以尝试简化第一步？",
+      "“{{worstHabit}}”计划的时间合适吗？或许换个时间试试？",
+      "对于“{{worstHabit}}”，您可能起步太快了。最简单的版本会是什么样？",
+      "您能把“{{worstHabit}}”和您已经习惯做的事情联系起来吗？习惯叠加会更容易。",
+      "如果“{{worstHabit}}”没按计划进行，这只是调整策略的信号 —— 而非失败。"
+    ]
+  },
+  "summary": {
+    "subtitle": "今天全部完成！",
+    "title": "每日总结",
+    "no-actions": "一旦您完成所选习惯的至少一次重复，您的进度总结就会显示在这里。"
+  },
+  "error-boundary": {
+    "title": "糟糕，出错了",
+    "body": "错误已自动报告。给您带来的不便，深表歉意。",
+    "button": "重新启动"
+  }
+}
