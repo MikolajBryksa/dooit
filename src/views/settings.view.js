@@ -25,6 +25,7 @@ import DeleteDataDialog from '@/dialogs/delete-data.dialog';
 import ResetDataDialog from '@/dialogs/reset-counters.dialog';
 import NameModal from '@/modals/name.modal';
 import TermsDialog from '@/dialogs/terms.dialog';
+import LanguageDialog, {LANGUAGE_NAMES} from '@/dialogs/language.dialog';
 import {useColorScheme} from 'react-native';
 import packageJson from '../../package.json';
 import notifee from '@notifee/react-native';
@@ -50,6 +51,7 @@ const SettingsView = () => {
   const [visibleDeleteDataDialog, setVisibleDeleteDataDialog] = useState(false);
   const [visibleResetDataDialog, setVisibleResetDataDialog] = useState(false);
   const [visibleTermsDialog, setVisibleTermsDialog] = useState(false);
+  const [visibleLanguageDialog, setVisibleLanguageDialog] = useState(false);
   const [adsLoading, setAdsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
   const [updateHandler, setUpdateHandler] = useState(null);
@@ -122,6 +124,7 @@ const SettingsView = () => {
   const handleNameModal = () => setVisibleNameModal(v => !v);
   const handleDeleteDataDialog = () => setVisibleDeleteDataDialog(v => !v);
   const handleTermsDialog = () => setVisibleTermsDialog(v => !v);
+  const handleLanguageDialog = () => setVisibleLanguageDialog(v => !v);
 
   const canReset = hasAnyExecutions() || settings.streakCount > 0;
 
@@ -176,16 +179,15 @@ const SettingsView = () => {
     ).catch(e => logError(e, 'settings.handleVersion'));
   }
 
-  function handleLanguage() {
+  function handleLanguage(newLanguage) {
+    if (newLanguage === language) return;
     const oldLanguage = language;
-    const newLanguage = language === 'en' ? 'pl' : 'en';
-    const newLocale = newLanguage === 'en' ? 'en' : 'pl';
 
-    i18next.changeLanguage(newLocale);
-    LocaleConfig.defaultLocale = newLocale;
+    i18next.changeLanguage(newLanguage);
+    LocaleConfig.defaultLocale = newLanguage;
 
-    if (newLocale === 'en') registerTranslation('en', en);
-    else registerTranslation('pl', pl);
+    if (newLanguage === 'pl') registerTranslation('pl', pl);
+    else registerTranslation('en', en);
 
     const updatedCount = translateDefaultHabits(oldLanguage, newLanguage);
     if (updatedCount > 0) {
@@ -273,9 +275,9 @@ const SettingsView = () => {
 
         <SettingComponent
           label={t('settings.language')}
-          value={t(`settings.${language}`)}
+          value={LANGUAGE_NAMES[language]}
           icon="translate"
-          onPress={handleLanguage}
+          onPress={handleLanguageDialog}
         />
 
         <SettingComponent
@@ -443,6 +445,13 @@ const SettingsView = () => {
       />
 
       <TermsDialog visible={visibleTermsDialog} onDismiss={handleTermsDialog} />
+
+      <LanguageDialog
+        visible={visibleLanguageDialog}
+        onDismiss={handleLanguageDialog}
+        language={language}
+        onSelectLanguage={handleLanguage}
+      />
     </>
   );
 };

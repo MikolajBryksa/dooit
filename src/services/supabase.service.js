@@ -117,6 +117,7 @@ export const syncUserData = async (habits, streak) => {
       {
         user_id: userId,
         user_name: getSettingValue('userName'),
+        language: getSettingValue('language'),
         habits_json: habits,
         streak,
         updated_at: new Date().toISOString(),
