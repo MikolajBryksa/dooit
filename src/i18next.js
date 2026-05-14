@@ -1,45 +1,28 @@
 import i18next from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import * as RNLocalize from 'react-native-localize';
-import en from './translation/en.json';
-import pl from './translation/pl.json';
-import de from './translation/de.json';
-import es from './translation/es.json';
-import fr from './translation/fr.json';
-import nl from './translation/nl.json';
-import it from './translation/it.json';
-import uk from './translation/uk.json';
-import tr from './translation/tr.json';
-import sv from './translation/sv.json';
-import no from './translation/no.json';
-import ar from './translation/ar.json';
-import hi from './translation/hi.json';
-import th from './translation/th.json';
-import ko from './translation/ko.json';
-import ja from './translation/ja.json';
-import zh from './translation/zh.json';
 
-const TRANSLATIONS = {
-  en,
-  pl,
-  de,
-  es,
-  fr,
-  nl,
-  it,
-  uk,
-  tr,
-  sv,
-  no,
-  ar,
-  hi,
-  th,
-  ko,
-  ja,
-  zh,
+const LANGUAGE_LOADERS = {
+  en: () => require('./translation/en.json'),
+  pl: () => require('./translation/pl.json'),
+  de: () => require('./translation/de.json'),
+  es: () => require('./translation/es.json'),
+  fr: () => require('./translation/fr.json'),
+  nl: () => require('./translation/nl.json'),
+  it: () => require('./translation/it.json'),
+  uk: () => require('./translation/uk.json'),
+  tr: () => require('./translation/tr.json'),
+  sv: () => require('./translation/sv.json'),
+  no: () => require('./translation/no.json'),
+  ar: () => require('./translation/ar.json'),
+  hi: () => require('./translation/hi.json'),
+  th: () => require('./translation/th.json'),
+  ko: () => require('./translation/ko.json'),
+  ja: () => require('./translation/ja.json'),
+  zh: () => require('./translation/zh.json'),
 };
 
-export const SUPPORTED_LANGUAGES = Object.keys(TRANSLATIONS);
+export const SUPPORTED_LANGUAGES = Object.keys(LANGUAGE_LOADERS);
 
 export const detectDeviceLanguage = () => {
   const deviceLocales = RNLocalize.getLocales();
@@ -47,16 +30,30 @@ export const detectDeviceLanguage = () => {
   return SUPPORTED_LANGUAGES.includes(code) ? code : 'en';
 };
 
+const loadLanguageBundle = code => {
+  if (!LANGUAGE_LOADERS[code]) return;
+  if (i18next.hasResourceBundle(code, 'translation')) return;
+  i18next.addResourceBundle(
+    code,
+    'translation',
+    LANGUAGE_LOADERS[code](),
+    true,
+    true,
+  );
+};
+
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
   lng: 'en',
   fallbackLng: 'en',
-  resources: Object.fromEntries(
-    Object.entries(TRANSLATIONS).map(([code, translation]) => [
-      code,
-      {translation},
-    ]),
-  ),
+  resources: {
+    en: {translation: LANGUAGE_LOADERS.en()},
+  },
 });
+
+export const changeLanguage = code => {
+  loadLanguageBundle(code);
+  return i18next.changeLanguage(code);
+};
 
 export default i18next;

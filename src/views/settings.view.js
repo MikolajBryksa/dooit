@@ -4,7 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import i18next, {detectDeviceLanguage} from '@/i18next';
+import {changeLanguage, detectDeviceLanguage} from '@/i18next';
 import {
   updateSettingValue,
   updateSettings,
@@ -149,7 +149,7 @@ const SettingsView = () => {
       await deleteUserData();
       await deleteAllLocalData();
       const detectedLanguage = detectDeviceLanguage();
-      i18next.changeLanguage(detectedLanguage);
+      changeLanguage(detectedLanguage);
       setLanguage(detectedLanguage);
       dispatch(setHabits([]));
       dispatch(
@@ -184,7 +184,7 @@ const SettingsView = () => {
     if (newLanguage === language) return;
     const oldLanguage = language;
 
-    i18next.changeLanguage(newLanguage);
+    changeLanguage(newLanguage);
 
     const updatedCount = translateDefaultHabits(oldLanguage, newLanguage);
     if (updatedCount > 0) {

@@ -13,7 +13,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
 import {useColorScheme} from 'react-native';
 import {renderIcon} from './src/utils';
-import i18next from './src/i18next';
+import {changeLanguage} from './src/i18next';
 import {getSettings} from './src/services/settings.service';
 import {setSettings, setHabits} from './src/redux/actions';
 import {getTheme} from './src/theme/theme';
@@ -72,7 +72,7 @@ function AppContent() {
               .catch(e => logError(e, 'mobileAds.initialize'));
           }
 
-          i18next.changeLanguage(localSettings.language as string);
+          changeLanguage(localSettings.language as string);
         }
 
         const habits = getHabits() || [];
