@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 import {BannerAd, BannerAdSize} from 'react-native-google-mobile-ads';
 
-const Banner = ({unitId, enabled = true}) => {
+const Banner = React.memo(({unitId, enabled = true}) => {
   const [bannerLoaded, setBannerLoaded] = useState(false);
   const adsEnabled = useSelector(state => state.settings.adsEnabled);
   const theme = useTheme();
@@ -26,6 +26,6 @@ const Banner = ({unitId, enabled = true}) => {
       />
     </View>
   );
-};
+});
 
 export default Banner;
