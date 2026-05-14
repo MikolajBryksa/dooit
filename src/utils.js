@@ -1,6 +1,8 @@
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faCog, faList, faClock} from '@fortawesome/free-solid-svg-icons';
+import {faCog} from '@fortawesome/free-solid-svg-icons/faCog';
+import {faList} from '@fortawesome/free-solid-svg-icons/faList';
+import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 import realm from '@/storage/schemas';
 import {dayMap} from '@/constants';
 
