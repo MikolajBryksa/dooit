@@ -4,9 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
-import i18next from 'i18next';
-import {en, pl, registerTranslation} from 'react-native-paper-dates';
-import {LocaleConfig} from 'react-native-calendars';
+import i18next, {detectDeviceLanguage} from '@/i18next';
 import {
   updateSettingValue,
   updateSettings,
@@ -150,12 +148,15 @@ const SettingsView = () => {
     try {
       await deleteUserData();
       await deleteAllLocalData();
+      const detectedLanguage = detectDeviceLanguage();
+      i18next.changeLanguage(detectedLanguage);
+      setLanguage(detectedLanguage);
       dispatch(setHabits([]));
       dispatch(
         setSettings({
           id: 1,
           userName: null,
-          language: 'en',
+          language: detectedLanguage,
           clockFormat: '24 h',
           firstDay: 'mon',
           firstLaunch: true,
@@ -184,10 +185,6 @@ const SettingsView = () => {
     const oldLanguage = language;
 
     i18next.changeLanguage(newLanguage);
-    LocaleConfig.defaultLocale = newLanguage;
-
-    if (newLanguage === 'pl') registerTranslation('pl', pl);
-    else registerTranslation('en', en);
 
     const updatedCount = translateDefaultHabits(oldLanguage, newLanguage);
     if (updatedCount > 0) {

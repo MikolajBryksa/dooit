@@ -31,7 +31,7 @@ https://play.google.com/store/apps/details?id=com.dooit.bryksa
 - **Daily summary**. Personalized recap.
 - **No distraction**. Clean design, zero noise.
 - **Dark mode**. Beautiful in any lighting.
-- **Multi-language**. Available in English and Polish.
+- **Language support**. Available in multiple languages.
 
 ## Setup
 

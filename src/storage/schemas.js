@@ -1,6 +1,6 @@
 import Realm from 'realm';
-import * as RNLocalize from 'react-native-localize';
 import {dayMap} from '@/constants';
+import {detectDeviceLanguage} from '@/i18next';
 
 class Habit extends Realm.Object {}
 Habit.schema = {
@@ -93,15 +93,9 @@ try {
   realm.write(() => {
     const existingSettings = realm.objects('Settings')[0];
     if (!existingSettings) {
-      const deviceLocales = RNLocalize.getLocales();
-      const deviceLanguage =
-        deviceLocales && deviceLocales.length > 0
-          ? deviceLocales[0].languageCode
-          : 'en';
-
       realm.create('Settings', {
         id: 1,
-        language: deviceLanguage,
+        language: detectDeviceLanguage(),
         clockFormat: '24 h',
         firstDay: 'mon',
         firstLaunch: true,

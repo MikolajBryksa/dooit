@@ -6,6 +6,7 @@ import DialogComponent from '@/components/dialog.component';
 export const LANGUAGE_NAMES = {
   en: 'English',
   pl: 'Polski',
+  de: 'Deutsch',
 };
 
 const LanguageDialog = ({visible, onDismiss, language, onSelectLanguage}) => {

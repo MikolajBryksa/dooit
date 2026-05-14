@@ -1,6 +1,7 @@
 import realm from '@/storage/schemas';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {subtractDays} from '@/utils';
+import {detectDeviceLanguage} from '@/i18next';
 
 const ADS_GRACE_PERIOD_DAYS = 3;
 
@@ -137,7 +138,7 @@ export const deleteAllLocalData = async () => {
         {
           id: 1,
           userName: null,
-          language: 'en',
+          language: detectDeviceLanguage(),
           clockFormat: '24 h',
           firstDay: 'mon',
           firstLaunch: true,

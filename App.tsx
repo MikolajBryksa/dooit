@@ -11,7 +11,6 @@ import 'react-native-gesture-handler';
 import {NavigationContainer, CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
-import {LocaleConfig} from 'react-native-calendars';
 import {useColorScheme} from 'react-native';
 import {renderIcon} from './src/utils';
 import i18next from './src/i18next';
@@ -73,9 +72,7 @@ function AppContent() {
               .catch(e => logError(e, 'mobileAds.initialize'));
           }
 
-          const newLocale = localSettings.language as string;
-          i18next.changeLanguage(newLocale);
-          LocaleConfig.defaultLocale = newLocale;
+          i18next.changeLanguage(localSettings.language as string);
         }
 
         const habits = getHabits() || [];

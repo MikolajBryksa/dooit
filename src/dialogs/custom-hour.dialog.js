@@ -64,7 +64,7 @@ const CustomHourDialog = ({visible, onDismiss, onConfirm}) => {
             minutes={minutes}
             onFocusInput={setFocused}
             onChange={handleChange}
-            locale={language === 'en' ? 'en' : 'pl'}
+            locale={language}
             use24HourClock={clockFormat !== '12 h'}
             inputFontSize={44}
           />
