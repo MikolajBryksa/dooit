@@ -9,6 +9,7 @@ export const LANGUAGE_NAMES = {
   de: 'Deutsch',
   es: 'Español',
   fr: 'Français',
+  nl: 'Nederlands',
 };
 
 const LanguageDialog = ({visible, onDismiss, language, onSelectLanguage}) => {

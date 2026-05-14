@@ -1,0 +1,315 @@
+{
+  "view": {
+    "now": "Nu",
+    "habits": "Gewoonten",
+    "settings": "Instellingen"
+  },
+  "loading": {
+    "subtitle": "Even geduld alsjeblieft.",
+    "title": "Laden"
+  },
+  "empty": {
+    "subtitle": "Geen gewoonten voor vandaag.",
+    "title": "Geen gewoonten"
+  },
+  "title": {
+    "add": "Gewoonte toevoegen",
+    "delete-habit": "Gewoonte verwijderen",
+    "delete-execution": "Herhaling verwijderen",
+    "delete-data": "Alle gegevens verwijderen",
+    "reset-counters": "Tellers resetten",
+    "change-goal": "Doel wijzigen",
+    "goal-reached": "Doel behaald!",
+    "contact": "Contact",
+    "support": "Koffie",
+    "thanks-support": "Bedankt!",
+    "filter": "Gewoonten filteren",
+    "history": "Geschiedenis",
+    "terms": "Privacybeleid",
+    "customHour": "Eigen tijd"
+  },
+  "terms": {
+    "last-updated": "Laatst bijgewerkt: 13 mei 2026",
+    "intro": "Dooit is een app die ontwikkeld en onderhouden wordt door Mikołaj Bryksa. Dit beleid legt uit welke gegevens de app verzamelt, waarom, hoe lang ze bewaard worden en wat je daaraan kunt doen. Voor vragen over privacy kun je het contactformulier in de app gebruiken.",
+    "s1-title": "1. Verzamelde gegevens",
+    "s1-body": "• Account — bij de eerste keer openen van de app wordt een anoniem account aangemaakt, zodat je gegevens opgeslagen en gesynchroniseerd kunnen worden.\n• Gebruikersnaam — de naam die je tijdens de introductie invoert of later wijzigt in Instellingen. Deze wordt op je apparaat en in de database van de app bewaard, gekoppeld aan je account. Je mag elke naam gebruiken, ook een pseudoniem.\n• Gewoontegegevens — de gewoonten die je aanmaakt, je voltooiingsgeschiedenis en je reeksstatistieken, gekoppeld aan je account.\n• Foutmeldingen — als de app crasht of een fout tegenkomt, worden de foutmelding, de versie van de app en het betrokken scherm vastgelegd.\n• Contactberichten — als je het contactformulier in de app gebruikt, worden je e-mailadres en bericht opgeslagen zodat de auteur kan antwoorden. Hierdoor wordt je e-mail gekoppeld aan je account zolang het bericht bewaard blijft.\n• Advertentiegegevens — advertenties worden geleverd door Google AdMob, dat je advertentie-ID, IP-adres en apparaatgegevens kan verzamelen. Hierop is het privacybeleid van Google van toepassing: https://policies.google.com/privacy \n\nDe app verzamelt geen telefoonnummers, precieze locatie, contacten, foto’s of biometrische gegevens.\n\nDe database van de app wordt gehost door Supabase (https://supabase.com/privacy). Sommige gegevens kunnen door deze leverancier buiten je land verwerkt worden, onder de standaard waarborgen voor gegevensbescherming. De gegevens worden tijdens het verzenden versleuteld en elk account heeft alleen toegang tot de eigen records.",
+    "s2-title": "2. Hoe gegevens gebruikt worden",
+    "s2-body": "Alle gegevens worden gebruikt om je te helpen gewoonten op te bouwen — dat is het hoofddoel van de app. Concreet worden de gegevens gebruikt om:\n• Je gewoonten en voortgang tussen sessies op te slaan.\n• De interface te personaliseren met de gekozen gebruikersnaam.\n• Bugs op te sporen en op te lossen.\n• Te reageren op berichten via het contactformulier.\n• Advertenties te tonen (via Google AdMob).\n\nDe auteur verkoopt je gegevens niet en deelt ze niet met datahandelaars. Sommige door Google AdMob verzamelde advertentiegegevens kunnen met partners worden gedeeld om advertenties te leveren — dit kun je beheren via het toestemmingsvenster van AdMob bij de eerste start en in Instellingen.",
+    "s3-title": "3. Je rechten",
+    "s3-body": "Je hebt het recht om:\n• De over jou bewaarde gegevens in te zien.\n• Onjuiste gegevens te corrigeren.\n• Je gegevens te verwijderen.\n• Verwerking te beperken of er bezwaar tegen te maken.\n• Een klacht in te dienen bij je lokale toezichthouder voor gegevensbescherming.\n• Je te verzetten tegen het delen van persoonsgegevens voor advertenties — dit beheer je via het toestemmingsvenster van Google AdMob.\n\nGebruik het contactformulier in de app om een van deze rechten uit te oefenen. Verzoeken worden binnen 30 dagen behandeld.",
+    "s4-title": "4. Gegevens verwijderen",
+    "s4-body": "Je kunt al je gegevens op elk moment definitief verwijderen via Instellingen. Hiermee verdwijnen je gewoonten, reeks, naam, foutmeldingen en contactberichten zowel uit de database als van je apparaat. Deze actie is onomkeerbaar.\n\nAlle gegevens worden ook automatisch verwijderd na 12 maanden zonder activiteit.\n\nHet verwijderen van Dooit-gegevens heeft geen invloed op gegevens die eerder door Google AdMob zijn verzameld. Voor het beheren van Google-gegevens ga je naar https://myaccount.google.com/data-and-privacy"
+  },
+  "settings": {
+    "version": "Versie",
+    "user-name": "Je naam",
+    "language": "Taal",
+    "clock-format": "Tijdnotatie",
+    "first-day": "Eerste dag",
+    "theme": "Modus",
+    "dark": "Donker",
+    "light": "Licht",
+    "notifications": "Meldingen",
+    "enabled": "Ingeschakeld",
+    "disabled": "Uitgeschakeld",
+    "repetition-counters": "Herhalingen",
+    "reset-counters": "Resetten",
+    "no-data": "Geen gegevens",
+    "tips": "Tips",
+    "restore-tips": "Herstellen",
+    "tips-restored": "Hersteld",
+    "terms": "Privacybeleid",
+    "show": "Tonen",
+    "data": "Accountgegevens",
+    "delete": "Verwijderen",
+    "ads": "Advertenties",
+    "manage-ads": "Beheren",
+    "test-connection": "Verbinding testen",
+    "test": "Testen",
+    "connection-ok": "Verbonden",
+    "connection-fail": "Niet verbonden",
+    "test-error-logging": "Fout testen",
+    "error-logged": "Fout geregistreerd",
+    "log-error": "Fout melden",
+    "test-crash": "Crash testen",
+    "crash-app": "App crashen",
+    "test-ads": "Advertenties testen"
+  },
+  "message": {
+    "delete-habit": "Wil je de gewoonte verwijderen:",
+    "delete-execution": "Wil je deze herhaling verwijderen?",
+    "delete-data": "Weet je het zeker? Hiermee worden al je gewoonten, geschiedenis en accountgegevens permanent verwijderd. Deze actie kan niet ongedaan gemaakt worden.",
+    "reset-counters": "Weet je het zeker? Hiermee wordt je hele herhalingsgeschiedenis gereset. Je gewoonten en instellingen blijven ongewijzigd.",
+    "change-goal": "Wil je het doel wijzigen?\nStandaard is dit het aantal herhalingen binnen 4 weken.",
+    "goal-reached": "Je hebt je doel behaald! Wil je verder gaan en de limiet verhogen om de gewoonte nog sterker te maken?",
+    "contact": "Vul het formulier in om contact op te nemen met de maker van de app.",
+    "support": "Hoi, {{userName}}!\n\nIk bouw Dooit in mijn eentje. Als de app je helpt om gewoonten op te bouwen, kun je de verdere ontwikkeling steunen.\n\nJe hoeft alleen een korte advertentie te bekijken of me een virtueel kopje koffie aan te bieden. Dat zou ik enorm waarderen.\n\n~ Mikołaj Bryksa",
+    "thanks-support": "{{userName}}, je steun betekent echt veel!\n\nDankzij jou kan Dooit blijven groeien en meer mensen helpen om betere gewoonten op te bouwen. Pas goed op jezelf en veel succes met je doelen!\n\n~ Mikołaj Bryksa"
+  },
+  "button": {
+    "delete": "Verwijderen",
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "contact": "Contact",
+    "buy": "Kopen",
+    "add": "Toevoegen",
+    "start": "Starten",
+    "save": "Opslaan",
+    "back": "Terug",
+    "next": "Volgende",
+    "skip": "Overslaan",
+    "skipped": "Overgeslagen",
+    "done": "Klaar",
+    "reset": "Resetten",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "unlock": "Ontgrendelen",
+    "send": "Verzenden",
+    "sent": "Verzonden",
+    "offline": "Offline",
+    "finish": "Voltooien",
+    "deleting": "Verwijderen",
+    "understand": "Begrepen",
+    "watch": "Bekijken",
+    "update": "Bijwerken",
+    "customHour": "Eigen tijd"
+  },
+  "contact": {
+    "email": "Je e-mail",
+    "message": "Bericht",
+    "rate-limit": "Je hebt de daglimiet bereikt (3 berichten)."
+  },
+  "card": {
+    "habitName": "Naam van de gewoonte",
+    "repeatDays": "Herhalingsdagen",
+    "repeatHours": "Herhalingstijden",
+    "goal": "Huidig doel",
+    "newGoal": "Voorgesteld doel",
+    "noRepetitions": "Geen herhalingen",
+    "repetitions": "herhalingen"
+  },
+  "date": {
+    "daily": "Dagelijks",
+    "workdays": "Werkdagen",
+    "weekend": "Weekend",
+    "mon": "Ma",
+    "tue": "Di",
+    "wed": "Wo",
+    "thu": "Do",
+    "fri": "Vr",
+    "sat": "Za",
+    "sun": "Zo",
+    "monday": "Maandag",
+    "tuesday": "Dinsdag",
+    "wednesday": "Woensdag",
+    "thursday": "Donderdag",
+    "friday": "Vrijdag",
+    "saturday": "Zaterdag",
+    "sunday": "Zondag"
+  },
+  "addStep": {
+    "customHabit": "Eigen gewoonte",
+    "habitName": "Wat wil je regelmatig doen?",
+    "repeatDays": "Op welke dagen wil je het doen?",
+    "repeatHours": "Hoe laat wil je het doen?"
+  },
+  "tip": {
+    "onboarding-habit-mindset": "Zie een gewoonte niet als een grote taak, maar als de eerste kleine stap die ervoor nodig is.",
+    "onboarding-same-time": "Gewoonten blijven het best hangen als je ze op dezelfde tijd en dagen herhaalt.",
+    "now-repetitions-matter": "In Dooit tellen alleen herhalingen. Geen calorieën, liters, kilo’s of minuten.",
+    "now-first-habit": "Concentreer je alleen op wat hieronder staat, {{userName}}, en geef daarna aan of het gelukt is.",
+    "now-locked-habit": "Deze gewoonte staat gepland voor later. Wil je het nu doen, tik dan op ontgrendelen.",
+    "summary-daily-recap": "Aan het einde van de dag vat Dooit je herhalingen samen en geeft een korte analyse.",
+    "habits-edit-and-goal": "Je kunt elke gewoonte op elk moment bewerken. Het standaarddoel is gebaseerd op 28 dagen herhalingen.",
+    "settings-overview": "Hier kun je je naam bijwerken, de taal wijzigen, de modus omschakelen en meldingen en advertenties beheren."
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Welkom bij Dooit",
+      "subtitle": "je partner bij het opbouwen van gewoonten",
+      "name": "Vul je naam in",
+      "terms-prefix": "Ik accepteer het",
+      "terms-link": "Privacybeleid"
+    },
+    "features": [
+      {
+        "title": "Eenvoudig in gebruik",
+        "body": "Maak in seconden een gewoonte aan en begin meteen."
+      },
+      {
+        "title": "Zichtbare voortgang",
+        "body": "Focus op herhalingen, niet op prestaties."
+      },
+      {
+        "title": "Volledig aanpasbaar",
+        "body": "Stem gewoonten af op je dagelijkse ritme."
+      },
+      {
+        "title": "Eén stap tegelijk",
+        "body": "Alleen wat als volgende komt, niet de hele lijst."
+      }
+    ],
+    "step2": {
+      "choose": "Kies",
+      "which-habits": "welke gewoonten je wilt opbouwen"
+    },
+    "step3": {
+      "select-repetition": "Pas aan",
+      "accept-default": "of houd de standaard herhalingsinstellingen aan"
+    },
+    "start": {
+      "subtitle": "Hoi, {{userName}}",
+      "title": "Aan de slag",
+      "text": "Maak voor elke gewoonte\néén keuze:\ndoen of overslaan."
+    }
+  },
+  "default-habits": {
+    "1": {
+      "habitName": "Schenk een glas water in"
+    },
+    "2": {
+      "habitName": "Ga naar de sportschool"
+    },
+    "3": {
+      "habitName": "Stap op de weegschaal"
+    },
+    "4": {
+      "habitName": "Was een stuk fruit"
+    },
+    "5": {
+      "habitName": "Neem je pillen"
+    },
+    "6": {
+      "habitName": "Sla een boek open"
+    },
+    "7": {
+      "habitName": "Begin een les"
+    },
+    "8": {
+      "habitName": "Haal diep adem"
+    },
+    "9": {
+      "habitName": "Bel je dierbaren"
+    },
+    "10": {
+      "habitName": "Ga vroeg naar bed"
+    }
+  },
+  "history": {
+    "summary": "{{count}} herhalingen over {{days}} dagen"
+  },
+  "streak": {
+    "reminder-title": "Houd je reeks vol! 🔥",
+    "reminder-body": "Denk aan je gewoonten, open Dooit en laat het tellen."
+  },
+  "motivation": {
+    "notification": [
+      "Kleine stap, grote vooruitgang.",
+      "Je gewoonten vormen je toekomst.",
+      "Eén gewoonte tegelijk.",
+      "Vooruitgang, geen perfectie.",
+      "Kleine gewoonten, grote impact.",
+      "Consistentie levert resultaat op.",
+      "Weinig moeite, blijvende verandering."
+    ],
+    "done": [
+      "De ene goede gewoonte leidt naar de andere.",
+      "Je laat je toewijding zien.",
+      "Stap voor stap verander je.",
+      "Ga zo door, je boekt vooruitgang.",
+      "Je discipline werpt vruchten af.",
+      "Weer een bouwsteen in de muur van succes.",
+      "Elke actie vormt wie je wordt.",
+      "Je bouwt de beste versie van jezelf.",
+      "Je schrijft je eigen succesverhaal.",
+      "Goede keuze, je routine werkt."
+    ],
+    "skipped": [
+      "Een misstap wist je voortgang niet uit.",
+      "Leer ervan en ga verder.",
+      "Stop niet, stuur bij en ga door.",
+      "Het is een struikeling, geen mislukking.",
+      "Focus op vooruitgang, niet op perfectie.",
+      "Je gewoonte is sterker dan dit moment.",
+      "Zelfs kampioenen struikelen.",
+      "Eén keer overslaan is niet het einde.",
+      "Een pauze wist je voortgang niet uit.",
+      "Je bent nog steeds op de goede weg.",
+      "Het is een pauze, geen stap terug.",
+      "Overslaan gebeurt, blijf vooruitgaan.",
+      "Zelfs pauzes kunnen je voortgang voeden.",
+      "Slechts een pauze, je reis gaat door."
+    ],
+    "intro": [
+      "Weer een dag achter de rug, {{userName}}. Elke keer dat je Dooit opent is een stap in de juiste richting.",
+      "Fijn om je weer te zien, {{userName}}. Consistentie is de sleutel tot blijvende gewoonten.",
+      "Gewoonten ontstaan dag voor dag, {{userName}}. Daarom telt elke dag en elke keuze.",
+      "Ik vind het echt fijn dat Dooit deel uitmaakt van je dagelijkse routine, {{userName}}. Consistentie is het geheim van blijvende verandering.",
+      "Hoe vaker je terugkomt, {{userName}}, hoe sneller je gewoonten opbouwt en je leven verandert."
+    ],
+    "praise": [
+      "Top dat je zo consistent bent met de gewoonte '{{bestHabit}}'! Vandaag ging het echt goed.",
+      "Het lijkt erop dat je veel vooruitgang boekt met de gewoonte '{{bestHabit}}'. Het gaat heel goed!",
+      "Voel je de effecten al van het herhalen van de gewoonte '{{bestHabit}}'? Je bent op de goede weg om er iets blijvends van te maken.",
+      "Ik ben erg onder de indruk van je consistentie met de gewoonte '{{bestHabit}}'. Ga zo door!",
+      "De gewoonte '{{bestHabit}}' is vandaag je grootste winst. Hou vol!"
+    ],
+    "tip": [
+      "Het lijkt erop dat iets de gewoonte '{{worstHabit}}' blokkeert. Misschien helpt een simpelere eerste stap?",
+      "Staat de gewoonte '{{worstHabit}}' op het juiste moment van de dag? Probeer eventueel een ander tijdstip.",
+      "Bij de gewoonte '{{worstHabit}}' begin je misschien te groot. Hoe ziet de simpelste versie eruit?",
+      "Kun je de gewoonte '{{worstHabit}}' koppelen aan iets wat je al regelmatig doet? Gewoonten stapelen werkt makkelijker.",
+      "Als de gewoonte '{{worstHabit}}' niet loopt zoals gepland, is dat alleen een signaal om je aanpak bij te stellen, geen mislukking."
+    ]
+  },
+  "summary": {
+    "subtitle": "Vandaag alles klaar!",
+    "title": "Dagoverzicht",
+    "no-actions": "Hier verschijnt het overzicht van je voortgang zodra je minstens één herhaling van de gekozen gewoonte voltooit."
+  },
+  "error-boundary": {
+    "title": "Oeps, er ging iets mis",
+    "body": "De fout is automatisch gemeld.\nMijn excuses voor het ongemak.",
+    "button": "Opnieuw starten"
+  }
+}
