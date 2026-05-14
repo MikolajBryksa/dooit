@@ -15,6 +15,8 @@ export const darkScheme = {
   onPrimary: backgroundColor, // text on buttons
   primaryContainer: backgroundColor, // clock selected background
   onPrimaryContainer: textColor, // clock outline
+  tertiaryContainer: buttonColor, // AM/PM selected background
+  onTertiaryContainer: backgroundColor, // AM/PM selected text
   surfaceVariant: backgroundColor, // clock and progress backround
   background: backgroundColor, // app background
   surface: boardColor, // card backround

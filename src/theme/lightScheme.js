@@ -15,6 +15,8 @@ export const lightScheme = {
   onPrimary: boardColor, // text on buttons
   primaryContainer: backgroundColor, // clock selected background
   onPrimaryContainer: textColor, // clock outline
+  tertiaryContainer: buttonColor, // mirrors primary for paper-dates consistency
+  onTertiaryContainer: backgroundColor,
   surfaceVariant: backgroundColor, // clock and progress backround
   background: backgroundColor, // app background
   surface: boardColor, // card backround

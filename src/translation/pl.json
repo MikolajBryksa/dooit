@@ -25,7 +25,8 @@
     "thanks-support": "Dziękuję!",
     "filter": "Filtruj nawyki",
     "history": "Historia",
-    "terms": "Polityka prywatności"
+    "terms": "Polityka prywatności",
+    "customHour": "Własna godzina"
   },
   "terms": {
     "last-updated": "Ostatnia aktualizacja: 13 maja 2026",
@@ -113,7 +114,8 @@
     "deleting": "Usuwanie",
     "understand": "Rozumiem",
     "watch": "Obejrzyj",
-    "update": "Aktualizuj"
+    "update": "Aktualizuj",
+    "customHour": "Własna godzina"
   },
   "contact": {
     "email": "Twój e-mail",

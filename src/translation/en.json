@@ -25,7 +25,8 @@
     "thanks-support": "Thank you!",
     "filter": "Filter habits",
     "history": "History",
-    "terms": "Privacy Policy"
+    "terms": "Privacy Policy",
+    "customHour": "Custom hour"
   },
   "terms": {
     "last-updated": "Last updated: 13 May 2026",
@@ -113,7 +114,8 @@
     "deleting": "Deleting",
     "understand": "Got it",
     "watch": "Watch",
-    "update": "Update"
+    "update": "Update",
+    "customHour": "Custom hour"
   },
   "contact": {
     "email": "Your e-mail",

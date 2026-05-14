@@ -266,6 +266,14 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       alignContent: 'stretch',
     },
+    selector__gridStart: {
+      width: '100%',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-start',
+      alignContent: 'stretch',
+      columnGap: theme.dimensions.gap,
+    },
     selector__chip: {
       marginBottom: theme.dimensions.gap,
       borderWidth: 1,
@@ -332,6 +340,57 @@ export const useStyles = () => {
     },
     particle: {
       position: 'absolute',
+    },
+    timePicker__rootPortrait: {
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    timePicker__rootLandscape: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    timePicker__inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    timePicker__column: {
+      flexDirection: 'column',
+    },
+    timePicker__hoursAndMinutesSeparator: {
+      fontSize: 65,
+      width: 24,
+      alignItems: 'center',
+    },
+    timePicker__dot: {
+      width: 7,
+      height: 7,
+      borderRadius: 7 / 2,
+    },
+    timePicker__betweenDot: {
+      height: 12,
+    },
+    timePicker__spaceBetweenInputsAndSwitcher: {
+      width: 12,
+    },
+    timePicker__clockContainer: {
+      paddingTop: 36,
+      paddingLeft: 12,
+      paddingRight: 12,
+    },
+    timePicker__switchRoot: {
+      width: 52,
+      borderWidth: 1,
+      overflow: 'hidden',
+    },
+    timePicker__switchSeparator: {
+      height: 1,
+      width: 52,
+    },
+    timePicker__switchButtonInner: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 };
