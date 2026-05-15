@@ -84,8 +84,8 @@ android {
         applicationId "com.dooit.bryksa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
-        versionName "3.4.0"
+        versionCode 22
+        versionName "3.4.1"
     }
     signingConfigs {
         debug {
