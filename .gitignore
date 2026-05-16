@@ -74,3 +74,6 @@ yarn-error.log
 
 # Secrets
 .env
+
+# Kotlin 2.0 build artifacts
+android/.kotlin/
