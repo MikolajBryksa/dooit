@@ -7,7 +7,6 @@ import LoadingView from './src/views/loading.view';
 import NowView from './src/views/now.view';
 import HabitsView from './src/views/habits.view';
 import SettingsView from './src/views/settings.view';
-import 'react-native-gesture-handler';
 import {NavigationContainer, CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
