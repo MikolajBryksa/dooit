@@ -173,20 +173,20 @@
     },
     "features": [
       {
-        "title": "Einfache Bedienung",
-        "body": "Lege in Sekunden eine Gewohnheit an und starte sofort."
+        "title": "Einfach zu bedienen",
+        "body": "Nur die wichtigsten Funktionen."
       },
       {
-        "title": "Sichtbarer Fortschritt",
-        "body": "Konzentriere dich auf Wiederholungen statt auf Trophäen."
+        "title": "Erfolge zählen",
+        "body": "Jede Wiederholung ist ein Sieg."
       },
       {
-        "title": "Volle Anpassung",
-        "body": "Passe Gewohnheiten an deinen Tagesrhythmus an."
+        "title": "Täglicher Rhythmus",
+        "body": "Gewohnheiten, die zu deinem Lebensstil passen."
       },
       {
-        "title": "Ein Schritt nach dem anderen",
-        "body": "Nur das, was als Nächstes ansteht — nicht die ganze Liste."
+        "title": "Schluss mit Überforderung",
+        "body": "Konzentriere dich auf deinen nächsten kleinen Schritt."
       }
     ],
     "step2": {

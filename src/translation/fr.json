@@ -173,20 +173,20 @@
     },
     "features": [
       {
-        "title": "Simple d’usage",
-        "body": "Crée une habitude en quelques secondes et lance-toi tout de suite."
+        "title": "Facile à utiliser",
+        "body": "Uniquement les fonctionnalités essentielles."
       },
       {
-        "title": "Progression visible",
-        "body": "Concentre-toi sur les répétitions, pas sur les trophées."
+        "title": "Comptez les victoires",
+        "body": "Chaque répétition est une victoire."
       },
       {
-        "title": "Personnalisation totale",
-        "body": "Adapte les habitudes à ton rythme quotidien."
+        "title": "Rythme quotidien",
+        "body": "Des habitudes adaptées à votre style de vie."
       },
       {
-        "title": "Une étape à la fois",
-        "body": "Seulement la suivante, pas toute la liste."
+        "title": "Stop au surmenage",
+        "body": "Concentrez-vous sur votre prochain petit pas."
       }
     ],
     "step2": {
