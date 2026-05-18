@@ -7,7 +7,7 @@ import {
   Portal,
   Checkbox,
 } from 'react-native-paper';
-import {View, ScrollView} from 'react-native';
+import {View, FlatList} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useStyles} from '@/styles';
 import {getExecutions, updateExecution} from '@/services/executions.service';
@@ -131,14 +131,20 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
             </Text>
           )}
           <View style={[styles.card__divider, {marginTop: 16}]} />
-          <ScrollView style={{maxHeight: 300}}>
-            {executions.map(exec => {
+          <FlatList
+            style={{maxHeight: 300}}
+            data={executions}
+            extraData={changes}
+            keyExtractor={exec => exec.id}
+            initialNumToRender={20}
+            windowSize={10}
+            removeClippedSubviews
+            renderItem={({item: exec}) => {
               const status = getCurrentStatus(exec);
               const checked = status === 'done';
 
               return (
                 <View
-                  key={exec.id}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -165,8 +171,8 @@ const HistoryModal = ({visible, onDismiss, habitId, habitName}) => {
                   />
                 </View>
               );
-            })}
-          </ScrollView>
+            }}
+          />
 
           <Card.Actions>
             <Button

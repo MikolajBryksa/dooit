@@ -22,8 +22,8 @@ Execution.schema = {
   primaryKey: 'id',
   properties: {
     id: 'string',
-    habitId: 'int',
-    date: 'string',
+    habitId: {type: 'int', indexed: true},
+    date: {type: 'string', indexed: true},
     slotIndex: 'int',
     plannedHour: 'string',
     status: 'string',
@@ -83,7 +83,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 37,
+  schemaVersion: 38,
   migration: () => {},
 };
 
