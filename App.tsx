@@ -23,6 +23,7 @@ import mobileAds from 'react-native-google-mobile-ads';
 import {getHabits} from '@/services/habits.service';
 import {backfillMissedExecutions} from '@/services/executions.service';
 import {ErrorBoundary} from '@/components/error-boundary.component';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 setupErrorTracking();
 
@@ -178,11 +179,13 @@ function App(): React.JSX.Element {
   const theme: any = getTheme(currentTheme);
 
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <AppContent />
-      </NavigationContainer>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          <AppContent />
+        </NavigationContainer>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
 
