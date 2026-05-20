@@ -85,7 +85,6 @@ export const trackAppOpen = async () => {
         user_id: userId,
         language: getSettingValue('language'),
         version: VERSION,
-        updated_at: new Date().toISOString(),
       },
       {onConflict: 'user_id', ignoreDuplicates: false},
     );
@@ -179,7 +178,6 @@ export const syncUserData = async (habits, streak) => {
         habits_json: habits,
         streak,
         version: VERSION,
-        updated_at: new Date().toISOString(),
       },
       {onConflict: 'user_id'},
     );

@@ -64,6 +64,20 @@ CREATE INDEX IF NOT EXISTS idx_errors_user_id ON public.errors(user_id);
 CREATE INDEX IF NOT EXISTS idx_errors_created_at ON public.errors(created_at);
 CREATE INDEX IF NOT EXISTS idx_contact_created_at ON public.contact(created_at);
 
+-- Server-side trigger to keep updated_at authoritative (never relies on client clock)
+CREATE OR REPLACE FUNCTION public.set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS users_set_updated_at ON public.users;
+CREATE TRIGGER users_set_updated_at
+BEFORE INSERT OR UPDATE ON public.users
+FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
 
 -- ============================================
 -- 2. ROW LEVEL SECURITY - USERS TABLE
