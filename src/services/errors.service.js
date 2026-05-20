@@ -1,8 +1,7 @@
 import {supabase, getSupabaseUserId} from './supabase.service';
-import {getSettingValue} from './settings.service';
 import realm from '@/storage/schemas';
 
-const APP_VERSION = require('../../package.json').version;
+const VERSION = require('../../package.json').version;
 
 export const logError = async (error, context = 'unknown') => {
   try {
@@ -19,7 +18,7 @@ export const logError = async (error, context = 'unknown') => {
       error_message: error?.message || String(error),
       error_stack: error?.stack || null,
       context,
-      app_version: APP_VERSION,
+      version: VERSION,
       user_id: supabaseUserId,
       created_at: new Date().toISOString(),
     };
@@ -41,7 +40,7 @@ export const logError = async (error, context = 'unknown') => {
       'User:',
       errorData.user_id ? `(${errorData.user_id})` : '(no user ID)',
     );
-    console.error('Version:', errorData.app_version);
+    console.error('Version:', errorData.version);
     console.error('═══════════════════════════════════════');
   } catch (e) {
     console.error('Failed to queue error:', e);
@@ -95,7 +94,7 @@ export const flushErrorQueue = async () => {
       error_message: e.error_message,
       error_stack: e.error_stack,
       context: e.context,
-      app_version: e.app_version,
+      version: e.version,
       user_id: currentUserId || e.user_id,
       created_at: e.created_at,
     }));

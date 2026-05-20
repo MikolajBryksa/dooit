@@ -8,6 +8,7 @@ import store from '@/redux/store';
 import {setSettings} from '@/redux/actions';
 
 const SERVICE_NAME = 'supabase_auth';
+const VERSION = require('../../package.json').version;
 
 const KeychainAdapter = {
   getItem: async key => {
@@ -120,6 +121,7 @@ export const syncUserData = async (habits, streak) => {
         language: getSettingValue('language'),
         habits_json: habits,
         streak,
+        version: VERSION,
         updated_at: new Date().toISOString(),
       },
       {onConflict: 'user_id'},

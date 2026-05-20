@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS public.users (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     habits_json JSONB,
-    streak INTEGER NOT NULL DEFAULT 0
+    streak INTEGER NOT NULL DEFAULT 0,
+    version TEXT
 );
 
 -- errors table - stores application errors for tracking
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS public.errors (
     error_message TEXT NOT NULL,
     error_stack TEXT,
     context TEXT,
-    app_version TEXT,
+    version TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -64,7 +64,7 @@ ErrorLog.schema = {
     error_message: 'string',
     error_stack: 'string?',
     context: 'string?',
-    app_version: 'string?',
+    version: 'string?',
     user_id: 'string?',
     user_name: 'string?',
     created_at: 'string',
@@ -83,7 +83,7 @@ ContactMessage.schema = {
 
 const realmConfig = {
   schema: [Habit, Execution, Settings, ErrorLog, ContactMessage],
-  schemaVersion: 38,
+  schemaVersion: 39,
   migration: () => {},
 };
 
