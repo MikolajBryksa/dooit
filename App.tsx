@@ -10,7 +10,7 @@ import SettingsView from './src/views/settings.view';
 import {NavigationContainer, CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
-import {useColorScheme} from 'react-native';
+import {AppState, useColorScheme} from 'react-native';
 import {renderIcon} from './src/utils';
 import {changeLanguage} from './src/i18next';
 import {getSettings} from './src/services/settings.service';
@@ -22,6 +22,8 @@ import {setupErrorTracking, logError} from '@/services/errors.service';
 import mobileAds from 'react-native-google-mobile-ads';
 import {getHabits} from '@/services/habits.service';
 import {backfillMissedExecutions} from '@/services/executions.service';
+import {trackAppOpen} from '@/services/supabase.service';
+import NetInfo from '@react-native-community/netinfo';
 import {ErrorBoundary} from '@/components/error-boundary.component';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
@@ -79,6 +81,7 @@ function AppContent() {
         dispatch(setHabits(habits));
 
         backfillMissedExecutions(habits, 14);
+        trackAppOpen().catch(e => logError(e, 'trackAppOpen'));
       } catch (e) {
         logError(e, 'loadLocalData');
       } finally {
@@ -101,6 +104,23 @@ function AppContent() {
     return setupNotificationSync(settings, loading, dispatch, setSettings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, settings]);
+
+  useEffect(() => {
+    const appStateSub = AppState.addEventListener('change', nextState => {
+      if (nextState === 'active') {
+        trackAppOpen().catch(e => logError(e, 'trackAppOpen.appState'));
+      }
+    });
+    const netInfoUnsub = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        trackAppOpen().catch(e => logError(e, 'trackAppOpen.netInfo'));
+      }
+    });
+    return () => {
+      appStateSub.remove();
+      netInfoUnsub();
+    };
+  }, []);
 
   if (loading) return <LoadingView />;
 

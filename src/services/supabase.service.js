@@ -1,6 +1,7 @@
 import {createClient} from '@supabase/supabase-js';
 import Config from 'react-native-config';
 import * as Keychain from 'react-native-keychain';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {logError} from './errors.service';
 import {getSettingValue, enableAdsIfDue} from './settings.service';
 import {tryShowPendingAdsConsent} from './consent.service';
@@ -9,6 +10,7 @@ import {setSettings} from '@/redux/actions';
 
 const SERVICE_NAME = 'supabase_auth';
 const VERSION = require('../../package.json').version;
+const LAST_ACTIVE_DATE_KEY = 'metrics_last_active_date';
 
 const KeychainAdapter = {
   getItem: async key => {
@@ -67,6 +69,60 @@ export const initializeAnonymousAuth = () => {
   return initAuthPromise;
 };
 
+export const trackAppOpen = async () => {
+  if (__DEV__) return;
+  try {
+    const auth = await initializeAnonymousAuth();
+    const userId = auth?.userId;
+    if (!userId) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const lastActive = await AsyncStorage.getItem(LAST_ACTIVE_DATE_KEY);
+    if (lastActive === today) return;
+
+    const {error} = await supabase.from('users').upsert(
+      {
+        user_id: userId,
+        language: getSettingValue('language'),
+        version: VERSION,
+        updated_at: new Date().toISOString(),
+      },
+      {onConflict: 'user_id', ignoreDuplicates: false},
+    );
+
+    if (error) {
+      logError(error, 'trackAppOpen');
+      return;
+    }
+
+    await AsyncStorage.setItem(LAST_ACTIVE_DATE_KEY, today);
+  } catch (error) {
+    logError(error, 'trackAppOpen');
+  }
+};
+
+export const markActivated = async () => {
+  if (__DEV__) return;
+  try {
+    await initializeAnonymousAuth();
+    const {
+      data: {session},
+    } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) return;
+
+    const {error} = await supabase
+      .from('users')
+      .update({activated_at: new Date().toISOString()})
+      .eq('user_id', userId)
+      .is('activated_at', null);
+
+    if (error) logError(error, 'markActivated');
+  } catch (error) {
+    logError(error, 'markActivated');
+  }
+};
+
 export const getCurrentUserToken = async () => {
   try {
     const {
@@ -97,6 +153,7 @@ export const deleteUserData = async () => {
     }
 
     await supabase.auth.signOut();
+    await AsyncStorage.removeItem(LAST_ACTIVE_DATE_KEY);
     initAuthPromise = null;
   } catch (error) {
     logError(error, 'deleteUserData');

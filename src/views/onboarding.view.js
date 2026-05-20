@@ -18,6 +18,8 @@ import {
   getHabitById,
 } from '@/services/habits.service';
 import {requestNotificationPermission} from '@/services/notifications.service';
+import {markActivated} from '@/services/supabase.service';
+import {logError} from '@/services/errors.service';
 import mobileAds from 'react-native-google-mobile-ads';
 import {requestAdsConsentWithNetworkCheck} from '@/services/consent.service';
 import {habitIcons} from '@/constants';
@@ -171,6 +173,7 @@ const OnboardingView = ({setShowOnboarding}) => {
     mobileAds()
       .initialize()
       .catch(() => {});
+    markActivated().catch(e => logError(e, 'markActivated'));
     setShowOnboarding(false);
   }
 

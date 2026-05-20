@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     language TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
+    activated_at TIMESTAMPTZ,
     habits_json JSONB,
     streak INTEGER NOT NULL DEFAULT 0,
     version TEXT
